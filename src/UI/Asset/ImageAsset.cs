@@ -1,22 +1,33 @@
 using Gdk;
 using System.IO;
 
-namespace charter.UI.Asset
+namespace OpenChart.UI.Asset
 {
     /// <summary>
     /// Represents an image asset.
     /// </summary>
     public class Image
     {
+        /// <summary>
+        /// The raw image data.
+        /// </summary>
         public readonly byte[] Data;
+
+        /// <summary>
+        /// The absolute path to the image file.
+        /// </summary>
         public readonly string Path;
-        public readonly Pixbuf PixBuf;
+
+        /// <summary>
+        /// A reusable Pixbuf instance.
+        /// </summary>
+        public readonly Pixbuf Pixbuf;
 
         public Image(string path)
         {
             Data = File.ReadAllBytes(path);
             Path = path;
-            PixBuf = new Pixbuf(Data);
+            Pixbuf = new Pixbuf(Data);
         }
     }
 }

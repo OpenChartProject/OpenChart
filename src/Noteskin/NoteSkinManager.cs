@@ -2,8 +2,11 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-namespace charter.NoteSkin
+namespace OpenChart.NoteSkin
 {
+    ///
+    /// <summary>
+    /// </summary>
     public class NoteSkinManager
     {
         List<NoteSkin> noteSkins;

@@ -1,14 +1,17 @@
 using System;
 
-namespace charter.NoteSkin
+namespace OpenChart.NoteSkin
 {
     /// <summary>
     /// Contains the images that are displayed for a particular keymode.
     /// </summary>
-    public class KeyMode
+    public class KeyModeSkin
     {
         int _keyCount;
 
+        /// <summary>
+        /// The number of keys for this keymode.
+        /// </summary>
         public int KeyCount
         {
             get => _keyCount;
@@ -23,22 +26,31 @@ namespace charter.NoteSkin
             }
         }
 
+        /// <summary>
+        /// The images for each individual key. The leftmost key is at index `0` and the rightmost key is at `KeyCount - 1`.
+        /// </summary>
+        /// <value></value>
         public NoteSkinKey[] Images { get; private set; }
 
-        public KeyMode(int keyCount)
+        public KeyModeSkin(int keyCount)
         {
             KeyCount = keyCount;
             Images = new NoteSkinKey[keyCount];
         }
 
-        public void Set(int column, NoteSkinKey keyImage)
+        /// <summary>
+        /// Sets the key images to use for a specific key.
+        /// </summary>
+        /// <param name="key">The key index, from `0` to `KeyCount - 1`.</param>
+        /// <param name="keyImage">The noteskin images for the key.</param>
+        public void Set(int key, NoteSkinKey keyImage)
         {
-            if (column < 0 || column >= KeyCount)
+            if (key < 0 || key >= KeyCount)
             {
-                throw new ArgumentException($"Column must be between 0 and {KeyCount}.");
+                throw new ArgumentException($"Key must be between 0 and {KeyCount - 1}.");
             }
 
-            Images[column] = keyImage;
+            Images[key] = keyImage;
         }
     }
 }

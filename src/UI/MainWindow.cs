@@ -1,10 +1,13 @@
 using Gtk;
 
-namespace charter.UI
+namespace OpenChart.UI
 {
+    /// <summary>
+    /// The main window of the application.
+    /// </summary>
     public class MainWindow : Window
     {
-        public MainWindow() : base("Hello")
+        public MainWindow() : base("OpenChart")
         {
             DeleteEvent += onDelete;
 

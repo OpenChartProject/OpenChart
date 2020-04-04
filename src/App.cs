@@ -1,8 +1,13 @@
-using charter.NoteSkin;
-using charter.UI;
+using OpenChart.NoteSkin;
+using OpenChart.UI;
+using ManagedBass;
+using System;
 
-namespace charter
+namespace OpenChart
 {
+    /// <summary>
+    /// A static class that contains application data.
+    /// </summary>
     public static class App
     {
         public const string NoteSkinFolder = "noteskins";
@@ -10,6 +15,12 @@ namespace charter
 
         public static void Init()
         {
+            if (!Bass.Init())
+            {
+                Console.WriteLine("Failed to initialize libbass");
+                App.Quit();
+            }
+
             Gtk.Application.Init();
             NoteSkins = new NoteSkinManager();
         }
