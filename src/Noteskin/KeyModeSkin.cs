@@ -30,12 +30,12 @@ namespace OpenChart.NoteSkin
         /// The images for each individual key. The leftmost key is at index `0` and the rightmost key is at `KeyCount - 1`.
         /// </summary>
         /// <value></value>
-        public NoteSkinKey[] Images { get; private set; }
+        public NoteSkinKey[] Keys { get; private set; }
 
         public KeyModeSkin(int keyCount)
         {
             KeyCount = keyCount;
-            Images = new NoteSkinKey[keyCount];
+            Keys = new NoteSkinKey[keyCount];
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace OpenChart.NoteSkin
                 throw new ArgumentException($"Key must be between 0 and {KeyCount - 1}.");
             }
 
-            Images[key] = keyImage;
+            Keys[key] = keyImage;
         }
     }
 }

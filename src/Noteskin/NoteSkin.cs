@@ -45,7 +45,7 @@ namespace OpenChart.NoteSkin
         /// </summary>
         /// <param name="keyCount">The keycount for the keymode to get the skin of.</param>
         /// <returns>The keymode's noteskin, or null if none is set.</returns>
-        public KeyModeSkin GetSkin(int keyCount)
+        public KeyModeSkin GetKeyModeSkin(int keyCount)
         {
             if (keyCount <= 0)
             {

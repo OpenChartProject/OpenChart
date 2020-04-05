@@ -11,7 +11,15 @@ namespace OpenChart.UI
         {
             DeleteEvent += onDelete;
 
-            Add(new Image("noteskins/default_arrow/tap_1.png"));
+            var box = new Box(Orientation.Horizontal, 0);
+            var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(4);
+
+            box.Add(new Image(noteSkin.Keys[0].TapNote.Pixbuf));
+            box.Add(new Image(noteSkin.Keys[1].TapNote.Pixbuf));
+            box.Add(new Image(noteSkin.Keys[2].TapNote.Pixbuf));
+            box.Add(new Image(noteSkin.Keys[3].TapNote.Pixbuf));
+
+            Add(box);
 
             Resize(640, 480);
             ShowAll();

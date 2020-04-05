@@ -23,6 +23,7 @@ namespace OpenChart
 
             Gtk.Application.Init();
             NoteSkins = new NoteSkinManager();
+            NoteSkins.LoadAll();
         }
 
         public static void Run()

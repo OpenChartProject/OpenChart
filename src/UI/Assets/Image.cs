@@ -1,7 +1,7 @@
 using Gdk;
 using System.IO;
 
-namespace OpenChart.UI.Asset
+namespace OpenChart.UI.Assets
 {
     /// <summary>
     /// Represents an image asset.
