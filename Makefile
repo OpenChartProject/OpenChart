@@ -11,4 +11,4 @@ clean:
 	rm -rf bin/
 
 run:
-	dotnet run
+	dotnet run --no-build
