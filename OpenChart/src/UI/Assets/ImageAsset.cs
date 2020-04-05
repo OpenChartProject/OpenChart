@@ -6,7 +6,7 @@ namespace OpenChart.UI.Assets
     /// <summary>
     /// Represents an image asset.
     /// </summary>
-    public class Image
+    public class ImageAsset
     {
         /// <summary>
         /// The raw image data.
@@ -23,7 +23,7 @@ namespace OpenChart.UI.Assets
         /// </summary>
         public readonly Pixbuf Pixbuf;
 
-        public Image(string path)
+        public ImageAsset(string path)
         {
             Data = File.ReadAllBytes(path);
             Path = path;
