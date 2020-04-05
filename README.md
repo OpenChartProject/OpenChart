@@ -21,8 +21,9 @@ Makefile commands:
 - `make`: builds and runs OpenChart.
 - `make build`: compiles OpenChart and copies dependencies to the output folder.
 - `make run`: starts OpenChart.
-- `make clean`: cleans all output folders.
 - `make test`: runs the test suite.
+- `make clean`: cleans `bin/` folders.
+- `make cleanall`: cleans both `bin/` and `obj/` folders. Run `dotnet restore` to redownload dependencies.
 
 ## Visual Studio Code
 

@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using OpenChart.Chart;
+using OpenChart.Charting;
 using System;
 
-namespace OpenChart.Tests.Chart
+namespace OpenChart.Tests.Charting
 {
     public class TestChartUtils
     {

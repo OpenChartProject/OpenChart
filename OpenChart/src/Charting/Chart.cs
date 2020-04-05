@@ -1,6 +1,7 @@
+using System;
 using System.Collections.Generic;
 
-namespace OpenChart.Chart
+namespace OpenChart.Charting
 {
     public class Chart
     {
@@ -20,6 +21,13 @@ namespace OpenChart.Chart
         {
             if (_bpms.Count == 0)
             {
+                if (bpm.Beat != 0)
+                {
+                    throw new ArgumentException(
+                        "The first BPM change must occur at the beginning of the chart (beat zero)."
+                    );
+                }
+
                 _bpms.AddFirst(bpm);
                 return;
             }

@@ -1,4 +1,4 @@
-namespace OpenChart.Chart
+namespace OpenChart.Charting
 {
     public class ChartObject
     {

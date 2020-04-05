@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.Chart
+namespace OpenChart.Charting
 {
     public static class ChartUtils
     {

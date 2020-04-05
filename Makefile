@@ -4,7 +4,7 @@ output_dir = bin
 project_file = OpenChart/OpenChart.csproj
 
 all: build run
-.PHONY: all build clean run test
+.PHONY: all build clean cleanall run test
 
 build:
 	dotnet build -o $(output_dir) $(project_file)
@@ -12,6 +12,9 @@ build:
 
 clean:
 	rm -rf $(output_dir) OpenChart/bin/ OpenChart.Tests/bin/
+
+cleanall: clean
+	rm -rf OpenChart/obj/ OpenChart.Tests/obj/
 
 run:
 	./$(output_dir)/OpenChart

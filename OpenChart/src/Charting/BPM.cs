@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.Chart
+namespace OpenChart.Charting
 {
     /// <summary>
     /// Represents a BPM (beats per minute) change in a chart.

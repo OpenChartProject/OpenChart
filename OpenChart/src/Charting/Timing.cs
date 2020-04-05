@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.Chart
+namespace OpenChart.Charting
 {
     /// <summary>
     /// The base class for chart objects that are timing-based.
