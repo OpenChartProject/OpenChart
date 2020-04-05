@@ -14,14 +14,15 @@ We plan to add support for the following games:
 
 OpenChart uses the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
 
-Nuget takes care of most of the dependencies. For the ones it doesn't (such as `libbass`), they can be found in `lib/`.
+Nuget takes care of most of the dependencies. For the ones it doesn't (such as `libbass`), they can be found in `OpenChart/lib/`.
 
 Makefile commands:
 
-- `make`: builds and runs the project.
-- `make build`: compiles the project and copies dependencies from `lib/` into `bin/`.
+- `make`: builds and runs OpenChart.
+- `make build`: compiles OpenChart and copies dependencies to the output folder.
 - `make run`: starts OpenChart.
-- `make clean`: cleans the output directory.
+- `make clean`: cleans all output folders.
+- `make test`: runs the test suite.
 
 ## Visual Studio Code
 
