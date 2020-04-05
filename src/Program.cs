@@ -5,7 +5,7 @@ namespace OpenChart
     /// </summary>
     class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             App.Init();
             App.Run();
