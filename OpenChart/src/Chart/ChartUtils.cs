@@ -112,7 +112,7 @@ namespace OpenChart.Chart
 
                     // If 100% is too much, calculate the target percentage by subtracting out
                     // the amount that was overshot.
-                    overshot = 1 - (timeDelta / overshot);
+                    overshot = 1 - (overshot / timeDelta);
 
                     return lastBPM.Beat + (beatDelta * overshot);
                 }

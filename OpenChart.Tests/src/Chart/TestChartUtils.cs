@@ -191,7 +191,7 @@ namespace OpenChart.Tests.Chart
         }
 
         [Test]
-        // [DefaultFloatingPointTolerance(0.1)]
+        [DefaultFloatingPointTolerance(0.1)]
         public void Test_SecondsToBeat_BetweenBPMChange()
         {
             // 60BPM @ for 15 seconds = beat 15
