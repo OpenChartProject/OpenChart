@@ -1,7 +1,9 @@
+using ManagedBass;
 using OpenChart.NoteSkin;
 using OpenChart.UI;
-using ManagedBass;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace OpenChart
 {
@@ -10,11 +12,34 @@ namespace OpenChart
     /// </summary>
     public static class App
     {
+        /// <summary>
+        /// The absolute path to the folder where the OpenChart executable is.
+        /// </summary>
+        public static string AppFolder { get; private set; }
+
+        /// <summary>
+        /// The location of the noteskins folder.
+        /// </summary>
         public const string NoteSkinFolder = "noteskins";
+
+        /// <summary>
+        /// The noteskins that are loaded into the app.
+        /// </summary>
         public static NoteSkinManager NoteSkins { get; private set; }
 
+        /// <summary>
+        /// Initializes the app.
+        /// </summary>
         public static void Init()
         {
+            // Get the path to the folder where the executable is.
+            AppFolder = Path.GetDirectoryName(
+                Assembly.GetExecutingAssembly().Location
+            );
+
+            Directory.SetCurrentDirectory(AppFolder);
+
+            // Initialize libbass
             if (!Bass.Init())
             {
                 Console.WriteLine("Failed to initialize libbass");
@@ -22,16 +47,23 @@ namespace OpenChart
             }
 
             Gtk.Application.Init();
+
             NoteSkins = new NoteSkinManager();
             NoteSkins.LoadAll();
         }
 
+        /// <summary>
+        /// Runs the app and displays the main window.
+        /// </summary>
         public static void Run()
         {
             new MainWindow();
             Gtk.Application.Run();
         }
 
+        /// <summary>
+        /// Quits the app.
+        /// </summary>
         public static void Quit()
         {
             Gtk.Application.Quit();
