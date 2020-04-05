@@ -7,12 +7,12 @@ namespace OpenChart.Chart
     /// </summary>
     public class BPM : Timing
     {
-        float _value;
+        double _value;
 
         /// <summary>
         /// Beats per minute. Most songs are somewhere in the range of 120 to 200.
         /// </summary>
-        public float Value
+        public double Value
         {
             get => _value;
             set
@@ -26,7 +26,7 @@ namespace OpenChart.Chart
             }
         }
 
-        public BPM(float value, float beat) : base(beat)
+        public BPM(double value, double beat) : base(beat)
         {
             Value = value;
         }

@@ -1,14 +1,18 @@
-output_dir = bin/Debug/netcoreapp3.1
+output_dir = bin/
+project_file = OpenChart/OpenChart.csproj
 
 all: build run
-.PHONY: build clean run
+.PHONY: all build clean run test
 
 build:
-	dotnet build
-	cp lib/x64/* $(output_dir)
+	dotnet build -o $(output_dir) $(project_file)
+	cp -r lib/x64/* noteskins/ $(output_dir)
 
 clean:
-	rm -rf bin/
+	rm -rf $(output_dir) OpenChart/bin/ OpenChart.Tests/bin/
 
 run:
-	dotnet run --no-build
+	dotnet $(output_dir)/OpenChart.dll
+
+test:
+	dotnet test

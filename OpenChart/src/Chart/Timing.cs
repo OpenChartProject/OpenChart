@@ -7,13 +7,13 @@ namespace OpenChart.Chart
     /// </summary>
     public class Timing
     {
-        float _beat;
+        double _beat;
 
         /// <summary>
         /// The beat number. The time that this occurs during the chart is dependent on
         /// the BPM changes that come before it.
         /// </summary>
-        public float Beat
+        public double Beat
         {
             get => _beat;
             set
@@ -27,7 +27,7 @@ namespace OpenChart.Chart
             }
         }
 
-        public Timing(float beat)
+        public Timing(double beat)
         {
             Beat = beat;
         }
