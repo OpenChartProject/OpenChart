@@ -1,15 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenChart.Charting
 {
     public class Chart
     {
-        LinkedList<BPM> _bpms;
+        LinkedList<BPM> bpmList;
+        BPM[] cachedBPMs;
+
+        /// <summary>
+        /// Returns a list of BPM changes for the chart.
+        ///
+        /// **This list is meant to be readonly. Do not modify this list.**
+        /// </summary>
+        public BPM[] BPMs
+        {
+            get
+            {
+                // Update the cache if it's outdated.
+                if (cachedBPMs == null)
+                {
+                    cachedBPMs = bpmList.ToArray();
+                }
+
+                return cachedBPMs;
+            }
+        }
 
         public Chart()
         {
-            _bpms = new LinkedList<BPM>();
+            bpmList = new LinkedList<BPM>();
         }
 
         /// <summary>
@@ -17,9 +38,17 @@ namespace OpenChart.Charting
         /// an existing BPM change, the existing change is overwritten with the new one.
         /// </summary>
         /// <param name="bpm">The BPM to add.</param>
-        public void AddBPMChange(BPM bpm)
+        public void AddBPM(BPM bpm)
         {
-            if (_bpms.Count == 0)
+            addBPM(bpm);
+
+            // Invalidate the cache.
+            cachedBPMs = null;
+        }
+
+        private void addBPM(BPM bpm)
+        {
+            if (bpmList.Count == 0)
             {
                 if (bpm.Beat != 0)
                 {
@@ -28,11 +57,11 @@ namespace OpenChart.Charting
                     );
                 }
 
-                _bpms.AddFirst(bpm);
+                bpmList.AddFirst(bpm);
                 return;
             }
 
-            LinkedListNode<BPM> cur = _bpms.First;
+            LinkedListNode<BPM> cur = bpmList.First;
 
             // Search the list to find where we need to insert this new bpm change.
             while (true)
@@ -49,7 +78,7 @@ namespace OpenChart.Charting
                     // We've hit the end of the list, or we're between two BPM changes.
                     if (cur.Next == null || cur.Next.Value.Beat > bpm.Beat)
                     {
-                        _bpms.AddAfter(cur, bpm);
+                        bpmList.AddAfter(cur, bpm);
                         return;
                     }
                 }
