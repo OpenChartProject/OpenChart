@@ -10,6 +10,8 @@ We plan to add support for the following games:
 - [Quaver](https://quavergame.com/)
 - [Osu! (mania)](https://osu.ppy.sh/)
 
+Visit us on Discord: https://discord.gg/wSGmN52
+
 # Building OpenChart
 
 OpenChart uses the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
