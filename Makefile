@@ -1,10 +1,10 @@
-assets_dir = OpenChart/assets
-lib_dir = OpenChart/lib
-output_dir = bin
-project_file = OpenChart/OpenChart.csproj
+assets_dir := OpenChart/assets
+lib_dir := OpenChart/lib
+output_dir := bin
+project_file := OpenChart/OpenChart.csproj
 
 # OS detection. Do not assume the existence of uname on Windows.
-ifeq ($(OS),Windows_NT)
+ifeq ($(OS), Windows_NT)
     detected_os := Windows_NT
 else
     detected_os := $(shell uname)
@@ -22,6 +22,7 @@ ifeq ($(detected_os), Darwin)
 else
 	cp -r $(lib_dir)/x64/* $(assets_dir)/* $(output_dir)
 endif
+
 clean:
 	rm -rf $(output_dir) OpenChart/bin/ OpenChart.Tests/bin/
 
@@ -31,6 +32,10 @@ cleanall: clean
 run:
 # Run command varies between OS.
 ifeq ($(detected_os), Windows_NT)
+	./$(output_dir)/OpenChart.exe
+endif
+
+ifeq ($(detected_os), Linux)
 	./$(output_dir)/OpenChart
 else
 	dotnet $(output_dir)/OpenChart.dll
