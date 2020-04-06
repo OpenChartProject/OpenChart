@@ -1,0 +1,8 @@
+language: csharp
+mono: none
+dotnet: 3.1
+solution: OpenChart.sln
+install:
+  - make build
+script:
+  - make test
