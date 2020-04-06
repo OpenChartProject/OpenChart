@@ -2,6 +2,8 @@
 
 OpenChart is a free, open source, cross platform tool for creating rhythm game charts and maps.
 
+Visit us on Discord: https://discord.gg/wSGmN52
+
 **OpenChart is currently in active development.**
 
 We plan to add support for the following games:
