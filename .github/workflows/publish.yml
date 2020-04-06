@@ -2,6 +2,9 @@ name: Publish apps
 
 on:
   release:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
@@ -9,32 +12,89 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
 
-    - name: Build
-      run: make build
+      - name: Build
+        run: make build
 
-    - name: Publish
-      run: make publish
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: /
 
-    # Upload linux artifacts
-    - uses: actions/upload-artifact@v1
-      with:
-        name: linux-x64
-        path: dist/linux-x64
+  publish-linux:
+    runs-on: ubuntu-latest
 
-    # Upload macOS artifacts
-    - uses: actions/upload-artifact@v1
-      with:
-        name: osx-x64
-        path: dist/osx-x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
 
-    # Upload windows artifacts
-    - uses: actions/upload-artifact@v1
-      with:
-        name: win-x64
-        path: dist/win-x64
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+
+      - name: Publish
+        run: make publish-linux
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: linux-x64
+          path: dist/linux-x64
+
+  publish-osx:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+
+      - name: Publish
+        run: make publish-osx
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: osx-x64
+          path: dist/osx-x64
+
+  publish-win:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+
+      - name: Download build
+        uses: actions/download-artifact@v1
+        with:
+          name: build
+
+      - name: Publish
+        run: make publish-win
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: win-x64
+          path: dist/win-x64
