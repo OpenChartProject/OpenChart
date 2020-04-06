@@ -43,6 +43,10 @@ pacman -S mingw-w64-x86_64-gtk3
 - `make test`: runs the test suite.
 - `make clean`: cleans `bin/` folders.
 - `make cleanall`: cleans both `bin/` and `obj/` folders. Run `dotnet restore` to redownload dependencies.
+- `make publish`: publishes the project for Linux, macOS, and Windows into `dist/`.
+- `make publish-linux`: publishes the project for Linux x64 into `dist/`.
+- `make publish-osx`: publishes the project for macOS x64 into `dist/`.
+- `make publish-win`: publishes the project for Windows x64 into `dist/`.
 
 ## Visual Studio Code
 
