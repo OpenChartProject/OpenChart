@@ -3,12 +3,21 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
+
+  <!-- Publish configuration -->
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>None</DebugType>
+    <PublishSingleFile>false</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="**\*.glade" />
     <EmbeddedResource Include="**\*.glade">
       <LogicalName>%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="GtkSharp" Version="3.22.25.*" />
     <PackageReference Include="ManagedBass" Version="2.0.4" />
