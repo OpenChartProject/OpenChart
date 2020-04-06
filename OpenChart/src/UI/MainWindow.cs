@@ -1,3 +1,4 @@
+using System.IO;
 using Gtk;
 
 namespace OpenChart.UI
@@ -10,6 +11,8 @@ namespace OpenChart.UI
         public MainWindow() : base("OpenChart")
         {
             DeleteEvent += onDelete;
+
+            SetIconFromFile(System.IO.Path.Join("assets", "icons", "AppIcon.ico"));
 
             var box = new Box(Orientation.Horizontal, 0);
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(4);

@@ -4,13 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="**\*.glade"/>
+    <None Remove="**\*.glade" />
     <EmbeddedResource Include="**\*.glade">
       <LogicalName>%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="assets\icons\AppIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="GtkSharp" Version="3.22.25.*"/>
-    <PackageReference Include="ManagedBass" Version="2.0.4"/>
+    <PackageReference Include="GtkSharp" Version="3.22.25.*" />
+    <PackageReference Include="ManagedBass" Version="2.0.4" />
   </ItemGroup>
 </Project>
