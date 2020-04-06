@@ -20,4 +20,4 @@ Please base any pull requests on the `develop` branch.
 
 ## Any questions?
 
-We're here to help you make a success out of any contributions to OpenChart. If you need help or have any questions, [please join our Discord server](https://discord.gg/Eyn479Q).
+We're here to help you make a success out of any contributions to OpenChart. If you need help or have any questions, [please join our Discord server](https://discord.gg/wSGmN52).
