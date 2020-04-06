@@ -17,8 +17,8 @@ all: build run
 build:
 	dotnet build -o $(output_dir) $(project_file)
 
-	# Copy dependencies and runtime assets
-	if [[ "$(detected_os)" == "Darwin" ]]; then \
+	@# Copy dependencies and runtime assets
+	@if [[ "$(detected_os)" == "Darwin" ]]; then \
 		cp -r $(lib_dir)/osx/* $(assets_dir)/* $(output_dir); \
 	else \
 		cp -r $(lib_dir)/x64/* $(assets_dir)/* $(output_dir); \
@@ -31,7 +31,9 @@ cleanall: clean
 	rm -rf OpenChart/obj/ OpenChart.Tests/obj/
 
 run:
-	if [[ "$(detected_os)" == "Windows_NT" ]]; then \
+	@echo
+	@echo "Starting OpenChart..."
+	@if [[ "$(detected_os)" == "Windows_NT" ]]; then \
 		./$(output_dir)/OpenChart.exe; \
 	elif [[ "$(detected_os)" == "Linux" ]]; then \
 		./$(output_dir)/OpenChart; \
