@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 assets_dir := OpenChart/assets
 lib_dir := OpenChart/lib
 output_dir := bin
@@ -15,13 +16,13 @@ all: build run
 
 build:
 	dotnet build -o $(output_dir) $(project_file)
-	
-# Copy libraries from specific directory depending on OS.
-ifeq ($(detected_os), Darwin)
-	cp -r $(lib_dir)/osx/* $(assets_dir)/* $(output_dir)
-else
-	cp -r $(lib_dir)/x64/* $(assets_dir)/* $(output_dir)
-endif
+
+	# Copy dependencies and runtime assets
+	if [[ "$(detected_os)" == "Darwin" ]]; then \
+		cp -r $(lib_dir)/osx/* $(assets_dir)/* $(output_dir); \
+	else \
+		cp -r $(lib_dir)/x64/* $(assets_dir)/* $(output_dir); \
+	fi
 
 clean:
 	rm -rf $(output_dir) OpenChart/bin/ OpenChart.Tests/bin/
@@ -30,16 +31,13 @@ cleanall: clean
 	rm -rf OpenChart/obj/ OpenChart.Tests/obj/
 
 run:
-# Run command varies between OS.
-ifeq ($(detected_os), Windows_NT)
-	./$(output_dir)/OpenChart.exe
-endif
-
-ifeq ($(detected_os), Linux)
-	./$(output_dir)/OpenChart
-else
-	dotnet $(output_dir)/OpenChart.dll
-endif
+	if [[ "$(detected_os)" == "Windows_NT" ]]; then \
+		./$(output_dir)/OpenChart.exe; \
+	elif [[ "$(detected_os)" == "Linux" ]]; then \
+		./$(output_dir)/OpenChart; \
+	else \
+		dotnet $(output_dir)/OpenChart.dll; \
+	fi
 
 test:
 	dotnet test
