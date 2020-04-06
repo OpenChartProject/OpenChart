@@ -1,6 +1,5 @@
 name: Publish apps
 on:
-  release:
   push:
     branches:
       - master
