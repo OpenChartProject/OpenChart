@@ -29,4 +29,4 @@ Makefile commands:
 
 ⚠️ Use an external terminal (i.e. not the one in VSCode) to start the app.
 
-On linux (and possibly other platforms) there is an issue with the app crashing at startup if you try and run it from the terminal inside VSCode. VSCode injects some environment variables which causes both GDK and libbass to fail.
+On linux (and possibly other platforms) there is an issue with the app crashing at startup if you try and run it from the terminal inside VSCode. VSCode injects some environment variables which causes both GTK and libbass to fail.
