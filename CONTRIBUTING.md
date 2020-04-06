@@ -6,7 +6,7 @@ Thanks for your interest in contributing to OpenChart. This guide aims to outlin
 In order to keep everything consistent and readable, we ask that any code you write adheres to the the [C# Coding Conventions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions). 
 
 ### Documentation
-We require that any public classes, methods or properties include [XMLdocs](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/). Please include a description of what the method/class/property is for, as well as any method arguments. You can usually generate these automatically by typing three forward slashes (`///`) - in Visual Studio Code, [there is an extension to facilitate this](https://marketplace.visualstudio.com/items?itemName=k--kato.docomment).
+We require that any public classes, methods or properties include [XMLdocs](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/xmldoc/). Please include a description of what the method/class/property is for, as well as any method arguments. You can usually generate these automatically by typing three forward slashes (`///`) - in Visual Studio Code, [there is an extension to enable this](https://marketplace.visualstudio.com/items?itemName=k--kato.docomment).
 
 ### Formatting
 To keep the formatting consistent, it might be helpful for you to use the automatic formatting tools built into your IDE or text editor of choice.
