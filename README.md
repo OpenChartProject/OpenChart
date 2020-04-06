@@ -1,8 +1,6 @@
 # OpenChart
 
-OpenChart is a free, open source, cross platform tool for creating rhythm game charts and maps.
-
-**OpenChart is currently in active development.**
+OpenChart is a free, open source, cross platform tool for creating rhythm game charts and maps. OpenChart is currently in active development.
 
 We plan to add support for the following games:
 
@@ -14,11 +12,30 @@ Visit us on Discord: https://discord.gg/wSGmN52
 
 # Building OpenChart
 
-OpenChart uses the [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
 
-Nuget takes care of most of the dependencies. For the ones it doesn't (such as `libbass`), they can be found in `OpenChart/lib/`.
+[GTK v3.x](https://www.gtk.org/) must be installed to build and run the project. This really should come already bundled with the project (like how `libbass` is). If you would like to add these dependencies it would be greatly appreciated!
 
-Makefile commands:
+### GTK for Ubuntu/Debian
+```
+sudo apt install libgtk-3-0
+```
+
+### GTK for macOS
+```
+brew install gtk+3
+```
+
+### GTK for Windows
+Follow the installation directions [here](https://www.gtk.org/docs/installations/windows/).
+
+Alternatively, if `pacman` is installed:
+
+```
+pacman -S mingw-w64-x86_64-gtk3
+```
+
+### Makefile
 
 - `make`: builds and runs OpenChart.
 - `make build`: compiles OpenChart and copies dependencies to the output folder.
