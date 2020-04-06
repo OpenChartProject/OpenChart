@@ -4,6 +4,10 @@ using System.Linq;
 
 namespace OpenChart.Charting
 {
+    /// <summary>
+    /// A chart represents a playable beat mapping for a song. The chart has a key count
+    /// which dictates what keymode it's played in.
+    /// </summary>
     public class Chart
     {
         LinkedList<BPM> bpmList;
@@ -28,9 +32,35 @@ namespace OpenChart.Charting
             }
         }
 
-        public Chart()
+        /// <summary>
+        /// The key count for the chart. The key count is the number of unique columns that
+        /// ChartObjects appear on.
+        /// </summary>
+        public readonly int KeyCount;
+
+        /// <summary>
+        /// The chart objects that make up the chart. Chart objects include things like tap notes,
+        /// holds, mines, etc.
+        ///
+        /// The objects are stored as an array of lists. Each list element represents a key/column.
+        /// </summary>
+        public LinkedList<ChartObject>[] Objects { get; private set; }
+
+        public Chart(int keyCount)
         {
+            if (keyCount < 1)
+            {
+                throw new ArgumentException("Key count must be greater than zero.");
+            }
+
+            KeyCount = keyCount;
             bpmList = new LinkedList<BPM>();
+            Objects = new LinkedList<ChartObject>[KeyCount];
+
+            for (var i = 0; i < KeyCount; i++)
+            {
+                Objects[i] = new LinkedList<ChartObject>();
+            }
         }
 
         /// <summary>

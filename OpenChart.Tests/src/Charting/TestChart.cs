@@ -6,10 +6,32 @@ namespace OpenChart.Tests.Charting
 {
     public class TestChart
     {
-        [TestCase]
+        [Test]
+        public void Test_Init()
+        {
+            var chart = new Chart(7);
+
+            Assert.AreEqual(7, chart.KeyCount);
+            Assert.AreEqual(0, chart.BPMs.Length);
+            Assert.AreEqual(chart.KeyCount, chart.Objects.Length);
+
+            for (var i = 0; i < chart.KeyCount; i++)
+            {
+                Assert.AreEqual(0, chart.Objects[i].Count);
+            }
+        }
+
+        [TestCase(-1)]
+        [TestCase(0)]
+        public void Test_KeyCountLessThanOne(int value)
+        {
+            Assert.Throws<ArgumentException>(() => new Chart(value));
+        }
+
+        [Test]
         public void Test_BPMs()
         {
-            var chart = new Chart();
+            var chart = new Chart(1);
             var bpms = new BPM[] {
                 new BPM(100, 0),
                 new BPM(200, 10),
@@ -23,10 +45,10 @@ namespace OpenChart.Tests.Charting
             Assert.AreEqual(bpms[1], chart.BPMs[1]);
         }
 
-        [TestCase]
+        [Test]
         public void Test_BPMs_IsCached()
         {
-            var chart = new Chart();
+            var chart = new Chart(1);
             var bpms = new BPM[] {
                 new BPM(100, 0),
                 new BPM(200, 10),
@@ -38,19 +60,19 @@ namespace OpenChart.Tests.Charting
             Assert.AreSame(chart.BPMs, chart.BPMs);
         }
 
-        [TestCase]
+        [Test]
         public void Test_AddBPM_FirstBPMNonZeroBeat()
         {
-            var chart = new Chart();
+            var chart = new Chart(1);
             var bpm = new BPM(100, 1);
 
             Assert.Throws<ArgumentException>(() => chart.AddBPM(bpm));
         }
 
-        [TestCase]
+        [Test]
         public void Test_AddBPM_FirstBPMZeroBeat()
         {
-            var chart = new Chart();
+            var chart = new Chart(1);
             var bpm = new BPM(100, 0);
 
             Assert.DoesNotThrow(() => chart.AddBPM(bpm));

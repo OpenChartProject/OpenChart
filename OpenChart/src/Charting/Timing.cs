@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// The base class for chart objects that are timing-based.
     /// </summary>
-    public class Timing
+    public abstract class Timing
     {
         double _beat;
 
