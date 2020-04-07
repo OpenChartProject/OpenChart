@@ -20,7 +20,7 @@ OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/do
 
 [GTK v3.x](https://www.gtk.org/) must be installed to build and run the project. This really should come already bundled with the project (like how `libbass` is). If you would like to add these dependencies it would be greatly appreciated!
 
-[Please read this if you are using VSCode.](#Visual Studio Code)
+[Please read this if you are using VSCode.](#visual-studio-code)
 
 ### GTK for Ubuntu/Debian
 ```
