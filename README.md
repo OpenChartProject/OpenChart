@@ -55,3 +55,11 @@ pacman -S mingw-w64-x86_64-gtk3
 Use an external terminal (i.e. not the one in VSCode) to start the app.
 
 On linux (and possibly other platforms) there is an issue with the app crashing at startup if you try and run it from the terminal inside VSCode. VSCode injects some environment variables which causes both GTK and libbass to fail.
+
+# License
+
+The OpenChart project is dual-licensed.
+
+All code and non-branding related assets are protected under the GNU GPLv3 license. See the [LICENSE](LICENSE) for more information.
+
+Branding images are protected under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License. This applies to any artifacts locating in the [branding/](branding) folder. See the [README](branding/README.md) for more information.
