@@ -1,4 +1,10 @@
-# OpenChart
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Kangaroux/OpenChart/Build and test?style=for-the-badge)![GitHub All Releases](https://img.shields.io/github/downloads/Kangaroux/OpenChart/total?style=for-the-badge)![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kangaroux/OpenChart?style=for-the-badge)
+
+[![](https://imgur.com/bhQKKSZ.png)](https://discord.gg/wSGmN52)
+
+--------------
+
+[![](branding/banner_small.png)](https://github.com/Kangaroux/OpenChart)
 
 OpenChart is a free, open source, cross platform tool for creating rhythm game charts and maps. OpenChart is currently in active development.
 
@@ -8,13 +14,13 @@ We plan to add support for the following games:
 - [Quaver](https://quavergame.com/)
 - [Osu! (mania)](https://osu.ppy.sh/)
 
-Visit us on Discord: https://discord.gg/wSGmN52
-
-# Building OpenChart
+# Building OpenChart 🔨
 
 OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
 
 [GTK v3.x](https://www.gtk.org/) must be installed to build and run the project. This really should come already bundled with the project (like how `libbass` is). If you would like to add these dependencies it would be greatly appreciated!
+
+[Please read this if you are using VSCode.](#Visual Studio Code)
 
 ### GTK for Ubuntu/Debian
 ```
@@ -46,6 +52,6 @@ pacman -S mingw-w64-x86_64-gtk3
 
 ## Visual Studio Code
 
-⚠️ Use an external terminal (i.e. not the one in VSCode) to start the app.
+Use an external terminal (i.e. not the one in VSCode) to start the app.
 
 On linux (and possibly other platforms) there is an issue with the app crashing at startup if you try and run it from the terminal inside VSCode. VSCode injects some environment variables which causes both GTK and libbass to fail.
