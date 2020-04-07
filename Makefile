@@ -33,17 +33,18 @@ cleanall: clean
 publish: publish-linux publish-osx publish-win
 
 publish-linux:
-	rm -rf $(publish_dir)/linux_x64
+	rm -rf $(publish_dir)/linux-x64
 	dotnet publish -o $(publish_dir)/linux-x64 -r linux-x64 -c Release OpenChart
 	cp -r $(lib_dir)/x64/*.so $(assets_dir)/* $(publish_dir)/linux-x64
 
 publish-osx:
-	rm -rf $(publish_dir)/osx
+	rm -rf $(publish_dir)/osx-x64
 	dotnet publish -o $(publish_dir)/osx-x64 -r osx-x64 -c Release OpenChart
+	chmod +x $(publish_dir)/osx-x64/OpenChart
 	cp -r $(lib_dir)/osx/* $(assets_dir)/* $(publish_dir)/osx-x64
 
 publish-win:
-	rm -rf $(publish_dir)/win
+	rm -rf $(publish_dir)/win-x64
 	dotnet publish -o $(publish_dir)/win-x64 -r win-x64 -c Release OpenChart
 	cp -r $(lib_dir)/x64/*.dll $(assets_dir)/* $(publish_dir)/win-x64
 
