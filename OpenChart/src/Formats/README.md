@@ -26,7 +26,6 @@ Say we want to add support for a file format called `Foo`. We need three things:
 - A class that can read and write `FooChart` objects to/from a .foo file. (`FooLoader`)
 - A class that can convert a `FooChart` into a `Chart` and vice versa. (`FooConverter`)
 
-
 ### Conversion Pipeline
 
 ```
