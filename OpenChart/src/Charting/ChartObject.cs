@@ -2,6 +2,9 @@ using System;
 
 namespace OpenChart.Charting
 {
+    /// <summary>
+    /// The base class for any object that the player interacts with in a chart.
+    /// </summary>
     public abstract class ChartObject : Timing
     {
         int _key;
