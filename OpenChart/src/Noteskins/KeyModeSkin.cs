@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
     /// <summary>
     /// Contains the images that are displayed for a particular keymode.

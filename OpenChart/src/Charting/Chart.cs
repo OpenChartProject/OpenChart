@@ -42,7 +42,7 @@ namespace OpenChart.Charting
         /// The chart objects that make up the chart. Chart objects include things like tap notes,
         /// holds, mines, etc.
         ///
-        /// The objects are stored as an array of lists. Each list element represents a key/column.
+        /// The objects are stored as an array of linked lists. Each list element represents a key/column.
         /// </summary>
         public LinkedList<ChartObject>[] Objects { get; private set; }
 

@@ -1,5 +1,5 @@
 using ManagedBass;
-using OpenChart.NoteSkin;
+using OpenChart.NoteSkins;
 using OpenChart.UI;
 using System;
 using System.IO;

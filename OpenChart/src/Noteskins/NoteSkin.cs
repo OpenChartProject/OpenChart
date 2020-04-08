@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
     /// <summary>
     /// A noteskin contains the image assets that are used in the notefield to display the chart.
