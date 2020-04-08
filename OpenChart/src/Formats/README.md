@@ -33,6 +33,8 @@ import: .foo file ---> FooLoader    ---> FooChart ---> FooConverter ---> Chart
 export: Chart     ---> FooConverter ---> FooChart ---> FooLoader    ---> .foo file
 ```
 
+Note: for the OpenChart file format, the process is simplified since the conversion step is unnecessary.
+
 # Benefits
 
 Compare the pipeline in the example with the pipeline described in the first section:
