@@ -7,6 +7,8 @@ namespace OpenChart.Charting
     /// <summary>
     /// A chart represents a playable beat mapping for a song. The chart has a key count
     /// which dictates what keymode it's played in.
+    ///
+    /// In the context of file formats, this class is referred to the "native" chart class.
     /// </summary>
     public class Chart
     {
