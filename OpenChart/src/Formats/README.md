@@ -23,14 +23,14 @@ In order to mesh these two processes together, we need an intermediate data clas
 Say we want to add support for a file format called `Foo`. We need three things:
 
 - A class that can store the data from a .foo file. (`FooChart`)
-- A class that can read and write `FooChart` objects to/from a .foo file. (`FooLoader`)
+- A class that can read and write `FooChart` objects to/from a .foo file. (`FooFileHandler`)
 - A class that can convert a `FooChart` into a `Chart` and vice versa. (`FooConverter`)
 
 ### Conversion Pipeline
 
 ```
-import: .foo file ---> FooLoader    ---> FooChart ---> FooConverter ---> Chart
-export: Chart     ---> FooConverter ---> FooChart ---> FooLoader    ---> .foo file
+import: .foo file ---> FooFileHandler    ---> FooChart ---> FooConverter ---> Chart
+export: Chart     ---> FooConverter ---> FooChart ---> FooFileHandler    ---> .foo file
 ```
 
 Note: for the OpenChart file format, the process is simplified since the conversion step is unnecessary.

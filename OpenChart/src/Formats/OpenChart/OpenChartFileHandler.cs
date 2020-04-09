@@ -5,8 +5,14 @@ using System.Text.Json;
 
 namespace OpenChart.Formats.OpenChart
 {
+    /// <summary>
+    /// The file handler for the OpenChart (.oc) file format.
+    /// </summary>
     public class OpenChartFileHandler : IFileHandler<Chart>
     {
+        /// <summary>
+        /// Metadata about the chart that is saved.
+        /// </summary>
         public class FileMetadata
         {
             public int KeyCount { get; set; }
@@ -15,6 +21,11 @@ namespace OpenChart.Formats.OpenChart
             public string ChartName { get; set; }
         }
 
+        /// <summary>
+        /// The data in an OpenChart file. This class is serialized/deserialized to save/load a file.
+        /// The properties in this class should not be changed. Always create a new version of the file
+        /// format instead of modifying existing ones.
+        /// </summary>
         public class FileData
         {
             public FileMetadata Metadata { get; set; }
@@ -25,6 +36,9 @@ namespace OpenChart.Formats.OpenChart
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
+        /// <summary>
+        /// The version this handler supports.
+        /// </summary>
         public static string Version => "0.1";
 
         /// <summary>
@@ -56,6 +70,9 @@ namespace OpenChart.Formats.OpenChart
             stream.Flush();
         }
 
+        /// <summary>
+        /// Converts a Chart object to a FileData object.
+        /// </summary>
         public FileData ConvertChartToFileData(Chart chart)
         {
             var fd = new FileData();

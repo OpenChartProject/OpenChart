@@ -32,6 +32,10 @@ namespace OpenChart.NoteSkins
         /// <value></value>
         public NoteSkinKey[] Keys { get; private set; }
 
+        /// <summary>
+        /// Creates a new noteskin instance.
+        /// </summary>
+        /// <param name="keyCount">The number of keys (columns) this noteskin supports.</param>
         public KeyModeSkin(int keyCount)
         {
             KeyCount = keyCount;

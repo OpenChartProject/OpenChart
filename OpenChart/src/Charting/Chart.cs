@@ -48,6 +48,10 @@ namespace OpenChart.Charting
         /// </summary>
         public LinkedList<ChartObject>[] Objects { get; private set; }
 
+        /// <summary>
+        /// Creates a new chart instance.
+        /// </summary>
+        /// <param name="keyCount">The keycount of the chart.</param>
         public Chart(int keyCount)
         {
             if (keyCount < 1)
@@ -65,6 +69,9 @@ namespace OpenChart.Charting
             }
         }
 
+        /// <summary>
+        /// Checks if both charts have the same (by value): keycount, BPM changes, and objects.
+        /// </summary>
         public override bool Equals(object obj)
         {
             var chart = obj as Chart;
@@ -114,6 +121,9 @@ namespace OpenChart.Charting
             return true;
         }
 
+        /// <summary>
+        /// Returns the object's hash code.
+        /// </summary>
         public override int GetHashCode()
         {
             return Tuple.Create(KeyCount, BPMs, Objects).GetHashCode();

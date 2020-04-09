@@ -19,6 +19,10 @@ namespace OpenChart.NoteSkins
         /// </summary>
         List<KeyModeSkin> keyModes;
 
+        /// <summary>
+        /// Creates a new noteskin instance.
+        /// </summary>
+        /// <param name="name">The name of the noteskin.</param>
         public NoteSkin(string name)
         {
             Name = name;
