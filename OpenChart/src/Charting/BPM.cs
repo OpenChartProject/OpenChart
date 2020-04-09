@@ -30,5 +30,22 @@ namespace OpenChart.Charting
         {
             Value = value;
         }
+
+        public override bool Equals(object obj)
+        {
+            var bpm = obj as BPM;
+
+            if (bpm == null)
+            {
+                return false;
+            }
+
+            return Beat == bpm.Beat && Value == bpm.Value;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(Beat, Value).GetHashCode();
+        }
     }
 }

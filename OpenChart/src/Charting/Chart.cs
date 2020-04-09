@@ -65,6 +65,60 @@ namespace OpenChart.Charting
             }
         }
 
+        public override bool Equals(object obj)
+        {
+            var chart = obj as Chart;
+
+            if (chart == null)
+            {
+                return false;
+            }
+            else if (KeyCount != chart.KeyCount || BPMs != chart.BPMs)
+            {
+                return false;
+            }
+            else if (Objects == chart.Objects)
+            {
+                return true;
+            }
+            else
+            {
+                // Compare the object counts for each column.
+                for (var i = 0; i < KeyCount; i++)
+                {
+                    if (Objects[i].Count != chart.Objects[i].Count)
+                    {
+                        return false;
+                    }
+                }
+
+                // Compare each object individually.
+                for (var i = 0; i < KeyCount; i++)
+                {
+                    var curA = Objects[i].First;
+                    var curB = chart.Objects[i].First;
+
+                    while (curA != null)
+                    {
+                        if (curA.Value != curB.Value)
+                        {
+                            return false;
+                        }
+
+                        curA = curA.Next;
+                        curB = curB.Next;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(KeyCount, BPMs, Objects).GetHashCode();
+        }
+
         /// <summary>
         /// Adds a BPM change to the chart. If the BPM being added occurs on the same beat as
         /// an existing BPM change, the existing change is overwritten with the new one.

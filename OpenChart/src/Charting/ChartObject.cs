@@ -30,5 +30,22 @@ namespace OpenChart.Charting
         {
             Key = key;
         }
+
+        public override bool Equals(object obj)
+        {
+            var chartObj = obj as ChartObject;
+
+            if (chartObj == null)
+            {
+                return false;
+            }
+
+            return Beat == chartObj.Beat && Key == chartObj.Key;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(Beat, Key).GetHashCode();
+        }
     }
 }
