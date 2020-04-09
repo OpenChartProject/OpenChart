@@ -31,6 +31,9 @@ namespace OpenChart.Charting
             Key = key;
         }
 
+        /// <summary>
+        /// Checks if both chart objects occur on the same beat and key.
+        /// </summary>
         public override bool Equals(object obj)
         {
             var chartObj = obj as ChartObject;
@@ -43,6 +46,9 @@ namespace OpenChart.Charting
             return Beat == chartObj.Beat && Key == chartObj.Key;
         }
 
+        /// <summary>
+        /// Returns the object's hash code.
+        /// </summary>
         public override int GetHashCode()
         {
             return Tuple.Create(Beat, Key).GetHashCode();
