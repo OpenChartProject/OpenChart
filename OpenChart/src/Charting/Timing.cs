@@ -31,5 +31,22 @@ namespace OpenChart.Charting
         {
             Beat = beat;
         }
+
+        public override bool Equals(object obj)
+        {
+            var timing = obj as Timing;
+
+            if (timing == null)
+            {
+                return false;
+            }
+
+            return Beat == timing.Beat;
+        }
+
+        public override int GetHashCode()
+        {
+            return Beat.GetHashCode();
+        }
     }
 }
