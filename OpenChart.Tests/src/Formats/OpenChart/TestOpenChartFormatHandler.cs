@@ -20,5 +20,11 @@ namespace OpenChart.Tests.Formats.OpenChart
         {
             Assert.AreEqual(".oc", handler.FileExtension);
         }
+
+        [Test]
+        public void Test_FormatName()
+        {
+            Assert.AreEqual("OpenChart", handler.FormatName);
+        }
     }
 }
