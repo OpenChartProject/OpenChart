@@ -1,49 +1,34 @@
-# tl;dr
+# File Formats
 
-This first section explains the process and rationale around how file formats are handled. Skip to the examples if you just want a quick reference.
+To help keep things consistent and make file formats easier to test, there is a standardized way that all file formats are handled.
 
-# File Format Process
+In order to create a new file format, you will need to:
 
-Ultimately, we want to only have a single chart class that we use internally within the app (`OpenChart.Charting.Chart`). This obviously makes our lives way easier since the internal logic doesn't depend on what kind of chart we're working on. The goal is to have a universal file format which can reasonably represent the data for all the other file formats.
+1. Create a class which represents the data stored by the file format.
+- Create an implementation of [IFormatConverter](IFormatConverter.cs).
+- Create an implementation of [IFormatSerializer](IFormatSerializer.cs).
+- Create an implementation of [IFormatHandler](IFormatHandler.cs).
 
-For handling different file formats, the most direct approach is to simply have a Converter class that can write `Chart` objects to the file format (exporting), or read the file and return a `Chart` object (importing).
+This diagram shows how these classes fit together. The direction the data is moving is dependent on whether a chart is being imported (loaded) or exported (saved).
 
-The problem with this approach is that you are stuffing a ton of logic into a single class. Suppose we try exporting a file but it didn't work like we expected it to. Was this error a result of incorrectly interpreting the `Chart` class in the context of a different file format? Or was this an I/O related error, such as bad formatting?
+![](diagram.png)
 
-The preferred approach here then is to split up the data conversion and the data representation.
+## IFormatConverter
 
-Data conversion refers to the interpretation of our `Chart` data. Every file format likely doesn't support all the data we use internally. Conversely, we likely don't use all of the data internally that a particular file format has to offer, either.
+The converter is responsible for converting between the native `Chart` object and an object used by an `IFormatSerializer`.
 
-Data representation refers to how that data is stored. This is where the I/O comes in, and knowing how to read/write data from a particular format.
+**Importing**: The converter accepts a **file-format object (FFO)** as input and converts it to a `Chart` object.
 
-In order to mesh these two processes together, we need an intermediate data class. Essentially, a class we can load the raw file data into that then gets passed to the chart converter.
+**Exporting**: The converter accepts a `Chart` object and converts it to a FFO.
 
-## Example
+## IFormatSerializer
 
-Say we want to add support for a file format called `Foo`. We need three things:
+The serializer is responsible for reading and writing the FFO to a stream.
 
-- A class that can store the data from a .foo file. (`FooChart`)
-- A class that can read and write `FooChart` objects to/from a .foo file. (`FooFileHandler`)
-- A class that can convert a `FooChart` into a `Chart` and vice versa. (`FooConverter`)
+**Importing**: The serializer accepts a byte stream and unserializes it into a FFO.
 
-### Conversion Pipeline
+**Exporting**: The serializer accepts a FFO from the converter, serializes it, and writes it to the byte stream.
 
-```
-import: .foo file ---> FooFileHandler    ---> FooChart ---> FooConverter ---> Chart
-export: Chart     ---> FooConverter ---> FooChart ---> FooFileHandler    ---> .foo file
-```
+## IFormatHandler
 
-Note: for the OpenChart file format, the process is simplified since the conversion step is unnecessary.
-
-# Benefits
-
-Compare the pipeline in the example with the pipeline described in the first section:
-
-```
-import: Chart 	  ---> .foo file
-export: .foo file ---> Chart
-```
-
-Both pipelines produce the same results, but by having more steps, we can distribute the complexity among several classes. This means having classes which are smaller, more concise, easier to read, and easier to maintain.
-
-Additionally, because we can test each individual step, we can now incrementally test four individual steps instead of just one.
+The format handler's main purpose is to call the converter and serializer and pass the necessary data between the two. While most format handlers will look nearly identical, the format handler is a great place to do some inspection on the file, such as checking the file's version to know which converter/serializer to use.
