@@ -5,9 +5,9 @@ To help keep things consistent and make file formats easier to test, there is a 
 In order to create a new file format, you will need to:
 
 1. Create a class which represents the data stored by the file format.
-- Create an implementation of [IFormatConverter](IFormatConverter.cs).
-- Create an implementation of [IFormatSerializer](IFormatSerializer.cs).
-- Create an implementation of [IFormatHandler](IFormatHandler.cs).
+2. Create an implementation of [IFormatConverter](IFormatConverter.cs).
+3. Create an implementation of [IFormatSerializer](IFormatSerializer.cs).
+4. Create an implementation of [IFormatHandler](IFormatHandler.cs).
 
 This diagram shows how these classes fit together. The direction the data is moving is dependent on whether a chart is being imported (loaded) or exported (saved).
 
