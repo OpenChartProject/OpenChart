@@ -7,6 +7,8 @@ namespace OpenChart.Charting
     /// <summary>
     /// A chart represents a playable beat mapping for a song. The chart has a key count
     /// which dictates what keymode it's played in.
+    ///
+    /// In the context of file formats, this class is referred to the "native" chart class.
     /// </summary>
     public class Chart
     {
@@ -42,10 +44,14 @@ namespace OpenChart.Charting
         /// The chart objects that make up the chart. Chart objects include things like tap notes,
         /// holds, mines, etc.
         ///
-        /// The objects are stored as an array of lists. Each list element represents a key/column.
+        /// The objects are stored as an array of linked lists. Each list element represents a key/column.
         /// </summary>
         public LinkedList<ChartObject>[] Objects { get; private set; }
 
+        /// <summary>
+        /// Creates a new chart instance.
+        /// </summary>
+        /// <param name="keyCount">The keycount of the chart.</param>
         public Chart(int keyCount)
         {
             if (keyCount < 1)
@@ -61,6 +67,66 @@ namespace OpenChart.Charting
             {
                 Objects[i] = new LinkedList<ChartObject>();
             }
+        }
+
+        /// <summary>
+        /// Checks if both charts have the same (by value): keycount, BPM changes, and objects.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            var chart = obj as Chart;
+
+            if (chart == null)
+            {
+                return false;
+            }
+            else if (KeyCount != chart.KeyCount || BPMs != chart.BPMs)
+            {
+                return false;
+            }
+            else if (Objects == chart.Objects)
+            {
+                return true;
+            }
+            else
+            {
+                // Compare the object counts for each column.
+                for (var i = 0; i < KeyCount; i++)
+                {
+                    if (Objects[i].Count != chart.Objects[i].Count)
+                    {
+                        return false;
+                    }
+                }
+
+                // Compare each object individually.
+                for (var i = 0; i < KeyCount; i++)
+                {
+                    var curA = Objects[i].First;
+                    var curB = chart.Objects[i].First;
+
+                    while (curA != null)
+                    {
+                        if (curA.Value != curB.Value)
+                        {
+                            return false;
+                        }
+
+                        curA = curA.Next;
+                        curB = curB.Next;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Returns the object's hash code.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Tuple.Create(KeyCount, BPMs, Objects).GetHashCode();
         }
 
         /// <summary>
