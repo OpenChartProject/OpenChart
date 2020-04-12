@@ -36,5 +36,13 @@ namespace OpenChart.Charting.Objects
         {
             Length = length;
         }
+
+        public override void CanBeInserted(ChartObject prev, ChartObject next)
+        {
+            if (next != null && next.Beat <= (Beat + Length))
+            {
+                throw new ChartException("Hold note is too long and obstructs another object.");
+            }
+        }
     }
 }
