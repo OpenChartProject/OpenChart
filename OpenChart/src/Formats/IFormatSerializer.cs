@@ -1,7 +1,7 @@
 namespace OpenChart.Formats
 {
     /// <summary>
-    /// The interface for a class which can serialize and unserialize a FFO (file-format object).
+    /// The interface for a class which can serialize and Deserialize a FFO (file-format object).
     /// </summary>
     /// <typeparam name="T">The FFO's class.</typeparam>
     public interface IFormatSerializer<T>
@@ -12,8 +12,8 @@ namespace OpenChart.Formats
         byte[] Serialize(T obj);
 
         /// <summary>
-        /// Unserializes the byte array into a FFO and returns it.
+        /// Deserializes the byte array into a FFO and returns it.
         /// </summary>
-        T Unserialize(byte[] data);
+        T Deserialize(byte[] data);
     }
 }

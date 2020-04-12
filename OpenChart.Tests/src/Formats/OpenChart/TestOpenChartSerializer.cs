@@ -15,7 +15,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Unserialize_MetaData()
+        public void Test_Deserialize_MetaData()
         {
             var data = @"
             {
@@ -28,7 +28,7 @@ namespace OpenChart.Tests.Formats.OpenChart
             }
             ";
 
-            var fd = serializer.Unserialize(Encoding.UTF8.GetBytes(data));
+            var fd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
 
             Assert.AreEqual(4, fd.Metadata.KeyCount);
             Assert.AreEqual("0.1", fd.Metadata.Version);

@@ -25,7 +25,7 @@ The converter is responsible for converting between the native `Chart` object an
 
 The serializer is responsible for reading and writing the FFO to a stream.
 
-**Importing**: The serializer accepts a byte stream and unserializes it into a FFO.
+**Importing**: The serializer accepts a byte stream and deserializes it into a FFO.
 
 **Exporting**: The serializer accepts a FFO from the converter, serializes it, and writes it to the byte stream.
 
