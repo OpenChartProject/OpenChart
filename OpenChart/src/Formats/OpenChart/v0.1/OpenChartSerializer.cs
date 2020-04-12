@@ -4,7 +4,7 @@ using System.Text.Json;
 namespace OpenChart.Formats.OpenChart.Version0_1
 {
     /// <summary>
-    /// Serializer for the OpenChart format. Uses JSON to serialize/unserialize FileData objects.
+    /// Serializer for the OpenChart format. Uses JSON to serialize/deserialize FileData objects.
     /// </summary>
     public class OpenChartSerializer : IFormatSerializer<FileData>
     {
@@ -14,10 +14,10 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         };
 
         /// <summary>
-        /// Unserializes raw JSON data into a FileData object.
+        /// Deserializes raw JSON data into a FileData object.
         /// </summary>
         /// <param name="data">JSON data.</param>
-        public FileData Unserialize(byte[] data)
+        public FileData Deserialize(byte[] data)
         {
             return (FileData)JsonSerializer.Deserialize(data, typeof(FileData), jsonOptions);
         }

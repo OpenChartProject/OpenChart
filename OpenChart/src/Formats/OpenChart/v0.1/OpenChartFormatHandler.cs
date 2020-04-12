@@ -26,7 +26,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         public Chart Read(StreamReader reader)
         {
             var data = reader.ReadToEnd();
-            var fd = serializer.Unserialize(Encoding.UTF8.GetBytes(data));
+            var fd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
 
             return converter.ToNative(fd);
         }
