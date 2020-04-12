@@ -3,7 +3,7 @@ namespace OpenChart.Charting.Objects
     /// <summary>
     /// A tap note represents a note that is it with a single keypress.
     /// </summary>
-    public class TapNote : ChartObject
+    public class TapNote : BaseObject
     {
         /// <summary>
         /// Creates a new TapNote instance.

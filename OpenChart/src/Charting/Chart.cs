@@ -1,3 +1,4 @@
+using OpenChart.Charting.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +45,7 @@ namespace OpenChart.Charting
         ///
         /// The objects are stored as an array of lists. Each list element represents a key/column.
         /// </summary>
-        public LinkedList<ChartObject>[] Objects { get; private set; }
+        public LinkedList<BaseObject>[] Objects { get; private set; }
 
         public Chart(int keyCount)
         {
@@ -55,11 +56,11 @@ namespace OpenChart.Charting
 
             KeyCount = keyCount;
             bpmList = new LinkedList<BPM>();
-            Objects = new LinkedList<ChartObject>[KeyCount];
+            Objects = new LinkedList<BaseObject>[KeyCount];
 
             for (var i = 0; i < KeyCount; i++)
             {
-                Objects[i] = new LinkedList<ChartObject>();
+                Objects[i] = new LinkedList<BaseObject>();
             }
         }
 
@@ -81,7 +82,7 @@ namespace OpenChart.Charting
         /// use `AddObjects()` instead as it's much faster.
         /// </summary>
         /// <param name="obj">The chart object to add.</param>
-        public void AddObject(ChartObject obj)
+        public void AddObject(BaseObject obj)
         {
             addObject(obj, null);
         }
@@ -95,7 +96,7 @@ namespace OpenChart.Charting
         /// no longer needed.
         /// </summary>
         /// <param name="obj">An array of chart objects to add.</param>
-        public void AddObjects(ChartObject[] objs)
+        public void AddObjects(BaseObject[] objs)
         {
             // Inserting into linked lists is usually pretty slow since it's O(n), but we can
             // speed things up by taking advantage of the fact that our list is sorted by beats.
@@ -106,7 +107,7 @@ namespace OpenChart.Charting
                         select obj;
 
             // Create a cursor for each key
-            var cursors = new LinkedListNode<ChartObject>[KeyCount];
+            var cursors = new LinkedListNode<BaseObject>[KeyCount];
 
             foreach (var obj in query)
             {
@@ -171,7 +172,7 @@ namespace OpenChart.Charting
         /// Adds an object to the chart using the given cursor as the starting point (or the
         /// start of the list if it's null). Returns the node the object was added to.
         /// </summary>
-        private LinkedListNode<ChartObject> addObject(ChartObject obj, LinkedListNode<ChartObject> cur)
+        private LinkedListNode<BaseObject> addObject(BaseObject obj, LinkedListNode<BaseObject> cur)
         {
             if (obj == null)
             {

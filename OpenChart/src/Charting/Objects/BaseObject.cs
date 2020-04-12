@@ -1,8 +1,11 @@
 using System;
 
-namespace OpenChart.Charting
+namespace OpenChart.Charting.Objects
 {
-    public abstract class ChartObject : Timing
+    /// <summary>
+    /// The base class for a chart object that occurs on a specific key at a certain beat.
+    /// </summary>
+    public abstract class BaseObject : Timing
     {
         int _key;
 
@@ -23,7 +26,7 @@ namespace OpenChart.Charting
             }
         }
 
-        public ChartObject(int key, double beat) : base(beat)
+        public BaseObject(int key, double beat) : base(beat)
         {
             Key = key;
         }
@@ -37,6 +40,6 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="prev">The object immediately before this (or null).</param>
         /// <param name="next">The object immediately after this (or null).</param>
-        public virtual void CanBeInserted(ChartObject prev, ChartObject next) { }
+        public virtual void CanBeInserted(BaseObject prev, BaseObject next) { }
     }
 }

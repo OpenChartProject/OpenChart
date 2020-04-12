@@ -126,7 +126,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObject_ObjectsInOrder()
         {
-            var objs = new ChartObject[] {
+            var objs = new BaseObject[] {
                 new TapNote(0, 0),
                 new TapNote(0, 1),
                 new TapNote(0, 2)
@@ -145,7 +145,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObject_ObjectsOutOfOrder()
         {
-            var objs = new ChartObject[] {
+            var objs = new BaseObject[] {
                 new TapNote(0, 2),
                 new TapNote(0, 0),
                 new TapNote(0, 1)
@@ -172,7 +172,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObject_TwoObjectsOnSameBeat()
         {
-            var objs = new ChartObject[] {
+            var objs = new BaseObject[] {
                 new TapNote(0, 0),
                 new TapNote(0, 0)
             };
@@ -185,7 +185,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObjects_SameKeyUnsorted()
         {
-            var objs = new ChartObject[] {
+            var objs = new BaseObject[] {
                 new TapNote(0, 2),
                 new TapNote(0, 0),
                 new TapNote(0, 1)
@@ -205,7 +205,7 @@ namespace OpenChart.Tests.Charting
             var beats = new double[] { 2, 0, 1, 3 };
             var sortedBeats = new double[] { 0, 1, 2, 3 };
 
-            List<ChartObject> objs = new List<ChartObject>();
+            List<BaseObject> objs = new List<BaseObject>();
 
             // Create a list of tap notes.
             for (var key = 0; key < chart.KeyCount; key++)
