@@ -1,4 +1,6 @@
 using ManagedBass;
+using OpenChart.Formats;
+using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
 using OpenChart.UI;
 using System;
@@ -18,9 +20,14 @@ namespace OpenChart
         public static string AppFolder { get; private set; }
 
         /// <summary>
+        /// The manager for different file formats.
+        /// </summary>
+        public static FormatManager Formats { get; private set; }
+
+        /// <summary>
         /// The location of the noteskins folder.
         /// </summary>
-        public const string NoteSkinFolder = "noteskins";
+        public static string NoteSkinFolder => "noteskins";
 
         /// <summary>
         /// The noteskins that are loaded into the app.
@@ -47,6 +54,9 @@ namespace OpenChart
             }
 
             Gtk.Application.Init();
+
+            Formats = new FormatManager();
+            Formats.AddFormat(new OpenChartFormatHandler());
 
             NoteSkins = new NoteSkinManager();
             NoteSkins.LoadAll();
