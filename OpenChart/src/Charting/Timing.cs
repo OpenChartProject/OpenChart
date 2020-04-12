@@ -31,5 +31,28 @@ namespace OpenChart.Charting
         {
             Beat = beat;
         }
+
+        /// <summary>
+        /// Returns if both timing objects occur at the same beat.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            var timing = obj as Timing;
+
+            if (timing == null)
+            {
+                return false;
+            }
+
+            return Beat == timing.Beat;
+        }
+
+        /// <summary>
+        /// Returns the object's hash code.
+        /// </summary>
+        public override int GetHashCode()
+        {
+            return Beat.GetHashCode();
+        }
     }
 }
