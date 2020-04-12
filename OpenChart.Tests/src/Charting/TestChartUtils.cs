@@ -18,7 +18,7 @@ namespace OpenChart.Tests.Charting
         [TestCase(-0.0001)]
         public void Test_BeatToSeconds_NegativeBeat(double value)
         {
-            Assert.Throws<ArgumentException>(
+            Assert.Throws<ArgumentOutOfRangeException>(
                 () => ChartUtils.BeatToSeconds(new BPM[1], value)
             );
         }
@@ -133,7 +133,7 @@ namespace OpenChart.Tests.Charting
         [TestCase(-0.0001)]
         public void Test_SecondsToBeat_NegativeSeconds(double value)
         {
-            Assert.Throws<ArgumentException>(
+            Assert.Throws<ArgumentOutOfRangeException>(
                 () => ChartUtils.SecondsToBeat(new BPM[1], value)
             );
         }

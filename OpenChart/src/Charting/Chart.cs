@@ -1,3 +1,4 @@
+using OpenChart.Charting.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,7 +47,7 @@ namespace OpenChart.Charting
         ///
         /// The objects are stored as an array of linked lists. Each list element represents a key/column.
         /// </summary>
-        public LinkedList<ChartObject>[] Objects { get; private set; }
+        public LinkedList<BaseObject>[] Objects { get; private set; }
 
         /// <summary>
         /// Creates a new chart instance.
@@ -56,16 +57,16 @@ namespace OpenChart.Charting
         {
             if (keyCount < 1)
             {
-                throw new ArgumentException("Key count must be greater than zero.");
+                throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
             }
 
             KeyCount = keyCount;
             bpmList = new LinkedList<BPM>();
-            Objects = new LinkedList<ChartObject>[KeyCount];
+            Objects = new LinkedList<BaseObject>[KeyCount];
 
             for (var i = 0; i < KeyCount; i++)
             {
-                Objects[i] = new LinkedList<ChartObject>();
+                Objects[i] = new LinkedList<BaseObject>();
             }
         }
 
@@ -142,9 +143,59 @@ namespace OpenChart.Charting
             cachedBPMs = null;
         }
 
+        /// <summary>
+        /// Adds a chart object to the chart. When adding several objects at once,
+        /// use `AddObjects()` instead as it's much faster.
+        /// </summary>
+        /// <param name="obj">The chart object to add.</param>
+        public void AddObject(BaseObject obj)
+        {
+            addObject(obj, null);
+        }
+
+        /// <summary>
+        /// Adds an array of chart objects to the chart. The objects don't have to be on the
+        /// same key, nor do they need to be sorted.
+        ///
+        /// TODO?: We could store cursors for each column on the Chart object itself, since it's
+        /// likely that objects will be getting added near each other. That would make this method
+        /// no longer needed.
+        /// </summary>
+        /// <param name="obj">An array of chart objects to add.</param>
+        public void AddObjects(BaseObject[] objs)
+        {
+            // Inserting into linked lists is usually pretty slow since it's O(n), but we can
+            // speed things up by taking advantage of the fact that our list is sorted by beats.
+            // We can sort the object array by beats and then reuse the LinkedListNode cursor
+            // so we don't need to start at the beginning of the list every time.
+            var query = from obj in objs
+                        orderby obj.Beat
+                        select obj;
+
+            // Create a cursor for each key
+            var cursors = new LinkedListNode<BaseObject>[KeyCount];
+
+            foreach (var obj in query)
+            {
+                // This logic is only necessary to prevent an out of range exception when we
+                // try and access the list. If the object's key index is out of range, the
+                // `addObject()` method will take care of it by throwing an exception.
+                var cur = obj.Key < KeyCount ? cursors[obj.Key] : null;
+
+                // Use the cursor as the starting point for inserting the object, then save it
+                // to be reused later.
+                cur = addObject(obj, cur);
+                cursors[obj.Key] = cur;
+            }
+        }
+
         private void addBPM(BPM bpm)
         {
-            if (bpmList.Count == 0)
+            if (bpm == null)
+            {
+                throw new ArgumentNullException("BPM cannot be null.");
+            }
+            else if (bpmList.Count == 0)
             {
                 if (bpm.Beat != 0)
                 {
@@ -181,6 +232,63 @@ namespace OpenChart.Charting
 
                 cur = cur.Next;
             }
+        }
+
+        /// <summary>
+        /// Adds an object to the chart using the given cursor as the starting point (or the
+        /// start of the list if it's null). Returns the node the object was added to.
+        /// </summary>
+        private LinkedListNode<BaseObject> addObject(BaseObject obj, LinkedListNode<BaseObject> cur)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException("Chart object cannot be null.");
+            }
+            else if (obj.Key >= KeyCount)
+            {
+                throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
+            }
+
+            var col = Objects[obj.Key];
+            cur = cur ?? col.First;
+
+            // Traverse down the list.
+            while (cur != null)
+            {
+                if (cur.Value.Beat > obj.Beat)
+                {
+                    // Check if the object can be inserted here.
+                    obj.CanBeInserted(
+                        cur.Previous != null ? cur.Previous.Value : null,
+                        cur.Value
+                    );
+
+                    // Insert the object as soon as we find an existing object which occurs after it.
+                    return col.AddBefore(cur, obj);
+                }
+                else if (cur.Value.Beat == obj.Beat)
+                {
+                    if (cur.Value == obj)
+                    {
+                        throw new ChartException("Chart object already exists in chart.");
+                    }
+                    else
+                    {
+                        throw new ChartException("Cannot add chart object (an object already exists at this beat).");
+                    }
+                }
+
+                cur = cur.Next;
+            }
+
+            // Check if the object can be inserted here.
+            obj.CanBeInserted(
+                col.Last != null ? col.Last.Value : null,
+                null
+            );
+
+            // Add the object to the end if it hasn't been inserted already.
+            return col.AddLast(obj);
         }
     }
 }
