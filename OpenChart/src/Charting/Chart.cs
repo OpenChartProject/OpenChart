@@ -77,19 +77,58 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
-        /// Adds a chart object to the chart.
+        /// Adds a chart object to the chart. When adding several objects at once,
+        /// use `AddObjects()` instead as it's much faster.
         /// </summary>
+        /// <param name="obj">The chart object to add.</param>
         public void AddObject(ChartObject obj)
         {
-            if (obj.Key >= KeyCount)
+            addObject(obj, null);
+        }
+
+        /// <summary>
+        /// Adds an array of chart objects to the chart. The objects don't have to be on the
+        /// same key, nor do they need to be sorted.
+        ///
+        /// TODO?: We could store cursors for each column on the Chart object itself, since it's
+        /// likely that objects will be getting added near each other. That would make this method
+        /// no longer needed.
+        /// </summary>
+        /// <param name="obj">An array of chart objects to add.</param>
+        public void AddObjects(ChartObject[] objs)
+        {
+            // Inserting into linked lists is usually pretty slow since it's O(n), but we can
+            // speed things up by taking advantage of the fact that our list is sorted by beats.
+            // We can sort the object array by beats and then reuse the LinkedListNode cursor
+            // so we don't need to start at the beginning of the list every time.
+            var query = from obj in objs
+                        orderby obj.Beat
+                        select obj;
+
+            // Create a cursor for each key
+            var cursors = new LinkedListNode<ChartObject>[KeyCount];
+
+            foreach (var obj in query)
             {
-                throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
+                // This logic is only necessary to prevent an out of range exception when we
+                // try and access the list. If the object's key index is out of range, the
+                // `addObject()` method will take care of it by throwing an exception.
+                var cur = obj.Key < KeyCount ? cursors[obj.Key] : null;
+
+                // Use the cursor as the starting point for inserting the object, then save it
+                // to be reused later.
+                cur = addObject(obj, cur);
+                cursors[obj.Key] = cur;
             }
         }
 
         private void addBPM(BPM bpm)
         {
-            if (bpmList.Count == 0)
+            if (bpm == null)
+            {
+                throw new ArgumentNullException("BPM cannot be null.");
+            }
+            else if (bpmList.Count == 0)
             {
                 if (bpm.Beat != 0)
                 {
@@ -126,6 +165,51 @@ namespace OpenChart.Charting
 
                 cur = cur.Next;
             }
+        }
+
+        /// <summary>
+        /// Adds an object to the chart using the given cursor as the starting point (or the
+        /// start of the list if it's null). Returns the node the object was added to.
+        /// </summary>
+        private LinkedListNode<ChartObject> addObject(ChartObject obj, LinkedListNode<ChartObject> cur)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException("Chart object cannot be null.");
+            }
+            else if (obj.Key >= KeyCount)
+            {
+                throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
+            }
+
+            var col = Objects[obj.Key];
+            cur = cur ?? col.First;
+
+            // Traverse down the list
+            while (cur != null)
+            {
+                if (cur.Value.Beat > obj.Beat)
+                {
+                    // Insert the object as soon as we find an existing object which occurs after it.
+                    return col.AddBefore(cur, obj);
+                }
+                else if (cur.Value.Beat == obj.Beat)
+                {
+                    if (cur.Value == obj)
+                    {
+                        throw new ChartException("Chart object already exists in chart.");
+                    }
+                    else
+                    {
+                        throw new ChartException("Cannot add chart object (an object already exists at this beat).");
+                    }
+                }
+
+                cur = cur.Next;
+            }
+
+            // Add the object to the end if it hasn't been inserted already.
+            return col.AddLast(obj);
         }
     }
 }
