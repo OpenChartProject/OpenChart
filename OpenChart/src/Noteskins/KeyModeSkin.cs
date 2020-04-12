@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
     /// <summary>
     /// Contains the images that are displayed for a particular keymode.
@@ -32,6 +32,10 @@ namespace OpenChart.NoteSkin
         /// <value></value>
         public NoteSkinKey[] Keys { get; private set; }
 
+        /// <summary>
+        /// Creates a new noteskin instance.
+        /// </summary>
+        /// <param name="keyCount">The number of keys (columns) this noteskin supports.</param>
         public KeyModeSkin(int keyCount)
         {
             KeyCount = keyCount;

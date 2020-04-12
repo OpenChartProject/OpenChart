@@ -4,21 +4,28 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
-    ///
     /// <summary>
+    /// Manages loading in noteskins and retrieving them by name.
     /// </summary>
     public class NoteSkinManager
     {
         static Regex reNoteSkinKeyModeDir = new Regex(@"^(\d+)[kK]$");
         List<NoteSkin> noteSkins;
 
+        /// <summary>
+        /// Creates a new noteskin manager instance.
+        /// </summary>
         public NoteSkinManager()
         {
             noteSkins = new List<NoteSkin>();
         }
 
+        /// <summary>
+        /// Returns the noteskin with the given name, or null if it hasn't been loaded or doesn't exist.
+        /// </summary>
+        /// <param name="name">The name of the noteskin.</param>
         public NoteSkin GetNoteSkin(string name)
         {
             return noteSkins.Find(ns => ns.Name == name);
