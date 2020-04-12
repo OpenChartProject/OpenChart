@@ -7,16 +7,16 @@ namespace OpenChart.Charting
         int _key;
 
         /// <summary>
-        /// The key index this object occurs on.
+        /// The key index this object occurs on. The first key starts at zero.
         /// </summary>
         public int Key
         {
             get => _key;
             set
             {
-                if (value <= 0)
+                if (value < 0)
                 {
-                    throw new ArgumentException("Key cannot be less than 1.");
+                    throw new ArgumentOutOfRangeException("Key cannot be less than 0.");
                 }
 
                 _key = value;

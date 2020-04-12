@@ -11,16 +11,16 @@ namespace OpenChart.Tests.Charting
 
     public class TestChartObject
     {
+        [TestCase(-999)]
         [TestCase(-1)]
-        [TestCase(0)]
-        public void Test_KeyLessThanOne(int value)
+        public void Test_KeyLessThanZero(int value)
         {
-            Assert.Throws<ArgumentException>(() => new DummyObject(value));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DummyObject(value));
         }
 
+        [TestCase(0)]
         [TestCase(1)]
-        [TestCase(4)]
-        public void Test_KeyGteOne(int value)
+        public void Test_KeyGteZero(int value)
         {
             Assert.DoesNotThrow(() => new DummyObject(value));
         }

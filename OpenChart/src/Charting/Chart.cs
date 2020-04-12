@@ -50,7 +50,7 @@ namespace OpenChart.Charting
         {
             if (keyCount < 1)
             {
-                throw new ArgumentException("Key count must be greater than zero.");
+                throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
             }
 
             KeyCount = keyCount;
@@ -74,6 +74,17 @@ namespace OpenChart.Charting
 
             // Invalidate the cache.
             cachedBPMs = null;
+        }
+
+        /// <summary>
+        /// Adds a chart object to the chart.
+        /// </summary>
+        public void AddObject(ChartObject obj)
+        {
+            if (obj.Key >= KeyCount)
+            {
+                throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
+            }
         }
 
         private void addBPM(BPM bpm)
