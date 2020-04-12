@@ -1,6 +1,6 @@
 using OpenChart.UI.Assets;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
     /// <summary>
     /// Contains the image assets for a single key (column).

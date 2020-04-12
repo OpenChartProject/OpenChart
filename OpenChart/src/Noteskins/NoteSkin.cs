@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace OpenChart.NoteSkin
+namespace OpenChart.NoteSkins
 {
     /// <summary>
     /// A noteskin contains the image assets that are used in the notefield to display the chart.
@@ -19,6 +19,10 @@ namespace OpenChart.NoteSkin
         /// </summary>
         List<KeyModeSkin> keyModes;
 
+        /// <summary>
+        /// Creates a new noteskin instance.
+        /// </summary>
+        /// <param name="name">The name of the noteskin.</param>
         public NoteSkin(string name)
         {
             Name = name;
