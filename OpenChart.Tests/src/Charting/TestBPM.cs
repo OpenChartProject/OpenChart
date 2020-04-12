@@ -10,7 +10,7 @@ namespace OpenChart.Tests.Charting
         [TestCase(0)]
         public void Test_NonPositiveBPM(double value)
         {
-            Assert.Throws<ArgumentException>(() => new BPM(value, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new BPM(value, 0));
         }
 
         [TestCase(0.0001)]

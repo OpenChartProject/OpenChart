@@ -19,7 +19,7 @@ namespace OpenChart.Charting
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentException("BPM must be greater than zero.");
+                    throw new ArgumentOutOfRangeException("BPM must be greater than zero.");
                 }
 
                 _value = value;

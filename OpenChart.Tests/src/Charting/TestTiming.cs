@@ -15,7 +15,7 @@ namespace OpenChart.Tests.Charting
         [TestCase(-0.001)]
         public void Test_NegativeBeat(double value)
         {
-            Assert.Throws<ArgumentException>(() => new TimingDummy(value));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TimingDummy(value));
         }
 
         [TestCase(0)]

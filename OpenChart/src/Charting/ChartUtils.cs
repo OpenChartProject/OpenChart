@@ -20,7 +20,7 @@ namespace OpenChart.Charting
             }
             else if (beat < 0)
             {
-                throw new ArgumentException("Beat cannot be negative.");
+                throw new ArgumentOutOfRangeException("Beat cannot be negative.");
             }
             else if (beat == 0)
             {
@@ -78,7 +78,7 @@ namespace OpenChart.Charting
             }
             else if (seconds < 0)
             {
-                throw new ArgumentException("Seconds cannot be negative.");
+                throw new ArgumentOutOfRangeException("Seconds cannot be negative.");
             }
             else if (seconds == 0)
             {
