@@ -185,11 +185,17 @@ namespace OpenChart.Charting
             var col = Objects[obj.Key];
             cur = cur ?? col.First;
 
-            // Traverse down the list
+            // Traverse down the list.
             while (cur != null)
             {
                 if (cur.Value.Beat > obj.Beat)
                 {
+                    // Check if the object can be inserted here.
+                    obj.CanBeInserted(
+                        cur.Previous != null ? cur.Previous.Value : null,
+                        cur.Value
+                    );
+
                     // Insert the object as soon as we find an existing object which occurs after it.
                     return col.AddBefore(cur, obj);
                 }
@@ -207,6 +213,12 @@ namespace OpenChart.Charting
 
                 cur = cur.Next;
             }
+
+            // Check if the object can be inserted here.
+            obj.CanBeInserted(
+                col.Last != null ? col.Last.Value : null,
+                null
+            );
 
             // Add the object to the end if it hasn't been inserted already.
             return col.AddLast(obj);
