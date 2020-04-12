@@ -25,7 +25,7 @@ namespace OpenChart.Tests.Charting
         [TestCase(0)]
         public void Test_KeyCountLessThanOne(int value)
         {
-            Assert.Throws<ArgumentException>(() => new Chart(value));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Chart(value));
         }
 
         [Test]
