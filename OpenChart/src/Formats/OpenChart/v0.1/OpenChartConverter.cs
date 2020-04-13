@@ -24,6 +24,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         {
             var project = new Project();
 
+            // Add the song data if it's present
             if (data.Song != null)
             {
                 project.SongMetadata = new SongMetadata();
@@ -32,6 +33,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                 project.SongMetadata.Title = data.Song.Title;
             }
 
+            // Convert each chart in the project
             if (data.Charts != null)
             {
                 foreach (var c in data.Charts)
@@ -50,28 +52,30 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="project">A native Project.</param>
         public ProjectData FromNative(Project project)
         {
-            var fd = new ProjectData();
-            fd.Metadata.Version = OpenChartFormatHandler.Version;
+            var pd = new ProjectData();
+            pd.Metadata.Version = OpenChartFormatHandler.Version;
 
+            // Add the song data if it's present
             if (project.SongMetadata != null)
             {
-                fd.Song = new SongData();
-                fd.Song.Artist = project.SongMetadata.Artist;
-                fd.Song.Title = project.SongMetadata.Title;
-                fd.Song.Path = project.SongMetadata.AudioFilePath;
+                pd.Song = new SongData();
+                pd.Song.Artist = project.SongMetadata.Artist;
+                pd.Song.Title = project.SongMetadata.Title;
+                pd.Song.Path = project.SongMetadata.AudioFilePath;
             }
 
             var chartList = new List<ChartData>(project.Charts.Count);
 
+            // Convert each chart in the project
             foreach (var c in project.Charts)
             {
                 var chart = new ChartData();
                 chart.KeyCount = c.KeyCount;
             }
 
-            fd.Charts = chartList.ToArray();
+            pd.Charts = chartList.ToArray();
 
-            return fd;
+            return pd;
         }
     }
 }
