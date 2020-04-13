@@ -29,7 +29,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             var project = converter.ToNative(data);
 
-            Assert.AreEqual(0, project.Charts.Count);
+            Assert.IsEmpty(project.Charts);
             Assert.IsNull(project.SongMetadata);
         }
 
@@ -39,8 +39,8 @@ namespace OpenChart.Tests.Formats.OpenChart
             var project = new Project();
             var data = converter.FromNative(project);
 
-            Assert.AreEqual(0, data.Charts.Length);
             Assert.AreEqual(OpenChartFormatHandler.Version, data.Metadata.Version);
+            Assert.IsEmpty(data.Charts);
             Assert.IsNull(data.Song);
         }
     }
