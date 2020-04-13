@@ -12,7 +12,7 @@ namespace OpenChart.Formats
         /// <summary>
         /// Whether this converter supports exporting multiple charts at one time.
         /// </summary>
-        bool SupportsMultipleExports { get; }
+        static bool SupportsMultipleExports { get; }
 
         /// <summary>
         /// Converts a FFO to a native Project.

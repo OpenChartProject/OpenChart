@@ -15,25 +15,28 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Deserialize_MetaData()
+        public void Test_Deserialize_MetadataRequired()
+        {
+            var data = "{}";
+            var projectData = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
+        }
+
+        [Test]
+        public void Test_Deserialize_EmptyProject()
         {
             var data = @"
             {
                 ""metadata"": {
-                    ""keyCount"": 4,
-                    ""version"": ""0.1"",
-                    ""author"": ""Jessie"",
-                    ""chartName"": ""I hope this test passes""
-                }
+                    ""version"": ""test-version""
+                },
+                ""charts"": [],
+                ""song"": null
             }
             ";
 
-            var fd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
+            var pd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
 
-            Assert.AreEqual(4, fd.Metadata.KeyCount);
-            Assert.AreEqual("0.1", fd.Metadata.Version);
-            Assert.AreEqual("Jessie", fd.Metadata.Author);
-            Assert.AreEqual("I hope this test passes", fd.Metadata.ChartName);
+            Assert.AreEqual("test-version", pd.Metadata.Version);
         }
     }
 }

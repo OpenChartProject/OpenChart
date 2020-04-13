@@ -1,6 +1,7 @@
 using OpenChart.Charting;
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Projects;
+using OpenChart.Songs;
 using System.Collections.Generic;
 
 namespace OpenChart.Formats.OpenChart.Version0_1
@@ -10,7 +11,10 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// </summary>
     public class OpenChartConverter : IProjectConverter<ProjectData>
     {
-        public bool SupportsMultipleExports => true;
+        /// <summary>
+        /// This converter supports exporting multiple charts into a single file.
+        /// </summary>
+        public static bool SupportsMultipleExports => true;
 
         /// <summary>
         /// Converts an OpenChart file into a Project instance.
@@ -20,14 +24,21 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         {
             var project = new Project();
 
-            project.SongMetadata.Artist = data.Song.Artist;
-            project.SongMetadata.AudioFilePath = data.Song.Path;
-            project.SongMetadata.Title = data.Song.Title;
-
-            foreach (var c in data.Charts)
+            if (data.Song != null)
             {
-                var chart = new Chart(c.KeyCount);
-                project.Charts.Add(chart);
+                project.SongMetadata = new SongMetadata();
+                project.SongMetadata.Artist = data.Song.Artist;
+                project.SongMetadata.AudioFilePath = data.Song.Path;
+                project.SongMetadata.Title = data.Song.Title;
+            }
+
+            if (data.Charts != null)
+            {
+                foreach (var c in data.Charts)
+                {
+                    var chart = new Chart(c.KeyCount);
+                    project.Charts.Add(chart);
+                }
             }
 
             return project;
@@ -40,7 +51,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         public ProjectData FromNative(Project project)
         {
             var fd = new ProjectData();
-            fd.Metadata.Version = "0.1";
+            fd.Metadata.Version = OpenChartFormatHandler.Version;
 
             if (project.SongMetadata != null)
             {

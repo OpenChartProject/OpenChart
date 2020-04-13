@@ -1,6 +1,7 @@
 using NUnit.Framework;
-using OpenChart.Charting;
 using OpenChart.Formats.OpenChart.Version0_1;
+using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Projects;
 
 namespace OpenChart.Tests.Formats.OpenChart
 {
@@ -15,26 +16,32 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
+        public void Test_SupportsMultipleExports()
+        {
+            Assert.IsTrue(OpenChartConverter.SupportsMultipleExports);
+        }
+
+        [Test]
         public void Test_ToNative_Empty()
         {
-            var fd = new ProjectData();
-            fd.Metadata = new ProjectMetadata();
-            fd.Metadata.KeyCount = 4;
-            var chart = converter.ToNative(fd);
+            var data = new ProjectData();
+            data.Metadata.Version = OpenChartFormatHandler.Version;
 
-            Assert.AreEqual(0, chart.BPMs.Length);
-            Assert.AreEqual(fd.Metadata.KeyCount, chart.KeyCount);
-            Assert.AreEqual(fd.Metadata.KeyCount, chart.Objects.Length);
+            var project = converter.ToNative(data);
+
+            Assert.AreEqual(0, project.Charts.Count);
+            Assert.IsNull(project.SongMetadata);
         }
 
         [Test]
         public void Test_FromNative_Empty()
         {
-            var chart = new Chart(4);
-            var fd = converter.FromNative(chart);
+            var project = new Project();
+            var data = converter.FromNative(project);
 
-            Assert.AreEqual(chart.KeyCount, fd.Metadata.KeyCount);
-            Assert.AreEqual("0.1", fd.Metadata.Version);
+            Assert.AreEqual(0, data.Charts.Length);
+            Assert.AreEqual(OpenChartFormatHandler.Version, data.Metadata.Version);
+            Assert.IsNull(data.Song);
         }
     }
 }
