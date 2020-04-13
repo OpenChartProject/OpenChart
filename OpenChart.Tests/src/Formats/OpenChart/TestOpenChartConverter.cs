@@ -17,8 +17,8 @@ namespace OpenChart.Tests.Formats.OpenChart
         [Test]
         public void Test_ToNative_Empty()
         {
-            var fd = new FileData();
-            fd.Metadata = new FileMetadata();
+            var fd = new ProjectData();
+            fd.Metadata = new ProjectMetadata();
             fd.Metadata.KeyCount = 4;
             var chart = converter.ToNative(fd);
 
