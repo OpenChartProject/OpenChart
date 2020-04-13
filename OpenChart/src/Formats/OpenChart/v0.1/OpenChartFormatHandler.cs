@@ -1,4 +1,5 @@
-using OpenChart.Charting;
+using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Projects;
 using System.IO;
 using System.Text;
 
@@ -6,8 +7,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1
 {
     public class OpenChartFormatHandler : IFormatHandler
     {
-        static IFormatConverter<FileData> converter = new OpenChartConverter();
-        static IFormatSerializer<FileData> serializer = new OpenChartSerializer();
+        static IProjectConverter<ProjectData> converter = new OpenChartConverter();
+        static IFormatSerializer<ProjectData> serializer = new OpenChartSerializer();
 
         /// <summary>
         /// The name of the OpenChart format.
@@ -20,26 +21,25 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         public string FileExtension => ".oc";
 
         /// <summary>
-        /// Reads data from an OpenChart file and returns a Chart object.
+        /// Reads data from an OpenChart file and returns a Project object.
         /// </summary>
         /// <param name="reader">The stream that contains the file data.</param>
-        public Chart Read(StreamReader reader)
+        public Project Read(StreamReader reader)
         {
             var data = reader.ReadToEnd();
-            var fd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
+            var projectData = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
 
-            return converter.ToNative(fd);
+            return converter.ToNative(projectData);
         }
 
         /// <summary>
-        /// Writes the chart object to an OpenChart file.
+        /// Writes the project object to an OpenChart file.
         /// </summary>
         /// <param name="writer">The stream to write to.</param>
-        /// <param name="chart">The chart to write.</param>
-        public void Write(StreamWriter writer, Chart chart)
+        /// <param name="project">The project to write.</param>
+        public void Write(StreamWriter writer, Project project)
         {
-            var fd = converter.FromNative(chart);
-            var data = serializer.Serialize(fd);
+            var data = serializer.Serialize(converter.FromNative(project));
 
             writer.Write(data);
             writer.Flush();
