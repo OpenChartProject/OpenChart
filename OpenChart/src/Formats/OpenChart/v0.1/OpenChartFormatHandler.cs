@@ -21,6 +21,11 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         public string FileExtension => ".oc";
 
         /// <summary>
+        /// The file format version this handler supports.
+        /// </summary>
+        public static string Version => "0.1";
+
+        /// <summary>
         /// Reads data from an OpenChart file and returns a Project object.
         /// </summary>
         /// <param name="reader">The stream that contains the file data.</param>
