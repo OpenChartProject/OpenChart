@@ -20,16 +20,32 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
+            var pd = (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
+
+            if (pd.Metadata == null)
+            {
+                throw new SerializerException("The 'metadata' is missing or null.");
+            }
+            else if (string.IsNullOrEmpty(pd.Metadata.Version))
+            {
+                throw new SerializerException("The 'version' field is missing or empty.");
+            }
+
+            if (pd.Charts == null)
+            {
+                pd.Charts = new ChartData[] { };
+            }
+
+            return pd;
         }
 
         /// <summary>
         /// Serializes a FileData object into JSON.
         /// </summary>
         /// <param name="fd">The FileData object.</param>
-        public byte[] Serialize(ProjectData fd)
+        public byte[] Serialize(ProjectData pd)
         {
-            var str = JsonSerializer.Serialize(fd, jsonOptions);
+            var str = JsonSerializer.Serialize(pd, jsonOptions);
 
             return Encoding.UTF8.GetBytes(str);
         }
