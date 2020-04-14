@@ -34,7 +34,7 @@ With the IO stream parsed, the serializer creates an instance of a "File data ob
 
 The file data object is then passed from the serializer to the converter, whose job is to take the object and somehow transform it into a `Project` object.
 
-Not all fields in the file data object may be used. While OpenChart *is* meant to be universal, some fields may not be used within the app. Ignoring or discarding data is perfectly OK. **We may decide to use that data in the future.**
+While OpenChart *is* meant to be universal, some fields may not be used within the app. In this case, the converter can safely ignore those extra fields. Note that it's the converter's responsibility to know what data we do and don't need. The serializer shouldn't discard data unless it's for a good reason. **We may decide to use that data in the future,** and it will be much easier if we don't have to modify the converter *and* the serializer.
 
 ## Exporting
 
