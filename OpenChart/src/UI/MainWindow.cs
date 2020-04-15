@@ -1,4 +1,5 @@
 using Gtk;
+using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI
 {
@@ -16,10 +17,10 @@ namespace OpenChart.UI
             var box = new Box(Orientation.Horizontal, 0);
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(4);
 
-            box.Add(new Image(noteSkin.Keys[0].TapNote.Pixbuf));
-            box.Add(new Image(noteSkin.Keys[1].TapNote.Pixbuf));
-            box.Add(new Image(noteSkin.Keys[2].TapNote.Pixbuf));
-            box.Add(new Image(noteSkin.Keys[3].TapNote.Pixbuf));
+            box.Add(new NoteWidget(0, noteSkin.Keys[0].TapNote));
+            box.Add(new NoteWidget(0, noteSkin.Keys[1].TapNote));
+            box.Add(new NoteWidget(0, noteSkin.Keys[2].TapNote));
+            box.Add(new NoteWidget(0, noteSkin.Keys[3].TapNote));
 
             Add(box);
 
