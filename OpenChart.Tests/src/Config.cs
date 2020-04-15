@@ -1,3 +1,4 @@
+using OpenChart.NoteSkins;
 using System.IO;
 using System.Reflection;
 
@@ -21,8 +22,13 @@ namespace OpenChart.Tests
         /// </summary>
         public readonly string TestDataPath;
 
+        public readonly NoteSkinManager NoteSkins;
+
         private Config()
         {
+            // Initialize Gtk, otherwise it causes a crash when trying to create a Widget instance.
+            Gtk.Application.Init();
+
             ProjectPath = Path.GetDirectoryName(
                 Assembly.GetExecutingAssembly().Location
             );
@@ -35,8 +41,8 @@ namespace OpenChart.Tests
             ProjectPath = Path.GetFullPath(Path.Join(ProjectPath, "..", "..", "..", ".."));
             TestDataPath = Path.Join(ProjectPath, "OpenChart.Tests", "test_data");
 
-            // Initialize Gtk, otherwise it causes a crash when trying to create a Widget instance.
-            Gtk.Application.Init();
+            NoteSkins = new NoteSkinManager(Path.Join(ProjectPath, "OpenChart", "assets", "noteskins"));
+            NoteSkins.LoadAll();
         }
 
         /// <summary>
