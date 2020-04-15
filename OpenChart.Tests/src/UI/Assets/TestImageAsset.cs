@@ -1,6 +1,5 @@
 using GLib;
 using NUnit.Framework;
-using OpenChart.Tests;
 using OpenChart.UI.Assets;
 using System.IO;
 

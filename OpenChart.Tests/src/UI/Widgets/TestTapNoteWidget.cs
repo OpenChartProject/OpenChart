@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using OpenChart.NoteSkins;
 using OpenChart.UI.Widgets;
-using OpenChart.Tests;
 
 namespace OpenChart.Tests.UI.Widgets
 {

@@ -3,8 +3,28 @@ using System;
 
 namespace OpenChart.UI.Widgets
 {
-    public abstract class BaseNoteFieldWidget : ImageWidget, IKeyWidget, ISkinnedWidget
+    public abstract class BaseNoteFieldWidget : ImageWidget, IBeatWidget, IKeyWidget, ISkinnedWidget
     {
+        double _beat;
+
+        public double Beat
+        {
+            get => _beat;
+            set
+            {
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Beat cannot be negative.");
+                }
+
+                if (_beat != value)
+                {
+                    _beat = value;
+                    OnBeatChanged();
+                }
+            }
+        }
+
         int _key;
 
         /// <summary>
@@ -46,12 +66,17 @@ namespace OpenChart.UI.Widgets
         }
 
         /// <summary>
-        /// An event fired when the key the widget is assigned to changes.
+        /// An event fired when the widget's beat changes.
+        /// </summary>
+        public event EventHandler BeatChanged;
+
+        /// <summary>
+        /// An event fired when the widget's key changes.
         /// </summary>
         public event EventHandler KeyChanged;
 
         /// <summary>
-        /// An event fired when the note skin the widget is using changes.
+        /// An event fired when widget's note skin changes.
         /// </summary>
         public event EventHandler NoteSkinChanged;
 
@@ -59,6 +84,15 @@ namespace OpenChart.UI.Widgets
         {
             Key = key;
             NoteSkin = noteSkin;
+        }
+
+        /// <summary>
+        /// Fires a BeatChanged event.
+        /// </summary>
+        protected virtual void OnBeatChanged()
+        {
+            var handler = BeatChanged;
+            handler?.Invoke(this, null);
         }
 
         /// <summary>

@@ -8,7 +8,8 @@ namespace OpenChart.UI.Widgets
     public interface IKeyWidget
     {
         /// <summary>
-        /// The key the widget is bound to.
+        /// The key the widget is bound to. The key determines the x-position of the
+        /// widget in the note field.
         /// </summary>
         int Key { get; set; }
     }
