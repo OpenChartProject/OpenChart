@@ -34,6 +34,9 @@ namespace OpenChart.Tests
             //   OpenChart/
             ProjectPath = Path.GetFullPath(Path.Join(ProjectPath, "..", "..", "..", ".."));
             TestDataPath = Path.Join(ProjectPath, "OpenChart.Tests", "test_data");
+
+            // Initialize Gtk, otherwise it causes a crash when trying to create a Widget instance.
+            Gtk.Application.Init();
         }
 
         /// <summary>
