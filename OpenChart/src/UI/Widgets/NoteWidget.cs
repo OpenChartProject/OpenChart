@@ -1,23 +1,29 @@
 using OpenChart.UI.Assets;
+using System;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteWidget : NoteFieldObject
+    public class NoteWidget : ImageWidget, IKeyWidget
     {
-        ImageAsset _image;
-        public ImageAsset Image
+        int _key;
+        public int Key
         {
-            get => _image;
+            get => _key;
             set
             {
-                _image = value;
-                Pixbuf = _image.Pixbuf;
+                if (value < 0)
+                {
+                    throw new ArgumentOutOfRangeException("Key cannot be negative.");
+                }
+
+                _key = value;
             }
         }
 
-        public NoteWidget(int key, ImageAsset image) : base(key)
+        public NoteWidget(int key, ImageAsset image) : base(image)
         {
             Image = image;
+            Key = key;
         }
     }
 }
