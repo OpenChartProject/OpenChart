@@ -17,6 +17,7 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         protected virtual void UpdateAppearance()
         {
+            // Use the tap note image from the noteskin.
             Image = NoteSkin?.Keys[Key]?.TapNote;
         }
     }

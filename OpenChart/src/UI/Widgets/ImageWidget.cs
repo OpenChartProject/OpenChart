@@ -11,7 +11,7 @@ namespace OpenChart.UI.Widgets
         ImageAsset _image;
 
         /// <summary>
-        /// The image to display.
+        /// The image to display. Can be null.
         /// </summary>
         public ImageAsset Image
         {
