@@ -25,9 +25,9 @@ namespace OpenChart
         public static FormatManager Formats { get; private set; }
 
         /// <summary>
-        /// The location of the noteskins folder.
+        /// The location of the noteskins folder. `noteskins/`
         /// </summary>
-        public static string NoteSkinFolder => "noteskins";
+        public static string NoteSkinFolder { get; private set; }
 
         /// <summary>
         /// The noteskins that are loaded into the app.
@@ -44,7 +44,10 @@ namespace OpenChart
                 Assembly.GetExecutingAssembly().Location
             );
 
+            NoteSkinFolder = Path.Join(AppFolder, "noteskins");
+
             Directory.SetCurrentDirectory(AppFolder);
+
 
             // Initialize libbass
             if (!Bass.Init())
@@ -58,7 +61,7 @@ namespace OpenChart
             Formats = new FormatManager();
             Formats.AddFormat(new OpenChartFormatHandler());
 
-            NoteSkins = new NoteSkinManager();
+            NoteSkins = new NoteSkinManager(NoteSkinFolder);
             NoteSkins.LoadAll();
         }
 

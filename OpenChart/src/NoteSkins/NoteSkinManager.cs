@@ -14,12 +14,15 @@ namespace OpenChart.NoteSkins
         static Regex reNoteSkinKeyModeDir = new Regex(@"^(\d+)[kK]$");
         List<NoteSkin> noteSkins;
 
+        public readonly string NoteSkinFolder;
+
         /// <summary>
         /// Creates a new noteskin manager instance.
         /// </summary>
-        public NoteSkinManager()
+        public NoteSkinManager(string noteSkinFolder)
         {
             noteSkins = new List<NoteSkin>();
+            NoteSkinFolder = noteSkinFolder;
         }
 
         /// <summary>
@@ -32,16 +35,16 @@ namespace OpenChart.NoteSkins
         }
 
         /// <summary>
-        /// Loads all noteskins found in the noteskins folder. <seealso cref="App.NoteSkinFolder" />
+        /// Loads all noteskins found in the noteskins folder.
         /// </summary>
         public void LoadAll()
         {
-            if (!Directory.Exists(App.NoteSkinFolder))
+            if (!Directory.Exists(NoteSkinFolder))
             {
-                throw new Exception($"The noteskins folder ('{App.NoteSkinFolder}') does not exist.");
+                throw new Exception($"The noteskins folder ('{NoteSkinFolder}') does not exist.");
             }
 
-            foreach (var dir in Directory.GetDirectories(App.NoteSkinFolder))
+            foreach (var dir in Directory.GetDirectories(NoteSkinFolder))
             {
                 var name = Path.GetFileName(dir);
                 NoteSkin ns;
@@ -64,11 +67,11 @@ namespace OpenChart.NoteSkins
         /// <summary>
         /// Attempts to load a noteskin with the given name.
         /// </summary>
-        /// <param name="skinName">The name of the folder for the noteskin. <seealso cref="App.NoteSkinFolder" /></param>
+        /// <param name="skinName">The name of the folder for the noteskin.</param>
         /// <returns>The loaded noteskin.</returns>
         private NoteSkin loadNoteSkin(string skinName)
         {
-            var dirName = Path.Join(App.NoteSkinFolder, skinName);
+            var dirName = Path.Join(NoteSkinFolder, skinName);
 
             if (!Directory.Exists(dirName))
             {
