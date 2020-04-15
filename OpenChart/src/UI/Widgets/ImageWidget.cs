@@ -19,13 +19,8 @@ namespace OpenChart.UI.Widgets
             set
             {
                 _image = value;
-                Pixbuf = _image.Pixbuf;
+                Pixbuf = Image?.Pixbuf;
             }
-        }
-
-        public ImageWidget(ImageAsset image)
-        {
-            Image = image;
         }
     }
 }

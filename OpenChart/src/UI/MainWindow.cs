@@ -17,10 +17,10 @@ namespace OpenChart.UI
             var box = new Box(Orientation.Horizontal, 0);
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(4);
 
-            box.Add(new NoteWidget(0, noteSkin.Keys[0].TapNote));
-            box.Add(new NoteWidget(0, noteSkin.Keys[1].TapNote));
-            box.Add(new NoteWidget(0, noteSkin.Keys[2].TapNote));
-            box.Add(new NoteWidget(0, noteSkin.Keys[3].TapNote));
+            box.Add(new TapNoteWidget(noteSkin, 0));
+            box.Add(new TapNoteWidget(noteSkin, 1));
+            box.Add(new TapNoteWidget(noteSkin, 2));
+            box.Add(new TapNoteWidget(noteSkin, 3));
 
             Add(box);
 
