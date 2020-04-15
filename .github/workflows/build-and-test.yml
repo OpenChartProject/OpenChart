@@ -15,8 +15,5 @@ jobs:
       - name: Build
         run: make build
 
-      - name: Install Xvfb
-        run: sudo apt-get install -y xvfb
-
       - name: Test
         run: xvfb-run make test
