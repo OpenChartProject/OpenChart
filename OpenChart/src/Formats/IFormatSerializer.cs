@@ -1,3 +1,5 @@
+using OpenChart.Songs;
+
 namespace OpenChart.Formats
 {
     /// <summary>

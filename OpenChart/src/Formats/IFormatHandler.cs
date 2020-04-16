@@ -1,4 +1,4 @@
-using OpenChart.Charting;
+using OpenChart.Projects;
 using System.IO;
 
 namespace OpenChart.Formats
@@ -19,16 +19,16 @@ namespace OpenChart.Formats
         string FileExtension { get; }
 
         /// <summary>
-        /// Reads the data from a specific file format and returns a Chart object.
+        /// Reads the data from a specific file format and returns a Project object.
         /// </summary>
         /// <param name="reader">The stream that contains the file data.</param>
-        Chart Read(StreamReader reader);
+        Project Read(StreamReader reader);
 
         /// <summary>
         /// Writes the chart to the stream using a specific file format.
         /// </summary>
         /// <param name="writer">The stream to write to.</param>
         /// <param name="chart">The chart to write.</param>
-        void Write(StreamWriter writer, Chart chart);
+        void Write(StreamWriter writer, Project chart);
     }
 }

@@ -1,19 +1,14 @@
-namespace OpenChart.Formats.OpenChart.Version0_1
+namespace OpenChart.Formats.OpenChart.Version0_1.Data
 {
     /// <summary>
-    /// Metadata about the chart that is saved.
+    /// The data for an individual chart in a project.
     /// </summary>
-    public class FileMetadata
+    public class ChartData
     {
         /// <summary>
         /// The chart's keycount.
         /// </summary>
         public int KeyCount { get; set; }
-
-        /// <summary>
-        /// The version of the file format.
-        /// </summary>
-        public string Version { get; set; }
 
         /// <summary>
         /// The name of the chart's author.
