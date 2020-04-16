@@ -10,17 +10,13 @@ namespace OpenChart.Charting
         /// slightly inaccurate.
         /// </summary>
         /// <param name="bpms">The BPM changes. Cannot be empty.</param>
-        /// <param name="beat">The beat number. Must be greater than zero.</param>
+        /// <param name="_beat">The beat number. Must be greater than zero.</param>
         /// <returns>The time, in seconds.</returns>
-        public static double BeatToSeconds(BPM[] bpms, double beat)
+        public static double BeatToSeconds(BPM[] bpms, Beat beat)
         {
             if (bpms.Length == 0)
             {
                 throw new ArgumentException("BPMs cannot be empty.");
-            }
-            else if (beat < 0)
-            {
-                throw new ArgumentOutOfRangeException("Beat cannot be negative.");
             }
             else if (beat == 0)
             {
@@ -45,7 +41,7 @@ namespace OpenChart.Charting
                 var delta = Math.Min(beat, bpm.Beat) - lastBPM.Beat;
 
                 // Multiply how long each beat lasts for with the number of beats.
-                elapsed += (60 / lastBPM.Value) * delta;
+                elapsed += (60.0 / lastBPM.Value) * delta;
 
                 // We've gone as far as we need.
                 if (lastBPM.Beat >= beat)
@@ -57,7 +53,7 @@ namespace OpenChart.Charting
             }
 
             // The beat came after the last BPM change, so add whatever is remaining.
-            elapsed += (60 / lastBPM.Value) * (beat - lastBPM.Beat);
+            elapsed += (60.0 / lastBPM.Value) * (beat - lastBPM.Beat);
 
             return elapsed;
         }
@@ -70,7 +66,7 @@ namespace OpenChart.Charting
         /// <param name="bpms">The BPM changes. Cannot be empty.</param>
         /// <param name="seconds">The time in seconds. Cannot be negative.</param>
         /// <returns>The beat number.</returns>
-        public static double SecondsToBeat(BPM[] bpms, double seconds)
+        public static Beat SecondsToBeat(BPM[] bpms, double seconds)
         {
             if (bpms.Length == 0)
             {
@@ -99,7 +95,7 @@ namespace OpenChart.Charting
 
                 // Get how much time has elapsed since the last BPM change.
                 var beatDelta = bpm.Beat - lastBPM.Beat;
-                var timeDelta = (60 / lastBPM.Value) * beatDelta;
+                var timeDelta = (60.0 / lastBPM.Value) * beatDelta;
 
                 if (elapsed + timeDelta == seconds)
                 {
@@ -125,7 +121,7 @@ namespace OpenChart.Charting
             // and multiply that by the beats per second.
             var remaining = seconds - elapsed;
 
-            return lastBPM.Beat + (remaining * lastBPM.Value / 60);
+            return lastBPM.Beat + (remaining * lastBPM.Value / 60.0);
         }
     }
 }

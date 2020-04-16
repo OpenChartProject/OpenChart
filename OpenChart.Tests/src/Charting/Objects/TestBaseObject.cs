@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using OpenChart.Charting;
 using System;
 
 namespace OpenChart.Tests.Charting.Objects
@@ -9,14 +10,14 @@ namespace OpenChart.Tests.Charting.Objects
         [TestCase(-1)]
         public void Test_KeyLessThanZero(int value)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new DummyObject(value, 0));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new DummyObject(value, (Beat)0));
         }
 
         [TestCase(0)]
         [TestCase(1)]
         public void Test_KeyGteZero(int value)
         {
-            Assert.DoesNotThrow(() => new DummyObject(value, 0));
+            Assert.DoesNotThrow(() => new DummyObject((Key)value, (Beat)0));
         }
     }
 }

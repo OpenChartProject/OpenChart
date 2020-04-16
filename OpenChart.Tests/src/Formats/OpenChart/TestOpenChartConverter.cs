@@ -24,7 +24,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             Assert.AreEqual(0, chart.BPMs.Length);
             Assert.AreEqual(fd.Metadata.KeyCount, chart.KeyCount);
-            Assert.AreEqual(fd.Metadata.KeyCount, chart.Objects.Length);
+            Assert.AreEqual(fd.Metadata.KeyCount.Value, chart.Objects.Length);
         }
 
         [Test]

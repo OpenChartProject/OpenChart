@@ -10,6 +10,6 @@ namespace OpenChart.Charting.Objects
         /// </summary>
         /// <param name="key">The key index the note is on.</param>
         /// <param name="beat">The beat the tap note occurs.</param>
-        public TapNote(int key, double beat) : base(key, beat) { }
+        public TapNote(Key key, Beat beat) : base(key, beat) { }
     }
 }

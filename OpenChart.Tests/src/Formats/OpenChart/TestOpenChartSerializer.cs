@@ -30,7 +30,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             var fd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
 
-            Assert.AreEqual(4, fd.Metadata.KeyCount);
+            Assert.AreEqual(4, fd.Metadata.KeyCount.Value);
             Assert.AreEqual("0.1", fd.Metadata.Version);
             Assert.AreEqual("Jessie", fd.Metadata.Author);
             Assert.AreEqual("I hope this test passes", fd.Metadata.ChartName);

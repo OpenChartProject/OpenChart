@@ -3,7 +3,6 @@ using OpenChart.Charting;
 using OpenChart.Charting.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OpenChart.Tests.Charting
 {
@@ -20,9 +19,9 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_Init_4k()
         {
-            Assert.AreEqual(4, chart.KeyCount);
+            Assert.AreEqual(4, chart.KeyCount.Value);
             Assert.AreEqual(0, chart.BPMs.Length);
-            Assert.AreEqual(chart.KeyCount, chart.Objects.Length);
+            Assert.AreEqual(chart.KeyCount.Value, chart.Objects.Length);
 
             for (var i = 0; i < chart.KeyCount; i++)
             {
@@ -99,7 +98,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObject_KeyOutOfRange()
         {
-            var obj = new TapNote(chart.KeyCount, 0);
+            var obj = new TapNote(chart.KeyCount.Value, 0);
             Assert.Throws<ArgumentOutOfRangeException>(() => chart.AddObject(obj));
         }
 
@@ -228,8 +227,8 @@ namespace OpenChart.Tests.Charting
 
                 foreach (var beat in sortedBeats)
                 {
-                    Assert.AreEqual(beat, cur.Value.Beat);
-                    Assert.AreEqual(key, cur.Value.Key);
+                    Assert.AreEqual(beat, cur.Value.Beat.Value);
+                    Assert.AreEqual(key, cur.Value.Key.Value);
                     cur = cur.Next;
                 }
             }

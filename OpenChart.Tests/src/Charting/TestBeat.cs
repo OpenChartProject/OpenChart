@@ -4,25 +4,20 @@ using System;
 
 namespace OpenChart.Tests.Charting
 {
-    class TimingDummy : Timing
-    {
-        public TimingDummy(double beat) : base(beat) { }
-    }
-
-    public class TestTiming
+    public class TestBeat
     {
         [TestCase(-1)]
         [TestCase(-0.001)]
         public void Test_NegativeBeat(double value)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new TimingDummy(value));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Beat(value));
         }
 
         [TestCase(0)]
         [TestCase(1)]
         public void Test_NonNegativeBeat(double value)
         {
-            Assert.DoesNotThrow(() => new TimingDummy(value));
+            Assert.DoesNotThrow(() => new Beat(value));
         }
     }
 }
