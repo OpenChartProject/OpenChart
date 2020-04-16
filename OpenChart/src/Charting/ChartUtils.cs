@@ -18,7 +18,7 @@ namespace OpenChart.Charting
             {
                 throw new ArgumentException("BPMs cannot be empty.");
             }
-            else if (beat == 0)
+            else if (beat.Value == 0)
             {
                 return 0;
             }
@@ -38,13 +38,13 @@ namespace OpenChart.Charting
                 // Get the number of beats since the last BPM change up until
                 // the beat we're interested in or the current BPM change,
                 // whichever comes first.
-                var delta = Math.Min(beat, bpm.Beat) - lastBPM.Beat;
+                var delta = Math.Min(beat.Value, bpm.Beat.Value) - lastBPM.Beat.Value;
 
                 // Multiply how long each beat lasts for with the number of beats.
                 elapsed += (60.0 / lastBPM.Value) * delta;
 
                 // We've gone as far as we need.
-                if (lastBPM.Beat >= beat)
+                if (lastBPM.Beat.Value >= beat.Value)
                 {
                     return elapsed;
                 }
@@ -53,7 +53,7 @@ namespace OpenChart.Charting
             }
 
             // The beat came after the last BPM change, so add whatever is remaining.
-            elapsed += (60.0 / lastBPM.Value) * (beat - lastBPM.Beat);
+            elapsed += (60.0 / lastBPM.Value) * (beat.Value - lastBPM.Beat.Value);
 
             return elapsed;
         }
@@ -94,7 +94,7 @@ namespace OpenChart.Charting
                 }
 
                 // Get how much time has elapsed since the last BPM change.
-                var beatDelta = bpm.Beat - lastBPM.Beat;
+                var beatDelta = bpm.Beat.Value - lastBPM.Beat.Value;
                 var timeDelta = (60.0 / lastBPM.Value) * beatDelta;
 
                 if (elapsed + timeDelta == seconds)
@@ -110,7 +110,7 @@ namespace OpenChart.Charting
                     // the amount that was overshot.
                     overshot = 1 - (overshot / timeDelta);
 
-                    return lastBPM.Beat + (beatDelta * overshot);
+                    return lastBPM.Beat.Value + (beatDelta * overshot);
                 }
 
                 elapsed += timeDelta;
@@ -121,7 +121,7 @@ namespace OpenChart.Charting
             // and multiply that by the beats per second.
             var remaining = seconds - elapsed;
 
-            return lastBPM.Beat + (remaining * lastBPM.Value / 60.0);
+            return lastBPM.Beat.Value + (remaining * lastBPM.Value / 60.0);
         }
     }
 }

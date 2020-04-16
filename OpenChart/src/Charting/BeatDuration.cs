@@ -30,7 +30,6 @@ namespace OpenChart.Charting
             }
         }
 
-        public static implicit operator double(BeatDuration bd) => bd.Value;
         public static implicit operator BeatDuration(double value) => new BeatDuration(value);
         public static implicit operator BeatDuration(int value) => new BeatDuration(value);
 

@@ -56,9 +56,9 @@ namespace OpenChart.Charting
         {
             KeyCount = keyCount;
             bpmList = new LinkedList<BPM>();
-            Objects = new LinkedList<BaseObject>[KeyCount];
+            Objects = new LinkedList<BaseObject>[KeyCount.Value];
 
-            for (var i = 0; i < KeyCount; i++)
+            for (var i = 0; i < KeyCount.Value; i++)
             {
                 Objects[i] = new LinkedList<BaseObject>();
             }
@@ -86,7 +86,7 @@ namespace OpenChart.Charting
             else
             {
                 // Compare the object counts for each column.
-                for (var i = 0; i < KeyCount; i++)
+                for (var i = 0; i < KeyCount.Value; i++)
                 {
                     if (Objects[i].Count != chart.Objects[i].Count)
                     {
@@ -95,7 +95,7 @@ namespace OpenChart.Charting
                 }
 
                 // Compare each object individually.
-                for (var i = 0; i < KeyCount; i++)
+                for (var i = 0; i < KeyCount.Value; i++)
                 {
                     var curA = Objects[i].First;
                     var curB = chart.Objects[i].First;
@@ -167,19 +167,19 @@ namespace OpenChart.Charting
                         select obj;
 
             // Create a cursor for each key
-            var cursors = new LinkedListNode<BaseObject>[KeyCount];
+            var cursors = new LinkedListNode<BaseObject>[KeyCount.Value];
 
             foreach (var obj in query)
             {
                 // This logic is only necessary to prevent an out of range exception when we
                 // try and access the list. If the object's key index is out of range, the
                 // `addObject()` method will take care of it by throwing an exception.
-                var cur = obj.Key < KeyCount ? cursors[obj.Key] : null;
+                var cur = obj.Key.Value < KeyCount.Value ? cursors[obj.Key.Value] : null;
 
                 // Use the cursor as the starting point for inserting the object, then save it
                 // to be reused later.
                 cur = addObject(obj, cur);
-                cursors[obj.Key] = cur;
+                cursors[obj.Key.Value] = cur;
             }
         }
 
@@ -191,7 +191,7 @@ namespace OpenChart.Charting
             }
             else if (bpmList.Count == 0)
             {
-                if (bpm.Beat != 0)
+                if (bpm.Beat.Value != 0)
                 {
                     throw new ArgumentException(
                         "The first BPM change must occur at the beginning of the chart (beat zero)."
@@ -207,17 +207,17 @@ namespace OpenChart.Charting
             // Search the list to find where we need to insert this new bpm change.
             while (true)
             {
-                if (cur.Value.Beat == bpm.Beat)
+                if (cur.Value.Beat.Value == bpm.Beat.Value)
                 {
                     // Overwrite an existing BPM if it occurs on the same beat as the one
                     // we're trying to add.
                     cur.Value = bpm;
                     return;
                 }
-                else if (cur.Value.Beat < bpm.Beat)
+                else if (cur.Value.Beat.Value < bpm.Beat.Value)
                 {
                     // We've hit the end of the list, or we're between two BPM changes.
-                    if (cur.Next == null || cur.Next.Value.Beat > bpm.Beat)
+                    if (cur.Next == null || cur.Next.Value.Beat.Value > bpm.Beat.Value)
                     {
                         bpmList.AddAfter(cur, bpm);
                         return;
@@ -238,7 +238,7 @@ namespace OpenChart.Charting
             {
                 throw new ArgumentNullException("Chart object cannot be null.");
             }
-            else if (obj.Key.Value >= KeyCount)
+            else if (obj.Key.Value >= KeyCount.Value)
             {
                 throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
             }
