@@ -29,7 +29,7 @@ namespace OpenChart.Charting.Objects
                 prev.CanBeInserted(null, this);
             }
 
-            if (next != null && next.Beat <= (Beat + Length))
+            if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
             {
                 throw OverlapException;
             }

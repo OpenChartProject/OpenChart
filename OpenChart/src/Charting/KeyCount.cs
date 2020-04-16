@@ -30,7 +30,6 @@ namespace OpenChart.Charting
             }
         }
 
-        public static implicit operator int(KeyCount kc) => kc.Value;
         public static implicit operator KeyCount(int value) => new KeyCount(value);
 
         /// <summary>

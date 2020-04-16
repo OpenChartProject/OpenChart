@@ -38,7 +38,7 @@ namespace OpenChart.Tests.Charting.Objects
             var hold = new DummyLongObject(0, 10, 5);
 
             Assert.Throws<ChartException>(
-                () => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, hold.Beat + hold.Length))
+                () => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
             );
         }
     }

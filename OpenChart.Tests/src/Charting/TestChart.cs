@@ -23,7 +23,7 @@ namespace OpenChart.Tests.Charting
             Assert.AreEqual(0, chart.BPMs.Length);
             Assert.AreEqual(chart.KeyCount.Value, chart.Objects.Length);
 
-            for (var i = 0; i < chart.KeyCount; i++)
+            for (var i = 0; i < chart.KeyCount.Value; i++)
             {
                 Assert.AreEqual(0, chart.Objects[i].Count);
             }
@@ -105,7 +105,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_AddObject_KeyInRange()
         {
-            for (var i = 0; i < chart.KeyCount; i++)
+            for (var i = 0; i < chart.KeyCount.Value; i++)
             {
                 var obj = new TapNote(i, 0);
                 Assert.DoesNotThrow(() => chart.AddObject(obj));
@@ -207,7 +207,7 @@ namespace OpenChart.Tests.Charting
             List<BaseObject> objs = new List<BaseObject>();
 
             // Create a list of tap notes.
-            for (var key = 0; key < chart.KeyCount; key++)
+            for (var key = 0; key < chart.KeyCount.Value; key++)
             {
                 foreach (var beat in beats)
                 {
@@ -218,7 +218,7 @@ namespace OpenChart.Tests.Charting
             chart.AddObjects(objs.ToArray());
 
             // Check they were added in the correct order.
-            for (var key = 0; key < chart.KeyCount; key++)
+            for (var key = 0; key < chart.KeyCount.Value; key++)
             {
                 var col = chart.Objects[key];
                 Assert.AreEqual(beats.Length, col.Count);
