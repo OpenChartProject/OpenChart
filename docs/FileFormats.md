@@ -1,34 +1,45 @@
 # File Formats
 
-To help keep things consistent and make file formats easier to test, there is a standardized way that all file formats are handled.
+For several reasons -- including consistency and testing -- we want all of the file formats to use the same general process.
 
-In order to create a new file format, you will need to:
+A single parser class is often bloated and fragile, so to make our lives easier we'll split up the parsing into two discrete steps:
 
-1. Create a class which represents the data stored by the file format.
-2. Create an implementation of [IFormatConverter](/OpenChart/src/Formats/IFormatConverter.cs).
-3. Create an implementation of [IFormatSerializer](/OpenChart/src/Formats/IFormatSerializer.cs).
-4. Create an implementation of [IFormatHandler](/OpenChart/src/Formats/IFormatHandler.cs).
+1. Handle how the data is represented by the format.
+2. Handle how that data can be used by the application.
 
-This diagram shows how these classes fit together. The direction the data is moving is dependent on whether a chart is being imported (loaded) or exported (saved).
+The first step involves reading an IO stream and parsing the raw data into something useful, while the second step involves taking that data and reshaping it into a format that our application will understand.
 
-![](img/file_format_class_diagram.png)
+This makes it easier to separate out the logic into multiple smaller classes rather than a single large one. It also means that we have a "window" into the parsing process. This helps with testing since now we can test both steps independently of each other.
 
-## IFormatConverter
+## Design
 
-The converter is responsible for converting between the native `Chart` object and an object used by an `IFormatSerializer`.
+A few interfaces exist to help make the process easy to follow.
 
-**Importing**: The converter accepts a **file-format object (FFO)** as input and converts it to a `Chart` object.
+- [**IFormatSerializer**](/OpenChart/src/Formats/IFormatSerializer.cs)
+	+ Handles the IO and serialization/deserialization of the raw file data.
+- [**IProjectConverter**](/OpenChart/src/Formats/IProjectConverter.cs)
+	+ Handles the transformation between serialized file data and a `Project` object.
+- [**IFormatHandler**](/OpenChart/src/Formats/IFormatHandler.cs)
+	+ Bundles a serializer and converter together to make the parser easy to use.
 
-**Exporting**: The converter accepts a `Chart` object and converts it to a FFO.
+This diagram shows how everything fits together. On the surface, the caller sees a file format handler as a black box that can read and write `Project` files.
 
-## IFormatSerializer
+![](img/file_format_diagram.png)
 
-The serializer is responsible for reading and writing the FFO to a stream.
+## Importing
 
-**Importing**: The serializer accepts a byte stream and deserializes it into a FFO.
+The serializer receives an IO stream. Some file formats may be easy to deserialize while others may need to be parsed character-by-character.
 
-**Exporting**: The serializer accepts a FFO from the converter, serializes it, and writes it to the byte stream.
+With the IO stream parsed, the serializer creates an instance of a "File data object". This is simply a data class used internally by the file parser that represents the data stored in the file. This class should ideally map one-to-one with the data in the file.
 
-## IFormatHandler
+The file data object is then passed from the serializer to the converter, whose job is to take the object and somehow transform it into a `Project` object.
 
-The format handler's main purpose is to call the converter and serializer and pass the necessary data between the two. While most format handlers will look nearly identical, the format handler is a great place to do some inspection on the file, such as checking the file's version to know which converter/serializer to use.
+While OpenChart *is* meant to be universal, some fields may not be used within the app. In this case, the converter can safely ignore those extra fields. Note that it's the converter's responsibility to know what data we do and don't need. The serializer shouldn't discard data unless it's for a good reason. **We may decide to use that data in the future,** and it will be much easier if we don't have to modify the converter *and* the serializer.
+
+## Exporting
+
+The process for exporting is simply the reverse of the import process. The converter receives a `Project` object, converts it to a file data object, and then the serializer writes that object to an IO stream using the file format's syntax.
+
+OpenChart supports exporting individual charts as well as exporting all the charts in a project.
+
+In the case of a file format only supporting one chart per file, exporting the entire project will simply export each individual chart. However, if the format supports multiple charts per file (such as .sm), the parser will receive a single `Project` instance with all of the charts.
