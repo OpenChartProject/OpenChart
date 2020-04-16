@@ -19,5 +19,20 @@ namespace OpenChart.Tests.Charting
         {
             Assert.DoesNotThrow(() => new Beat(value));
         }
+
+        [Test]
+        public void Test_OnBeatChanged()
+        {
+            var beat = new Beat(0);
+            var calls = 0;
+
+            beat.BeatChanged += delegate { calls++; };
+
+            beat.Value = beat.Value;
+            Assert.AreEqual(0, calls);
+
+            beat.Value++;
+            Assert.AreEqual(1, calls);
+        }
     }
 }
