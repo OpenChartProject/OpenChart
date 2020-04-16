@@ -27,7 +27,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             var fd = new FileData();
 
             fd.Metadata = new FileMetadata();
-            fd.Metadata.KeyCount = chart.KeyCount;
+            fd.Metadata.KeyCount = chart.KeyCount.Value;
             fd.Metadata.Version = "0.1";
 
             return fd;

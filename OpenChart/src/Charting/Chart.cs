@@ -36,10 +36,9 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
-        /// The key count for the chart. The key count is the number of unique columns that
-        /// ChartObjects appear on.
+        /// The key count for the chart.
         /// </summary>
-        public readonly int KeyCount;
+        public KeyCount KeyCount;
 
         /// <summary>
         /// The chart objects that make up the chart. Chart objects include things like tap notes,
@@ -53,13 +52,8 @@ namespace OpenChart.Charting
         /// Creates a new chart instance.
         /// </summary>
         /// <param name="keyCount">The keycount of the chart.</param>
-        public Chart(int keyCount)
+        public Chart(KeyCount keyCount)
         {
-            if (keyCount < 1)
-            {
-                throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
-            }
-
             KeyCount = keyCount;
             bpmList = new LinkedList<BPM>();
             Objects = new LinkedList<BaseObject>[KeyCount];
@@ -244,18 +238,18 @@ namespace OpenChart.Charting
             {
                 throw new ArgumentNullException("Chart object cannot be null.");
             }
-            else if (obj.Key >= KeyCount)
+            else if (obj.Key.Value >= KeyCount)
             {
                 throw new ArgumentOutOfRangeException("ChartObject's key is out of range.");
             }
 
-            var col = Objects[obj.Key];
+            var col = Objects[obj.Key.Value];
             cur = cur ?? col.First;
 
             // Traverse down the list.
             while (cur != null)
             {
-                if (cur.Value.Beat > obj.Beat)
+                if (cur.Value.Beat.Value > obj.Beat.Value)
                 {
                     // Check if the object can be inserted here.
                     obj.CanBeInserted(
@@ -266,7 +260,7 @@ namespace OpenChart.Charting
                     // Insert the object as soon as we find an existing object which occurs after it.
                     return col.AddBefore(cur, obj);
                 }
-                else if (cur.Value.Beat == obj.Beat)
+                else if (cur.Value.Beat.Value == obj.Beat.Value)
                 {
                     if (cur.Value == obj)
                     {

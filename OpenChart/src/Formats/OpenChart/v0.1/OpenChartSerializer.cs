@@ -8,10 +8,18 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// </summary>
     public class OpenChartSerializer : IFormatSerializer<FileData>
     {
-        static JsonSerializerOptions jsonOptions => new JsonSerializerOptions
+        static JsonSerializerOptions jsonOptions;
+
+        static OpenChartSerializer()
         {
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-        };
+            jsonOptions = new JsonSerializerOptions();
+
+            jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            jsonOptions.Converters.Add(new BeatConverter());
+            jsonOptions.Converters.Add(new BeatDurationConverter());
+            jsonOptions.Converters.Add(new KeyConverter());
+            jsonOptions.Converters.Add(new KeyCountConverter());
+        }
 
         /// <summary>
         /// Deserializes raw JSON data into a FileData object.
