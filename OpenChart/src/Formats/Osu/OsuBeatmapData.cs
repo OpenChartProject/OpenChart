@@ -17,8 +17,8 @@ namespace OpenChart.Formats.Osu
         public string FormatVersion { get; set; }
         
         /// <summary>
-        /// General information about the beatmap.
-        /// Contains 
+        /// General information about the beatmap, such as the path to the audio file, and information used by the client
+        /// to set up the playfield.
         /// </summary>
         public OsuGeneralInformation GeneralInformation { get; set; }
         
@@ -47,6 +47,9 @@ namespace OpenChart.Formats.Osu
         /// </summary>
         public List<OsuTimingPoint> TimingPoints { get; set; }
         
+        /// <summary>
+        /// Hit objects. Used to define the actual hit points on the beatmap.
+        /// </summary>
         public List<OsuHitObject> HitObjects { get; set; }
     }
 }

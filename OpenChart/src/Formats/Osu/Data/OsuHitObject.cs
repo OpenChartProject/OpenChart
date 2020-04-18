@@ -1,10 +1,10 @@
-﻿namespace OpenChart.Formats.Osu.Data
+﻿using System.Collections.Generic;
+
+namespace OpenChart.Formats.Osu.Data
 {
     /// <summary>
-    /// A hit object for an osu! beatmap.
+    /// A standard hit object for an osu! beatmap.
     /// </summary>
-    ///
-    /// TODO: Parse that goddamn type field, and make provisions for extra hit object data (maybe an interface would be good for this?)
     public class OsuHitObject
     {
         /// <summary>
@@ -25,5 +25,25 @@
         /// The time, in milliseconds, from the start of the beatmap's audio, when this object should appear.
         /// </summary>
         public int Time { get; set; }
+        
+        /// <summary>
+        /// Extra type data for an osu! hit object. Contains information about colorhax and combo splitting.
+        /// </summary>
+        public OsuExtraTypeData ExtraTypeData { get; set; }
+        
+        /// <summary>
+        /// Information about which hitsound samples to play for this hit object.
+        /// </summary>
+        public OsuHitObjectSample HitSounds { get; set; }
+        
+        /// <summary>
+        /// Arbitrary hit object parameters.
+        /// </summary>
+        public List<OsuHitObjectParameter> ObjectParameters { get; set; }
+        
+        /// <summary>
+        /// Custom hit sample data for this hit object.
+        /// </summary>
+        public OsuCustomHitSample HitSample { get; set; }
     }
 }

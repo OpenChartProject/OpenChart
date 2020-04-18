@@ -29,7 +29,7 @@ namespace OpenChart.Formats.Osu.Data
         /// <summary>
         /// The default sample set to use for hit objects in this timing section. 
         /// </summary>
-        public OsuTimingPointSampleSet SampleSet { get; set; }
+        public OsuPredefinedSampleSet SampleSet { get; set; }
         
         /// <summary>
         /// The index to use for custom hit object samples. Set to 0 to use osu!'s default hitsounds.
