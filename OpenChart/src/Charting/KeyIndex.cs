@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a key index. The key index refers to the column on a note field.
     /// </summary>
-    public class Key : IComparable
+    public class KeyIndex
     {
         int _value;
 
@@ -30,7 +30,7 @@ namespace OpenChart.Charting
             }
         }
 
-        public static implicit operator Key(int value) => new Key(value);
+        public static implicit operator KeyIndex(int value) => new KeyIndex(value);
 
         /// <summary>
         /// An event fired when the key index changes.
@@ -40,31 +40,9 @@ namespace OpenChart.Charting
         /// <summary>
         /// Creates a new Key instance.
         /// </summary>
-        public Key(int value)
+        public KeyIndex(int value)
         {
             Value = value;
-        }
-
-        /// <summary>
-        /// Compares the value with another object of the same type.
-        /// </summary>
-        public int CompareTo(object o)
-        {
-            if (o == null)
-            {
-                return 1;
-            }
-
-            var key = o as Key;
-
-            if (key != null)
-            {
-                return key.Value.CompareTo(Value);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a Key instance.");
-            }
         }
 
         /// <summary>
@@ -72,7 +50,7 @@ namespace OpenChart.Charting
         /// </summary>
         public override bool Equals(object obj)
         {
-            var key = obj as Key;
+            var key = obj as KeyIndex;
 
             if (key == null)
             {

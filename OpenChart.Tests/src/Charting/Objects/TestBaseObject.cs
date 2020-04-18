@@ -17,7 +17,7 @@ namespace OpenChart.Tests.Charting.Objects
         [TestCase(1)]
         public void Test_KeyGteZero(int value)
         {
-            Assert.DoesNotThrow(() => new DummyObject((Key)value, (Beat)0));
+            Assert.DoesNotThrow(() => new DummyObject((KeyIndex)value, (Beat)0));
         }
     }
 }
