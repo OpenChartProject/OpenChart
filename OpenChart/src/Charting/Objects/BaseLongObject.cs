@@ -12,7 +12,7 @@ namespace OpenChart.Charting.Objects
 
         public BeatDuration Length;
 
-        public BaseLongObject(Key key, Beat beat, BeatDuration length) : base(key, beat)
+        public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
             Length = length;
         }

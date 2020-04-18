@@ -10,20 +10,20 @@ namespace OpenChart.Tests.Charting
         [TestCase(-1)]
         public void Test_NegativeKey(int value)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Key(value));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new KeyIndex(value));
         }
 
         [TestCase(0)]
         [TestCase(1)]
         public void Test_NonNegativeKey(int value)
         {
-            Assert.DoesNotThrow(() => new Key(value));
+            Assert.DoesNotThrow(() => new KeyIndex(value));
         }
 
         [Test]
         public void Test_OnKeyChanged()
         {
-            var key = new Key(0);
+            var key = new KeyIndex(0);
             var calls = 0;
 
             key.KeyChanged += delegate { calls++; };

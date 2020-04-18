@@ -9,9 +9,9 @@ namespace OpenChart.Charting.Objects
     {
         public Beat Beat;
 
-        public Key Key;
+        public KeyIndex Key;
 
-        public BaseObject(Key key, Beat beat)
+        public BaseObject(KeyIndex key, Beat beat)
         {
             Beat = beat;
             Key = key;

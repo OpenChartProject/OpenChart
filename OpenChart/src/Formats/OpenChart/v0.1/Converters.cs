@@ -40,14 +40,14 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// <summary>
     /// JSON converter for a Key object.
     /// </summary>
-    public class KeyConverter : JsonConverter<Key>
+    public class KeyConverter : JsonConverter<KeyIndex>
     {
-        public override Key Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override KeyIndex Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            return new Key(reader.GetInt32());
+            return new KeyIndex(reader.GetInt32());
         }
 
-        public override void Write(Utf8JsonWriter writer, Key value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, KeyIndex value, JsonSerializerOptions options)
         {
             writer.WriteNumberValue(value.Value);
         }
