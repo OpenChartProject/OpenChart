@@ -10,7 +10,7 @@ namespace OpenChart.Charting
         /// slightly inaccurate.
         /// </summary>
         /// <param name="bpms">The BPM changes. Cannot be empty.</param>
-        /// <param name="_beat">The beat number. Must be greater than zero.</param>
+        /// <param name="beat">The beat number. Must be greater than zero.</param>
         /// <returns>The time, in seconds.</returns>
         public static double BeatToSeconds(BPM[] bpms, Beat beat)
         {
