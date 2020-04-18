@@ -45,31 +45,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Compares the value with another object of the same type.
-        /// </summary>
-        public int CompareTo(object o)
-        {
-            if (o == null)
-            {
-                return 1;
-            }
-
-            var keyCount = o as KeyCount;
-
-            if (keyCount != null)
-            {
-                return keyCount.Value.CompareTo(Value);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a KeyCount instance.");
-            }
-        }
-
-        /// <summary>
-        /// Returns true if both key counts are the same.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var keyCount = obj as KeyCount;
@@ -82,9 +57,6 @@ namespace OpenChart.Charting
             return keyCount.Value == Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
