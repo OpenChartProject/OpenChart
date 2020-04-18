@@ -1,3 +1,4 @@
+using OpenChart.Charting;
 using OpenChart.Charting.Objects;
 
 namespace OpenChart.Tests.Charting.Objects
@@ -7,7 +8,7 @@ namespace OpenChart.Tests.Charting.Objects
     /// </summary>
     class DummyObject : BaseObject
     {
-        public DummyObject(int keyCount, double beat) : base(keyCount, beat) { }
+        public DummyObject(KeyIndex key, Beat beat) : base(key, beat) { }
     }
 
     /// <summary>
@@ -15,6 +16,6 @@ namespace OpenChart.Tests.Charting.Objects
     /// </summary>
     class DummyLongObject : BaseLongObject
     {
-        public DummyLongObject(int keyCount, double beat, double length) : base(keyCount, beat, length) { }
+        public DummyLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat, length) { }
     }
 }

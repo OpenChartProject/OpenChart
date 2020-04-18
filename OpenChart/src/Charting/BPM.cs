@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a BPM (beats per minute) change in a chart.
     /// </summary>
-    public class BPM : Timing
+    public class BPM
     {
         double _value;
 
@@ -27,12 +27,18 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
+        /// The beat where the BPM change occurs.
+        /// </summary>
+        public Beat Beat;
+
+        /// <summary>
         /// Creates a new BPM instance.
         /// </summary>
         /// <param name="value">The beats per minute.</param>
         /// <param name="beat">The beat this BPM change occurs on.</param>
-        public BPM(double value, double beat) : base(beat)
+        public BPM(double value, double beat)
         {
+            Beat = new Beat(beat);
             Value = value;
         }
 
