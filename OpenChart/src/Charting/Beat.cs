@@ -46,9 +46,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Returns true if both beat objects occur on the same beat.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var beat = obj as Beat;
@@ -61,9 +58,6 @@ namespace OpenChart.Charting
             return Value == beat.Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();

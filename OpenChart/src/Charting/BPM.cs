@@ -42,9 +42,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Checks if both BPM objects are equal.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var bpm = obj as BPM;
@@ -57,9 +54,6 @@ namespace OpenChart.Charting
             return Beat == bpm.Beat && Value == bpm.Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Tuple.Create(Beat, Value).GetHashCode();

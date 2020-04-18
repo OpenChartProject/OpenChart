@@ -45,9 +45,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Returns true if both keys are the same.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var key = obj as KeyIndex;
@@ -60,9 +57,6 @@ namespace OpenChart.Charting
             return key.Value == Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
