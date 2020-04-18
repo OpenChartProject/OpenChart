@@ -1,6 +1,6 @@
 ﻿namespace OpenChart.Formats.Osu.Enum
 {
-    public enum OsuTimingPointSampleSet
+    public enum OsuPredefinedSampleSet
     {
         BeatmapDefault = 0,
         Normal = 1,
