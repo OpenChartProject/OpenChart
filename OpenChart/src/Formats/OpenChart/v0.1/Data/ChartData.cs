@@ -1,3 +1,5 @@
+using OpenChart.Charting;
+
 namespace OpenChart.Formats.OpenChart.Version0_1.Data
 {
     /// <summary>
@@ -8,7 +10,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
         /// <summary>
         /// The chart's keycount.
         /// </summary>
-        public int KeyCount { get; set; }
+        public KeyCount KeyCount { get; set; }
 
         /// <summary>
         /// The name of the chart's author.
