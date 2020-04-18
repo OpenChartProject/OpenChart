@@ -141,7 +141,7 @@ namespace OpenChart.Tests.Charting
         [Test]
         public void Test_SecondsToBeat_ZeroSeconds()
         {
-            Assert.AreEqual(0, ChartUtils.SecondsToBeat(new BPM[1], 0));
+            Assert.AreEqual(0, ChartUtils.SecondsToBeat(new BPM[1], 0).Value);
         }
 
         [Test]
@@ -150,13 +150,13 @@ namespace OpenChart.Tests.Charting
             // 60BPM for 60 seconds = beat 60
             Assert.AreEqual(
                 60,
-                ChartUtils.SecondsToBeat(new BPM[] { new BPM(60, 0) }, 60)
+                ChartUtils.SecondsToBeat(new BPM[] { new BPM(60, 0) }, 60).Value
             );
 
             // 120BPM for 30 seconds = beat 60
             Assert.AreEqual(
                 60,
-                ChartUtils.SecondsToBeat(new BPM[] { new BPM(120, 0) }, 30)
+                ChartUtils.SecondsToBeat(new BPM[] { new BPM(120, 0) }, 30).Value
             );
 
             // 60BPM -> 120BPM for 45 seconds = beat 60
@@ -169,7 +169,7 @@ namespace OpenChart.Tests.Charting
                         new BPM(120, 30)
                     },
                     45
-                )
+                ).Value
             );
         }
 
@@ -186,7 +186,7 @@ namespace OpenChart.Tests.Charting
                         new BPM(9999, 30)
                     },
                     30
-                )
+                ).Value
             );
         }
 
@@ -204,7 +204,7 @@ namespace OpenChart.Tests.Charting
                         new BPM(9999, 30)
                     },
                     15
-                )
+                ).Value
             );
 
             // 60BPM -> 120BPM for 45 seconds = beat 60
@@ -218,7 +218,7 @@ namespace OpenChart.Tests.Charting
                         new BPM(9999, 60)
                     },
                     45
-                )
+                ).Value
             );
 
             // I'm not commenting this one
@@ -232,7 +232,7 @@ namespace OpenChart.Tests.Charting
                         new BPM(300, 21)
                     },
                     10.917
-                )
+                ).Value
             );
         }
     }

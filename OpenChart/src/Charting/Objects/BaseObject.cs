@@ -1,33 +1,19 @@
-using System;
+using OpenChart.Charting;
 
 namespace OpenChart.Charting.Objects
 {
     /// <summary>
     /// The base class for a chart object that occurs on a specific key at a certain beat.
     /// </summary>
-    public abstract class BaseObject : Timing
+    public abstract class BaseObject
     {
-        int _key;
+        public Beat Beat;
 
-        /// <summary>
-        /// The key index this object occurs on. The first key starts at zero.
-        /// </summary>
-        public int Key
+        public KeyIndex Key;
+
+        public BaseObject(KeyIndex key, Beat beat)
         {
-            get => _key;
-            set
-            {
-                if (value < 0)
-                {
-                    throw new ArgumentOutOfRangeException("Key cannot be less than 0.");
-                }
-
-                _key = value;
-            }
-        }
-
-        public BaseObject(int key, double beat) : base(beat)
-        {
+            Beat = beat;
             Key = key;
         }
 

@@ -1,5 +1,3 @@
-using System;
-
 namespace OpenChart.Charting.Objects
 {
     /// <summary>
@@ -12,26 +10,9 @@ namespace OpenChart.Charting.Objects
         /// </summary>
         public ChartException OverlapException => new ChartException("This object overlaps with another object.");
 
-        double _length;
+        public BeatDuration Length;
 
-        /// <summary>
-        /// The duration (in beats) that the hold note lasts for.
-        /// </summary>
-        public double Length
-        {
-            get => _length;
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new ArgumentOutOfRangeException("Length must be greater than zero.");
-                }
-
-                _length = value;
-            }
-        }
-
-        public BaseLongObject(int key, double beat, double length) : base(key, beat)
+        public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
             Length = length;
         }
@@ -48,7 +29,7 @@ namespace OpenChart.Charting.Objects
                 prev.CanBeInserted(null, this);
             }
 
-            if (next != null && next.Beat <= (Beat + Length))
+            if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
             {
                 throw OverlapException;
             }
