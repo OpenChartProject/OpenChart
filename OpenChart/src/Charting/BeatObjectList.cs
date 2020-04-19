@@ -6,27 +6,27 @@ using System.Linq;
 namespace OpenChart.Charting
 {
     /// <summary>
+    /// Event arguments for adding and removing objects from a ObjectList.
+    /// </summary>
+    public class ObjectListEventArgs<T> : EventArgs
+    {
+        /// <summary>
+        /// The object that was added/removed.
+        /// </summary>
+        public readonly T Object;
+
+        public ObjectListEventArgs(T obj)
+        {
+            Object = obj;
+        }
+    }
+
+    /// <summary>
     /// A generic list class for storing beat objects. The objects are stored in
     /// ascending order by their beat, and no two objects can occur on the same beat.
     /// </summary>
-    public class BeatObjectList<T> : ICollection<T>, IChangeNotifier where T : class, IBeatObject
+    public class BeatObjectList<T> : ICollection<T> where T : class, IBeatObject
     {
-        /// <summary>
-        /// Event arguments for adding and removing objects from a ObjectList.
-        /// </summary>
-        public class ObjectListEventArgs : EventArgs
-        {
-            /// <summary>
-            /// The object that was added/removed.
-            /// </summary>
-            public readonly T Object;
-
-            public ObjectListEventArgs(T obj)
-            {
-                Object = obj;
-            }
-        }
-
         LinkedList<T> objects;
 
         /// <summary>
@@ -40,12 +40,6 @@ namespace OpenChart.Charting
         /// An event for when an object is added to the list.
         /// </summary>
         public event EventHandler Added;
-
-        /// <summary>
-        /// An event for when an object object is modified (e.g. its beat or value changed).
-        /// This event is mostly for the convenience of not having to track every object yourself.
-        /// </summary>
-        public event EventHandler Changed;
 
         /// <summary>
         /// An event for when the list is completely cleared.
@@ -80,8 +74,13 @@ namespace OpenChart.Charting
         /// Adds multiple objects to the list. This is far more efficient than adding each
         /// object individually.
         /// </summary>
-        public void Add(T[] objs)
+        public void AddMultiple(T[] objs)
         {
+            if (objs == null)
+            {
+                throw new ArgumentNullException("Object array cannot be null.");
+            }
+
             // Inserting into linked lists is usually pretty slow since it's O(n), but we can
             // speed things up by taking advantage of the fact that our list is sorted by beats.
             // We can sort the object array by beats and then reuse the LinkedListNode cursor
@@ -135,7 +134,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// Removes an object at the given beat. Returns true if the object exists and was removed.
         /// </summary>
-        public bool Remove(Beat beat)
+        public bool RemoveAtBeat(Beat beat)
         {
             if (beat == null)
             {
@@ -237,9 +236,9 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
-        /// This method is called when an object in the list is modified.
+        /// This method is called when an item in the list is modified.
         /// </summary>
-        private void onObjectChanged(object o, EventArgs e)
+        private void onItemChanged(object o, EventArgs e)
         {
             var obj = (T)o;
             var node = objects.Find(obj);
@@ -252,25 +251,17 @@ namespace OpenChart.Charting
                 objects.Remove(node);
                 insertObject(obj);
             }
-
-            OnChanged(obj);
         }
 
         protected virtual void OnAdded(T obj)
         {
-            if (obj is IChangeNotifier eventObj)
+            if (obj is IChangeNotifier notifier)
             {
-                eventObj.Changed += onObjectChanged;
+                notifier.Changed += onItemChanged;
             }
 
             var handler = Added;
-            handler?.Invoke(this, new ObjectListEventArgs(obj));
-        }
-
-        protected virtual void OnChanged(T obj)
-        {
-            var handler = Changed;
-            handler?.Invoke(this, new ObjectListEventArgs(obj));
+            handler?.Invoke(this, new ObjectListEventArgs<T>(obj));
         }
 
         protected virtual void OnCleared()
@@ -281,13 +272,13 @@ namespace OpenChart.Charting
 
         protected virtual void OnRemoved(T obj)
         {
-            if (obj is IChangeNotifier eventObj)
+            if (obj is IChangeNotifier notifier)
             {
-                eventObj.Changed -= onObjectChanged;
+                notifier.Changed -= onItemChanged;
             }
 
             var handler = Removed;
-            handler?.Invoke(this, new ObjectListEventArgs(obj));
+            handler?.Invoke(this, new ObjectListEventArgs<T>(obj));
         }
     }
 }

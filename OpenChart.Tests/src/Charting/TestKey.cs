@@ -26,7 +26,7 @@ namespace OpenChart.Tests.Charting
             var key = new KeyIndex(0);
             var calls = 0;
 
-            key.KeyChanged += delegate { calls++; };
+            key.Changed += delegate { calls++; };
 
             key.Value = key.Value;
             Assert.AreEqual(0, calls);
