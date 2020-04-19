@@ -1,13 +1,11 @@
-using OpenChart.Charting;
-
 namespace OpenChart.Charting.Objects
 {
     /// <summary>
     /// The base class for a chart object that occurs on a specific key at a certain beat.
     /// </summary>
-    public abstract class BaseObject
+    public abstract class BaseObject : IBeatObject
     {
-        public Beat Beat;
+        public Beat Beat { get; private set; }
 
         public KeyIndex Key;
 
