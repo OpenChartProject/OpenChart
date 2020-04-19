@@ -4,7 +4,7 @@
 
 --------------
 
-[![](branding/banner_small.png)](https://github.com/Kangaroux/OpenChart)
+[![](branding/banner_small.png)](https://github.com/OpenChartProject/OpenChart)
 
 OpenChart is a free, open source, cross platform tool for creating rhythm game charts and maps. OpenChart is currently in active development.
 
