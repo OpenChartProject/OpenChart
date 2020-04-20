@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a BPM (beats per minute) change in a chart.
     /// </summary>
-    public class BPM
+    public class BPM : IBeatObject, IChangeNotifier
     {
         double _value;
 
@@ -22,14 +22,23 @@ namespace OpenChart.Charting
                     throw new ArgumentOutOfRangeException("BPM must be greater than zero.");
                 }
 
-                _value = value;
+                if (_value != value)
+                {
+                    _value = value;
+                    OnChanged();
+                }
             }
         }
 
         /// <summary>
         /// The beat where the BPM change occurs.
         /// </summary>
-        public Beat Beat;
+        public Beat Beat { get; private set; }
+
+        /// <summary>
+        /// An event fired when the BPM changes.
+        /// </summary>
+        public event EventHandler Changed;
 
         /// <summary>
         /// Creates a new BPM instance.
@@ -40,11 +49,10 @@ namespace OpenChart.Charting
         {
             Beat = new Beat(beat);
             Value = value;
+
+            Beat.Changed += delegate { OnChanged(); };
         }
 
-        /// <summary>
-        /// Checks if both BPM objects are equal.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var bpm = obj as BPM;
@@ -57,12 +65,15 @@ namespace OpenChart.Charting
             return Beat == bpm.Beat && Value == bpm.Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Tuple.Create(Beat, Value).GetHashCode();
+        }
+
+        protected virtual void OnChanged()
+        {
+            var handler = Changed;
+            handler?.Invoke(this, null);
         }
     }
 }

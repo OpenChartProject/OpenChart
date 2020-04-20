@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a key index. The key index refers to the column on a note field.
     /// </summary>
-    public class KeyIndex
+    public class KeyIndex : IChangeNotifier
     {
         int _value;
 
@@ -25,7 +25,7 @@ namespace OpenChart.Charting
                 if (_value != value)
                 {
                     _value = value;
-                    OnKeyChanged();
+                    OnChanged();
                 }
             }
         }
@@ -35,7 +35,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// An event fired when the key index changes.
         /// </summary>
-        public event EventHandler KeyChanged;
+        public event EventHandler Changed;
 
         /// <summary>
         /// Creates a new Key instance.
@@ -45,9 +45,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Returns true if both keys are the same.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var key = obj as KeyIndex;
@@ -60,17 +57,14 @@ namespace OpenChart.Charting
             return key.Value == Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
         }
 
-        protected virtual void OnKeyChanged()
+        protected virtual void OnChanged()
         {
-            var handler = KeyChanged;
+            var handler = Changed;
             handler?.Invoke(this, null);
         }
     }

@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a beat.
     /// </summary>
-    public class Beat : IComparable
+    public class Beat : IChangeNotifier
     {
         double _value;
 
@@ -25,7 +25,7 @@ namespace OpenChart.Charting
                 if (_value != value)
                 {
                     _value = value;
-                    OnBeatChanged();
+                    OnChanged();
                 }
             }
         }
@@ -36,7 +36,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// An event fired when the beat value changes.
         /// </summary>
-        public event EventHandler BeatChanged;
+        public event EventHandler Changed;
 
         /// <summary>
         /// Creates a new Beat instance.
@@ -46,9 +46,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Returns true if both beat objects occur on the same beat.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var beat = obj as Beat;
@@ -61,9 +58,6 @@ namespace OpenChart.Charting
             return Value == beat.Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
@@ -91,9 +85,9 @@ namespace OpenChart.Charting
             }
         }
 
-        protected virtual void OnBeatChanged()
+        protected virtual void OnChanged()
         {
-            var handler = BeatChanged;
+            var handler = Changed;
             handler?.Invoke(this, null);
         }
     }

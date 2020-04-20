@@ -26,7 +26,7 @@ namespace OpenChart.Tests.Charting
             var beat = new Beat(0);
             var calls = 0;
 
-            beat.BeatChanged += delegate { calls++; };
+            beat.Changed += delegate { calls++; };
 
             beat.Value = beat.Value;
             Assert.AreEqual(0, calls);
