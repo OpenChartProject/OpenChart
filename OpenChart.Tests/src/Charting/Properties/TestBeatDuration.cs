@@ -1,8 +1,8 @@
 using NUnit.Framework;
-using OpenChart.Charting;
+using OpenChart.Charting.Properties;
 using System;
 
-namespace OpenChart.Tests.Charting
+namespace OpenChart.Tests.Charting.Properties
 {
     public class TestBeatDuration
     {

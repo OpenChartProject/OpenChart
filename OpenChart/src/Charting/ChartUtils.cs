@@ -1,3 +1,4 @@
+using OpenChart.Charting.Properties;
 using System;
 
 namespace OpenChart.Charting

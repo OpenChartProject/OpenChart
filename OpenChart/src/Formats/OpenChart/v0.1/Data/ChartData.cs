@@ -1,4 +1,4 @@
-using OpenChart.Charting;
+using OpenChart.Charting.Properties;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.Data
 {
