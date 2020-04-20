@@ -81,6 +81,14 @@ namespace OpenChart.Charting
                 throw new ArgumentNullException("Object array cannot be null.");
             }
 
+            foreach (var o in objs)
+            {
+                if (o == null)
+                {
+                    throw new ArgumentNullException("Object array cannot contain null values.");
+                }
+            }
+
             // Inserting into linked lists is usually pretty slow since it's O(n), but we can
             // speed things up by taking advantage of the fact that our list is sorted by beats.
             // We can sort the object array by beats and then reuse the LinkedListNode cursor
@@ -131,6 +139,34 @@ namespace OpenChart.Charting
             objects.CopyTo(array, arrayIndex);
         }
 
+        public IEnumerator<T> GetEnumerator()
+        {
+            return objects.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return objects.GetEnumerator();
+        }
+
+        /// <summary>
+        /// Removes the given object.
+        /// </summary>
+        public bool Remove(T obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException("Object cannot be null.");
+            }
+            else if (objects.Remove(obj))
+            {
+                OnRemoved(obj);
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Removes an object at the given beat. Returns true if the object exists and was removed.
         /// </summary>
@@ -157,34 +193,6 @@ namespace OpenChart.Charting
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Removes the given object.
-        /// </summary>
-        public bool Remove(T obj)
-        {
-            if (obj == null)
-            {
-                throw new ArgumentNullException("Object cannot be null.");
-            }
-            else if (objects.Remove(obj))
-            {
-                OnRemoved(obj);
-                return true;
-            }
-
-            return false;
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return objects.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return objects.GetEnumerator();
         }
 
         /// <summary>
