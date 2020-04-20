@@ -5,7 +5,7 @@ namespace OpenChart.Charting
     /// <summary>
     /// Represents a key count. The key count refers to how many keys a chart has.
     /// </summary>
-    public class KeyCount : IComparable
+    public class KeyCount : IChangeNotifier
     {
         int _value;
 
@@ -25,7 +25,7 @@ namespace OpenChart.Charting
                 if (_value != value)
                 {
                     _value = value;
-                    OnKeyCountChanged();
+                    OnChanged();
                 }
             }
         }
@@ -35,7 +35,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// An event fired when the key count changes.
         /// </summary>
-        public event EventHandler KeyCountChanged;
+        public event EventHandler Changed;
 
         /// <summary>
         /// Creates a new KeyCount instance.
@@ -45,31 +45,6 @@ namespace OpenChart.Charting
             Value = value;
         }
 
-        /// <summary>
-        /// Compares the value with another object of the same type.
-        /// </summary>
-        public int CompareTo(object o)
-        {
-            if (o == null)
-            {
-                return 1;
-            }
-
-            var keyCount = o as KeyCount;
-
-            if (keyCount != null)
-            {
-                return keyCount.Value.CompareTo(Value);
-            }
-            else
-            {
-                throw new ArgumentException("Object is not a KeyCount instance.");
-            }
-        }
-
-        /// <summary>
-        /// Returns true if both key counts are the same.
-        /// </summary>
         public override bool Equals(object obj)
         {
             var keyCount = obj as KeyCount;
@@ -82,17 +57,14 @@ namespace OpenChart.Charting
             return keyCount.Value == Value;
         }
 
-        /// <summary>
-        /// Returns the object's hash code.
-        /// </summary>
         public override int GetHashCode()
         {
             return Value.GetHashCode();
         }
 
-        protected virtual void OnKeyCountChanged()
+        protected virtual void OnChanged()
         {
-            var handler = KeyCountChanged;
+            var handler = Changed;
             handler?.Invoke(this, null);
         }
     }

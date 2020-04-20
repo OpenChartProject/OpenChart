@@ -26,7 +26,7 @@ namespace OpenChart.Tests.Charting
             var keyCount = new KeyCount(1);
             var calls = 0;
 
-            keyCount.KeyCountChanged += delegate { calls++; };
+            keyCount.Changed += delegate { calls++; };
 
             keyCount.Value = keyCount.Value;
             Assert.AreEqual(0, calls);
