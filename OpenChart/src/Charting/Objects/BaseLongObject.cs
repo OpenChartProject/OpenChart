@@ -1,16 +1,14 @@
+using OpenChart.Charting.Exceptions;
+using OpenChart.Charting.Properties;
+
 namespace OpenChart.Charting.Objects
 {
     /// <summary>
     /// The base class for a chart object which has a length or duration associated with it.
     /// </summary>
-    public abstract class BaseLongObject : BaseObject
+    public abstract class BaseLongObject : BaseObject, IPlacementValidator, IBeatDurationObject
     {
-        /// <summary>
-        /// The exception thrown by `CanBeInserted()` if there is an object overlap.
-        /// </summary>
-        public ChartException OverlapException => new ChartException("This object overlaps with another object.");
-
-        public BeatDuration Length;
+        public BeatDuration Length { get; private set; }
 
         public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
@@ -18,20 +16,19 @@ namespace OpenChart.Charting.Objects
         }
 
         /// <summary>
-        /// Checks if the object will overlap with an object that comes befores or after it.
+        /// Checks if the object overlaps with another object. Throws an exception if it does.
         /// </summary>
-        /// <param name="prev"></param>
-        /// <param name="next"></param>
-        public override void CanBeInserted(BaseObject prev, BaseObject next)
+        public void ValidOrThrow(IBeatObject prev, IBeatObject next)
         {
-            if (prev is BaseLongObject)
+            // Check if the previous object overlaps with this one.
+            if (prev is IPlacementValidator validatable)
             {
-                prev.CanBeInserted(null, this);
+                validatable.ValidOrThrow(null, this);
             }
 
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
             {
-                throw OverlapException;
+                throw new ObjectOverlapException();
             }
         }
     }

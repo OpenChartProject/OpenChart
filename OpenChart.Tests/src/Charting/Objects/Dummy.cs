@@ -1,5 +1,5 @@
-using OpenChart.Charting;
 using OpenChart.Charting.Objects;
+using OpenChart.Charting.Properties;
 
 namespace OpenChart.Tests.Charting.Objects
 {

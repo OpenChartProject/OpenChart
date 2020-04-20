@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using OpenChart.Charting;
+using OpenChart.Charting.Exceptions;
 using System;
 
 namespace OpenChart.Tests.Charting.Objects
@@ -26,10 +26,10 @@ namespace OpenChart.Tests.Charting.Objects
             var hold = new DummyLongObject(0, 10, 5);
 
             // No issues inserting.
-            Assert.DoesNotThrow(() => hold.CanBeInserted(null, null));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(new DummyObject(0, 0), null));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(null, new DummyObject(0, 20)));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidOrThrow(null, null));
+            Assert.DoesNotThrow(() => hold.ValidOrThrow(new DummyObject(0, 0), null));
+            Assert.DoesNotThrow(() => hold.ValidOrThrow(null, new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, 20)));
         }
 
         [Test]
@@ -37,8 +37,8 @@ namespace OpenChart.Tests.Charting.Objects
         {
             var hold = new DummyLongObject(0, 10, 5);
 
-            Assert.Throws<ChartException>(
-                () => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
+            Assert.Throws<ObjectOverlapException>(
+                () => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
             );
         }
     }

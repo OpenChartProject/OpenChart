@@ -1,25 +1,25 @@
 using System;
 
-namespace OpenChart.Charting
+namespace OpenChart.Charting.Properties
 {
     /// <summary>
-    /// Represents a key index. The key index refers to the column on a note field.
+    /// Represents a key count. The key count refers to how many keys a chart has.
     /// </summary>
-    public class KeyIndex : IChangeNotifier
+    public class KeyCount : IChangeNotifier
     {
         int _value;
 
         /// <summary>
-        /// The key index. Cannot be negative.
+        /// The key count. Cannot be negative.
         /// </summary>
         public int Value
         {
             get => _value;
             set
             {
-                if (value < 0)
+                if (value < 1)
                 {
-                    throw new ArgumentOutOfRangeException("Key index cannot be negative.");
+                    throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
                 }
 
                 if (_value != value)
@@ -30,31 +30,31 @@ namespace OpenChart.Charting
             }
         }
 
-        public static implicit operator KeyIndex(int value) => new KeyIndex(value);
+        public static implicit operator KeyCount(int value) => new KeyCount(value);
 
         /// <summary>
-        /// An event fired when the key index changes.
+        /// An event fired when the key count changes.
         /// </summary>
         public event EventHandler Changed;
 
         /// <summary>
-        /// Creates a new Key instance.
+        /// Creates a new KeyCount instance.
         /// </summary>
-        public KeyIndex(int value)
+        public KeyCount(int value)
         {
             Value = value;
         }
 
         public override bool Equals(object obj)
         {
-            var key = obj as KeyIndex;
+            var keyCount = obj as KeyCount;
 
-            if (key == null)
+            if (keyCount == null)
             {
                 return false;
             }
 
-            return key.Value == Value;
+            return keyCount.Value == Value;
         }
 
         public override int GetHashCode()
