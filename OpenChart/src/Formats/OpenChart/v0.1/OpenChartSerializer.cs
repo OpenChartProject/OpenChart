@@ -1,4 +1,5 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Formats.OpenChart.Version0_1.Converters;
 using System.Text;
 using System.Text.Json;
 
@@ -18,7 +19,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             jsonOptions.Converters.Add(new BeatConverter());
             jsonOptions.Converters.Add(new BeatDurationConverter());
-            jsonOptions.Converters.Add(new KeyConverter());
+            jsonOptions.Converters.Add(new KeyIndexConverter());
             jsonOptions.Converters.Add(new KeyCountConverter());
         }
 

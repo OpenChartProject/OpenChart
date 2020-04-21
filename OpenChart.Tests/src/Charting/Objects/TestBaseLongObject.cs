@@ -38,7 +38,7 @@ namespace OpenChart.Tests.Charting.Objects
             var hold = new DummyLongObject(0, 10, 5);
 
             Assert.Throws<ObjectOverlapException>(
-                () => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
+                () => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.BeatDuration.Value))
             );
         }
     }
