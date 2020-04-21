@@ -3,7 +3,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace OpenChart.Formats.OpenChart.Version0_1.Converters
+namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
     /// <summary>
     /// JSON converter for a Beat object.
