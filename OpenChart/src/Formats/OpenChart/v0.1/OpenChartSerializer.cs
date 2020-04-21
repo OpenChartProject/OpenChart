@@ -40,11 +40,6 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                 throw new SerializerException("The 'version' field is missing or empty.");
             }
 
-            if (pd.Charts == null)
-            {
-                pd.Charts = new ChartData[] { };
-            }
-
             return pd;
         }
 

@@ -26,5 +26,11 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
         /// The beat rows for the chart.
         /// </summary>
         public BeatRowData[] Rows { get; set; }
+
+        public ChartData()
+        {
+            // Default to an empty array instead of null if it's not set
+            Rows = new BeatRowData[] { };
+        }
     }
 }
