@@ -54,5 +54,35 @@ namespace OpenChart.Tests.Formats.OpenChart
             Assert.IsEmpty(pd.Charts);
             Assert.IsNull(pd.Song);
         }
+
+        [TestCase(@"
+            {
+                ""metadata"": {
+                    ""version"": ""test-version""
+                },
+                ""charts"": [
+                    {
+                        ""keyCount"": 4,
+                        ""author"": ""jessie"",
+                        ""chartName"": ""test chart"",
+                        ""rows"": []
+                    }
+                ],
+                ""song"": null
+            }
+            ")]
+        public void Test_Deserialize_EmptyChart(string data)
+        {
+            var pd = serializer.Deserialize(Encoding.UTF8.GetBytes(data));
+
+            Assert.AreEqual(1, pd.Charts.Length);
+
+            var chart = pd.Charts[0];
+
+            Assert.AreEqual(4, chart.KeyCount.Value);
+            Assert.AreEqual("jessie", chart.Author);
+            Assert.AreEqual("test chart", chart.ChartName);
+            Assert.IsEmpty(chart.Rows);
+        }
     }
 }

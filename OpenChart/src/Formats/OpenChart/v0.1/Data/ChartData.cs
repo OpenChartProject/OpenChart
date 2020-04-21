@@ -21,5 +21,10 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
         /// The chart's name.
         /// </summary>
         public string ChartName { get; set; }
+
+        /// <summary>
+        /// The beat rows for the chart.
+        /// </summary>
+        public BeatRowData[] Rows { get; set; }
     }
 }
