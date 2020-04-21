@@ -1,8 +1,7 @@
 using NUnit.Framework;
-using OpenChart.Formats;
+using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
 using OpenChart.Formats.OpenChart.Version0_1.Objects;
-using System;
 using System.Text.Json;
 
 namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
@@ -14,9 +13,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [OneTimeSetUp]
         public void SetUp()
         {
-            options = new JsonSerializerOptions();
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.Converters.Add(new ChartObjectConverter());
+            options = OpenChartSerializer.jsonOptions;
         }
 
         public void Test_Read_Null()
@@ -25,21 +22,18 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             Assert.IsNull(data);
         }
 
-        [TestCase("tap", typeof(TapNote))]
-        public void Test_Read_ValidSimpleObjects(string value, Type expectedType)
+        [Test]
+        public void Test_Read_TapNote()
         {
-            var input = $"\"{value}\"";
+            var input = @"
+                {
+                    ""type"": ""tap""
+                }
+            ";
             var data = JsonSerializer.Deserialize(input, typeof(IChartObject), options);
-            Assert.NotNull(data);
-            Assert.IsInstanceOf(expectedType, data);
-        }
 
-        [TestCase("hold")]
-        [TestCase("invalid")]
-        public void Test_Read_InvalidSimpleObjectsThrows(string value)
-        {
-            var input = $"\"{value}\"";
-            Assert.Throws<ConverterException>(() => JsonSerializer.Deserialize(input, typeof(IChartObject), options));
+            Assert.NotNull(data);
+            Assert.IsInstanceOf(typeof(TapNote), data);
         }
 
         [Test]

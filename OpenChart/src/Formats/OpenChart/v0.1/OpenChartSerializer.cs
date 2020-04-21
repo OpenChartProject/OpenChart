@@ -10,7 +10,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// </summary>
     public class OpenChartSerializer : IFormatSerializer<ProjectData>
     {
-        static JsonSerializerOptions jsonOptions;
+        public static JsonSerializerOptions jsonOptions;
 
         static OpenChartSerializer()
         {
@@ -21,6 +21,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             jsonOptions.Converters.Add(new BeatDurationConverter());
             jsonOptions.Converters.Add(new KeyIndexConverter());
             jsonOptions.Converters.Add(new KeyCountConverter());
+            jsonOptions.Converters.Add(new ChartObjectConverter());
         }
 
         /// <summary>
