@@ -73,7 +73,8 @@ namespace OpenChart.Tests.Formats.OpenChart
                         ""keyCount"": 4,
                         ""author"": ""jessie"",
                         ""chartName"": ""test chart"",
-                        ""rows"": []
+                        ""rows"": [],
+                        ""bpms"": []
                     }
                 ],
                 ""song"": null
@@ -90,6 +91,7 @@ namespace OpenChart.Tests.Formats.OpenChart
             Assert.AreEqual(4, chart.KeyCount.Value);
             Assert.AreEqual("jessie", chart.Author);
             Assert.AreEqual("test chart", chart.ChartName);
+            Assert.IsEmpty(chart.BPMs);
             Assert.IsEmpty(chart.Rows);
         }
 
@@ -141,6 +143,7 @@ namespace OpenChart.Tests.Formats.OpenChart
             Assert.AreEqual(chart.Author, actual.Charts[0].Author);
             Assert.AreEqual(chart.ChartName, actual.Charts[0].ChartName);
             Assert.AreEqual(chart.KeyCount, actual.Charts[0].KeyCount);
+            Assert.IsEmpty(actual.Charts[0].BPMs);
             Assert.IsEmpty(actual.Charts[0].Rows);
         }
     }
