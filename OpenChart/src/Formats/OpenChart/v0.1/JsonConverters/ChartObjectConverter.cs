@@ -1,5 +1,8 @@
 using OpenChart.Formats.OpenChart.Version0_1.Objects;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -10,61 +13,43 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
     /// </summary>
     public class ChartObjectConverter : JsonConverter<IChartObject>
     {
-        public override bool CanConvert(Type typeToConvert)
-        {
-            return typeof(IChartObject).IsAssignableFrom(typeToConvert);
-        }
-
         public override IChartObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            if (reader.TokenType == JsonTokenType.String)
+            if (reader.TokenType != JsonTokenType.StartObject)
             {
-                var objectType = reader.GetString();
+                throw new ConverterException("Chart object must be a JSON object.");
+            }
 
-                switch (objectType)
+            JsonDocument document = JsonDocument.ParseValue(ref reader);
+            string typeString;
+
+            try
+            {
+                typeString = document.RootElement.GetProperty("type").GetString();
+            }
+            catch (KeyNotFoundException)
+            {
+                throw new ConverterException("Chart object must contain a 'type' field.");
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                using (var writer = new Utf8JsonWriter(stream))
+                {
+                    document.WriteTo(writer);
+                }
+
+                var json = Encoding.UTF8.GetString(stream.ToArray());
+
+                switch (typeString)
                 {
                     case TapNote.Type:
-                        return new TapNote();
+                        return JsonSerializer.Deserialize<TapNote>(json, options);
                     case HoldNote.Type:
-                        throw new ConverterException("Hold notes are not a simple chart object type.");
+                        return JsonSerializer.Deserialize<HoldNote>(json, options);
                     default:
-                        throw new ConverterException($"Unexpected chart object type: '{objectType}'");
+                        throw new ConverterException($"Unknown chart object type: '{typeString}'");
                 }
-            }
-            else if (reader.TokenType == JsonTokenType.StartArray)
-            {
-                reader.Read();
-
-                if (reader.TokenType != JsonTokenType.String)
-                {
-                    throw new ConverterException("Expected a string as the first parameter for an extended chart object.");
-                }
-
-                var objectType = reader.GetString();
-
-                reader.Read();
-
-                if (reader.TokenType != JsonTokenType.StartObject)
-                {
-                    throw new ConverterException("Expected a JSON object as the second parameter for an extended chart object.");
-                }
-
-                reader.Read();
-
-                switch (objectType)
-                {
-                    case TapNote.Type:
-                        throw new ConverterException("Tap notes are not an extended chart object type.");
-                    case HoldNote.Type:
-                        var note = new HoldNote();
-                        return note;
-                    default:
-                        throw new ConverterException($"Unexpected chart object type: '{objectType}'");
-                }
-            }
-            else
-            {
-                throw new ConverterException("Expected string, array, or null.");
             }
         }
 
