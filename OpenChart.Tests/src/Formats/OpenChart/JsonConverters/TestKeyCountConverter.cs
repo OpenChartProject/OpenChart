@@ -34,7 +34,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 
         [TestCase(-1)]
         [TestCase(0)]
-        public void Test_Read_InvalidKeyCount(double value)
+        public void Test_Read_InvalidKeyCount(int value)
         {
             var input = $"{{ \"keyCount\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
@@ -45,7 +45,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [TestCase(1)]
         [TestCase(4)]
         [TestCase(7)]
-        public void Test_Read_ValidKeyCount(double value)
+        public void Test_Read_ValidKeyCount(int value)
         {
             var input = $"{{ \"keyCount\": {value} }}";
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);

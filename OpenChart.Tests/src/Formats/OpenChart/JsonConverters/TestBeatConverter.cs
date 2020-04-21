@@ -32,7 +32,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         }
 
         [TestCase(-1)]
-        public void Test_Read_InvalidBeat(double value)
+        public void Test_Read_InvalidValue(double value)
         {
             var input = $"{{ \"beat\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
@@ -43,7 +43,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [TestCase(0)]
         [TestCase(100)]
         [TestCase(123.45)]
-        public void Test_Read_ValidBeat(double value)
+        public void Test_Read_ValidValue(double value)
         {
             var input = $"{{ \"beat\": {value} }}";
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
