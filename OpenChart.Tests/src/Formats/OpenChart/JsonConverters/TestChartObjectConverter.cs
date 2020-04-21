@@ -46,12 +46,10 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Read_HoldNote()
         {
             var input = @"
-                [
-                    ""hold"",
-                    {
-                        ""beatDuration"": 10
-                    }
-                ]
+                {
+                    ""type"": ""hold"",
+                    ""beatDuration"": 10
+                }
             ";
             var data = JsonSerializer.Deserialize(input, typeof(IChartObject), options);
 
