@@ -22,6 +22,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
 
         public ProjectData()
         {
+            // Default to an empty array instead of null if it's not set.
+            Charts = new ChartData[] { };
             Metadata = new ProjectMetadata();
         }
     }
