@@ -8,6 +8,6 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
         /// <summary>
         /// A string describing the object's type. This should be constant.
         /// </summary>
-        string Type { get; }
+        static string Type { get; }
     }
 }

@@ -33,7 +33,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 
         [TestCase(-1)]
         [TestCase(0)]
-        public void Test_Read_InvalidBeatDuration(double value)
+        public void Test_Read_InvalidValue(double value)
         {
             var input = $"{{ \"duration\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
@@ -44,7 +44,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [TestCase(1)]
         [TestCase(100)]
         [TestCase(123.45)]
-        public void Test_Read_ValidBeatDuration(double value)
+        public void Test_Read_ValidValue(double value)
         {
             var input = $"{{ \"duration\": {value} }}";
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);

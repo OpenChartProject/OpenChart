@@ -33,7 +33,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         }
 
         [TestCase(-1)]
-        public void Test_Read_InvalidKeyIndex(double value)
+        public void Test_Read_InvalidValue(int value)
         {
             var input = $"{{ \"keyIndex\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
@@ -44,7 +44,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(4)]
-        public void Test_Read_ValidKeyIndex(double value)
+        public void Test_Read_ValidValue(int value)
         {
             var input = $"{{ \"keyIndex\": {value} }}";
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);

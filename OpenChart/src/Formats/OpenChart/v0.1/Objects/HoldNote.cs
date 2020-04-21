@@ -11,11 +11,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
         /// The duration of the hold note.
         /// </summary>
         public BeatDuration BeatDuration { get; set; }
-        public string Type => ChartObjectType.HoldNote;
 
-        public HoldNote(BeatDuration duration)
-        {
-            BeatDuration = duration;
-        }
+        public const string Type = ChartObjectType.HoldNote;
     }
 }
