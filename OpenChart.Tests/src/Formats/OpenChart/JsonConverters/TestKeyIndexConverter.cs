@@ -50,5 +50,14 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
             Assert.AreEqual(value, data.KeyIndex.Value);
         }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        public void Test_Write(int value)
+        {
+            var data = new DummyData() { KeyIndex = value };
+            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
+            Assert.AreEqual($"{{\"keyIndex\":{value}}}", json);
+        }
     }
 }

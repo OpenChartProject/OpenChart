@@ -10,6 +10,19 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
     /// <summary>
     /// JSON converter for reading and writing objects that inherit from IChartObject.
+    ///
+    /// This class acts like a factory for converting the concrete chart object types.
+    /// Each IChartObject class has a 'type' field which says what kind of object it is.
+    /// The chart objects themselves aren't complex enough to warrant having their own
+    /// converter.
+    ///
+    /// Every chart object is represented as a JSON object ({}). This reads in the full
+    /// object and only looks at the value of the 'type' field. Once we know the type of
+    /// the object we can deserialize it into an object instance.
+    ///
+    /// In a sense, what this converter is doing is taking the full JSON text for the file,
+    /// extracting a small part of it, and then deserializing that part as if it were its
+    /// own file.
     /// </summary>
     public class ChartObjectConverter : JsonConverter<IChartObject>
     {
@@ -20,11 +33,13 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
                 throw new ConverterException("Chart object must be a JSON object.");
             }
 
+            // Read the entire JSON object.
             JsonDocument document = JsonDocument.ParseValue(ref reader);
             string typeString;
 
             try
             {
+                // Try looking up the 'type' field.
                 typeString = document.RootElement.GetProperty("type").GetString();
             }
             catch (KeyNotFoundException)
@@ -34,6 +49,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 
             using (var stream = new MemoryStream())
             {
+                // The .NET JSON converters don't work on already parsed objects, so unfortunately
+                // we can't just pass the document instance directly to a converter.
                 using (var writer = new Utf8JsonWriter(stream))
                 {
                     document.WriteTo(writer);
@@ -41,11 +58,12 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 
                 var json = Encoding.UTF8.GetString(stream.ToArray());
 
+                // Deserializes the object based on its type.
                 switch (typeString)
                 {
-                    case TapNote.Type:
+                    case ChartObjectType.TapNote:
                         return JsonSerializer.Deserialize<TapNote>(json, options);
-                    case HoldNote.Type:
+                    case ChartObjectType.HoldNote:
                         return JsonSerializer.Deserialize<HoldNote>(json, options);
                     default:
                         throw new ConverterException($"Unknown chart object type: '{typeString}'");
@@ -55,7 +73,19 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 
         public override void Write(Utf8JsonWriter writer, IChartObject value, JsonSerializerOptions options)
         {
-            //writer.WriteNull();
+            // Serializes the object based on its type.
+            if (value is TapNote)
+            {
+                JsonSerializer.Serialize<TapNote>(writer, (TapNote)value, options);
+            }
+            else if (value is HoldNote)
+            {
+                JsonSerializer.Serialize<HoldNote>(writer, (HoldNote)value, options);
+            }
+            else
+            {
+                throw new ConverterException("Cannot serialize chart object, type is unknown.");
+            }
         }
     }
 }
