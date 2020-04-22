@@ -1,13 +1,15 @@
+using System;
+
 namespace OpenChart.Formats.OpenChart.Version0_1.Objects
 {
     /// <summary>
-    /// An interface for objects that contain a Type field.
+    /// An interface for chart objects which are identified by a unique type string.
     /// </summary>
     public interface IChartObject
     {
         /// <summary>
-        /// A string describing the object's type. This should be constant.
+        /// A unique string that describes the chart object class.
         /// </summary>
-        static string Type { get; }
+        string Type { get; }
     }
 }

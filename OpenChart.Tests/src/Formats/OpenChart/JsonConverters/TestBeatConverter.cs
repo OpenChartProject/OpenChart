@@ -49,5 +49,15 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
             Assert.AreEqual(value, data.Beat.Value);
         }
+
+        [TestCase(0)]
+        [TestCase(1.5)]
+        [TestCase(123.45)]
+        public void Test_Write(double value)
+        {
+            var data = new DummyData() { Beat = value };
+            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
+            Assert.AreEqual($"{{\"beat\":{value}}}", json);
+        }
     }
 }

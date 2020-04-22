@@ -50,5 +50,15 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
             Assert.AreEqual(value, data.Duration.Value);
         }
+
+        [TestCase(1)]
+        [TestCase(1.5)]
+        [TestCase(123.45)]
+        public void Test_Write(double value)
+        {
+            var data = new DummyData() { Duration = value };
+            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
+            Assert.AreEqual($"{{\"duration\":{value}}}", json);
+        }
     }
 }
