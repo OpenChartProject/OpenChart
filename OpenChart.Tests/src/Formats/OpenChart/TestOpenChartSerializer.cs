@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using OpenChart.Charting.Properties;
 using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.Formats.OpenChart.Version0_1.Data;
@@ -145,6 +146,29 @@ namespace OpenChart.Tests.Formats.OpenChart
             Assert.AreEqual(chart.KeyCount, actual.Charts[0].KeyCount);
             Assert.IsEmpty(actual.Charts[0].BPMs);
             Assert.IsEmpty(actual.Charts[0].Rows);
+        }
+
+        [Test]
+        public void Test_Serialize_BPMs()
+        {
+            var expected = newProject();
+            var chart = new ChartData
+            {
+                Author = "Jessie",
+                ChartName = "My chart",
+                KeyCount = 4,
+            };
+
+            expected.Charts = new ChartData[] { chart };
+            chart.BPMs = new BPM[] {
+                new BPM(100, 0),
+                new BPM(150, 10.5),
+            };
+
+            var actual = serializer.Deserialize(serializer.Serialize(expected));
+
+            Assert.AreEqual(2, actual.Charts[0].BPMs.Length);
+            Assert.AreEqual(chart.BPMs, actual.Charts[0].BPMs);
         }
     }
 }

@@ -19,5 +19,19 @@ namespace OpenChart.Tests.Charting.Properties
         {
             Assert.DoesNotThrow(() => new BPM(value, 0));
         }
+
+        [TestCase(100, 0)]
+        [TestCase(101.5, 1.5)]
+        public void Test_Equals_AreEqual(double bpmValue, double bpmBeat)
+        {
+            Assert.AreEqual(new BPM(100, 0), new BPM(100, 0));
+        }
+
+        [TestCase(100, 0)]
+        [TestCase(101.5, 1.5)]
+        public void Test_Equals_AreNotEqual(double bpmValue, double bpmBeat)
+        {
+            Assert.AreNotEqual(new BPM(bpmValue + 1, bpmBeat + 1), new BPM(bpmValue, bpmBeat));
+        }
     }
 }
