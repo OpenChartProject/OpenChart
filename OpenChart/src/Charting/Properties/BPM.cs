@@ -33,12 +33,14 @@ namespace OpenChart.Charting.Properties
         /// <summary>
         /// The beat where the BPM change occurs.
         /// </summary>
-        public Beat Beat { get; private set; }
+        public Beat Beat { get; set; }
 
         /// <summary>
         /// An event fired when the BPM changes.
         /// </summary>
         public event EventHandler Changed;
+
+        public BPM() : this(100, 0) { }
 
         /// <summary>
         /// Creates a new BPM instance.
@@ -62,7 +64,7 @@ namespace OpenChart.Charting.Properties
                 return false;
             }
 
-            return Beat == bpm.Beat && Value == bpm.Value;
+            return Beat.Equals(bpm.Beat) && Value == bpm.Value;
         }
 
         public override int GetHashCode()

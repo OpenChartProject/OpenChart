@@ -54,7 +54,7 @@ namespace OpenChart.Charting.Properties
                 return false;
             }
 
-            return key.Value == Value;
+            return Value == key.Value;
         }
 
         public override int GetHashCode()
