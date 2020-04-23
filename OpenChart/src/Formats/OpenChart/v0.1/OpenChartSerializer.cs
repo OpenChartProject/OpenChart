@@ -32,14 +32,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         {
             var pd = (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
 
-            if (pd.Metadata == null)
-            {
-                throw new SerializerException("The 'metadata' is missing or null.");
-            }
-            else if (string.IsNullOrEmpty(pd.Metadata.Version))
-            {
-                throw new SerializerException("The 'version' field is missing or empty.");
-            }
+            ValidateOrThrow(pd);
 
             return pd;
         }
@@ -50,9 +43,23 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="fd">The FileData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
+            ValidateOrThrow(pd);
+
             var str = JsonSerializer.Serialize(pd, jsonOptions);
 
             return Encoding.UTF8.GetBytes(str);
+        }
+
+        public void ValidateOrThrow(ProjectData pd)
+        {
+            if (pd.Metadata == null)
+            {
+                throw new SerializerException("The 'metadata' is missing or null.");
+            }
+            else if (string.IsNullOrEmpty(pd.Metadata.Version))
+            {
+                throw new SerializerException("The 'version' field is missing or empty.");
+            }
         }
     }
 }
