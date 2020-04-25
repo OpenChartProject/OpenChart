@@ -1,4 +1,4 @@
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Kangaroux/OpenChart/Build%20and%20test?style=for-the-badge)![GitHub All Releases](https://img.shields.io/github/downloads/Kangaroux/OpenChart/total?style=for-the-badge)![GitHub release (latest by date)](https://img.shields.io/github/v/release/Kangaroux/OpenChart?style=for-the-badge)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/OpenChartProject/OpenChart/Build%20and%20test?style=for-the-badge)![GitHub All Releases](https://img.shields.io/github/downloads/OpenChartProject/OpenChart/total?style=for-the-badge)![GitHub release (latest by date)](https://img.shields.io/github/v/release/OpenChartProject/OpenChart?style=for-the-badge)
 
 [![](https://imgur.com/bhQKKSZ.png)](https://discord.gg/wSGmN52)
 
