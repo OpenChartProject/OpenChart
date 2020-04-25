@@ -25,14 +25,10 @@ namespace OpenChart.Charting.Objects
         public override void CanBeInserted(BaseObject prev, BaseObject next)
         {
             if (prev is BaseLongObject)
-            {
                 prev.CanBeInserted(null, this);
-            }
 
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
-            {
                 throw OverlapException;
-            }
         }
     }
 }

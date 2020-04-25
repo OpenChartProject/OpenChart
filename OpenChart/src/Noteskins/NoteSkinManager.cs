@@ -37,9 +37,7 @@ namespace OpenChart.NoteSkins
         public void LoadAll()
         {
             if (!Directory.Exists(App.NoteSkinFolder))
-            {
                 throw new Exception($"The noteskins folder ('{App.NoteSkinFolder}') does not exist.");
-            }
 
             foreach (var dir in Directory.GetDirectories(App.NoteSkinFolder))
             {
@@ -71,9 +69,7 @@ namespace OpenChart.NoteSkins
             var dirName = Path.Join(App.NoteSkinFolder, skinName);
 
             if (!Directory.Exists(dirName))
-            {
                 throw new Exception($"Unable to find a noteskin with the name '{skinName}'.");
-            }
 
             var noteSkin = new NoteSkin(skinName);
 

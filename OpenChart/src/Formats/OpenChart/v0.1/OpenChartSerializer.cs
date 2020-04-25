@@ -31,18 +31,12 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             var pd = (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
 
             if (pd.Metadata == null)
-            {
                 throw new SerializerException("The 'metadata' is missing or null.");
-            }
             else if (string.IsNullOrEmpty(pd.Metadata.Version))
-            {
                 throw new SerializerException("The 'version' field is missing or empty.");
-            }
 
             if (pd.Charts == null)
-            {
                 pd.Charts = new ChartData[] { };
-            }
 
             return pd;
         }

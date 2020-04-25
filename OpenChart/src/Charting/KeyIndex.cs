@@ -18,9 +18,7 @@ namespace OpenChart.Charting
             set
             {
                 if (value < 0)
-                {
                     throw new ArgumentOutOfRangeException("Key index cannot be negative.");
-                }
 
                 if (_value != value)
                 {
@@ -50,9 +48,7 @@ namespace OpenChart.Charting
             var key = obj as KeyIndex;
 
             if (key == null)
-            {
                 return false;
-            }
 
             return key.Value == Value;
         }

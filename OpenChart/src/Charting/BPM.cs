@@ -18,9 +18,7 @@ namespace OpenChart.Charting
             set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentOutOfRangeException("BPM must be greater than zero.");
-                }
 
                 if (_value != value)
                 {
@@ -58,9 +56,7 @@ namespace OpenChart.Charting
             var bpm = obj as BPM;
 
             if (bpm == null)
-            {
                 return false;
-            }
 
             return Beat == bpm.Beat && Value == bpm.Value;
         }
