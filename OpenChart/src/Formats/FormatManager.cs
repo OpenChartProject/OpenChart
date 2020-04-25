@@ -36,9 +36,7 @@ namespace OpenChart.Formats
         public IFormatHandler GetFormatHandler(string ext)
         {
             if (!formats.ContainsKey(ext))
-            {
                 return null;
-            }
 
             return formats[ext];
         }

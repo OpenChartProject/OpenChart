@@ -19,8 +19,7 @@ namespace OpenChart.Charting
             {
                 if (value < 1)
                     throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
                     OnChanged();
