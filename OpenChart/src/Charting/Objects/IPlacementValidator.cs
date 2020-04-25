@@ -1,14 +1,13 @@
-using System;
+using OpenChart.Charting.Properties;
 
-namespace OpenChart.Charting
+namespace OpenChart.Charting.Objects
 {
     /// <summary>
-    /// An interface for an object which occurs on a particular beat.
+    /// An interface for a beat object that has constraints regarding where it can be
+    /// placed inside a BeatObjectList.
     /// </summary>
-    public interface IBeatObject
+    public interface IPlacementValidator
     {
-        Beat Beat { get; }
-
         /// <summary>
         /// This method is used by beat objects that are put into a list, sorted by beats.
         /// This is called right before insertion, with the previous and next objects in the list.
@@ -17,6 +16,6 @@ namespace OpenChart.Charting
         /// If there is a reason that this object cannot be inserted between prev and next,
         /// it should raise a `ChartException` with a reason why.
         /// </summary>
-        void CheckValid(IBeatObject prev, IBeatObject next) { }
+        void ValidatePlacement(IBeatObject prev, IBeatObject next) { }
     }
 }

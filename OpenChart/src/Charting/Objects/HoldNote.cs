@@ -1,3 +1,5 @@
+using OpenChart.Charting.Properties;
+
 namespace OpenChart.Charting.Objects
 {
     /// <summary>

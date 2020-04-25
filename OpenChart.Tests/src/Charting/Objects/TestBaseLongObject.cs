@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using OpenChart.Charting;
+using OpenChart.Charting.Exceptions;
 using System;
 
 namespace OpenChart.Tests.Charting.Objects
@@ -21,24 +21,24 @@ namespace OpenChart.Tests.Charting.Objects
         }
 
         [Test]
-        public void Test_CanBeInserted_OK()
+        public void Test_ValidatePlacement_DoesNotThrowWhenValid()
         {
             var hold = new DummyLongObject(0, 10, 5);
 
             // No issues inserting.
-            Assert.DoesNotThrow(() => hold.CanBeInserted(null, null));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(new DummyObject(0, 0), null));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(null, new DummyObject(0, 20)));
-            Assert.DoesNotThrow(() => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(null, null));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(new DummyObject(0, 0), null));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(null, new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(new DummyObject(0, 0), new DummyObject(0, 20)));
         }
 
         [Test]
-        public void Test_CanBeInserted_Obstruction()
+        public void Test_ValidatePlacement_ThrowsWhenObstructed()
         {
             var hold = new DummyLongObject(0, 10, 5);
 
-            Assert.Throws<ChartException>(
-                () => hold.CanBeInserted(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
+            Assert.Throws<ObjectOverlapException>(
+                () => hold.ValidatePlacement(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.Length.Value))
             );
         }
     }
