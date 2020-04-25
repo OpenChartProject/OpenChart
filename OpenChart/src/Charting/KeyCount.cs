@@ -18,9 +18,7 @@ namespace OpenChart.Charting
             set
             {
                 if (value < 1)
-                {
                     throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
-                }
 
                 if (_value != value)
                 {
@@ -50,9 +48,7 @@ namespace OpenChart.Charting
             var keyCount = obj as KeyCount;
 
             if (keyCount == null)
-            {
                 return false;
-            }
 
             return keyCount.Value == Value;
         }

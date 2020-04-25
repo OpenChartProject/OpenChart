@@ -18,9 +18,7 @@ namespace OpenChart.Charting
             set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentOutOfRangeException("Beat duration must be greater than zero.");
-                }
 
                 if (_value != value)
                 {
@@ -51,9 +49,7 @@ namespace OpenChart.Charting
             var beat = obj as BeatDuration;
 
             if (beat == null)
-            {
                 return false;
-            }
 
             return Value == beat.Value;
         }
@@ -69,20 +65,14 @@ namespace OpenChart.Charting
         public int CompareTo(object o)
         {
             if (o == null)
-            {
                 return 1;
-            }
 
             var beatDuration = o as BeatDuration;
 
             if (beatDuration != null)
-            {
                 return beatDuration.Value.CompareTo(Value);
-            }
             else
-            {
                 throw new ArgumentException("Object is not a BeatDuration instance.");
-            }
         }
 
         protected virtual void OnChanged()

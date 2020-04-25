@@ -62,9 +62,7 @@ namespace OpenChart.Charting
         public void Add(T obj)
         {
             if (obj == null)
-            {
                 throw new ArgumentNullException("Object cannot be null.");
-            }
 
             insertObject(obj);
             OnAdded(obj);
@@ -77,16 +75,12 @@ namespace OpenChart.Charting
         public void AddMultiple(T[] objs)
         {
             if (objs == null)
-            {
                 throw new ArgumentNullException("Object array cannot be null.");
-            }
 
             foreach (var o in objs)
             {
                 if (o == null)
-                {
                     throw new ArgumentNullException("Object array cannot contain null values.");
-                }
             }
 
             // Inserting into linked lists is usually pretty slow since it's O(n), but we can
@@ -124,9 +118,7 @@ namespace OpenChart.Charting
         public bool Contains(T obj)
         {
             if (obj == null)
-            {
                 return false;
-            }
 
             return objects.Find(obj) != null;
         }
@@ -155,9 +147,7 @@ namespace OpenChart.Charting
         public bool Remove(T obj)
         {
             if (obj == null)
-            {
                 throw new ArgumentNullException("Object cannot be null.");
-            }
             else if (objects.Remove(obj))
             {
                 OnRemoved(obj);
@@ -173,9 +163,7 @@ namespace OpenChart.Charting
         public bool RemoveAtBeat(Beat beat)
         {
             if (beat == null)
-            {
                 throw new ArgumentNullException("Beat cannot be null.");
-            }
 
             var cur = objects.First;
 
@@ -215,16 +203,12 @@ namespace OpenChart.Charting
         private LinkedListNode<T> insertObject(T obj, LinkedListNode<T> cur = null)
         {
             if (cur == null)
-            {
                 cur = objects.First;
-            }
 
             while (cur != null)
             {
                 if (obj.Beat.Value == cur.Value.Beat.Value)
-                {
                     throw new ArgumentException("An object at the given beat already exists.");
-                }
                 else if (obj.Beat.Value < cur.Value.Beat.Value)
                 {
                     if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
@@ -264,9 +248,7 @@ namespace OpenChart.Charting
         protected virtual void OnAdded(T obj)
         {
             if (obj is IChangeNotifier notifier)
-            {
                 notifier.Changed += onItemChanged;
-            }
 
             var handler = Added;
             handler?.Invoke(this, new ObjectListEventArgs<T>(obj));
@@ -281,9 +263,7 @@ namespace OpenChart.Charting
         protected virtual void OnRemoved(T obj)
         {
             if (obj is IChangeNotifier notifier)
-            {
                 notifier.Changed -= onItemChanged;
-            }
 
             var handler = Removed;
             handler?.Invoke(this, new ObjectListEventArgs<T>(obj));
