@@ -22,7 +22,7 @@ namespace OpenChart.Charting
                 else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -68,13 +68,13 @@ namespace OpenChart.Charting
 
             var beat = o as Beat;
 
-            if (beat != null)
-                return beat.Value.CompareTo(Value);
-            else
+            if (beat == null)
                 throw new ArgumentException("Object is not a Beat instance.");
+
+            return beat.Value.CompareTo(Value);
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);
