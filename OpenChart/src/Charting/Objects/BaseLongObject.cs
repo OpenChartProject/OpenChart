@@ -22,14 +22,10 @@ namespace OpenChart.Charting.Objects
         {
             // Check if the previous object overlaps with this one.
             if (prev is IPlacementValidator validatable)
-            {
                 validatable.ValidOrThrow(null, this);
-            }
 
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
-            {
                 throw new ObjectOverlapException();
-            }
         }
     }
 }

@@ -18,14 +18,11 @@ namespace OpenChart.Charting.Properties
             set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentOutOfRangeException("BPM must be greater than zero.");
-                }
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -50,7 +47,7 @@ namespace OpenChart.Charting.Properties
             Beat = new Beat(beat);
             Value = value;
 
-            Beat.Changed += delegate { OnChanged(); };
+            Beat.Changed += delegate { onChanged(); };
         }
 
         public override bool Equals(object obj)
@@ -58,9 +55,7 @@ namespace OpenChart.Charting.Properties
             var bpm = obj as BPM;
 
             if (bpm == null)
-            {
                 return false;
-            }
 
             return Beat == bpm.Beat && Value == bpm.Value;
         }
@@ -70,7 +65,7 @@ namespace OpenChart.Charting.Properties
             return Tuple.Create(Beat, Value).GetHashCode();
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);

@@ -18,9 +18,7 @@ namespace OpenChart.NoteSkins
             private set
             {
                 if (value <= 0)
-                {
                     throw new ArgumentException("Key count must be greater than zero.");
-                }
 
                 _keyCount = value;
             }
@@ -50,9 +48,7 @@ namespace OpenChart.NoteSkins
         public void Set(int key, NoteSkinKey keyImage)
         {
             if (key < 0 || key >= KeyCount)
-            {
                 throw new ArgumentException($"Key must be between 0 and {KeyCount - 1}.");
-            }
 
             Keys[key] = keyImage;
         }
