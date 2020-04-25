@@ -65,7 +65,7 @@ namespace OpenChart.Charting
                 throw new ArgumentNullException("Object cannot be null.");
 
             insertObject(obj);
-            OnAdded(obj);
+            onAdded(obj);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace OpenChart.Charting
 
                 // FIXME?: When inserting a large amount of objects at once (such as by copy and pasting)
                 // calling an event for each individual object may lead to performance issues.
-                OnAdded(obj);
+                onAdded(obj);
             }
         }
 
@@ -105,7 +105,7 @@ namespace OpenChart.Charting
         public void Clear()
         {
             objects.Clear();
-            OnCleared();
+            onCleared();
         }
 
         /// <summary>
@@ -146,7 +146,7 @@ namespace OpenChart.Charting
                 throw new ArgumentNullException("Object cannot be null.");
             else if (objects.Remove(obj))
             {
-                OnRemoved(obj);
+                onRemoved(obj);
                 return true;
             }
 
@@ -169,7 +169,7 @@ namespace OpenChart.Charting
                 {
                     var bpm = cur.Value;
                     objects.Remove(cur);
-                    OnRemoved(bpm);
+                    onRemoved(bpm);
                     return true;
                 }
 
@@ -241,7 +241,7 @@ namespace OpenChart.Charting
             }
         }
 
-        protected virtual void OnAdded(T obj)
+        protected virtual void onAdded(T obj)
         {
             if (obj is IChangeNotifier notifier)
                 notifier.Changed += onItemChanged;
@@ -250,13 +250,13 @@ namespace OpenChart.Charting
             handler?.Invoke(this, new ObjectListEventArgs<T>(obj));
         }
 
-        protected virtual void OnCleared()
+        protected virtual void onCleared()
         {
             var handler = Cleared;
             handler?.Invoke(this, null);
         }
 
-        protected virtual void OnRemoved(T obj)
+        protected virtual void onRemoved(T obj)
         {
             if (obj is IChangeNotifier notifier)
                 notifier.Changed -= onItemChanged;

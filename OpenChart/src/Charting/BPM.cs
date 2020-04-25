@@ -22,7 +22,7 @@ namespace OpenChart.Charting
                 else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace OpenChart.Charting
             Beat = new Beat(beat);
             Value = value;
 
-            Beat.Changed += delegate { OnChanged(); };
+            Beat.Changed += delegate { onChanged(); };
         }
 
         public override bool Equals(object obj)
@@ -65,7 +65,7 @@ namespace OpenChart.Charting
             return Tuple.Create(Beat, Value).GetHashCode();
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);

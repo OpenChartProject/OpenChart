@@ -22,7 +22,7 @@ namespace OpenChart.Charting
                 else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -57,7 +57,7 @@ namespace OpenChart.Charting
             return Value.GetHashCode();
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);
