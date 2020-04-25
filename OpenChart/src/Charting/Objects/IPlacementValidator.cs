@@ -16,6 +16,6 @@ namespace OpenChart.Charting.Objects
         /// If there is a reason that this object cannot be inserted between prev and next,
         /// it should raise a `ChartException` with a reason why.
         /// </summary>
-        void ValidOrThrow(IBeatObject prev, IBeatObject next) { }
+        void ValidatePlacement(IBeatObject prev, IBeatObject next) { }
     }
 }
