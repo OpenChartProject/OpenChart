@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.Charting
+namespace OpenChart.Charting.Properties
 {
     /// <summary>
     /// Represents a key index. The key index refers to the column on a note field.

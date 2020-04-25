@@ -1,6 +1,6 @@
 using System;
 
-namespace OpenChart.Charting
+namespace OpenChart.Charting.Properties
 {
     /// <summary>
     /// Represents a key count. The key count refers to how many keys a chart has.

@@ -1,3 +1,5 @@
+using OpenChart.Charting.Objects;
+using OpenChart.Charting.Properties;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -201,6 +203,8 @@ namespace OpenChart.Charting
             if (cur == null)
                 cur = objects.First;
 
+            var validatable = obj as IPlacementValidator;
+
             while (cur != null)
             {
                 if (obj.Beat.Value == cur.Value.Beat.Value)
@@ -209,7 +213,7 @@ namespace OpenChart.Charting
                 {
                     if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
                     {
-                        obj.CheckValid(cur.Previous?.Value, cur.Next?.Value);
+                        validatable?.ValidatePlacement(cur.Previous?.Value, cur.Next?.Value);
 
                         return objects.AddBefore(cur, obj);
                     }
@@ -218,7 +222,7 @@ namespace OpenChart.Charting
                 cur = cur.Next;
             }
 
-            obj.CheckValid(objects.Last?.Value, null);
+            validatable?.ValidatePlacement(objects.Last?.Value, null);
 
             return objects.AddLast(obj);
         }
