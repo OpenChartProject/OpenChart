@@ -213,7 +213,7 @@ namespace OpenChart.Charting
                 {
                     if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
                     {
-                        validatable?.ValidOrThrow(cur.Previous?.Value, cur.Next?.Value);
+                        validatable?.ValidatePlacement(cur.Previous?.Value, cur.Next?.Value);
 
                         return objects.AddBefore(cur, obj);
                     }
@@ -222,7 +222,7 @@ namespace OpenChart.Charting
                 cur = cur.Next;
             }
 
-            validatable?.ValidOrThrow(objects.Last?.Value, null);
+            validatable?.ValidatePlacement(objects.Last?.Value, null);
 
             return objects.AddLast(obj);
         }

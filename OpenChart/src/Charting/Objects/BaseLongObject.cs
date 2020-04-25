@@ -18,11 +18,11 @@ namespace OpenChart.Charting.Objects
         /// <summary>
         /// Checks if the object overlaps with another object. Throws an exception if it does.
         /// </summary>
-        public void ValidOrThrow(IBeatObject prev, IBeatObject next)
+        public void ValidatePlacement(IBeatObject prev, IBeatObject next)
         {
             // Check if the previous object overlaps with this one.
             if (prev is IPlacementValidator validatable)
-                validatable.ValidOrThrow(null, this);
+                validatable.ValidatePlacement(null, this);
 
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
                 throw new ObjectOverlapException();
