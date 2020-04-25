@@ -18,14 +18,11 @@ namespace OpenChart.Charting
             set
             {
                 if (value < 1)
-                {
                     throw new ArgumentOutOfRangeException("Key count must be greater than zero.");
-                }
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -50,9 +47,7 @@ namespace OpenChart.Charting
             var keyCount = obj as KeyCount;
 
             if (keyCount == null)
-            {
                 return false;
-            }
 
             return keyCount.Value == Value;
         }
@@ -62,7 +57,7 @@ namespace OpenChart.Charting
             return Value.GetHashCode();
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);

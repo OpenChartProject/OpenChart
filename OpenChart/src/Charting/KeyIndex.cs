@@ -18,14 +18,11 @@ namespace OpenChart.Charting
             set
             {
                 if (value < 0)
-                {
                     throw new ArgumentOutOfRangeException("Key index cannot be negative.");
-                }
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -50,9 +47,7 @@ namespace OpenChart.Charting
             var key = obj as KeyIndex;
 
             if (key == null)
-            {
                 return false;
-            }
 
             return key.Value == Value;
         }
@@ -62,7 +57,7 @@ namespace OpenChart.Charting
             return Value.GetHashCode();
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);

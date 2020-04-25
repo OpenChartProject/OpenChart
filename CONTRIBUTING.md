@@ -18,6 +18,27 @@ Things that don't need to be documented:
 ### Formatting
 To keep the formatting consistent, it might be helpful for you to use the automatic formatting tools built into your IDE or text editor of choice.
 
+### Naming
+All public entities should be in PascalCase, i.e. the first letter is capitalized. Private and protected methods and properties should be in camelCase, i.e. the first letter is lowercase.
+
+If a property needs special getter/setter logic, and hence a private field is needed, the private field should be in camelCase and begin with a single underscore.
+
+Example:
+```C#
+public int MyNumber { get; set; }
+
+private double _myDouble;
+public double MyDouble { get => _myDouble; set { _myDouble = value; } }
+
+public event EventHandler SomethingHappened;
+
+public void MyPublicMethod() {
+    onSomethingHappened();
+}
+
+protected virtual void onSomethingHappened() { }
+```
+
 ### Unit testing
 We ask that where possible, any code you write is covered with clear, concise unit tests. This really helps us to ensure that any regressions are caught in the future, and gives us a fighting chance at not releasing buggy code.
 
