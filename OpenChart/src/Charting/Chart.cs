@@ -49,9 +49,7 @@ namespace OpenChart.Charting
             var chart = obj as Chart;
 
             if (chart == null)
-            {
                 return false;
-            }
 
             return (
                 KeyCount == chart.KeyCount
