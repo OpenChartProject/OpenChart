@@ -19,8 +19,7 @@ namespace OpenChart.Charting
             {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException("Beat cannot be negative.");
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
                     OnChanged();

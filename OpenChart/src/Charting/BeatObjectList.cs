@@ -76,12 +76,8 @@ namespace OpenChart.Charting
         {
             if (objs == null)
                 throw new ArgumentNullException("Object array cannot be null.");
-
-            foreach (var o in objs)
-            {
-                if (o == null)
-                    throw new ArgumentNullException("Object array cannot contain null values.");
-            }
+            else if (objs.Contains(null))
+                throw new ArgumentNullException("Object array cannot contain null values.");
 
             // Inserting into linked lists is usually pretty slow since it's O(n), but we can
             // speed things up by taking advantage of the fact that our list is sorted by beats.

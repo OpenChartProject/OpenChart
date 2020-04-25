@@ -19,8 +19,7 @@ namespace OpenChart.Charting
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException("Beat duration must be greater than zero.");
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
                     OnChanged();
