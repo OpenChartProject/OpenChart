@@ -39,6 +39,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                 foreach (var c in data.Charts)
                 {
                     var chart = new Chart(c.KeyCount);
+                    chart.BPMs.AddMultiple(c.BPMs);
                     project.Charts.Add(chart);
                 }
             }
@@ -71,6 +72,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             {
                 var chart = new ChartData();
                 chart.KeyCount = c.KeyCount;
+                chart.BPMs = c.BPMs.ToArray();
+                chartList.Add(chart);
             }
 
             pd.Charts = chartList.ToArray();
