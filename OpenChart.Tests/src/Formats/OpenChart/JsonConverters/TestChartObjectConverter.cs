@@ -59,14 +59,14 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             var input = @"
                 {
                     ""type"": ""hold"",
-                    ""beatDuration"": 10
+                    ""length"": 10
                 }
             ";
             var data = JsonSerializer.Deserialize(input, typeof(IChartObject), options);
 
             Assert.NotNull(data);
             Assert.IsInstanceOf(typeof(HoldNote), data);
-            Assert.AreEqual(10, (data as HoldNote).BeatDuration.Value);
+            Assert.AreEqual(10, (data as HoldNote).Length.Value);
         }
 
         [Test]
@@ -81,10 +81,10 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [Test]
         public void Test_Write_HoldNote()
         {
-            var input = new HoldNote() { BeatDuration = 2 };
+            var input = new HoldNote() { Length = 2 };
             var data = JsonSerializer.Serialize(input, typeof(IChartObject), options);
 
-            Assert.AreEqual("{\"beatDuration\":2,\"type\":\"hold\"}", data);
+            Assert.AreEqual("{\"length\":2,\"type\":\"hold\"}", data);
         }
     }
 }

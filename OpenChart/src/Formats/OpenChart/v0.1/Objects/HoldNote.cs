@@ -10,7 +10,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
         /// <summary>
         /// The duration of the hold note.
         /// </summary>
-        public BeatDuration BeatDuration { get; set; }
+        public BeatDuration Length { get; set; }
 
         public string Type => ChartObjectType.HoldNote;
     }

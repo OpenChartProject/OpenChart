@@ -5,6 +5,6 @@ namespace OpenChart.Charting.Properties
     /// </summary>
     public interface IBeatDurationObject
     {
-        BeatDuration BeatDuration { get; }
+        BeatDuration Length { get; }
     }
 }
