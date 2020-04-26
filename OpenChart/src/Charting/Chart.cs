@@ -20,6 +20,16 @@ namespace OpenChart.Charting
         public KeyCount KeyCount { get; private set; }
 
         /// <summary>
+        /// The chart's author.
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// The chart's name. This is what the difficulty is named in osu!/Quaver.
+        /// </summary>
+        public string ChartName { get; set; }
+
+        /// <summary>
         /// The chart objects that make up the chart. Chart objects include things like tap notes,
         /// holds, mines, etc.
         ///
