@@ -16,13 +16,9 @@ namespace OpenChart.Charting
         public static double BeatToSeconds(BPM[] bpms, Beat beat)
         {
             if (bpms.Length == 0)
-            {
                 throw new ArgumentException("BPMs cannot be empty.");
-            }
             else if (beat.Value == 0)
-            {
                 return 0;
-            }
 
             double elapsed = 0;
             BPM lastBPM = null;
@@ -46,9 +42,7 @@ namespace OpenChart.Charting
 
                 // We've gone as far as we need.
                 if (lastBPM.Beat.Value >= beat.Value)
-                {
                     return elapsed;
-                }
 
                 lastBPM = bpm;
             }
@@ -70,17 +64,11 @@ namespace OpenChart.Charting
         public static Beat SecondsToBeat(BPM[] bpms, double seconds)
         {
             if (bpms.Length == 0)
-            {
                 throw new ArgumentException("BPMs cannot be empty.");
-            }
             else if (seconds < 0)
-            {
                 throw new ArgumentOutOfRangeException("Seconds cannot be negative.");
-            }
             else if (seconds == 0)
-            {
                 return 0;
-            }
 
             double elapsed = 0;
             BPM lastBPM = null;
@@ -99,9 +87,7 @@ namespace OpenChart.Charting
                 var timeDelta = (60.0 / lastBPM.Value) * beatDelta;
 
                 if (elapsed + timeDelta == seconds)
-                {
                     return bpm.Beat;
-                }
                 else if (elapsed + timeDelta > seconds)
                 {
                     // Calculate how much we overshot our target time.

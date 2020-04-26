@@ -18,14 +18,11 @@ namespace OpenChart.Charting.Properties
             set
             {
                 if (value < 0)
-                {
                     throw new ArgumentOutOfRangeException("Beat cannot be negative.");
-                }
-
-                if (_value != value)
+                else if (_value != value)
                 {
                     _value = value;
-                    OnChanged();
+                    onChanged();
                 }
             }
         }
@@ -51,9 +48,7 @@ namespace OpenChart.Charting.Properties
             var beat = obj as Beat;
 
             if (beat == null)
-            {
                 return false;
-            }
 
             return Value == beat.Value;
         }
@@ -69,23 +64,17 @@ namespace OpenChart.Charting.Properties
         public int CompareTo(object o)
         {
             if (o == null)
-            {
                 return 1;
-            }
 
             var beat = o as Beat;
 
-            if (beat != null)
-            {
-                return beat.Value.CompareTo(Value);
-            }
-            else
-            {
+            if (beat == null)
                 throw new ArgumentException("Object is not a Beat instance.");
-            }
+
+            return beat.Value.CompareTo(Value);
         }
 
-        protected virtual void OnChanged()
+        protected virtual void onChanged()
         {
             var handler = Changed;
             handler?.Invoke(this, null);
