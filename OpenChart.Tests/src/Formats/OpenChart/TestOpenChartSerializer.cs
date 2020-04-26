@@ -98,7 +98,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Deserialize_OneBeatRow()
+        public void Test_Deserialize_BeatRows()
         {
             var expected = newProject();
             var chart = new ChartData
@@ -116,15 +116,57 @@ namespace OpenChart.Tests.Formats.OpenChart
                     Beat = 0,
                     Objects = new IChartObject[]
                     {
-                        new TapNote(), new TapNote(), new TapNote(), new TapNote()
+                        new TapNote(),
+                        new TapNote(),
+                        new TapNote(),
+                        new TapNote(),
+                    },
+                },
+
+                new BeatRowData
+                {
+                    Beat = 1,
+                    Objects = new IChartObject[]
+                    {
+                        null,
+                        null,
+                        null,
+                        new TapNote(),
+                    },
+                },
+
+                new BeatRowData
+                {
+                    Beat = 2,
+                    Objects = new IChartObject[]
+                    {
+                        new HoldNote { Length = 1 },
+                        new HoldNote { Length = 2 },
+                        new HoldNote { Length = 3 },
+                        new HoldNote { Length = 4 },
+                    },
+                },
+
+                new BeatRowData
+                {
+                    Beat = 10,
+                    Objects = new IChartObject[]
+                    {
+                        new TapNote(),
+                        new TapNote(),
+                        new TapNote(),
+                        new TapNote(),
                     },
                 },
             };
 
             var actual = serializer.Deserialize(serializer.Serialize(expected));
 
-            Assert.AreEqual(1, actual.Charts[0].Rows.Length);
             Assert.AreEqual(chart.Rows, actual.Charts[0].Rows);
+
+            // Just as a sanity check
+            chart.Rows[0].Beat.Value += 0.1;
+            Assert.AreNotEqual(chart.Rows, actual.Charts[0].Rows);
         }
     }
 }
