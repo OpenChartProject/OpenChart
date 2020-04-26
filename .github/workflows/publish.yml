@@ -1,4 +1,4 @@
-name: Publish apps
+name: publish
 on:
   push:
     branches:

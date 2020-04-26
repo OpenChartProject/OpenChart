@@ -21,24 +21,24 @@ namespace OpenChart.Tests.Charting.Objects
         }
 
         [Test]
-        public void Test_CanBeInserted_OK()
+        public void Test_ValidatePlacement_DoesNotThrowWhenValid()
         {
             var hold = new DummyLongObject(0, 10, 5);
 
             // No issues inserting.
-            Assert.DoesNotThrow(() => hold.ValidOrThrow(null, null));
-            Assert.DoesNotThrow(() => hold.ValidOrThrow(new DummyObject(0, 0), null));
-            Assert.DoesNotThrow(() => hold.ValidOrThrow(null, new DummyObject(0, 20)));
-            Assert.DoesNotThrow(() => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(null, null));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(new DummyObject(0, 0), null));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(null, new DummyObject(0, 20)));
+            Assert.DoesNotThrow(() => hold.ValidatePlacement(new DummyObject(0, 0), new DummyObject(0, 20)));
         }
 
         [Test]
-        public void Test_CanBeInserted_Obstruction()
+        public void Test_ValidatePlacement_ThrowsWhenObstructed()
         {
             var hold = new DummyLongObject(0, 10, 5);
 
             Assert.Throws<ObjectOverlapException>(
-                () => hold.ValidOrThrow(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.BeatDuration.Value))
+                () => hold.ValidatePlacement(new DummyObject(0, 0), new DummyObject(0, hold.Beat.Value + hold.BeatDuration.Value))
             );
         }
     }
