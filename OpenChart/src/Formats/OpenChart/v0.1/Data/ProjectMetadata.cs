@@ -17,5 +17,18 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
             if (string.IsNullOrEmpty(Version))
                 throw new Exception("The 'metadata.version' field is missing or empty.");
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is ProjectMetadata data)
+                return Version == data.Version;
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Version.GetHashCode();
+        }
     }
 }

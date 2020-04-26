@@ -29,5 +29,13 @@ namespace OpenChart.Tests.Formats.OpenChart.Data
             }
             catch { }
         }
+
+        [Test]
+        public void Test_Equals()
+        {
+            Assert.AreEqual(new ProjectData(), new ProjectData());
+            Assert.AreNotEqual(null, new ProjectData());
+            Assert.AreNotEqual(new ProjectData { Song = new SongData() }, new ProjectData());
+        }
     }
 }

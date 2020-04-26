@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
-using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Formats.OpenChart.Version0_1.Objects;
 
 namespace OpenChart.Tests.Formats.OpenChart
 {
@@ -62,7 +62,6 @@ namespace OpenChart.Tests.Formats.OpenChart
                 ChartName = "My chart",
                 KeyCount = 4,
             };
-
             expected.Charts = new ChartData[] { chart };
 
             var actual = serializer.Deserialize(serializer.Serialize(expected));
@@ -76,7 +75,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Serialize_BPMs()
+        public void Test_Deserialize_BPMs()
         {
             var expected = newProject();
             var chart = new ChartData
@@ -85,8 +84,8 @@ namespace OpenChart.Tests.Formats.OpenChart
                 ChartName = "My chart",
                 KeyCount = 4,
             };
-
             expected.Charts = new ChartData[] { chart };
+
             chart.BPMs = new BPM[] {
                 new BPM(100, 0),
                 new BPM(150, 10.5),
@@ -96,6 +95,36 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             Assert.AreEqual(2, actual.Charts[0].BPMs.Length);
             Assert.AreEqual(chart.BPMs, actual.Charts[0].BPMs);
+        }
+
+        [Test]
+        public void Test_Deserialize_OneBeatRow()
+        {
+            var expected = newProject();
+            var chart = new ChartData
+            {
+                Author = "Jessie",
+                ChartName = "My chart",
+                KeyCount = 4,
+            };
+            expected.Charts = new ChartData[] { chart };
+
+            chart.Rows = new BeatRowData[]
+            {
+                new BeatRowData
+                {
+                    Beat = 0,
+                    Objects = new IChartObject[]
+                    {
+                        new TapNote(), new TapNote(), new TapNote(), new TapNote()
+                    },
+                },
+            };
+
+            var actual = serializer.Deserialize(serializer.Serialize(expected));
+
+            Assert.AreEqual(1, actual.Charts[0].Rows.Length);
+            Assert.AreEqual(chart.Rows, actual.Charts[0].Rows);
         }
     }
 }

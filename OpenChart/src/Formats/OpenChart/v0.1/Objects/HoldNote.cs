@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using System;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.Objects
 {
@@ -13,5 +14,18 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
         public BeatDuration Length { get; set; }
 
         public string Type => ChartObjectType.HoldNote;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is HoldNote note)
+                return note.Length.Equals(Length);
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(Type, Length).GetHashCode();
+        }
     }
 }
