@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using System.Text.Json.Serialization;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.Data
 {
@@ -30,6 +31,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Data
         /// <summary>
         /// The BPM changes for the chart
         /// </summary>
+        [JsonPropertyName("bpms")]
         public BPM[] BPMs { get; set; }
 
         public ChartData()
