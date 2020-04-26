@@ -12,6 +12,6 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
         /// </summary>
         public BeatDuration BeatDuration { get; set; }
 
-        public string Type { get => ChartObjectType.HoldNote; }
+        public string Type => ChartObjectType.HoldNote;
     }
 }
