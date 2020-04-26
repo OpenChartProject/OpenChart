@@ -8,6 +8,8 @@ namespace OpenChart.Charting
     /// </summary>
     public class ChartException : Exception
     {
+        public ChartException() : base() { }
         public ChartException(string msg) : base(msg) { }
+        public ChartException(string msg, Exception inner) : base(msg, inner) { }
     }
 }
