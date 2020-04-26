@@ -54,6 +54,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                 {
                     var chart = new Chart(c.KeyCount);
                     chart.BPMs.AddMultiple(c.BPMs);
+                    chart.Author = c.Author;
+                    chart.ChartName = c.ChartName;
                     project.Charts.Add(chart);
                 }
             }
@@ -86,6 +88,8 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             {
                 var chart = new ChartData();
                 chart.KeyCount = c.KeyCount;
+                chart.Author = c.Author;
+                chart.ChartName = c.ChartName;
                 chart.BPMs = c.BPMs.ToArray();
                 chartList.Add(chart);
             }

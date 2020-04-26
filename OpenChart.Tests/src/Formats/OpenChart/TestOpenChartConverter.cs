@@ -59,12 +59,16 @@ namespace OpenChart.Tests.Formats.OpenChart
             data.Charts = new ChartData[] { chart };
 
             chart.KeyCount = 4;
+            chart.Author = "Jessie";
+            chart.ChartName = "My Chart";
 
             var native = converter.ToNative(data);
 
             Assert.AreEqual(1, native.Charts.Count);
             Assert.IsEmpty(native.Charts[0].BPMs);
-            Assert.AreEqual(4, native.Charts[0].Objects.Length);
+            Assert.AreEqual(chart.KeyCount.Value, native.Charts[0].Objects.Length);
+            Assert.AreEqual(chart.Author, native.Charts[0].Author);
+            Assert.AreEqual(chart.ChartName, native.Charts[0].ChartName);
 
             foreach (var list in native.Charts[0].Objects)
             {
@@ -79,10 +83,15 @@ namespace OpenChart.Tests.Formats.OpenChart
             var chart = new Chart(4);
             native.Charts.Add(chart);
 
+            chart.Author = "Jessie";
+            chart.ChartName = "My Chart";
+
             var data = converter.FromNative(native);
 
             Assert.AreEqual(1, data.Charts.Length);
             Assert.AreEqual(chart.KeyCount, data.Charts[0].KeyCount);
+            Assert.AreEqual(chart.Author, data.Charts[0].Author);
+            Assert.AreEqual(chart.ChartName, data.Charts[0].ChartName);
             Assert.IsEmpty(data.Charts[0].BPMs);
             Assert.IsEmpty(data.Charts[0].Rows);
         }
