@@ -17,7 +17,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// The key count for the chart.
         /// </summary>
-        public KeyCount KeyCount;
+        public KeyCount KeyCount { get; private set; }
 
         /// <summary>
         /// The chart objects that make up the chart. Chart objects include things like tap notes,
