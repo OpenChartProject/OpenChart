@@ -5,6 +5,6 @@ namespace OpenChart.Formats.OpenChart.Version0_1.Objects
     /// </summary>
     public class TapNote : IChartObject
     {
-        public string Type { get => ChartObjectType.TapNote; }
+        public string Type => ChartObjectType.TapNote;
     }
 }
