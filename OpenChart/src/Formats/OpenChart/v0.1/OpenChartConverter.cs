@@ -2,6 +2,7 @@ using OpenChart.Charting;
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Projects;
 using OpenChart.Songs;
+using System;
 using System.Collections.Generic;
 
 namespace OpenChart.Formats.OpenChart.Version0_1
@@ -22,6 +23,19 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">The project data loaded from an OpenChart file.</param>
         public Project ToNative(ProjectData data)
         {
+            try
+            {
+                data.Validate();
+            }
+            catch (Exception e)
+            {
+                throw new ConverterException(
+                    "An error occurred while loading in some project data. The file may " +
+                    "be missing some data, is corrupted, or is a version not currently supported.",
+                    e
+                );
+            }
+
             var project = new Project();
 
             // Add the song data if it's present
@@ -77,6 +91,19 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             }
 
             pd.Charts = chartList.ToArray();
+
+            try
+            {
+                pd.Validate();
+            }
+            catch (Exception e)
+            {
+                throw new ConverterException(
+                    "An error occurred while preparing to write a project to a file. " +
+                    "(This shouldn't happen!)",
+                    e
+                );
+            }
 
             return pd;
         }

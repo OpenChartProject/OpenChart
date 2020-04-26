@@ -1,5 +1,6 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
+using System;
 using System.Text;
 using System.Text.Json;
 
@@ -30,11 +31,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            var pd = (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
-
-            ValidateOrThrow(pd);
-
-            return pd;
+            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
         }
 
         /// <summary>
@@ -43,23 +40,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="fd">The FileData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
-            ValidateOrThrow(pd);
-
-            var str = JsonSerializer.Serialize(pd, jsonOptions);
-
-            return Encoding.UTF8.GetBytes(str);
-        }
-
-        public void ValidateOrThrow(ProjectData pd)
-        {
-            if (pd.Metadata == null)
-            {
-                throw new SerializerException("The 'metadata' is missing or null.");
-            }
-            else if (string.IsNullOrEmpty(pd.Metadata.Version))
-            {
-                throw new SerializerException("The 'version' field is missing or empty.");
-            }
+            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, jsonOptions));
         }
     }
 }

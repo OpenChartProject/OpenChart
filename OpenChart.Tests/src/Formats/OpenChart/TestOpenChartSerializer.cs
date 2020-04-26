@@ -24,13 +24,6 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Serialize_VersionRequired()
-        {
-            var project = new ProjectData();
-            Assert.Throws<SerializerException>(() => serializer.Serialize(project));
-        }
-
-        [Test]
         public void Test_Deserialize_EmptyProject()
         {
             var expected = newProject();
