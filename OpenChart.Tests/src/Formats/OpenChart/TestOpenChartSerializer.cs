@@ -31,7 +31,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Serialize_EmptyProject()
+        public void Test_Deserialize_EmptyProject()
         {
             var expected = newProject();
             var actual = serializer.Deserialize(serializer.Serialize(expected));
@@ -42,7 +42,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Serialize_Song()
+        public void Test_Deserialize_Song()
         {
             var expected = newProject();
             expected.Song = new SongData
@@ -60,7 +60,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         }
 
         [Test]
-        public void Test_Serialize_EmptyChart()
+        public void Test_Deserialize_EmptyChart()
         {
             var expected = newProject();
             var chart = new ChartData
