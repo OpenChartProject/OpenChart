@@ -131,7 +131,7 @@ namespace OpenChart.Tests.Formats.OpenChart
                         null,
                         null,
                         null,
-                        new TapNote(),
+                        null,
                     },
                 },
 
