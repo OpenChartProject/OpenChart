@@ -6,19 +6,19 @@ using System;
 
 namespace OpenChart.Tests.Charting
 {
-    public class TestBPMTimeTracker
+    public class TestBPMIntervalTracker
     {
         [Test]
         public void Test_Init_CannotBeNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new BPMTimeTracker(null));
+            Assert.Throws<ArgumentNullException>(() => new BPMIntervalTracker(null));
         }
 
         [Test]
         public void Test_Init_EmptyList()
         {
             var list = new BeatObjectList<BPM>();
-            var tracker = new BPMTimeTracker(list);
+            var tracker = new BPMIntervalTracker(list);
 
             Assert.AreSame(list, tracker.ObjectList);
             Assert.IsEmpty(tracker.Intervals);
@@ -34,7 +34,7 @@ namespace OpenChart.Tests.Charting
             };
 
             var list = new BeatObjectList<BPM>(bpms);
-            var tracker = new BPMTimeTracker(list);
+            var tracker = new BPMIntervalTracker(list);
 
             Assert.AreEqual(3, tracker.Intervals.Length);
             Assert.AreEqual(bpms[0], tracker.Intervals[0].BPM);
@@ -52,7 +52,7 @@ namespace OpenChart.Tests.Charting
             var list = new BeatObjectList<BPM>();
             list.Add(new BPM(100, 1));
 
-            var tracker = new BPMTimeTracker(list);
+            var tracker = new BPMIntervalTracker(list);
 
             try
             {
@@ -67,7 +67,7 @@ namespace OpenChart.Tests.Charting
         public void Test_Intervals_UpdatedWhenListChanged()
         {
             var list = new BeatObjectList<BPM>();
-            var tracker = new BPMTimeTracker(list);
+            var tracker = new BPMIntervalTracker(list);
 
             list.Add(new BPM(100, 0));
             Assert.AreEqual(1, tracker.Intervals.Length);
