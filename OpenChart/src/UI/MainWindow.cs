@@ -21,34 +21,34 @@ namespace OpenChart.UI
             noteField.Add(
                 new TapNote(
                     noteSkin.Keys[0].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(0, 0)
+                    new OpenChart.Charting.Objects.TapNote(0, 1)
                 )
             );
 
             noteField.Add(
                 new TapNote(
                     noteSkin.Keys[1].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(1, 0)
+                    new OpenChart.Charting.Objects.TapNote(1, 1)
                 )
             );
 
             noteField.Add(
                 new TapNote(
                     noteSkin.Keys[2].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(2, 0)
+                    new OpenChart.Charting.Objects.TapNote(2, 1)
                 )
             );
 
             noteField.Add(
                 new TapNote(
                     noteSkin.Keys[3].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(3, 0)
+                    new OpenChart.Charting.Objects.TapNote(3, 1)
                 )
             );
 
             Add(noteField);
 
-            Resize(640, 480);
+            Resize(800, 600);
             ShowAll();
         }
 
