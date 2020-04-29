@@ -12,7 +12,7 @@ namespace OpenChart.Charting
     /// </summary>
     public class Chart
     {
-        public BeatObjectList<BPM> BPMs { get; private set; }
+        public BPMList BPMList { get; private set; }
 
         /// <summary>
         /// The key count for the chart.
@@ -34,7 +34,7 @@ namespace OpenChart.Charting
         public Chart(KeyCount keyCount)
         {
             KeyCount = keyCount;
-            BPMs = new BeatObjectList<BPM>();
+            BPMList = new BPMList(new BeatObjectList<BPM>());
             Objects = new BeatObjectList<BaseObject>[KeyCount.Value];
 
             for (var i = 0; i < KeyCount.Value; i++)
@@ -52,14 +52,14 @@ namespace OpenChart.Charting
 
             return (
                 KeyCount == chart.KeyCount
-                && BPMs.Equals(chart.BPMs)
+                && BPMList.Equals(chart.BPMList)
                 && Objects.Equals(chart.Objects)
             );
         }
 
         public override int GetHashCode()
         {
-            return Tuple.Create(KeyCount, BPMs, Objects).GetHashCode();
+            return Tuple.Create(KeyCount, BPMList, Objects).GetHashCode();
         }
     }
 }
