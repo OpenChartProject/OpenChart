@@ -34,7 +34,7 @@ namespace OpenChart.Charting
     /// Generates a list of BPMInterval objects for a list of BPM objects. The tracker listens
     /// to a BeatObjectList for changes so it knows when to regenerate the intervals.
     /// </summary>
-    public class BPMTimeTracker
+    public class BPMIntervalTracker
     {
         bool hasChanged;
         BPMInterval[] _intervals;
@@ -66,7 +66,7 @@ namespace OpenChart.Charting
         /// Creates a new BPMTimeTracker instance.
         /// </summary>
         /// <param name="objectList">The BeatObjectList that will be watched for changes.</param>
-        public BPMTimeTracker(BeatObjectList<BPM> objectList)
+        public BPMIntervalTracker(BeatObjectList<BPM> objectList)
         {
             if (objectList == null)
                 throw new ArgumentNullException("Object list cannot be null.");

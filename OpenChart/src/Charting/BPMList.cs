@@ -15,7 +15,7 @@ namespace OpenChart.Charting
         /// <summary>
         /// A time tracker. This is setup to watch the BPMs object for changes.
         /// </summary>
-        public BPMTimeTracker Time { get; private set; }
+        public BPMIntervalTracker Time { get; private set; }
 
         /// <summary>
         /// Creates a new BPMList instance.
@@ -23,7 +23,7 @@ namespace OpenChart.Charting
         public BPMList(BeatObjectList<BPM> bpms)
         {
             BPMs = bpms;
-            Time = new BPMTimeTracker(BPMs);
+            Time = new BPMIntervalTracker(BPMs);
         }
     }
 }
