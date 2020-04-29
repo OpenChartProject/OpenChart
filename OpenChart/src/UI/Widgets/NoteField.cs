@@ -1,30 +1,36 @@
 using Gtk;
 using OpenChart.Charting.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteField : Layout
+    public class NoteField : Fixed
     {
-        Cairo.Color backgroundColor = new Cairo.Color(0, 0, 0);
-        Box keysContainer;
+        HBox keyContainer;
+        BeatLines beatLines;
+        List<Widget> widgetStack;
 
         public NoteFieldKey[] keys;
         public readonly KeyCount KeyCount;
 
-        public NoteField(KeyCount keyCount) : base(null, null)
+        public NoteField(KeyCount keyCount) : base()
         {
             KeyCount = keyCount;
+
+            widgetStack = new List<Widget>();
+            beatLines = new BeatLines();
+            keyContainer = new HBox();
             keys = new NoteFieldKey[KeyCount.Value];
-            keysContainer = new Box(Orientation.Horizontal, 0);
 
             for (var i = 0; i < KeyCount.Value; i++)
             {
                 keys[i] = new NoteFieldKey();
-                keysContainer.Add(keys[i]);
+                keyContainer.Add(keys[i]);
             }
 
-            Add(keysContainer);
+            Add(beatLines);
+            Add(keyContainer);
         }
 
         public void Add(INoteFieldObject obj)
@@ -37,6 +43,22 @@ namespace OpenChart.UI.Widgets
                 );
 
             keys[keyIndex].Add(obj);
+        }
+
+        public new void Add(Widget widget)
+        {
+            base.Add(widget);
+            widgetStack.Add(widget);
+        }
+
+        protected override bool OnDrawn(Cairo.Context cr)
+        {
+            foreach (var widget in widgetStack)
+            {
+                PropagateDraw(widget, cr);
+            }
+
+            return true;
         }
     }
 }
