@@ -50,6 +50,16 @@ namespace OpenChart.Charting.Properties
             Beat.Changed += delegate { onChanged(); };
         }
 
+        public double BeatsPerSecond()
+        {
+            return Value / 60;
+        }
+
+        public double SecondsPerBeat()
+        {
+            return 60 / Value;
+        }
+
         public override bool Equals(object obj)
         {
             var bpm = obj as BPM;
