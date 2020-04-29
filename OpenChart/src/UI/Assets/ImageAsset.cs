@@ -21,13 +21,25 @@ namespace OpenChart.UI.Assets
         /// <summary>
         /// A reusable Pixbuf instance.
         /// </summary>
-        public readonly Pixbuf Pixbuf;
+        public Pixbuf Pixbuf { get; private set; }
 
         public ImageAsset(string path)
         {
             Data = File.ReadAllBytes(path);
             Path = path;
             Pixbuf = new Pixbuf(Data);
+        }
+
+        public ImageAsset(string path, int width, int height)
+        {
+            Data = File.ReadAllBytes(path);
+            Path = path;
+            Pixbuf = new Pixbuf(Data, width, height);
+        }
+
+        public void Resize(int width, int height)
+        {
+            Pixbuf = new Pixbuf(Data, width, height);
         }
     }
 }
