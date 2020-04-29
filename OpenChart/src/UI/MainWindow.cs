@@ -8,6 +8,11 @@ namespace OpenChart.UI
     /// </summary>
     public class MainWindow : Window
     {
+        const int InitialWindowWidth = 800;
+        const int InitialWindowHeight = 600;
+        const int MinimumWindowWidth = 360;
+        const int MinimumWindowHeight = 240;
+
         public MainWindow() : base("OpenChart")
         {
             DeleteEvent += onDelete;
@@ -51,7 +56,17 @@ namespace OpenChart.UI
 
             Add(noteField);
 
-            Resize(800, 600);
+            SetGeometryHints(
+                null,
+                new Gdk.Geometry
+                {
+                    MinWidth = MinimumWindowWidth,
+                    MinHeight = MinimumWindowHeight,
+                },
+                Gdk.WindowHints.MinSize
+            );
+
+            SetDefaultSize(InitialWindowWidth, InitialWindowHeight);
             ShowAll();
         }
 
