@@ -20,7 +20,6 @@ namespace OpenChart.Charting
         /// <summary>
         /// Creates a new BPMList instance.
         /// </summary>
-        /// <param name="bpms"></param>
         public BPMList(BeatObjectList<BPM> bpms)
         {
             BPMs = bpms;
