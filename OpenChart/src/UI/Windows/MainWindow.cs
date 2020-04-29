@@ -1,7 +1,7 @@
 using Gtk;
 using OpenChart.UI.Widgets;
 
-namespace OpenChart.UI
+namespace OpenChart.UI.Windows
 {
     /// <summary>
     /// The main window of the application.
