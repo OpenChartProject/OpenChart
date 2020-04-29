@@ -58,6 +58,11 @@ namespace OpenChart.Charting
             objects = new LinkedList<T>();
         }
 
+        public BeatObjectList(T[] objs) : this()
+        {
+            AddMultiple(objs);
+        }
+
         /// <summary>
         /// Adds an object to the list. Multiple object changes cannot occur on the same beat.
         /// </summary>

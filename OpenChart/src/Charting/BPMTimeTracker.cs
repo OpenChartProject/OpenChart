@@ -1,4 +1,6 @@
+using OpenChart.Charting.Exceptions;
 using OpenChart.Charting.Properties;
+using System;
 using System.Collections.Generic;
 
 namespace OpenChart.Charting
@@ -66,6 +68,9 @@ namespace OpenChart.Charting
         /// <param name="objectList">The BeatObjectList that will be watched for changes.</param>
         public BPMTimeTracker(BeatObjectList<BPM> objectList)
         {
+            if (objectList == null)
+                throw new ArgumentNullException("Object list cannot be null.");
+
             hasChanged = true;
             ObjectList = objectList;
 
@@ -91,7 +96,12 @@ namespace OpenChart.Charting
             foreach (var bpm in bpms)
             {
                 if (lastInterval == null)
+                {
+                    if (bpm.Beat.Value != 0)
+                        throw new NoBPMAtBeatZeroException();
+
                     curInterval = new BPMInterval(bpm, 0);
+                }
                 else
                 {
                     // Calculate how much time has elapsed since the last BPM change.
@@ -102,10 +112,10 @@ namespace OpenChart.Charting
                     // BPM change if you started at beat 0.
                     var elapsed = lastInterval.Seconds + timeDelta;
 
-                    curInterval = new BPMInterval(lastInterval.BPM, elapsed);
+                    curInterval = new BPMInterval(bpm, elapsed);
                 }
 
-                intervalList.Add(lastInterval);
+                intervalList.Add(curInterval);
                 lastInterval = curInterval;
             }
 
