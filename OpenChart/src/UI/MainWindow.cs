@@ -18,33 +18,36 @@ namespace OpenChart.UI
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(keyCount);
             var noteField = new NoteField(keyCount);
 
-            noteField.Add(
-                new TapNote(
-                    noteSkin.Keys[0].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(0, 1)
-                )
-            );
+            for (var i = 0; i < 5; i++)
+            {
+                noteField.Add(
+                    new TapNote(
+                        noteSkin.Keys[0].TapNote,
+                        new OpenChart.Charting.Objects.TapNote(0, i)
+                    )
+                );
 
-            noteField.Add(
-                new TapNote(
-                    noteSkin.Keys[1].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(1, 1)
-                )
-            );
+                noteField.Add(
+                    new TapNote(
+                        noteSkin.Keys[1].TapNote,
+                        new OpenChart.Charting.Objects.TapNote(1, i)
+                    )
+                );
 
-            noteField.Add(
-                new TapNote(
-                    noteSkin.Keys[2].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(2, 1)
-                )
-            );
+                noteField.Add(
+                    new TapNote(
+                        noteSkin.Keys[2].TapNote,
+                        new OpenChart.Charting.Objects.TapNote(2, i)
+                    )
+                );
 
-            noteField.Add(
-                new TapNote(
-                    noteSkin.Keys[3].TapNote,
-                    new OpenChart.Charting.Objects.TapNote(3, 1)
-                )
-            );
+                noteField.Add(
+                    new TapNote(
+                        noteSkin.Keys[3].TapNote,
+                        new OpenChart.Charting.Objects.TapNote(3, i)
+                    )
+                );
+            }
 
             Add(noteField);
 

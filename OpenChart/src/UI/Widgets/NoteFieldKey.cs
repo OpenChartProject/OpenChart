@@ -12,7 +12,7 @@ namespace OpenChart.UI.Widgets
 
         public NoteFieldKey()
         {
-            BeatSpacing = 200;
+            BeatSpacing = 50;
             objects = new LinkedList<INoteFieldObject>();
         }
 
