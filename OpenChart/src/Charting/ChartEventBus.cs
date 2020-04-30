@@ -44,27 +44,27 @@ namespace OpenChart.Charting
         /// <summary>
         /// Fired when a new BPM is added.
         /// </summary>
-        public event EventHandler BPMAdded;
+        public event EventHandler<BPMEventArgs> BPMAdded;
 
         /// <summary>
         /// Fired when an existing BPM is changed.
         /// </summary>
-        public event EventHandler BPMChanged;
+        public event EventHandler<BPMEventArgs> BPMChanged;
 
         /// <summary>
         /// Fired when an existing BPM is removed.
         /// </summary>
-        public event EventHandler BPMRemoved;
+        public event EventHandler<BPMEventArgs> BPMRemoved;
 
         /// <summary>
         /// Fired when a new chart object is added.
         /// </summary>
-        public event EventHandler ObjectAdded;
+        public event EventHandler<ObjectEventArgs> ObjectAdded;
 
         /// <summary>
         /// Fired when an existing chart object is removed.
         /// </summary>
-        public event EventHandler ObjectRemoved;
+        public event EventHandler<ObjectEventArgs> ObjectRemoved;
 
         public ChartEventBus(Chart chart)
         {
@@ -84,12 +84,11 @@ namespace OpenChart.Charting
             }
         }
 
-        private void onBPMAdded(object o, EventArgs e)
+        private void onBPMAdded(object o, ObjectListEventArgs<BPM> e)
         {
-            var incomingArgs = e as ObjectListEventArgs<BPM>;
-            var outgoingArgs = new BPMEventArgs(incomingArgs.Object);
+            var outgoingArgs = new BPMEventArgs(e.Object);
 
-            incomingArgs.Object.Changed += onBPMChanged;
+            e.Object.Changed += onBPMChanged;
 
             BPMAdded?.Invoke(this, outgoingArgs);
         }
@@ -102,7 +101,7 @@ namespace OpenChart.Charting
             BPMChanged?.Invoke(this, outgoingArgs);
         }
 
-        private void onBPMRemoved(object o, EventArgs e)
+        private void onBPMRemoved(object o, ObjectListEventArgs<BPM> e)
         {
             var incomingArgs = e as ObjectListEventArgs<BPM>;
             var outgoingArgs = new BPMEventArgs(incomingArgs.Object);
@@ -112,18 +111,16 @@ namespace OpenChart.Charting
             BPMRemoved?.Invoke(this, outgoingArgs);
         }
 
-        private void onObjectAdded(object o, EventArgs e)
+        private void onObjectAdded(object o, ObjectListEventArgs<BaseObject> e)
         {
-            var incomingArgs = e as ObjectListEventArgs<BaseObject>;
-            var outgoingArgs = new ObjectEventArgs(incomingArgs.Object);
+            var outgoingArgs = new ObjectEventArgs(e.Object);
 
             ObjectAdded?.Invoke(this, outgoingArgs);
         }
 
-        private void onObjectRemoved(object o, EventArgs e)
+        private void onObjectRemoved(object o, ObjectListEventArgs<BaseObject> e)
         {
-            var incomingArgs = e as ObjectListEventArgs<BaseObject>;
-            var outgoingArgs = new ObjectEventArgs(incomingArgs.Object);
+            var outgoingArgs = new ObjectEventArgs(e.Object);
 
             ObjectRemoved?.Invoke(this, outgoingArgs);
         }

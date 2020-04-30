@@ -33,9 +33,7 @@ namespace OpenChart.Tests.Charting
 
             events.BPMAdded += (o, e) =>
             {
-                var args = e as BPMEventArgs;
-
-                Assert.AreSame(bpm, args.BPM);
+                Assert.AreSame(bpm, e.BPM);
 
                 calls++;
             };
@@ -54,9 +52,7 @@ namespace OpenChart.Tests.Charting
 
             events.BPMChanged += (o, e) =>
             {
-                var args = e as BPMEventArgs;
-
-                Assert.AreSame(bpm, args.BPM);
+                Assert.AreSame(bpm, e.BPM);
 
                 calls++;
             };
@@ -78,9 +74,7 @@ namespace OpenChart.Tests.Charting
 
             events.BPMRemoved += (o, e) =>
             {
-                var args = e as BPMEventArgs;
-
-                Assert.AreSame(bpm, args.BPM);
+                Assert.AreSame(bpm, e.BPM);
 
                 calls++;
             };
@@ -104,10 +98,8 @@ namespace OpenChart.Tests.Charting
 
             events.ObjectAdded += (o, e) =>
             {
-                var args = e as ObjectEventArgs;
-
-                Assert.AreSame(obj, args.Object);
-                Assert.AreEqual(obj.KeyIndex, args.Object.KeyIndex);
+                Assert.AreSame(obj, e.Object);
+                Assert.AreEqual(obj.KeyIndex, e.Object.KeyIndex);
 
                 calls++;
             };
@@ -129,9 +121,7 @@ namespace OpenChart.Tests.Charting
 
             events.ObjectRemoved += (o, e) =>
             {
-                var args = e as ObjectEventArgs;
-
-                Assert.AreSame(obj, args.Object);
+                Assert.AreSame(obj, e.Object);
 
                 calls++;
             };
