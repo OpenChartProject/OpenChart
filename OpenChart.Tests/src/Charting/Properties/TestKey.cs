@@ -34,5 +34,18 @@ namespace OpenChart.Tests.Charting.Properties
             key.Value++;
             Assert.AreEqual(1, calls);
         }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        public void Test_Equals_AreEqual(int value)
+        {
+            Assert.AreEqual(new KeyIndex(value), new KeyIndex(value));
+        }
+
+        [Test]
+        public void Test_Equals_AreNotEqual()
+        {
+            Assert.AreNotEqual(new KeyIndex(1), new KeyIndex(0));
+        }
     }
 }
