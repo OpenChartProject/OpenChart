@@ -71,7 +71,7 @@ namespace OpenChart.Charting.Properties
             if (beat == null)
                 throw new ArgumentException("Object is not a Beat instance.");
 
-            return beat.Value.CompareTo(Value);
+            return Value.CompareTo(beat.Value);
         }
 
         protected virtual void onChanged()

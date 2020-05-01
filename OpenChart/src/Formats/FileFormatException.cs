@@ -7,6 +7,8 @@ namespace OpenChart.Formats
     /// </summary>
     public abstract class FileFormatException : Exception
     {
+        public FileFormatException() : base() { }
         public FileFormatException(string msg) : base(msg) { }
+        public FileFormatException(string msg, Exception inner) : base(msg, inner) { }
     }
 }
