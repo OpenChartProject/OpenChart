@@ -187,8 +187,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             catch (Exception e)
             {
                 throw new ConverterException(
-                    "An error occurred while preparing to write a project to a file. " +
-                    "(This shouldn't happen!)",
+                    "An unexpected error occurred while processing the project.",
                     e
                 );
             }
