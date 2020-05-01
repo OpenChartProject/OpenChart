@@ -22,12 +22,7 @@ namespace OpenChart.Tests.Formats.OpenChart.Data
             // I don't know why this would ever happen but ¯\_(ツ)_/¯
             data.Metadata = null;
 
-            try
-            {
-                data.Validate();
-                Assert.Fail("Expected Validate method to throw an exception.");
-            }
-            catch { }
+            Assert.Catch(() => data.Validate());
         }
 
         [Test]
