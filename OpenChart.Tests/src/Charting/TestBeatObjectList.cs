@@ -37,8 +37,7 @@ namespace OpenChart.Tests.Charting
 
             list.Added += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                Assert.AreSame(bpm, args.Object);
+                Assert.AreSame(bpm, e.Object);
                 calls++;
             };
 
@@ -105,8 +104,7 @@ namespace OpenChart.Tests.Charting
 
             list.Added += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                added.Add(args.Object);
+                added.Add(e.Object);
             };
 
             list.AddMultiple(objects);
@@ -218,8 +216,7 @@ namespace OpenChart.Tests.Charting
             list.Add(bpm);
             list.Removed += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                removedList.Add(args.Object);
+                removedList.Add(e.Object);
             };
 
             list.Remove(bpm);
@@ -265,8 +262,7 @@ namespace OpenChart.Tests.Charting
             list.Add(bpm);
             list.Removed += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                removedList.Add(args.Object);
+                removedList.Add(e.Object);
             };
 
             list.RemoveAtBeat(bpm.Beat.Value + 100);
