@@ -10,15 +10,8 @@ namespace OpenChart.Tests.Formats.OpenChart.Data
         [TestCase("")]
         public void Test_Validate_MissingVersion(string value)
         {
-            var data = new ProjectMetadata();
-            data.Version = value;
-
-            try
-            {
-                data.Validate();
-                Assert.Fail("Expected Validate method to throw an exception.");
-            }
-            catch { }
+            var data = new ProjectMetadata { Version = value };
+            Assert.Catch(() => data.Validate());
         }
     }
 }
