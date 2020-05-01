@@ -41,17 +41,17 @@ namespace OpenChart.Charting
         /// <summary>
         /// An event for when an object is added to the list.
         /// </summary>
-        public event EventHandler Added;
+        public event EventHandler<ObjectListEventArgs<T>> Added;
 
         /// <summary>
         /// An event for when the list is completely cleared.
         /// </summary>
-        public event EventHandler Cleared;
+        public event EventHandler<ObjectListEventArgs<T>> Cleared;
 
         /// <summary>
         /// An event for when an object is removed from the list.
         /// </summary>
-        public event EventHandler Removed;
+        public event EventHandler<ObjectListEventArgs<T>> Removed;
 
         public BeatObjectList()
         {
