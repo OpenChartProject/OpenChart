@@ -18,9 +18,9 @@ namespace OpenChart.UI.Widgets
 
             foreach (var nextTime in iterator)
             {
-                var y = (int)Math.Floor((nextTime - time) * NoteField.TimeSpacing);
+                var y = NoteField.GetYPosOfTime(nextTime);
 
-                if (y > NoteField.AllocatedHeight)
+                if (y > NoteField.ViewportBottomY)
                     break;
 
                 cr.MoveTo(0, y + 0.5);
