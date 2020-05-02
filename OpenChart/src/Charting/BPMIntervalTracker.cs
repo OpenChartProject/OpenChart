@@ -121,12 +121,13 @@ namespace OpenChart.Charting
             BPMInterval cur = Intervals[fromIndex];
             BPMInterval next = cur;
 
-            for (var i = 0; i < Intervals.Length; i++)
+            for (var i = fromIndex; i < Intervals.Length; i++)
             {
+                cur = Intervals[i];
+
                 if (i == Intervals.Length - 1)
                     break;
 
-                cur = Intervals[i];
                 next = Intervals[i + 1];
 
                 // This beat occurs between these two intervals.
@@ -209,12 +210,13 @@ namespace OpenChart.Charting
             BPMInterval cur = Intervals[fromIndex];
             BPMInterval next = cur;
 
-            for (var i = 0; i < Intervals.Length; i++)
+            for (var i = fromIndex; i < Intervals.Length; i++)
             {
+                cur = Intervals[i];
+
                 if (i == Intervals.Length - 1)
                     break;
 
-                cur = Intervals[i];
                 next = Intervals[i + 1];
 
                 // This beat occurs between these two intervals.
