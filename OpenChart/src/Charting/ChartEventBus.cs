@@ -73,8 +73,8 @@ namespace OpenChart.Charting
 
             Chart = chart;
 
-            Chart.BPMs.Added += onBPMAdded;
-            Chart.BPMs.Removed += onBPMRemoved;
+            Chart.BPMList.BPMs.Added += onBPMAdded;
+            Chart.BPMList.BPMs.Removed += onBPMRemoved;
 
             // Listen to the object lists for each key.
             foreach (var keyObjects in Chart.Objects)
