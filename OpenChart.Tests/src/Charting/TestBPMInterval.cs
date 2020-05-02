@@ -14,7 +14,7 @@ namespace OpenChart.Tests.Charting
             var interval = new BPMInterval(bpm, 1);
 
             Assert.AreSame(bpm, interval.BPM);
-            Assert.AreEqual(1, interval.Seconds);
+            Assert.AreEqual(1, interval.Time.Value);
         }
 
         [TestCase(0)]
@@ -35,7 +35,7 @@ namespace OpenChart.Tests.Charting
             var bpm = new BPM(120, 0);
             var interval = new BPMInterval(bpm, 0);
 
-            Assert.AreEqual(expected, interval.BeatToTime(beat));
+            Assert.AreEqual(expected, interval.BeatToTime(beat).Value);
         }
 
         [TestCase(0)]

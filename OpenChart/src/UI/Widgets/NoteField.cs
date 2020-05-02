@@ -17,12 +17,12 @@ namespace OpenChart.UI.Widgets
         public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
 
-        public int ViewportTopY => GetYPosOfTime(ScrollSeconds);
+        public int ViewportTopY => GetYPosOfTime(ScrollTime);
         public int ViewportBottomY => ViewportTopY + AllocatedHeight;
 
         public Beat ScrollBeat { get; private set; }
         public uint ScrollIntervalIndex { get; private set; }
-        public double ScrollSeconds { get; private set; }
+        public Time ScrollTime { get; private set; }
 
         public NoteFieldKey[] Keys;
         public Chart Chart { get; private set; }
@@ -72,9 +72,9 @@ namespace OpenChart.UI.Widgets
             scrollWidget(widget);
         }
 
-        public int GetYPosOfTime(double seconds)
+        public int GetYPosOfTime(Time time)
         {
-            return (int)Math.Floor(seconds * TimeSpacing);
+            return (int)Math.Floor(time.Value * TimeSpacing);
         }
 
         protected override bool OnDrawn(Cairo.Context cr)
@@ -89,17 +89,16 @@ namespace OpenChart.UI.Widgets
 
         private void onScroll(object o, ScrollEventArgs e)
         {
-            var oldY = ScrollSeconds;
+            var newY = ScrollTime.Value + (e.Event.DeltaY * scrollFactor);
 
-            ScrollSeconds += e.Event.DeltaY * scrollFactor;
+            if (newY < 0)
+                newY = 0;
 
-            if (ScrollSeconds < 0)
-                ScrollSeconds = 0;
-
-            if (ScrollSeconds != oldY)
+            if (ScrollTime.Value != newY)
             {
-                ScrollIntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollSeconds);
-                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds, fromIndex: ScrollIntervalIndex);
+                ScrollTime.Value = newY;
+                ScrollIntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTime);
+                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollTime.Value, fromIndex: ScrollIntervalIndex);
 
                 foreach (var widget in widgetStack)
                 {
@@ -110,7 +109,7 @@ namespace OpenChart.UI.Widgets
 
         private void scrollWidget(Widget widget)
         {
-            Move(widget, 0, 0 - GetYPosOfTime(ScrollSeconds));
+            Move(widget, 0, 0 - GetYPosOfTime(ScrollTime.Value));
         }
     }
 }

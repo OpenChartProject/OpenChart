@@ -13,12 +13,12 @@ namespace OpenChart.UI.Widgets
             cr.LineWidth = 1;
 
             var index = NoteField.ScrollIntervalIndex;
-            var time = NoteField.ScrollSeconds;
+            var time = NoteField.ScrollTime;
             var iterator = NoteField.Chart.BPMList.Time.GetTimeOfNextBeat(time, index);
 
             foreach (var nextTime in iterator)
             {
-                var y = NoteField.GetYPosOfTime(nextTime);
+                var y = NoteField.GetYPosOfTime(nextTime.Value);
 
                 if (y > NoteField.ViewportBottomY)
                     break;
