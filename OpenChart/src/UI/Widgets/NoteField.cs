@@ -5,16 +5,19 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteField : Fixed
+    public class NoteField : Layout
     {
         HBox keyContainer;
         BeatLines beatLines;
         List<Widget> widgetStack;
 
+        public const double TimeSpacing = 100;
+        public double ScrollY { get; private set; }
+
         public NoteFieldKey[] keys;
         public readonly KeyCount KeyCount;
 
-        public NoteField(KeyCount keyCount) : base()
+        public NoteField(KeyCount keyCount) : base(null, null)
         {
             KeyCount = keyCount;
 
@@ -31,6 +34,8 @@ namespace OpenChart.UI.Widgets
 
             Add(beatLines);
             Add(keyContainer);
+
+            ScrollEvent += onScroll;
         }
 
         public void Add(INoteFieldObject obj)
@@ -59,6 +64,24 @@ namespace OpenChart.UI.Widgets
             }
 
             return true;
+        }
+
+        private void onScroll(object o, ScrollEventArgs e)
+        {
+            var oldY = ScrollY;
+
+            ScrollY += e.Event.DeltaY;
+
+            if (ScrollY < 0)
+                ScrollY = 0;
+
+            if (ScrollY != oldY)
+            {
+                foreach (var widget in widgetStack)
+                {
+                    Move(widget, 0, (int)Math.Floor(ScrollY * TimeSpacing));
+                }
+            }
         }
     }
 }
