@@ -13,8 +13,9 @@ namespace OpenChart.UI.Widgets
         List<Widget> widgetStack;
 
         public const double TimeSpacing = 100;
-        public double ScrollSeconds { get; private set; }
         public Beat ScrollBeat { get; private set; }
+        public BPMInterval ScrollInterval { get; private set; }
+        public double ScrollSeconds { get; private set; }
 
         public NoteFieldKey[] Keys;
         public Chart Chart { get; private set; }
@@ -79,7 +80,9 @@ namespace OpenChart.UI.Widgets
 
             if (ScrollSeconds != oldY)
             {
-                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds);
+                var index = Chart.BPMList.Time.GetIndexAtTime(ScrollSeconds);
+                ScrollInterval = Chart.BPMList.Time.Intervals[index];
+                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds, fromIndex: index);
 
                 foreach (var widget in widgetStack)
                 {
