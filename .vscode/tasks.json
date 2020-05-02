@@ -3,25 +3,19 @@
     "tasks": [
         {
             "label": "build",
-            "command": "dotnet",
+            "command": "make",
             "type": "process",
             "args": [
-                "build",
-                "${workspaceFolder}/OpenChart/OpenChart.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "build"
             ],
             "problemMatcher": "$msCompile"
         },
         {
             "label": "publish",
-            "command": "dotnet",
+            "command": "make",
             "type": "process",
             "args": [
-                "publish",
-                "${workspaceFolder}/OpenChart/OpenChart.csproj",
-                "/property:GenerateFullPaths=true",
-                "/consoleloggerparameters:NoSummary"
+                "publish"
             ],
             "problemMatcher": "$msCompile"
         },
