@@ -1,4 +1,5 @@
 using Gtk;
+using OpenChart.Charting;
 using OpenChart.Charting.Properties;
 using System;
 using System.Collections.Generic;
@@ -12,24 +13,25 @@ namespace OpenChart.UI.Widgets
         List<Widget> widgetStack;
 
         public const double TimeSpacing = 100;
-        public double ScrollY { get; private set; }
+        public double ScrollSeconds { get; private set; }
+        public Beat ScrollBeat { get; private set; }
 
-        public NoteFieldKey[] keys;
-        public readonly KeyCount KeyCount;
+        public NoteFieldKey[] Keys;
+        public Chart Chart { get; private set; }
 
-        public NoteField(KeyCount keyCount) : base(null, null)
+        public NoteField(Chart chart) : base(null, null)
         {
-            KeyCount = keyCount;
+            Chart = chart;
 
             widgetStack = new List<Widget>();
-            beatLines = new BeatLines();
+            beatLines = new BeatLines { NoteField = this };
             keyContainer = new HBox();
-            keys = new NoteFieldKey[KeyCount.Value];
+            Keys = new NoteFieldKey[Chart.KeyCount.Value];
 
-            for (var i = 0; i < KeyCount.Value; i++)
+            for (var i = 0; i < Chart.KeyCount.Value; i++)
             {
-                keys[i] = new NoteFieldKey();
-                keyContainer.Add(keys[i]);
+                Keys[i] = new NoteFieldKey();
+                keyContainer.Add(Keys[i]);
             }
 
             Add(beatLines);
@@ -42,18 +44,18 @@ namespace OpenChart.UI.Widgets
         {
             var keyIndex = obj.GetChartObject().KeyIndex.Value;
 
-            if (keyIndex >= KeyCount.Value)
+            if (keyIndex >= Chart.KeyCount.Value)
                 throw new ArgumentOutOfRangeException(
                     "The chart object's key index is out of range for the notefield's key count."
                 );
 
-            keys[keyIndex].Add(obj);
+            Keys[keyIndex].Add(obj);
         }
 
         public new void Add(Widget widget)
         {
-            base.Add(widget);
             widgetStack.Add(widget);
+            base.Add(widget);
         }
 
         protected override bool OnDrawn(Cairo.Context cr)
@@ -68,18 +70,20 @@ namespace OpenChart.UI.Widgets
 
         private void onScroll(object o, ScrollEventArgs e)
         {
-            var oldY = ScrollY;
+            var oldY = ScrollSeconds;
 
-            ScrollY += e.Event.DeltaY;
+            ScrollSeconds += e.Event.DeltaY;
 
-            if (ScrollY < 0)
-                ScrollY = 0;
+            if (ScrollSeconds < 0)
+                ScrollSeconds = 0;
 
-            if (ScrollY != oldY)
+            if (ScrollSeconds != oldY)
             {
+                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds);
+
                 foreach (var widget in widgetStack)
                 {
-                    Move(widget, 0, (int)Math.Floor(ScrollY * TimeSpacing));
+                    Move(widget, 0, (int)Math.Floor(ScrollSeconds * TimeSpacing));
                 }
             }
         }

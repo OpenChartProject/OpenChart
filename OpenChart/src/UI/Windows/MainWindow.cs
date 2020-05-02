@@ -1,4 +1,6 @@
 using Gtk;
+using OpenChart.Charting;
+using OpenChart.Charting.Properties;
 using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.Windows
@@ -19,9 +21,11 @@ namespace OpenChart.UI.Windows
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
 
-            var keyCount = 4;
-            var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(keyCount);
-            var noteField = new NoteField(keyCount);
+            var chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
+            var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
+            var noteField = new NoteField(chart);
 
             for (var i = 0; i < 5; i++)
             {
