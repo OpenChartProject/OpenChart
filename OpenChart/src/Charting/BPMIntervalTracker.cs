@@ -83,14 +83,16 @@ namespace OpenChart.Charting
         /// <summary>
         /// Returns the time in seconds that the given beat occurs at.
         /// </summary>
-        public double BeatToTime(Beat beat)
+        public double BeatToTime(Beat beat, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
+            else if (fromIndex >= Intervals.Length)
+                throw new ArgumentOutOfRangeException("fromIndex is out of range.");
             else if (beat.Value == 0)
                 return 0;
 
-            BPMInterval cur = Intervals[0];
+            BPMInterval cur = Intervals[fromIndex];
             BPMInterval next = cur;
 
             for (var i = 0; i < Intervals.Length; i++)
@@ -113,14 +115,16 @@ namespace OpenChart.Charting
         /// Returns the beat that occurs at the given time in seconds.
         /// </summary>
         /// <param name="seconds">Time in seconds.</param>
-        public Beat TimeToBeat(double seconds)
+        public Beat TimeToBeat(double seconds, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
+            else if (fromIndex >= Intervals.Length)
+                throw new ArgumentOutOfRangeException("fromIndex is out of range.");
             else if (seconds == 0)
                 return 0;
 
-            BPMInterval cur = Intervals[0];
+            BPMInterval cur = Intervals[fromIndex];
             BPMInterval next = cur;
 
             for (var i = 0; i < Intervals.Length; i++)
@@ -143,7 +147,7 @@ namespace OpenChart.Charting
         /// Returns the index of the interval which occurs at the given time in seconds.
         /// </summary>
         /// <param name="seconds">Time in seconds.</param>
-        public int GetIndexAtTime(double seconds)
+        public uint GetIndexAtTime(double seconds)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
@@ -154,11 +158,11 @@ namespace OpenChart.Charting
             {
                 // This time occurs between these two intervals.
                 if (Intervals[i].Seconds <= seconds && seconds < Intervals[i + 1].Seconds)
-                    return i;
+                    return (uint)i;
             }
 
             // The time occurs after the last interval change.
-            return Intervals.Length - 1;
+            return (uint)Intervals.Length - 1;
         }
 
         /// <summary>
