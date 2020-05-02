@@ -49,7 +49,7 @@ namespace OpenChart.Charting.Properties
             if (key == null)
                 return false;
 
-            return key.Value == Value;
+            return Value == key.Value;
         }
 
         public override int GetHashCode()
