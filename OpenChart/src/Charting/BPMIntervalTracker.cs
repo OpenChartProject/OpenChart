@@ -173,6 +173,13 @@ namespace OpenChart.Charting
         /// <param name="fromIndex">An optional start index (if it's known).</param>
         public IEnumerable<double> GetTimeOfNextBeat(double startTime, uint fromIndex = 0)
         {
+            if (Intervals.Length == 0)
+                throw new Exception("The Intervals array is empty.");
+            else if (fromIndex >= Intervals.Length)
+                throw new ArgumentOutOfRangeException("fromIndex is out of range.");
+            else if (startTime < 0)
+                throw new ArgumentOutOfRangeException("Time cannot be negative.");
+
             var index = GetIndexAtTime(startTime, fromIndex);
             double time = startTime;
 

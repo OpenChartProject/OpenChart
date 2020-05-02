@@ -106,7 +106,7 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_BeatToTime_ReturnsTimeAtIntervalStart()
+        public void Test_BeatToTime_ReturnsTimeAtStartOfInterval()
         {
             var bpms = new BPM[] {
                 new BPM(100, 0),
@@ -166,6 +166,173 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
+        public void Test_GetIndexAtTime_ThrowsWhenListIsEmpty()
+        {
+            var list = new BeatObjectList<BPM>();
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.Throws<Exception>(() => tracker.GetIndexAtTime(0));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ThrowsWhenIndexIsOutOfRange()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(100, 0));
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => tracker.GetIndexAtTime(0, fromIndex: 1));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ThrowsWhenSecondsIsNegative()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(100, 0));
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => tracker.GetIndexAtTime(-1));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ReturnsZeroForTimeZero()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(99999, 0));
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.AreEqual(0, tracker.GetIndexAtTime(0));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ReturnsIndexAtStartOfInterval()
+        {
+            var bpms = new BPM[] {
+                new BPM(100, 0),
+                new BPM(200, 10),
+                new BPM(300, 15),
+            };
+
+            var list = new BeatObjectList<BPM>();
+            list.Add(bpms[0]);
+            list.Add(bpms[1]);
+            list.Add(bpms[2]);
+
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.AreEqual(0, tracker.GetIndexAtTime(tracker.Intervals[0].Seconds));
+            Assert.AreEqual(1, tracker.GetIndexAtTime(tracker.Intervals[1].Seconds));
+            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Seconds));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ReturnsIndexInBetweenIntervals()
+        {
+            var bpms = new BPM[] {
+                new BPM(100, 0),
+                new BPM(200, 10),
+                new BPM(300, 15),
+            };
+
+            var list = new BeatObjectList<BPM>();
+            list.Add(bpms[0]);
+            list.Add(bpms[1]);
+            list.Add(bpms[2]);
+
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.AreEqual(0, tracker.GetIndexAtTime((tracker.Intervals[0].Seconds + tracker.Intervals[1].Seconds) / 2));
+            Assert.AreEqual(1, tracker.GetIndexAtTime((tracker.Intervals[1].Seconds + tracker.Intervals[2].Seconds) / 2));
+        }
+
+        [Test]
+        public void Test_GetIndexAtTime_ReturnsIndexAfterLastInterval()
+        {
+            var bpms = new BPM[] {
+                new BPM(100, 0),
+                new BPM(200, 10),
+                new BPM(300, 15),
+            };
+
+            var list = new BeatObjectList<BPM>();
+            list.Add(bpms[0]);
+            list.Add(bpms[1]);
+            list.Add(bpms[2]);
+
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Seconds + 1));
+        }
+
+        [Test]
+        public void Test_GetTimeOfNextBeat_ThrowsWhenListIsEmpty()
+        {
+            var list = new BeatObjectList<BPM>();
+            var tracker = new BPMIntervalTracker(list);
+            var iterator = tracker.GetTimeOfNextBeat(0);
+
+            Assert.Throws<Exception>(() =>
+            {
+                foreach (var _ in iterator) { break; }
+            });
+        }
+
+        [Test]
+        public void Test_GetTimeOfNextBeat_ThrowsWhenIndexIsOutOfRange()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(100, 0));
+            var tracker = new BPMIntervalTracker(list);
+            var iterator = tracker.GetTimeOfNextBeat(0, fromIndex: 1);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                foreach (var _ in iterator) { break; }
+            });
+        }
+
+        [Test]
+        public void Test_GetTimeOfNextBeat_ThrowsWhenSecondsIsNegative()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(100, 0));
+            var tracker = new BPMIntervalTracker(list);
+            var iterator = tracker.GetTimeOfNextBeat(-1);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
+                foreach (var _ in iterator) { break; }
+            });
+        }
+
+        [Test]
+        public void Test_GetTimeOfNextBeat_ReturnsExpectedTime()
+        {
+            var bpms = new BPM[] {
+                new BPM(100, 0),
+                new BPM(200, 2.5),
+                new BPM(300, 4),
+            };
+
+            var list = new BeatObjectList<BPM>();
+            list.Add(bpms[0]);
+            list.Add(bpms[1]);
+            list.Add(bpms[2]);
+
+            var tracker = new BPMIntervalTracker(list);
+            var iterator = tracker.GetTimeOfNextBeat(0);
+            var beat = 0;
+
+            foreach (var time in iterator)
+            {
+                Assert.AreEqual(tracker.BeatToTime(beat), time);
+
+                if (beat++ > 10)
+                    break;
+            }
+        }
+
+        [Test]
         public void Test_TimeToBeat_ThrowsWhenListIsEmpty()
         {
             var list = new BeatObjectList<BPM>();
@@ -185,7 +352,17 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_TimeToBeat_ReturnsZeroForBeatZero()
+        public void Test_TimeToBeat_ThrowsWhenTimeIsNegative()
+        {
+            var list = new BeatObjectList<BPM>();
+            list.Add(new BPM(100, 0));
+            var tracker = new BPMIntervalTracker(list);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => tracker.TimeToBeat(-1));
+        }
+
+        [Test]
+        public void Test_TimeToBeat_ReturnsZeroForTimeZero()
         {
             var list = new BeatObjectList<BPM>();
             list.Add(new BPM(99999, 0));
@@ -195,7 +372,7 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_TimeToBeat_ReturnsBeatAtIntervalStart()
+        public void Test_TimeToBeat_ReturnsBeatAtStartOfInterval()
         {
             var bpms = new BPM[] {
                 new BPM(100, 0),
