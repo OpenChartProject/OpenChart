@@ -38,7 +38,7 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Add(bpm);
             Assert.AreEqual(1, calls);
         }
 
@@ -57,7 +57,7 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Add(bpm);
 
             bpm.Value = 150;
 
@@ -79,8 +79,8 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
-            chart.BPMs.Remove(bpm);
+            chart.BPMList.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Remove(bpm);
 
             Assert.AreEqual(1, calls);
         }
