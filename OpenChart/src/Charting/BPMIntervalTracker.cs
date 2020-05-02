@@ -18,39 +18,39 @@ namespace OpenChart.Charting
         /// <summary>
         /// The time this BPM changed occurred.
         /// </summary>
-        public readonly double Seconds;
+        public readonly Time Time;
 
         /// <summary>
         /// Creates a new BPMInterval instance.
         /// </summary>
-        public BPMInterval(BPM bpm, double seconds)
+        public BPMInterval(BPM bpm, Time time)
         {
             BPM = bpm;
-            Seconds = seconds;
+            Time = time;
         }
 
         /// <summary>
         /// Returns the beat that occurs at the given time for this BPM interval.
         /// </summary>
         /// <param name="targetTime">The time of the beat.</param>
-        public double BeatToTime(Beat beat)
+        public Time BeatToTime(Beat beat)
         {
             if (beat.Value < BPM.Beat.Value)
                 throw new ArgumentOutOfRangeException("The beat must be after the BPM change occurs.");
 
-            return Seconds + (beat.Value - BPM.Beat.Value) * BPM.SecondsPerBeat();
+            return Time.Value + (beat.Value - BPM.Beat.Value) * BPM.SecondsPerBeat();
         }
 
         /// <summary>
         /// Returns the beat that occurs at the given time for this BPM interval.
         /// </summary>
         /// <param name="targetTime">The time of the beat.</param>
-        public Beat TimeToBeat(double targetTime)
+        public Beat TimeToBeat(Time targetTime)
         {
-            if (targetTime < Seconds)
+            if (targetTime.Value < Time.Value)
                 throw new ArgumentOutOfRangeException("The time must be after the BPM change occurs.");
 
-            return BPM.Beat.Value + (targetTime - Seconds) * BPM.BeatsPerSecond();
+            return BPM.Beat.Value + (targetTime.Value - Time.Value) * BPM.BeatsPerSecond();
         }
     }
 
@@ -109,7 +109,7 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="seconds">The beat to get the timestamp of.</param>
         /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public double BeatToTime(Beat beat, uint fromIndex = 0)
+        public Time BeatToTime(Beat beat, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
@@ -143,21 +143,19 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="seconds">Time in seconds.</param>
         /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public uint GetIndexAtTime(double seconds, uint fromIndex = 0)
+        public uint GetIndexAtTime(Time time, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
             else if (fromIndex >= Intervals.Length)
                 throw new ArgumentOutOfRangeException("fromIndex is out of range.");
-            else if (seconds < 0)
-                throw new ArgumentOutOfRangeException("Time cannot be negative.");
             else if (fromIndex == Intervals.Length - 1)
                 return (uint)Intervals.Length - 1;
 
             for (var i = fromIndex; i < Intervals.Length - 1; i++)
             {
                 // This time occurs between these two intervals.
-                if (Intervals[i].Seconds <= seconds && seconds < Intervals[i + 1].Seconds)
+                if (Intervals[i].Time.Value <= time.Value && time.Value < Intervals[i + 1].Time.Value)
                     return (uint)i;
             }
 
@@ -171,17 +169,15 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="startTime">The time to start at.</param>
         /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public IEnumerable<double> GetTimeOfNextBeat(double startTime, uint fromIndex = 0)
+        public IEnumerable<Time> GetTimeOfNextBeat(Time startTime, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
             else if (fromIndex >= Intervals.Length)
                 throw new ArgumentOutOfRangeException("fromIndex is out of range.");
-            else if (startTime < 0)
-                throw new ArgumentOutOfRangeException("Time cannot be negative.");
 
             var index = GetIndexAtTime(startTime, fromIndex);
-            double time = startTime;
+            Time time = startTime;
 
             // Get the beat we're starting on.
             Beat beat = Intervals[index].TimeToBeat(time);
@@ -205,13 +201,13 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="seconds">Time in seconds.</param>
         /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public Beat TimeToBeat(double seconds, uint fromIndex = 0)
+        public Beat TimeToBeat(Time time, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
             else if (fromIndex >= Intervals.Length)
                 throw new ArgumentOutOfRangeException("fromIndex is out of range.");
-            else if (seconds == 0)
+            else if (time.Value == 0)
                 return 0;
 
             BPMInterval cur = Intervals[fromIndex];
@@ -227,11 +223,11 @@ namespace OpenChart.Charting
                 next = Intervals[i + 1];
 
                 // This beat occurs between these two intervals.
-                if (cur.Seconds <= seconds && seconds < next.Seconds)
+                if (cur.Time.Value <= time.Value && time.Value < next.Time.Value)
                     break;
             }
 
-            return cur.TimeToBeat(seconds);
+            return cur.TimeToBeat(time);
         }
 
         /// <summary>
@@ -264,7 +260,7 @@ namespace OpenChart.Charting
 
                     // Add the elapsed time to track the total time needed to reach this
                     // BPM change if you started at beat 0.
-                    var elapsed = lastInterval.Seconds + timeDelta;
+                    var elapsed = lastInterval.Time.Value + timeDelta;
 
                     curInterval = new BPMInterval(bpm, elapsed);
                 }

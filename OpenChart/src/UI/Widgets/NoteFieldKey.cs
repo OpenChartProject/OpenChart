@@ -4,15 +4,14 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteFieldKey : Fixed
+    public class NoteFieldKey : Fixed, INoteFieldWidget
     {
         LinkedList<IChartObject> objects;
 
-        public int BeatSpacing { get; set; }
+        public NoteField NoteField { get; set; }
 
         public NoteFieldKey()
         {
-            BeatSpacing = 50;
             objects = new LinkedList<IChartObject>();
         }
 
@@ -71,7 +70,7 @@ namespace OpenChart.UI.Widgets
             Move(
                 obj.GetWidget(),
                 0,
-                (int)(obj.GetChartObject().Beat.Value * BeatSpacing)
+                (int)(obj.GetChartObject().Beat.Value)
             );
         }
     }

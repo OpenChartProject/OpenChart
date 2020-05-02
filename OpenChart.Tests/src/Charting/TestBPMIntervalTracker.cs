@@ -41,9 +41,9 @@ namespace OpenChart.Tests.Charting
             Assert.AreEqual(bpms[1], tracker.Intervals[1].BPM);
             Assert.AreEqual(bpms[2], tracker.Intervals[2].BPM);
 
-            Assert.AreEqual(0, tracker.Intervals[0].Seconds);
-            Assert.AreEqual(6.0, tracker.Intervals[1].Seconds);
-            Assert.AreEqual(7.5, tracker.Intervals[2].Seconds);
+            Assert.AreEqual(0, tracker.Intervals[0].Time.Value);
+            Assert.AreEqual(6.0, tracker.Intervals[1].Time.Value);
+            Assert.AreEqual(7.5, tracker.Intervals[2].Time.Value);
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace OpenChart.Tests.Charting
             list.Add(new BPM(99999, 0));
             var tracker = new BPMIntervalTracker(list);
 
-            Assert.AreEqual(0, tracker.BeatToTime(0));
+            Assert.AreEqual(0, tracker.BeatToTime(0).Value);
         }
 
         [Test]
@@ -185,16 +185,6 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_GetIndexAtTime_ThrowsWhenSecondsIsNegative()
-        {
-            var list = new BeatObjectList<BPM>();
-            list.Add(new BPM(100, 0));
-            var tracker = new BPMIntervalTracker(list);
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => tracker.GetIndexAtTime(-1));
-        }
-
-        [Test]
         public void Test_GetIndexAtTime_ReturnsZeroForTimeZero()
         {
             var list = new BeatObjectList<BPM>();
@@ -220,9 +210,9 @@ namespace OpenChart.Tests.Charting
 
             var tracker = new BPMIntervalTracker(list);
 
-            Assert.AreEqual(0, tracker.GetIndexAtTime(tracker.Intervals[0].Seconds));
-            Assert.AreEqual(1, tracker.GetIndexAtTime(tracker.Intervals[1].Seconds));
-            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Seconds));
+            Assert.AreEqual(0, tracker.GetIndexAtTime(tracker.Intervals[0].Time));
+            Assert.AreEqual(1, tracker.GetIndexAtTime(tracker.Intervals[1].Time));
+            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Time));
         }
 
         [Test]
@@ -241,8 +231,8 @@ namespace OpenChart.Tests.Charting
 
             var tracker = new BPMIntervalTracker(list);
 
-            Assert.AreEqual(0, tracker.GetIndexAtTime((tracker.Intervals[0].Seconds + tracker.Intervals[1].Seconds) / 2));
-            Assert.AreEqual(1, tracker.GetIndexAtTime((tracker.Intervals[1].Seconds + tracker.Intervals[2].Seconds) / 2));
+            Assert.AreEqual(0, tracker.GetIndexAtTime((tracker.Intervals[0].Time.Value + tracker.Intervals[1].Time.Value) / 2));
+            Assert.AreEqual(1, tracker.GetIndexAtTime((tracker.Intervals[1].Time.Value + tracker.Intervals[2].Time.Value) / 2));
         }
 
         [Test]
@@ -261,7 +251,7 @@ namespace OpenChart.Tests.Charting
 
             var tracker = new BPMIntervalTracker(list);
 
-            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Seconds + 1));
+            Assert.AreEqual(2, tracker.GetIndexAtTime(tracker.Intervals[2].Time.Value + 1));
         }
 
         [Test]
@@ -284,20 +274,6 @@ namespace OpenChart.Tests.Charting
             list.Add(new BPM(100, 0));
             var tracker = new BPMIntervalTracker(list);
             var iterator = tracker.GetTimeOfNextBeat(0, fromIndex: 1);
-
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
-            {
-                foreach (var _ in iterator) { break; }
-            });
-        }
-
-        [Test]
-        public void Test_GetTimeOfNextBeat_ThrowsWhenSecondsIsNegative()
-        {
-            var list = new BeatObjectList<BPM>();
-            list.Add(new BPM(100, 0));
-            var tracker = new BPMIntervalTracker(list);
-            var iterator = tracker.GetTimeOfNextBeat(-1);
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
@@ -352,16 +328,6 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_TimeToBeat_ThrowsWhenTimeIsNegative()
-        {
-            var list = new BeatObjectList<BPM>();
-            list.Add(new BPM(100, 0));
-            var tracker = new BPMIntervalTracker(list);
-
-            Assert.Throws<ArgumentOutOfRangeException>(() => tracker.TimeToBeat(-1));
-        }
-
-        [Test]
         public void Test_TimeToBeat_ReturnsZeroForTimeZero()
         {
             var list = new BeatObjectList<BPM>();
@@ -387,9 +353,9 @@ namespace OpenChart.Tests.Charting
 
             var tracker = new BPMIntervalTracker(list);
 
-            Assert.AreEqual(tracker.Intervals[0].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[0].Seconds).Value);
-            Assert.AreEqual(tracker.Intervals[1].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[1].Seconds).Value);
-            Assert.AreEqual(tracker.Intervals[2].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[2].Seconds).Value);
+            Assert.AreEqual(tracker.Intervals[0].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[0].Time).Value);
+            Assert.AreEqual(tracker.Intervals[1].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[1].Time).Value);
+            Assert.AreEqual(tracker.Intervals[2].BPM.Beat.Value, tracker.TimeToBeat(tracker.Intervals[2].Time).Value);
         }
 
         [Test]
