@@ -12,10 +12,15 @@ namespace OpenChart.UI.Widgets
         BeatLines beatLines;
         List<Widget> widgetStack;
 
-        public const double TimeSpacing = 100;
+        const double scrollFactor = 0.5;
+
+        public const int VerticalMargin = 100;
+        public const int TimeSpacing = 200;
+
         public Beat ScrollBeat { get; private set; }
-        public BPMInterval ScrollInterval { get; private set; }
         public double ScrollSeconds { get; private set; }
+        public BPMInterval ScrollInterval { get => Chart.BPMList.Time.Intervals[ScrollIntervalIndex]; }
+        public uint ScrollIntervalIndex { get; private set; }
 
         public NoteFieldKey[] Keys;
         public Chart Chart { get; private set; }
@@ -38,6 +43,11 @@ namespace OpenChart.UI.Widgets
             Add(beatLines);
             Add(keyContainer);
 
+            keyContainer.SizeAllocated += (o, e) =>
+            {
+                beatLines.SetAllocation(e.Allocation);
+            };
+
             ScrollEvent += onScroll;
         }
 
@@ -57,6 +67,12 @@ namespace OpenChart.UI.Widgets
         {
             widgetStack.Add(widget);
             base.Add(widget);
+            scrollWidget(widget);
+        }
+
+        public int GetYPosOfTime(double seconds)
+        {
+            return (int)Math.Floor(seconds * TimeSpacing);
         }
 
         protected override bool OnDrawn(Cairo.Context cr)
@@ -73,22 +89,26 @@ namespace OpenChart.UI.Widgets
         {
             var oldY = ScrollSeconds;
 
-            ScrollSeconds += e.Event.DeltaY;
+            ScrollSeconds += e.Event.DeltaY * scrollFactor;
 
             if (ScrollSeconds < 0)
                 ScrollSeconds = 0;
 
             if (ScrollSeconds != oldY)
             {
-                var index = Chart.BPMList.Time.GetIndexAtTime(ScrollSeconds);
-                ScrollInterval = Chart.BPMList.Time.Intervals[index];
-                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds, fromIndex: index);
+                ScrollIntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollSeconds);
+                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollSeconds, fromIndex: ScrollIntervalIndex);
 
                 foreach (var widget in widgetStack)
                 {
-                    Move(widget, 0, (int)Math.Floor(ScrollSeconds * TimeSpacing));
+                    scrollWidget(widget);
                 }
             }
+        }
+
+        private void scrollWidget(Widget widget)
+        {
+            Move(widget, 0, GetYPosOfTime(ScrollSeconds));
         }
     }
 }
