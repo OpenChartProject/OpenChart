@@ -12,15 +12,17 @@ namespace OpenChart.UI.Widgets
         BeatLines beatLines;
         List<Widget> widgetStack;
 
-        const double scrollFactor = 0.5;
+        const double scrollFactor = 0.2;
 
         public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
 
+        public int ViewportTopY => GetYPosOfTime(ScrollSeconds);
+        public int ViewportBottomY => ViewportTopY + AllocatedHeight;
+
         public Beat ScrollBeat { get; private set; }
-        public double ScrollSeconds { get; private set; }
-        public BPMInterval ScrollInterval { get => Chart.BPMList.Time.Intervals[ScrollIntervalIndex]; }
         public uint ScrollIntervalIndex { get; private set; }
+        public double ScrollSeconds { get; private set; }
 
         public NoteFieldKey[] Keys;
         public Chart Chart { get; private set; }
@@ -43,9 +45,9 @@ namespace OpenChart.UI.Widgets
             Add(beatLines);
             Add(keyContainer);
 
-            keyContainer.SizeAllocated += (o, e) =>
+            SizeAllocated += (o, e) =>
             {
-                beatLines.SetAllocation(e.Allocation);
+                beatLines.SetSizeRequest(keyContainer.AllocatedWidth, e.Allocation.Height);
             };
 
             ScrollEvent += onScroll;
@@ -108,7 +110,7 @@ namespace OpenChart.UI.Widgets
 
         private void scrollWidget(Widget widget)
         {
-            Move(widget, 0, GetYPosOfTime(ScrollSeconds));
+            Move(widget, 0, 0 - GetYPosOfTime(ScrollSeconds));
         }
     }
 }
