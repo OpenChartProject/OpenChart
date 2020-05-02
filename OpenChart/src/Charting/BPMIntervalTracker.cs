@@ -105,34 +105,6 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
-        /// Returns an iterator that yields the time (in seconds) of each successive beat, starting
-        /// at the given `startTime`.
-        /// </summary>
-        /// <param name="startTime">The time to start at.</param>
-        /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public IEnumerable<double> GetTimeOfNextBeat(double startTime, uint fromIndex = 0)
-        {
-            var index = GetIndexAtTime(startTime, fromIndex);
-            double time = startTime;
-
-            // Get the beat we're starting on.
-            Beat beat = Intervals[index].TimeToBeat(time);
-            beat.Value = Math.Ceiling(beat.Value);
-
-            while (true)
-            {
-                time = BeatToTime(beat, index);
-
-                yield return time;
-
-                index = GetIndexAtTime(time, index);
-
-                // This only yields on whole beat values.
-                beat.Value++;
-            }
-        }
-
-        /// <summary>
         /// Returns the time in seconds that the given beat occurs at.
         /// </summary>
         /// <param name="seconds">The beat to get the timestamp of.</param>
@@ -166,6 +138,61 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
+        /// Returns the index of the interval which occurs at the given time in seconds.
+        /// </summary>
+        /// <param name="seconds">Time in seconds.</param>
+        /// <param name="fromIndex">An optional start index (if it's known).</param>
+        public uint GetIndexAtTime(double seconds, uint fromIndex = 0)
+        {
+            if (Intervals.Length == 0)
+                throw new Exception("The Intervals array is empty.");
+            else if (fromIndex >= Intervals.Length)
+                throw new ArgumentOutOfRangeException("fromIndex is out of range.");
+            else if (seconds < 0)
+                throw new ArgumentOutOfRangeException("Time cannot be negative.");
+            else if (fromIndex == Intervals.Length - 1)
+                return (uint)Intervals.Length - 1;
+
+            for (var i = fromIndex; i < Intervals.Length - 1; i++)
+            {
+                // This time occurs between these two intervals.
+                if (Intervals[i].Seconds <= seconds && seconds < Intervals[i + 1].Seconds)
+                    return (uint)i;
+            }
+
+            // The time occurs after the last interval change.
+            return (uint)Intervals.Length - 1;
+        }
+
+        /// <summary>
+        /// Returns an iterator that yields the time (in seconds) of each successive beat, starting
+        /// at the given `startTime`.
+        /// </summary>
+        /// <param name="startTime">The time to start at.</param>
+        /// <param name="fromIndex">An optional start index (if it's known).</param>
+        public IEnumerable<double> GetTimeOfNextBeat(double startTime, uint fromIndex = 0)
+        {
+            var index = GetIndexAtTime(startTime, fromIndex);
+            double time = startTime;
+
+            // Get the beat we're starting on.
+            Beat beat = Intervals[index].TimeToBeat(time);
+            beat.Value = Math.Ceiling(beat.Value);
+
+            while (true)
+            {
+                time = BeatToTime(beat, index);
+
+                yield return time;
+
+                index = GetIndexAtTime(time, index);
+
+                // This only yields on whole beat values.
+                beat.Value++;
+            }
+        }
+
+        /// <summary>
         /// Returns the beat that occurs at the given time in seconds.
         /// </summary>
         /// <param name="seconds">Time in seconds.</param>
@@ -196,33 +223,6 @@ namespace OpenChart.Charting
             }
 
             return cur.TimeToBeat(seconds);
-        }
-
-        /// <summary>
-        /// Returns the index of the interval which occurs at the given time in seconds.
-        /// </summary>
-        /// <param name="seconds">Time in seconds.</param>
-        /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public uint GetIndexAtTime(double seconds, uint fromIndex = 0)
-        {
-            if (Intervals.Length == 0)
-                throw new Exception("The Intervals array is empty.");
-            else if (fromIndex >= Intervals.Length)
-                throw new ArgumentOutOfRangeException("fromIndex is out of range.");
-            else if (seconds < 0)
-                throw new ArgumentOutOfRangeException("Time cannot be negative.");
-            else if (fromIndex == Intervals.Length - 1)
-                return (uint)Intervals.Length - 1;
-
-            for (var i = fromIndex; i < Intervals.Length - 1; i++)
-            {
-                // This time occurs between these two intervals.
-                if (Intervals[i].Seconds <= seconds && seconds < Intervals[i + 1].Seconds)
-                    return (uint)i;
-            }
-
-            // The time occurs after the last interval change.
-            return (uint)Intervals.Length - 1;
         }
 
         /// <summary>
