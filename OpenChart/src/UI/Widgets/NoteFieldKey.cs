@@ -6,24 +6,24 @@ namespace OpenChart.UI.Widgets
 {
     public class NoteFieldKey : Fixed
     {
-        LinkedList<INoteFieldObject> objects;
+        LinkedList<IChartObject> objects;
 
         public int BeatSpacing { get; set; }
 
         public NoteFieldKey()
         {
             BeatSpacing = 50;
-            objects = new LinkedList<INoteFieldObject>();
+            objects = new LinkedList<IChartObject>();
         }
 
-        public void Add(INoteFieldObject obj)
+        public void Add(IChartObject obj)
         {
             addNoteFieldObject(obj);
             Add(obj.GetWidget());
             updateObject(obj);
         }
 
-        private void addNoteFieldObject(INoteFieldObject obj)
+        private void addNoteFieldObject(IChartObject obj)
         {
             var beat = obj.GetChartObject().Beat;
 
@@ -66,7 +66,7 @@ namespace OpenChart.UI.Widgets
             return true;
         }
 
-        private void updateObject(INoteFieldObject obj)
+        private void updateObject(IChartObject obj)
         {
             Move(
                 obj.GetWidget(),

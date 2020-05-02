@@ -38,7 +38,7 @@ namespace OpenChart.UI.Widgets
             ScrollEvent += onScroll;
         }
 
-        public void Add(INoteFieldObject obj)
+        public void Add(IChartObject obj)
         {
             var keyIndex = obj.GetChartObject().KeyIndex.Value;
 

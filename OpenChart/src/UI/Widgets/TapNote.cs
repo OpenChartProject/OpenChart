@@ -4,7 +4,7 @@ using System;
 
 namespace OpenChart.UI.Widgets
 {
-    public class TapNote : INoteFieldObject
+    public class TapNote : IChartObject
     {
         public readonly Image Widget;
         public Gtk.Widget GetWidget() => Widget;
