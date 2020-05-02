@@ -37,8 +37,7 @@ namespace OpenChart.Tests.Charting
 
             list.Added += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                Assert.AreSame(bpm, args.Object);
+                Assert.AreSame(bpm, e.Object);
                 calls++;
             };
 
@@ -105,8 +104,7 @@ namespace OpenChart.Tests.Charting
 
             list.Added += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                added.Add(args.Object);
+                added.Add(e.Object);
             };
 
             list.AddMultiple(objects);
@@ -178,13 +176,7 @@ namespace OpenChart.Tests.Charting
             };
 
             list.AddMultiple(objects);
-
-            // New object isn't in the list.
             Assert.IsFalse(list.Contains(new BPM(123, 45)));
-
-            // Copy of the first element added. Tests that it's checking the reference
-            // and not the value.
-            Assert.IsFalse(list.Contains(new BPM(100, 2)));
         }
 
         [Test]
@@ -224,14 +216,8 @@ namespace OpenChart.Tests.Charting
             list.Add(bpm);
             list.Removed += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                removedList.Add(args.Object);
+                removedList.Add(e.Object);
             };
-
-            list.Remove(new BPM(100, 0));
-
-            // Verify the event doesn't fire when an equivalent but different object is removed.
-            Assert.IsEmpty(removedList);
 
             list.Remove(bpm);
 
@@ -276,8 +262,7 @@ namespace OpenChart.Tests.Charting
             list.Add(bpm);
             list.Removed += (o, e) =>
             {
-                var args = e as ObjectListEventArgs<BPM>;
-                removedList.Add(args.Object);
+                removedList.Add(e.Object);
             };
 
             list.RemoveAtBeat(bpm.Beat.Value + 100);

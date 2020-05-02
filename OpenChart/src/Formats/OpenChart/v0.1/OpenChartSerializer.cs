@@ -1,4 +1,6 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
+using System;
 using System.Text;
 using System.Text.Json;
 
@@ -9,7 +11,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// </summary>
     public class OpenChartSerializer : IFormatSerializer<ProjectData>
     {
-        static JsonSerializerOptions jsonOptions;
+        public static JsonSerializerOptions jsonOptions;
 
         static OpenChartSerializer()
         {
@@ -18,8 +20,9 @@ namespace OpenChart.Formats.OpenChart.Version0_1
             jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
             jsonOptions.Converters.Add(new BeatConverter());
             jsonOptions.Converters.Add(new BeatDurationConverter());
-            jsonOptions.Converters.Add(new KeyConverter());
+            jsonOptions.Converters.Add(new KeyIndexConverter());
             jsonOptions.Converters.Add(new KeyCountConverter());
+            jsonOptions.Converters.Add(new ChartObjectConverter());
         }
 
         /// <summary>
@@ -28,17 +31,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            var pd = (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
-
-            if (pd.Metadata == null)
-                throw new SerializerException("The 'metadata' is missing or null.");
-            else if (string.IsNullOrEmpty(pd.Metadata.Version))
-                throw new SerializerException("The 'version' field is missing or empty.");
-
-            if (pd.Charts == null)
-                pd.Charts = new ChartData[] { };
-
-            return pd;
+            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
         }
 
         /// <summary>
@@ -47,9 +40,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="fd">The FileData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
-            var str = JsonSerializer.Serialize(pd, jsonOptions);
-
-            return Encoding.UTF8.GetBytes(str);
+            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, jsonOptions));
         }
     }
 }

@@ -1,3 +1,5 @@
+using System;
+
 namespace OpenChart.Formats
 {
     /// <summary>
@@ -5,6 +7,8 @@ namespace OpenChart.Formats
     /// </summary>
     public class SerializerException : FileFormatException
     {
+        public SerializerException() : base() { }
         public SerializerException(string msg) : base(msg) { }
+        public SerializerException(string msg, Exception inner) : base(msg, inner) { }
     }
 }

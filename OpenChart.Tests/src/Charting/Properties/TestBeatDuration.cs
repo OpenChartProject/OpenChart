@@ -34,5 +34,18 @@ namespace OpenChart.Tests.Charting.Properties
             beatDuration.Value++;
             Assert.AreEqual(1, calls);
         }
+
+        [TestCase(1)]
+        [TestCase(2)]
+        public void Test_Equals_AreEqual(double value)
+        {
+            Assert.AreEqual(new BeatDuration(value), new BeatDuration(value));
+        }
+
+        [Test]
+        public void Test_Equals_AreNotEqual()
+        {
+            Assert.AreNotEqual(new BeatDuration(2), new BeatDuration(1));
+        }
     }
 }
