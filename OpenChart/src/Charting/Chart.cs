@@ -50,6 +50,7 @@ namespace OpenChart.Charting
             for (var i = 0; i < KeyCount.Value; i++)
             {
                 Objects[i] = new BeatObjectList<BaseObject>();
+                Objects[i].Added += (o, e) => updateObjectTime(e.Object);
             }
         }
 
@@ -70,6 +71,16 @@ namespace OpenChart.Charting
         public override int GetHashCode()
         {
             return Tuple.Create(KeyCount, BPMList, Objects).GetHashCode();
+        }
+
+        /// <summary>
+        /// Calculates the time that the object occurs in the chart, given the current
+        /// list of BPMs.
+        /// </summary>
+        /// <param name="obj">The object to update.</param>
+        private void updateObjectTime(BaseObject obj)
+        {
+            obj.Time = BPMList.Time.BeatToTime(obj.Beat);
         }
     }
 }
