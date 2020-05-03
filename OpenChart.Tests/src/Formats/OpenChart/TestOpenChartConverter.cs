@@ -235,6 +235,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             chart.KeyCount = 4;
             chart.Rows = formatBeatData;
+            chart.BPMs = new BPM[] { new BPM(120, 0) };
 
             var native = converter.ToNative(data);
 
@@ -249,6 +250,8 @@ namespace OpenChart.Tests.Formats.OpenChart
         {
             var native = new Project();
             var chart = new Chart(4);
+
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
             native.Charts.Add(chart);
 
             for (var keyIndex = 0; keyIndex < nativeBeatData.Length; keyIndex++)
