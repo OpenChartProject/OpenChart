@@ -1,6 +1,6 @@
 namespace OpenChart.UI.Widgets
 {
-    public interface INoteFieldWidget
+    public interface IHasNoteField
     {
         NoteField NoteField { get; set; }
     }
