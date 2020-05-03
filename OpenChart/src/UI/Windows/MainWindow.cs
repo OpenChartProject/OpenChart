@@ -1,5 +1,6 @@
 using Gtk;
 using OpenChart.Charting;
+using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 using OpenChart.UI.Widgets;
 
@@ -25,38 +26,17 @@ namespace OpenChart.UI.Windows
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
-            var noteField = new NoteField(chart);
+            var noteField = new NoteField(chart, noteSkin);
 
-            for (var i = 0; i < 5; i++)
-            {
-                noteField.Add(
-                    new TapNote(
-                        noteSkin.Keys[0].TapNote,
-                        new OpenChart.Charting.Objects.TapNote(0, i)
-                    )
-                );
+            chart.Objects[0].Add(new NativeObjects.TapNote(0, 0));
+            chart.Objects[1].Add(new NativeObjects.TapNote(1, 0));
+            chart.Objects[2].Add(new NativeObjects.TapNote(2, 0));
+            chart.Objects[3].Add(new NativeObjects.TapNote(3, 0));
 
-                noteField.Add(
-                    new TapNote(
-                        noteSkin.Keys[1].TapNote,
-                        new OpenChart.Charting.Objects.TapNote(1, i)
-                    )
-                );
-
-                noteField.Add(
-                    new TapNote(
-                        noteSkin.Keys[2].TapNote,
-                        new OpenChart.Charting.Objects.TapNote(2, i)
-                    )
-                );
-
-                noteField.Add(
-                    new TapNote(
-                        noteSkin.Keys[3].TapNote,
-                        new OpenChart.Charting.Objects.TapNote(3, i)
-                    )
-                );
-            }
+            chart.Objects[0].Add(new NativeObjects.TapNote(0, 1));
+            chart.Objects[1].Add(new NativeObjects.TapNote(1, 1.25));
+            chart.Objects[2].Add(new NativeObjects.TapNote(2, 1.5));
+            chart.Objects[3].Add(new NativeObjects.TapNote(3, 1.75));
 
             Add(noteField);
 

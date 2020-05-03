@@ -1,6 +1,7 @@
 using Gtk;
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
+using OpenChart.NoteSkins;
 using System;
 using System.Collections.Generic;
 
@@ -25,12 +26,17 @@ namespace OpenChart.UI.Widgets
         public Time ScrollTime { get; private set; }
 
         public NoteFieldKey[] Keys;
-        public Chart Chart { get; private set; }
+        public readonly Chart Chart;
+        public ChartEventBus ChartEvents { get; private set; }
+        public readonly KeyModeSkin NoteSkin;
 
-        public NoteField(Chart chart) : base(null, null)
+        public NoteField(Chart chart, KeyModeSkin noteSkin) : base(null, null)
         {
             Chart = chart;
+            ChartEvents = new ChartEventBus(Chart);
+            NoteSkin = noteSkin;
 
+            ScrollTime = new Time(0);
             widgetStack = new List<Widget>();
             beatLines = new BeatLines { NoteField = this };
             keyContainer = new HBox();
@@ -38,31 +44,24 @@ namespace OpenChart.UI.Widgets
 
             for (var i = 0; i < Chart.KeyCount.Value; i++)
             {
-                Keys[i] = new NoteFieldKey();
+                Keys[i] = new NoteFieldKey(i, NoteSkin);
                 keyContainer.Add(Keys[i]);
             }
 
             Add(beatLines);
             Add(keyContainer);
 
+            ScrollEvent += onScroll;
+
             SizeAllocated += (o, e) =>
             {
                 beatLines.SetSizeRequest(keyContainer.AllocatedWidth, e.Allocation.Height);
             };
 
-            ScrollEvent += onScroll;
-        }
-
-        public void Add(IChartObject obj)
-        {
-            var keyIndex = obj.GetChartObject().KeyIndex.Value;
-
-            if (keyIndex >= Chart.KeyCount.Value)
-                throw new ArgumentOutOfRangeException(
-                    "The chart object's key index is out of range for the notefield's key count."
-                );
-
-            Keys[keyIndex].Add(obj);
+            ChartEvents.ObjectAdded += (o, e) =>
+            {
+                Keys[e.Object.KeyIndex.Value].Add(e.Object);
+            };
         }
 
         public new void Add(Widget widget)

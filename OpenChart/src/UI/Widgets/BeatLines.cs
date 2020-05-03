@@ -3,7 +3,7 @@ using System;
 
 namespace OpenChart.UI.Widgets
 {
-    public class BeatLines : DrawingArea, INoteFieldWidget
+    public class BeatLines : DrawingArea, IHasNoteField
     {
         public NoteField NoteField { get; set; }
 

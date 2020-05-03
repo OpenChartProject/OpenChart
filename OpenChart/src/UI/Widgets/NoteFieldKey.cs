@@ -1,63 +1,39 @@
 using Gtk;
-using System;
+using NativeObjects = OpenChart.Charting.Objects;
+using OpenChart.Charting.Properties;
+using OpenChart.NoteSkins;
 using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteFieldKey : Fixed, INoteFieldWidget
+    public class NoteFieldKey : Fixed, IHasNoteField
     {
-        LinkedList<IChartObject> objects;
+        Dictionary<Beat, INoteFieldChartObject> objects;
 
+        public readonly KeyModeSkin NoteSkin;
+        public readonly KeyIndex KeyIndex;
         public NoteField NoteField { get; set; }
 
-        public NoteFieldKey()
+        public NoteFieldKey(KeyIndex keyIndex, KeyModeSkin noteSkin)
         {
-            objects = new LinkedList<IChartObject>();
+            KeyIndex = keyIndex;
+            NoteSkin = noteSkin;
+
+            objects = new Dictionary<Beat, INoteFieldChartObject>();
         }
 
-        public void Add(IChartObject obj)
+        public void Add(NativeObjects.BaseObject chartObject)
         {
-            addNoteFieldObject(obj);
-            Add(obj.GetWidget());
-            updateObject(obj);
-        }
+            var noteFieldObject = UIUtils.ChartObjectToWidget(chartObject, NoteSkin.Keys[KeyIndex.Value]);
 
-        private void addNoteFieldObject(IChartObject obj)
-        {
-            var beat = obj.GetChartObject().Beat;
-
-            if (objects.Count == 0)
-            {
-                objects.AddFirst(obj);
-                return;
-            }
-
-            var cursor = objects.First;
-
-            while (cursor != null)
-            {
-                var cursorObject = cursor.Value.GetChartObject();
-
-                if (beat.Value == cursorObject.Beat.Value)
-                    throw new ArgumentException("An object at the given beat already exists.");
-                else if (beat.Value < cursorObject.Beat.Value)
-                {
-                    if (cursor.Previous == null || cursor.Previous.Value.GetChartObject().Beat.Value < beat.Value)
-                    {
-                        objects.AddBefore(cursor, obj);
-                        return;
-                    }
-                }
-
-                cursor = cursor.Next;
-            }
-
-            objects.AddLast(obj);
+            Add(noteFieldObject.GetWidget());
+            objects[noteFieldObject.GetChartObject().Beat] = noteFieldObject;
+            updateObject(noteFieldObject);
         }
 
         protected override bool OnDrawn(Cairo.Context cr)
         {
-            foreach (var obj in objects)
+            foreach (var obj in objects.Values)
             {
                 PropagateDraw(obj.GetWidget(), cr);
             }
@@ -65,12 +41,12 @@ namespace OpenChart.UI.Widgets
             return true;
         }
 
-        private void updateObject(IChartObject obj)
+        private void updateObject(INoteFieldChartObject obj)
         {
             Move(
                 obj.GetWidget(),
                 0,
-                (int)(obj.GetChartObject().Beat.Value)
+                (int)(obj.GetChartObject().Time.Value * NoteField.TimeSpacing)
             );
         }
     }

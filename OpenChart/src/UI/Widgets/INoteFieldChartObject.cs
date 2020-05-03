@@ -2,7 +2,7 @@ using OpenChart.Charting.Objects;
 
 namespace OpenChart.UI.Widgets
 {
-    public interface IChartObject
+    public interface INoteFieldChartObject
     {
         Gtk.Widget GetWidget();
         BaseObject GetChartObject();
