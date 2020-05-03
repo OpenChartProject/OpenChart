@@ -92,6 +92,8 @@ namespace OpenChart.Tests.Charting
         public void Test_ObjectAdded(int keyIndex)
         {
             var chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
             var events = new ChartEventBus(chart);
             var obj = new TapNote(keyIndex, 0);
             var calls = 0;
@@ -115,6 +117,8 @@ namespace OpenChart.Tests.Charting
         public void Test_ObjectRemoved(int keyIndex)
         {
             var chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
             var events = new ChartEventBus(chart);
             var obj = new TapNote(keyIndex, 0);
             var calls = 0;
