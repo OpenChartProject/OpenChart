@@ -25,9 +25,9 @@ namespace OpenChart.NoteSkins
         }
 
         /// <summary>
-        /// The images for each individual key. The leftmost key is at index `0` and the rightmost key is at `KeyCount - 1`.
+        /// The images for each individual key. The leftmost key is at index `0` and the
+        /// rightmost key is at `KeyCount - 1`.
         /// </summary>
-        /// <value></value>
         public NoteSkinKey[] Keys { get; private set; }
 
         /// <summary>
@@ -38,6 +38,21 @@ namespace OpenChart.NoteSkins
         {
             KeyCount = keyCount;
             Keys = new NoteSkinKey[keyCount];
+        }
+
+        /// <summary>
+        /// Scales all of the key images to fit in the provided width.
+        /// </summary>
+        /// <param name="width">The new width, in pixels.</param>
+        public void ScaleToNoteFieldWidth(int width)
+        {
+            foreach (var key in Keys)
+            {
+                key.HoldNote?.ScaleToWidth(width);
+                key.HoldNoteBody?.ScaleToWidth(width);
+                key.Receptor?.ScaleToWidth(width);
+                key.TapNote?.ScaleToWidth(width);
+            }
         }
 
         /// <summary>

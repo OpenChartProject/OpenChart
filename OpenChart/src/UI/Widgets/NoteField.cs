@@ -18,6 +18,21 @@ namespace OpenChart.UI.Widgets
         public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
 
+        int _columnWidth;
+        public int ColumnWidth
+        {
+            get => _columnWidth;
+            private set
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException("Width must be greater than zero.");
+
+                _columnWidth = value;
+
+                NoteSkin.ScaleToNoteFieldWidth(_columnWidth);
+            }
+        }
+
         public int ViewportTopY => GetYPosOfTime(ScrollTime);
         public int ViewportBottomY => ViewportTopY + AllocatedHeight;
 
@@ -30,11 +45,12 @@ namespace OpenChart.UI.Widgets
         public ChartEventBus ChartEvents { get; private set; }
         public readonly KeyModeSkin NoteSkin;
 
-        public NoteField(Chart chart, KeyModeSkin noteSkin) : base(null, null)
+        public NoteField(Chart chart, KeyModeSkin noteSkin, int columnWidth) : base(null, null)
         {
             Chart = chart;
             ChartEvents = new ChartEventBus(Chart);
             NoteSkin = noteSkin;
+            ColumnWidth = columnWidth;
 
             ScrollTime = new Time(0);
             widgetStack = new List<Widget>();
