@@ -73,7 +73,7 @@ namespace OpenChart.UI.Assets
                 return;
 
             // Maintain the aspect ratio by scaling the height by the same %.
-            var scalePercent = (double)Pixbuf.Width / width;
+            var scalePercent = (double)width / Pixbuf.Width;
             var newHeight = (int)Math.Round(Pixbuf.Height * scalePercent);
 
             Resize(width, newHeight);
