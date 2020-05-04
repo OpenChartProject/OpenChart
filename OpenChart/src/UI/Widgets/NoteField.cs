@@ -38,9 +38,11 @@ namespace OpenChart.UI.Widgets
 
                 _columnWidth = value;
 
-                NoteSkin.ScaleToNoteFieldWidth(_columnWidth);
+                NoteSkin.ScaleToNoteFieldColumnWidth(_columnWidth);
             }
         }
+
+        public int NoteFieldWidth => ColumnWidth * Chart.KeyCount.Value;
 
         public int ViewportTopY => GetYPosOfTime(ScrollTime);
         public int ViewportBottomY => ViewportTopY + AllocatedHeight;
@@ -86,7 +88,7 @@ namespace OpenChart.UI.Widgets
 
             SizeAllocated += (o, e) =>
             {
-                beatLines.SetSizeRequest(keyContainer.AllocatedWidth, e.Allocation.Height);
+                beatLines.SetSizeRequest(NoteFieldWidth, e.Allocation.Height);
             };
 
             ChartEvents.ObjectAdded += (o, e) =>
