@@ -17,9 +17,9 @@ namespace OpenChart.UI.Widgets
             var iterator = NoteField.Chart.BPMList.Time.GetBeats(time, index);
             var beat = NoteField.ScrollBeat;
 
-            foreach (var nextTime in iterator)
+            foreach (var beatTime in iterator)
             {
-                var y = NoteField.GetYPosOfTime(nextTime.Value);
+                var y = NoteField.GetYPosOfTime(beatTime.Time);
 
                 if (y > NoteField.ViewportBottomY)
                     break;

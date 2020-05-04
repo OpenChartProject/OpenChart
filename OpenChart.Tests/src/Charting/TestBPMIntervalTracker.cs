@@ -299,9 +299,10 @@ namespace OpenChart.Tests.Charting
             var iterator = tracker.GetBeats(0);
             var beat = 0;
 
-            foreach (var time in iterator)
+            foreach (var beatTime in iterator)
             {
-                Assert.AreEqual(tracker.BeatToTime(beat), time);
+                Assert.AreEqual(beat, beatTime.Beat.Value);
+                Assert.AreEqual(tracker.BeatToTime(beat), beatTime.Time);
 
                 if (beat++ > 10)
                     break;
