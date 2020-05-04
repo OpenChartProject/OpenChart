@@ -1,3 +1,4 @@
+using Gdk;
 using Gtk;
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
@@ -14,6 +15,14 @@ namespace OpenChart.UI.Widgets
         List<Widget> widgetStack;
 
         const double scrollFactor = 0.2;
+
+        public readonly RGBA BackgroundColor = new RGBA
+        {
+            Alpha = 1.0,
+            Red = 0.1,
+            Green = 0.1,
+            Blue = 0.1,
+        };
 
         public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
@@ -94,6 +103,11 @@ namespace OpenChart.UI.Widgets
 
         protected override bool OnDrawn(Cairo.Context cr)
         {
+            var bg = BackgroundColor;
+
+            cr.SetSourceRGBA(bg.Red, bg.Green, bg.Blue, bg.Alpha);
+            cr.Paint();
+
             foreach (var widget in widgetStack)
             {
                 PropagateDraw(widget, cr);
