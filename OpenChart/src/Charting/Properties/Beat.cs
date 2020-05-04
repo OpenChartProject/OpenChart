@@ -43,6 +43,34 @@ namespace OpenChart.Charting.Properties
             Value = value;
         }
 
+        /// <summary>
+        /// Returns true if this beat is at the start of a measure. A beat is considered to be
+        /// at the start of a measure if it's a whole number and evenly divisble by 4.
+        /// </summary>
+        public bool IsStartOfMeasure()
+        {
+            var floor = (int)Math.Floor(Value);
+
+            // Not a whole number.
+            if (floor != Value)
+                return false;
+
+            return floor % 4 == 0;
+        }
+
+        public int CompareTo(object o)
+        {
+            if (o == null)
+                return 1;
+
+            var beat = o as Beat;
+
+            if (beat == null)
+                throw new ArgumentException("Object is not a Beat instance.");
+
+            return Value.CompareTo(beat.Value);
+        }
+
         public override bool Equals(object obj)
         {
             var beat = obj as Beat;
@@ -56,22 +84,6 @@ namespace OpenChart.Charting.Properties
         public override int GetHashCode()
         {
             return Value.GetHashCode();
-        }
-
-        /// <summary>
-        /// Compares the value with another object of the same type.
-        /// </summary>
-        public int CompareTo(object o)
-        {
-            if (o == null)
-                return 1;
-
-            var beat = o as Beat;
-
-            if (beat == null)
-                throw new ArgumentException("Object is not a Beat instance.");
-
-            return Value.CompareTo(beat.Value);
         }
 
         protected virtual void onChanged()

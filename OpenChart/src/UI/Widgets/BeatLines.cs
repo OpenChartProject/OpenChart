@@ -67,7 +67,7 @@ namespace OpenChart.UI.Widgets
                 if (y > NoteField.ViewportBottomY)
                     break;
 
-                if (beatTime.Beat.Value % 4 == 0)
+                if (beatTime.Beat.IsStartOfMeasure())
                     startOfMeasure.Add(y);
                 else
                     duringMeasure.Add(y);
