@@ -24,8 +24,8 @@ namespace OpenChart.UI.Widgets
             Alpha = 1.0,
         };
 
-        public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
+        public const int VerticalMargin = 100;
 
         int _keyWidth;
         public int KeyWidth
@@ -80,6 +80,12 @@ namespace OpenChart.UI.Widgets
                 Keys[i] = new NoteFieldKey(this, i, NoteSkin, true);
                 keyContainer.Add(Keys[i]);
             }
+
+            keyContainer.MarginTop = VerticalMargin;
+            keyContainer.MarginBottom = VerticalMargin;
+
+            beatLines.MarginTop = VerticalMargin;
+            beatLines.MarginBottom = VerticalMargin;
 
             Add(beatLines);
             Add(keyContainer);
