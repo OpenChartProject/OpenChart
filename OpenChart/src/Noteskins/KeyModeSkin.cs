@@ -44,7 +44,7 @@ namespace OpenChart.NoteSkins
         /// Scales all of the key images to fit in the provided width.
         /// </summary>
         /// <param name="width">The new width, in pixels.</param>
-        public void ScaleToNoteFieldColumnWidth(int width)
+        public void ScaleToNoteFieldKeyWidth(int width)
         {
             foreach (var key in Keys)
             {

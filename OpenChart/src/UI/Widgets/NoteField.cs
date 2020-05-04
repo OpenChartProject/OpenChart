@@ -27,22 +27,22 @@ namespace OpenChart.UI.Widgets
         public const int VerticalMargin = 100;
         public const int TimeSpacing = 200;
 
-        int _columnWidth;
-        public int ColumnWidth
+        int _keyWidth;
+        public int KeyWidth
         {
-            get => _columnWidth;
+            get => _keyWidth;
             private set
             {
                 if (value <= 0)
                     throw new ArgumentOutOfRangeException("Width must be greater than zero.");
 
-                _columnWidth = value;
+                _keyWidth = value;
 
-                NoteSkin.ScaleToNoteFieldColumnWidth(_columnWidth);
+                NoteSkin.ScaleToNoteFieldKeyWidth(_keyWidth);
             }
         }
 
-        public int NoteFieldWidth => ColumnWidth * Chart.KeyCount.Value;
+        public int NoteFieldWidth => KeyWidth * Chart.KeyCount.Value;
 
         public int ViewportTopY => GetYPosOfTime(ScrollTime);
         public int ViewportBottomY => ViewportTopY + AllocatedHeight;
@@ -56,7 +56,7 @@ namespace OpenChart.UI.Widgets
         public ChartEventBus ChartEvents { get; private set; }
         public readonly KeyModeSkin NoteSkin;
 
-        public NoteField(Chart chart, KeyModeSkin noteSkin, int columnWidth) : base(null, null)
+        public NoteField(Chart chart, KeyModeSkin noteSkin, int keyWidth) : base(null, null)
         {
             if (chart == null)
                 throw new ArgumentNullException("Chart cannot be null.");
@@ -64,7 +64,7 @@ namespace OpenChart.UI.Widgets
                 throw new ArgumentNullException("Note skin cannot be null.");
 
             NoteSkin = noteSkin;
-            ColumnWidth = columnWidth;
+            KeyWidth = keyWidth;
 
             Chart = chart;
             ChartEvents = new ChartEventBus(Chart);
