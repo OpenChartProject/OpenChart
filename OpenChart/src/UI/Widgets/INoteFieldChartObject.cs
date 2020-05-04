@@ -6,5 +6,6 @@ namespace OpenChart.UI.Widgets
     {
         Gtk.Widget GetWidget();
         BaseObject GetChartObject();
+        int GetWidgetCenterOffset();
     }
 }

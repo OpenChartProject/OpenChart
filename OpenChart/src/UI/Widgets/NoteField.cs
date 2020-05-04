@@ -77,7 +77,7 @@ namespace OpenChart.UI.Widgets
 
             for (var i = 0; i < Chart.KeyCount.Value; i++)
             {
-                Keys[i] = new NoteFieldKey(this, i, NoteSkin);
+                Keys[i] = new NoteFieldKey(this, i, NoteSkin, true);
                 keyContainer.Add(Keys[i]);
             }
 

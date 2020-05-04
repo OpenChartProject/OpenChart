@@ -19,7 +19,7 @@ namespace OpenChart.UI
         /// </summary>
         /// <param name="chartObject">The chart object.</param>
         /// <param name="noteSkin">The key skin to use when creating the widget.</param>
-        public static INoteFieldChartObject ChartObjectToWidget(NativeObjects.BaseObject chartObject, NoteSkinKey noteSkin)
+        public static INoteFieldChartObject CreateWidgetForChartObject(NativeObjects.BaseObject chartObject, NoteSkinKey noteSkin)
         {
             INoteFieldChartObject noteFieldObject;
 
