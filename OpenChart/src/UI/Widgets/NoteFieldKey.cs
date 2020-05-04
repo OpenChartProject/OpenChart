@@ -6,31 +6,59 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class NoteFieldKey : Fixed, IHasNoteField
+    /// <summary>
+    /// A container widget that represents a single key/column of a chart. Chart objects are added
+    /// to the container and then rendered.
+    /// </summary>
+    public class NoteFieldKey : Fixed
     {
-        Dictionary<Beat, INoteFieldChartObject> objects;
+        SortedList<Beat, INoteFieldChartObject> objects;
 
+        /// <summary>
+        /// The key mode skin that is used for the chart objects.
+        /// </summary>
         public readonly KeyModeSkin NoteSkin;
-        public readonly KeyIndex KeyIndex;
-        public NoteField NoteField { get; set; }
 
-        public NoteFieldKey(KeyIndex keyIndex, KeyModeSkin noteSkin)
+        /// <summary>
+        /// The key index that this widget represents.
+        /// </summary>
+        public readonly KeyIndex KeyIndex;
+
+        /// <summary>
+        /// The note field this widget is for.
+        /// </summary>
+        public readonly NoteField NoteField;
+
+        /// <summary>
+        /// Creates a new NoteFieldKey instance.
+        /// </summary>
+        public NoteFieldKey(NoteField noteField, KeyIndex keyIndex, KeyModeSkin noteSkin)
         {
+            NoteField = noteField;
             KeyIndex = keyIndex;
             NoteSkin = noteSkin;
 
-            objects = new Dictionary<Beat, INoteFieldChartObject>();
+            objects = new SortedList<Beat, INoteFieldChartObject>();
         }
 
+        /// <summary>
+        /// Adds a chart object to be displayed. This converts the chart object into a note field
+        /// widget and adds it.
+        /// </summary>
         public void Add(NativeObjects.BaseObject chartObject)
         {
             var noteFieldObject = UIUtils.ChartObjectToWidget(chartObject, NoteSkin.Keys[KeyIndex.Value]);
 
             Add(noteFieldObject.GetWidget());
             objects[noteFieldObject.GetChartObject().Beat] = noteFieldObject;
-            updateObject(noteFieldObject);
+            updateObjectPosition(noteFieldObject);
         }
 
+        /// <summary>
+        /// Draws the chart object/widgets. This method is overridden because we want to draw
+        /// the objects in the correct order, otherwise newer added objects will be rendered on
+        /// top of existing objects even if they are at an earlier beat.
+        /// </summary>
         protected override bool OnDrawn(Cairo.Context cr)
         {
             foreach (var obj in objects.Values)
@@ -41,7 +69,10 @@ namespace OpenChart.UI.Widgets
             return true;
         }
 
-        private void updateObject(INoteFieldChartObject obj)
+        /// <summary>
+        /// Moves a chart object to the correct position.
+        /// </summary>
+        private void updateObjectPosition(INoteFieldChartObject obj)
         {
             Move(
                 obj.GetWidget(),

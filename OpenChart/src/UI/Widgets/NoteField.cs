@@ -54,13 +54,13 @@ namespace OpenChart.UI.Widgets
 
             ScrollTime = new Time(0);
             widgetStack = new List<Widget>();
-            beatLines = new BeatLines { NoteField = this };
+            beatLines = new BeatLines(this);
             keyContainer = new HBox();
             Keys = new NoteFieldKey[Chart.KeyCount.Value];
 
             for (var i = 0; i < Chart.KeyCount.Value; i++)
             {
-                Keys[i] = new NoteFieldKey(i, NoteSkin);
+                Keys[i] = new NoteFieldKey(this, i, NoteSkin);
                 keyContainer.Add(Keys[i]);
             }
 
