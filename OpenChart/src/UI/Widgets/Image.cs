@@ -22,6 +22,10 @@ namespace OpenChart.UI.Widgets
             }
         }
 
+        /// <summary>
+        /// Creates a new Image instance.
+        /// </summary>
+        /// <param name="imageAsset">The image asset this image will display.</param>
         public Image(ImageAsset imageAsset)
         {
             ImageAsset = imageAsset;
