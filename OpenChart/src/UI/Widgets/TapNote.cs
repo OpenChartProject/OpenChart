@@ -20,5 +20,10 @@ namespace OpenChart.UI.Widgets
             Widget = new Image(imageAsset);
             Note = note;
         }
+
+        public int GetWidgetCenterOffset()
+        {
+            return Widget.AllocatedHeight / 2;
+        }
     }
 }
