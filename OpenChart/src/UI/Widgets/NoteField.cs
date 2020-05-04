@@ -56,10 +56,16 @@ namespace OpenChart.UI.Widgets
 
         public NoteField(Chart chart, KeyModeSkin noteSkin, int columnWidth) : base(null, null)
         {
-            Chart = chart;
-            ChartEvents = new ChartEventBus(Chart);
+            if (chart == null)
+                throw new ArgumentNullException("Chart cannot be null.");
+            else if (noteSkin == null)
+                throw new ArgumentNullException("Note skin cannot be null.");
+
             NoteSkin = noteSkin;
             ColumnWidth = columnWidth;
+
+            Chart = chart;
+            ChartEvents = new ChartEventBus(Chart);
 
             ScrollTime = new Time(0);
             widgetStack = new List<Widget>();
