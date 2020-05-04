@@ -3,10 +3,28 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.Widgets
 {
-    public class BeatLines : DrawingArea, IHasNoteField
+    /// <summary>
+    /// Note field widget for drawing beat lines.
+    /// </summary>
+    public class BeatLines : DrawingArea
     {
-        public NoteField NoteField { get; set; }
+        /// <summary>
+        /// The note field this widget is for.
+        /// </summary>
+        public readonly NoteField NoteField;
 
+        /// <summary>
+        /// Creates a new BeatLines instance.
+        /// </summary>
+        public BeatLines(NoteField noteField)
+        {
+            NoteField = noteField;
+        }
+
+        /// <summary>
+        /// Draws lines at each beat. The line for the first beat of each measure is drawn
+        /// thicker and brighter than lines for beats that occur in the middle of a measure.
+        /// </summary>
         protected override bool OnDrawn(Cairo.Context cr)
         {
             cr.SetSourceRGBA(1, 1, 1, 1);
