@@ -18,10 +18,10 @@ namespace OpenChart.UI.Widgets
 
         public readonly RGBA BackgroundColor = new RGBA
         {
-            Alpha = 1.0,
             Red = 0.1,
             Green = 0.1,
             Blue = 0.1,
+            Alpha = 1.0,
         };
 
         public const int VerticalMargin = 100;

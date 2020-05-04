@@ -1,3 +1,4 @@
+using Gdk;
 using Gtk;
 using System.Collections.Generic;
 
@@ -8,6 +9,24 @@ namespace OpenChart.UI.Widgets
     /// </summary>
     public class BeatLines : DrawingArea
     {
+        readonly int lineThickness = 1;
+        readonly RGBA lineColor = new RGBA
+        {
+            Red = 0.5,
+            Green = 0.5,
+            Blue = 0.5,
+            Alpha = 1.0
+        };
+
+        readonly int measureLineThickness = 2;
+        readonly RGBA measureLineColor = new RGBA
+        {
+            Red = 0.7,
+            Green = 0.7,
+            Blue = 0.7,
+            Alpha = 1.0
+        };
+
         /// <summary>
         /// The note field this widget is for.
         /// </summary>
@@ -54,26 +73,43 @@ namespace OpenChart.UI.Widgets
                     duringMeasure.Add(y);
             }
 
-            cr.SetSourceRGB(1, 1, 1);
-            cr.LineWidth = 3;
+            double offset;
+
+            cr.LineWidth = measureLineThickness;
+            cr.SetSourceRGBA(
+                measureLineColor.Red,
+                measureLineColor.Green,
+                measureLineColor.Blue,
+                measureLineColor.Alpha
+            );
+
+            // Cairo uses pen drawing so we need to realign when the line width is an even number.
+            offset = cr.LineWidth % 2 == 0 ? 0.5 : 0;
 
             // Draw the measure start beat lines.
             foreach (var y in startOfMeasure)
             {
-                cr.MoveTo(0, y + 0.5);
-                cr.LineTo(AllocatedWidth, y + 0.5);
+                cr.MoveTo(0, y + offset);
+                cr.LineTo(AllocatedWidth, y + offset);
             }
 
             cr.Stroke();
 
-            cr.SetSourceRGB(0.65, 0.65, 0.65);
-            cr.LineWidth = 1;
+            cr.LineWidth = lineThickness;
+            cr.SetSourceRGBA(
+                lineColor.Red,
+                lineColor.Green,
+                lineColor.Blue,
+                lineColor.Alpha
+            );
+
+            offset = cr.LineWidth % 2 == 0 ? 0 : 0.5;
 
             // Draw the beat lines for during a measure.
             foreach (var y in duringMeasure)
             {
-                cr.MoveTo(0, y + 0.5);
-                cr.LineTo(AllocatedWidth, y + 0.5);
+                cr.MoveTo(0, y + offset);
+                cr.LineTo(AllocatedWidth, y + offset);
             }
 
             cr.Stroke();
