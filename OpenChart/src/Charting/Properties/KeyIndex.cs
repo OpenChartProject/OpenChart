@@ -3,7 +3,7 @@ using System;
 namespace OpenChart.Charting.Properties
 {
     /// <summary>
-    /// Represents a key index. The key index refers to the column on a note field.
+    /// Represents a key index. The key index refers to the key/column on a note field.
     /// </summary>
     public class KeyIndex : IChangeNotifier
     {
