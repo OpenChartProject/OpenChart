@@ -46,8 +46,6 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         protected override bool OnDrawn(Cairo.Context cr)
         {
-            cr.SetSourceRGBA(1, 1, 1, 1);
-
             var index = NoteField.ScrollIntervalIndex;
             var time = NoteField.ScrollTime;
             var iterator = NoteField.Chart.BPMList.Time.GetBeats(time, index);
