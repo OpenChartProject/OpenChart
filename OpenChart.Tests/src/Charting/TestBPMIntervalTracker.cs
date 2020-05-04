@@ -255,11 +255,11 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_GetTimeOfNextBeat_ThrowsWhenListIsEmpty()
+        public void Test_GetBeats_ThrowsWhenListIsEmpty()
         {
             var list = new BeatObjectList<BPM>();
             var tracker = new BPMIntervalTracker(list);
-            var iterator = tracker.GetTimeOfNextBeat(0);
+            var iterator = tracker.GetBeats(0);
 
             Assert.Throws<Exception>(() =>
             {
@@ -268,12 +268,12 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_GetTimeOfNextBeat_ThrowsWhenIndexIsOutOfRange()
+        public void Test_GetBeats_ThrowsWhenIndexIsOutOfRange()
         {
             var list = new BeatObjectList<BPM>();
             list.Add(new BPM(100, 0));
             var tracker = new BPMIntervalTracker(list);
-            var iterator = tracker.GetTimeOfNextBeat(0, fromIndex: 1);
+            var iterator = tracker.GetBeats(0, fromIndex: 1);
 
             Assert.Throws<ArgumentOutOfRangeException>(() =>
             {
@@ -282,7 +282,7 @@ namespace OpenChart.Tests.Charting
         }
 
         [Test]
-        public void Test_GetTimeOfNextBeat_ReturnsExpectedTime()
+        public void Test_GetBeats_ReturnsExpectedTime()
         {
             var bpms = new BPM[] {
                 new BPM(100, 0),
@@ -296,7 +296,7 @@ namespace OpenChart.Tests.Charting
             list.Add(bpms[2]);
 
             var tracker = new BPMIntervalTracker(list);
-            var iterator = tracker.GetTimeOfNextBeat(0);
+            var iterator = tracker.GetBeats(0);
             var beat = 0;
 
             foreach (var time in iterator)

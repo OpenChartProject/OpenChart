@@ -120,7 +120,7 @@ namespace OpenChart.Charting
         /// </summary>
         /// <param name="startTime">The time to start at.</param>
         /// <param name="fromIndex">An optional start index (if it's known).</param>
-        public IEnumerable<Time> GetTimeOfNextBeat(Time startTime, uint fromIndex = 0)
+        public IEnumerable<Time> GetBeats(Time startTime, uint fromIndex = 0)
         {
             if (Intervals.Length == 0)
                 throw new Exception("The Intervals array is empty.");
