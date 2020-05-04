@@ -14,7 +14,8 @@ namespace OpenChart.UI.Widgets
 
             var index = NoteField.ScrollIntervalIndex;
             var time = NoteField.ScrollTime;
-            var iterator = NoteField.Chart.BPMList.Time.GetTimeOfNextBeat(time, index);
+            var iterator = NoteField.Chart.BPMList.Time.GetBeats(time, index);
+            var beat = NoteField.ScrollBeat;
 
             foreach (var nextTime in iterator)
             {
