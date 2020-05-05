@@ -1,5 +1,9 @@
 {
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
-    "files.insertFinalNewline": true
+    "files.insertFinalNewline": true,
+    // https://github.com/GtkSharp/GtkSharp/issues/147
+    "terminal.integrated.env.linux": {
+        "GDK_PIXBUF_MODULE_FILE": null
+    }
 }
