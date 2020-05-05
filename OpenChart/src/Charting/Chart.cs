@@ -81,6 +81,9 @@ namespace OpenChart.Charting
         private void updateObjectTime(BaseObject obj)
         {
             obj.Time = BPMList.Time.BeatToTime(obj.Beat);
+
+            if (obj is BaseLongObject longObject)
+                longObject.Duration = BPMList.Time.BeatToTime(longObject.Beat.Value + longObject.Length.Value);
         }
     }
 }
