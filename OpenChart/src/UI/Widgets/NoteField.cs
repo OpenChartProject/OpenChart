@@ -44,8 +44,13 @@ namespace OpenChart.UI.Widgets
         {
             if (noteFieldData == null)
                 throw new ArgumentNullException("Note field data cannot be null.");
+            else if (keyWidth <= 0)
+                throw new ArgumentOutOfRangeException("Key width must be greater than zero.");
 
             NoteFieldData = noteFieldData;
+
+            KeyWidth = keyWidth;
+            NoteFieldData.NoteSkin.ScaleToNoteFieldKeyWidth(keyWidth);
 
             widgetStack = new List<Widget>();
             beatLines = new BeatLines(NoteFieldData);

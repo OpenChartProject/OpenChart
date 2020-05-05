@@ -27,7 +27,7 @@ namespace OpenChart.UI.Windows
 
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
             var noteFieldData = new NoteFieldData(chart, noteSkin, pixelsPerSecond: 200);
-            var noteField = new NoteField(noteFieldData, 64);
+            var noteField = new NoteField(noteFieldData, 96);
 
             chart.Objects[0].Add(new NativeObjects.TapNote(0, 0));
             chart.Objects[1].Add(new NativeObjects.TapNote(1, 0));
