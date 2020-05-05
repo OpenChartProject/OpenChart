@@ -138,11 +138,12 @@ namespace OpenChart.UI
         ///
         /// Scrolling takes advantage of the fact that time is displayed linearly, unlike
         /// BPMs which can change. Because time is displayed linearly we can easily map
-        /// between time <-> position.
+        /// between time and position.
         /// </summary>
         /// <param name="scrollDelta">The number of scroll steps the widget is scrolled.</param>
         /// <param name="widgetHeight">The height of the widget (in pixels).</param>
-        public void UpdateScroll(double scrollDelta, int widgetHeight)
+        /// <returns>True if the scroll position was updated.</returns>
+        public bool UpdateScroll(double scrollDelta, int widgetHeight)
         {
             var oldPos = RawScrollPosition;
             RawScrollPosition += scrollDelta * ScrollScalar;
@@ -152,7 +153,7 @@ namespace OpenChart.UI
 
             // Nothing to update.
             if (oldPos == RawScrollPosition)
-                return;
+                return false;
 
             // 1 step = 1 second.
             var time = new Time(RawScrollPosition);
@@ -167,6 +168,8 @@ namespace OpenChart.UI
             ScrollBottom.Time = bottomTime;
             ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
             ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);
+
+            return true;
         }
     }
 }
