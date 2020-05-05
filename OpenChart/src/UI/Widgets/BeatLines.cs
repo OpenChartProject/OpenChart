@@ -30,14 +30,14 @@ namespace OpenChart.UI.Widgets
         /// <summary>
         /// The note field this widget is for.
         /// </summary>
-        public readonly NoteField NoteField;
+        readonly NoteFieldData noteFieldData;
 
         /// <summary>
         /// Creates a new BeatLines instance.
         /// </summary>
-        public BeatLines(NoteField noteField)
+        public BeatLines(NoteFieldData noteFieldData)
         {
-            NoteField = noteField;
+            this.noteFieldData = noteFieldData;
         }
 
         /// <summary>
@@ -46,10 +46,10 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         protected override bool OnDrawn(Cairo.Context cr)
         {
-            var index = NoteField.ScrollIntervalIndex;
-            var time = NoteField.ScrollTime;
-            var iterator = NoteField.Chart.BPMList.Time.GetBeats(time, index);
-            var beat = NoteField.ScrollBeat;
+            var iterator = noteFieldData.Chart.BPMList.Time.GetBeats(
+                noteFieldData.ScrollTop.Time,
+                noteFieldData.ScrollTop.IntervalIndex
+            );
 
             // The y-position of beat lines that mark the start of a measure. We're assuming
             // 4/4 time so this will be every 4th beat.
@@ -60,9 +60,9 @@ namespace OpenChart.UI.Widgets
 
             foreach (var beatTime in iterator)
             {
-                var y = NoteField.GetYPosOfTime(beatTime.Time);
+                var y = noteFieldData.GetPosition(beatTime.Time);
 
-                if (y > NoteField.ViewportBottomY)
+                if (y > noteFieldData.ScrollBottom.Position)
                     break;
 
                 if (beatTime.Beat.IsStartOfMeasure())
