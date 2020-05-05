@@ -85,7 +85,7 @@ namespace OpenChart.UI.Widgets
             var offset = thickness % 2 == 0 ? 0 : 0.5;
 
             cr.LineWidth = thickness;
-            cr.SetSourceRGBA(color.Red, color.Green, color.Blue, color.Alpha);
+            Gdk.CairoHelper.SetSourceRgba(cr, color);
 
             foreach (var y in yPositions)
             {

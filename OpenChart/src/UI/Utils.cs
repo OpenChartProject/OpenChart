@@ -19,12 +19,18 @@ namespace OpenChart.UI
         /// </summary>
         /// <param name="chartObject">The chart object.</param>
         /// <param name="noteSkin">The key skin to use when creating the widget.</param>
-        public static INoteFieldChartObject CreateWidgetForChartObject(NativeObjects.BaseObject chartObject, NoteSkinKey noteSkin)
+        public static INoteFieldChartObject CreateWidgetForChartObject(
+            NoteField noteField,
+            NativeObjects.BaseObject chartObject,
+            NoteSkinKey noteSkin
+        )
         {
             INoteFieldChartObject noteFieldObject;
 
             if (chartObject is NativeObjects.TapNote tapNote)
                 noteFieldObject = new TapNote(noteSkin.TapNote, tapNote);
+            else if (chartObject is NativeObjects.HoldNote holdNote)
+                noteFieldObject = new HoldNote(noteField, noteSkin.HoldNote, noteSkin.HoldNoteBody, holdNote);
             else
                 throw new Exception("Unknown object type, cannot create widget.");
 
