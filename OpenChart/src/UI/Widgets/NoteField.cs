@@ -102,7 +102,7 @@ namespace OpenChart.UI.Widgets
 
         private void onScroll(object o, ScrollEventArgs e)
         {
-            NoteFieldData.UpdateScroll(e.Event.Y, AllocatedHeight);
+            NoteFieldData.UpdateScroll(e.Event.DeltaY, AllocatedHeight);
 
             foreach (var widget in widgetStack)
             {

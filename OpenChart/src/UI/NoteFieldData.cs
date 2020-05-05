@@ -16,6 +16,8 @@ namespace OpenChart.UI
         /// </summary>
         public class ScrollState
         {
+            NoteFieldData data;
+
             /// <summary>
             /// The scroll position (in beats).
             /// </summary>
@@ -30,8 +32,7 @@ namespace OpenChart.UI
             /// <summary>
             /// The scroll position (in pixels).
             /// </summary>
-            /// <value></value>
-            public int Position { get; internal set; }
+            public int Position => (int)Math.Floor(Time.Value * data.PixelsPerSecond);
 
             /// <summary>
             /// The scroll position (in seconds).
@@ -41,8 +42,9 @@ namespace OpenChart.UI
             /// <summary>
             /// Creates a new ScrollState instance.
             /// </summary>
-            public ScrollState()
+            public ScrollState(NoteFieldData data)
             {
+                this.data = data;
                 Beat = new Beat(0);
                 Time = new Time(0);
             }
@@ -69,10 +71,15 @@ namespace OpenChart.UI
         public int PixelsPerSecond { get; private set; }
 
         /// <summary>
-        /// The amount the note field is scrolled by for one scroll step (in pixels). A scroll step is
-        /// one "click" on a mouse wheel.
+        /// The amount the note field has been scrolled by, in steps. 1 step = 1 mouse wheel tick.
+        /// NOTE: Use `ScrollTop.Time` instead of this to get the current scroll time.
         /// </summary>
-        public int ScrollStepSize { get; internal set; }
+        public double RawScrollPosition { get; private set; }
+
+        /// <summary>
+        /// A multiplier for manipulating the scroll speed of the note field.
+        /// </summary>
+        public double ScrollScalar { get; private set; }
 
         /// <summary>
         /// The scroll state for the bottom of the note field viewport.
@@ -98,13 +105,15 @@ namespace OpenChart.UI
             else if (pixelsPerSecond <= 0)
                 throw new ArgumentOutOfRangeException("Pixels per second must be greater than zero.");
 
-            PixelsPerSecond = pixelsPerSecond;
             Chart = chart;
             NoteSkin = noteSkin;
 
+            PixelsPerSecond = pixelsPerSecond;
+            ScrollScalar = 0.25;
+
             ChartEvents = new ChartEventBus(Chart);
-            ScrollBottom = new ScrollState();
-            ScrollTop = new ScrollState();
+            ScrollBottom = new ScrollState(this);
+            ScrollTop = new ScrollState(this);
         }
 
         /// <summary>
@@ -126,12 +135,38 @@ namespace OpenChart.UI
         /// <summary>
         /// Updates the ScrollTop and ScrollBottom properties with the new scroll state
         /// of the note field widget.
+        ///
+        /// Scrolling takes advantage of the fact that time is displayed linearly, unlike
+        /// BPMs which can change. Because time is displayed linearly we can easily map
+        /// between time <-> position.
         /// </summary>
-        /// <param name="stepPosition">The number of scroll steps the widget is scrolled.</param>
-        /// <param name="viewPortHeight">The height of the widget (in pixels).</param>
-        public void UpdateScroll(double stepPosition, int viewPortHeight)
+        /// <param name="scrollDelta">The number of scroll steps the widget is scrolled.</param>
+        /// <param name="widgetHeight">The height of the widget (in pixels).</param>
+        public void UpdateScroll(double scrollDelta, int widgetHeight)
         {
+            var oldPos = RawScrollPosition;
+            RawScrollPosition += scrollDelta * ScrollScalar;
 
+            if (RawScrollPosition < 0)
+                RawScrollPosition = 0;
+
+            // Nothing to update.
+            if (oldPos == RawScrollPosition)
+                return;
+
+            // 1 step = 1 second.
+            var time = new Time(RawScrollPosition);
+            var y = time.Value * PixelsPerSecond;
+
+            ScrollTop.Time = time;
+            ScrollTop.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTop.Time);
+            ScrollTop.Beat = Chart.BPMList.Time.TimeToBeat(ScrollTop.Time, ScrollTop.IntervalIndex);
+
+            var bottomTime = new Time(time.Value + ((double)widgetHeight / PixelsPerSecond));
+
+            ScrollBottom.Time = bottomTime;
+            ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
+            ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);
         }
     }
 }
