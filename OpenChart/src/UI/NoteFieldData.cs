@@ -102,5 +102,32 @@ namespace OpenChart.UI
             ScrollBottom = new ScrollState();
             ScrollTop = new ScrollState();
         }
+
+        /// <summary>
+        /// Gets the Y-position (in pixels) that the given beat occurs at.
+        /// </summary>
+        public int GetPosition(Beat beat)
+        {
+            return GetPosition(Chart.BPMList.Time.BeatToTime(beat));
+        }
+
+        /// <summary>
+        /// Gets the Y-position (in pixels) that the given time occurs at.
+        /// </summary>
+        public int GetPosition(Time time)
+        {
+            return (int)Math.Floor(time.Value * PixelsPerSecond);
+        }
+
+        /// <summary>
+        /// Updates the ScrollTop and ScrollBottom properties with the new scroll state
+        /// of the note field widget.
+        /// </summary>
+        /// <param name="stepPosition">The number of scroll steps the widget is scrolled.</param>
+        /// <param name="viewPortHeight">The height of the widget (in pixels).</param>
+        public void UpdateScroll(double stepPosition, int viewPortHeight)
+        {
+
+        }
     }
 }

@@ -17,10 +17,11 @@ namespace OpenChart.UI
         /// e.g.:  OpenChart.Charting.Objects.TapNote --> OpenChart.UI.Widgets.TapNote
         ///
         /// </summary>
+        /// <param name="noteFieldData">The note field data this widget is being added to.</param>
         /// <param name="chartObject">The chart object.</param>
         /// <param name="noteSkin">The key skin to use when creating the widget.</param>
         public static INoteFieldChartObject CreateWidgetForChartObject(
-            NoteField noteField,
+            NoteFieldData noteFieldData,
             NativeObjects.BaseObject chartObject,
             NoteSkinKey noteSkin
         )
@@ -30,7 +31,7 @@ namespace OpenChart.UI
             if (chartObject is NativeObjects.TapNote tapNote)
                 noteFieldObject = new TapNote(noteSkin.TapNote, tapNote);
             else if (chartObject is NativeObjects.HoldNote holdNote)
-                noteFieldObject = new HoldNote(noteField, noteSkin.HoldNote, noteSkin.HoldNoteBody, holdNote);
+                noteFieldObject = new HoldNote(noteFieldData, noteSkin.HoldNote, noteSkin.HoldNoteBody, holdNote);
             else
                 throw new Exception("Unknown object type, cannot create widget.");
 

@@ -1,8 +1,5 @@
 using Gdk;
 using Gtk;
-using OpenChart.Charting;
-using OpenChart.Charting.Properties;
-using OpenChart.NoteSkins;
 using System;
 using System.Collections.Generic;
 
@@ -14,8 +11,6 @@ namespace OpenChart.UI.Widgets
         BeatLines beatLines;
         List<Widget> widgetStack;
 
-        const double scrollFactor = 0.2;
-
         public readonly RGBA BackgroundColor = new RGBA
         {
             Red = 0.1,
@@ -23,9 +18,6 @@ namespace OpenChart.UI.Widgets
             Blue = 0.1,
             Alpha = 1.0,
         };
-
-        public const int TimeSpacing = 200;
-        public const int VerticalMargin = 100;
 
         int _keyWidth;
         public int KeyWidth
@@ -38,46 +30,31 @@ namespace OpenChart.UI.Widgets
 
                 _keyWidth = value;
 
-                NoteSkin.ScaleToNoteFieldKeyWidth(_keyWidth);
+                NoteFieldData.NoteSkin.ScaleToNoteFieldKeyWidth(_keyWidth);
             }
         }
 
-        public int NoteFieldWidth => KeyWidth * Chart.KeyCount.Value;
+        public int NoteFieldWidth => KeyWidth * NoteFieldData.Chart.KeyCount.Value;
+        public const int VerticalMargin = 100;
 
-        public int ViewportTopY => GetYPosOfTime(ScrollTime);
-        public int ViewportBottomY => ViewportTopY + AllocatedHeight;
+        public readonly NoteFieldData NoteFieldData;
+        public readonly NoteFieldKey[] Keys;
 
-        public Beat ScrollBeat { get; private set; }
-        public uint ScrollIntervalIndex { get; private set; }
-        public Time ScrollTime { get; private set; }
-
-        public NoteFieldKey[] Keys;
-        public readonly Chart Chart;
-        public ChartEventBus ChartEvents { get; private set; }
-        public readonly KeyModeSkin NoteSkin;
-
-        public NoteField(Chart chart, KeyModeSkin noteSkin, int keyWidth) : base(null, null)
+        public NoteField(NoteFieldData noteFieldData, int keyWidth) : base(null, null)
         {
-            if (chart == null)
-                throw new ArgumentNullException("Chart cannot be null.");
-            else if (noteSkin == null)
-                throw new ArgumentNullException("Note skin cannot be null.");
+            if (noteFieldData == null)
+                throw new ArgumentNullException("Note field data cannot be null.");
 
-            NoteSkin = noteSkin;
-            KeyWidth = keyWidth;
+            NoteFieldData = noteFieldData;
 
-            Chart = chart;
-            ChartEvents = new ChartEventBus(Chart);
-
-            ScrollTime = new Time(0);
             widgetStack = new List<Widget>();
-            beatLines = new BeatLines(this);
+            beatLines = new BeatLines(NoteFieldData);
             keyContainer = new HBox();
-            Keys = new NoteFieldKey[Chart.KeyCount.Value];
+            Keys = new NoteFieldKey[NoteFieldData.Chart.KeyCount.Value];
 
-            for (var i = 0; i < Chart.KeyCount.Value; i++)
+            for (var i = 0; i < NoteFieldData.Chart.KeyCount.Value; i++)
             {
-                Keys[i] = new NoteFieldKey(this, i, NoteSkin, true);
+                Keys[i] = new NoteFieldKey(NoteFieldData, i, true);
                 keyContainer.Add(Keys[i]);
             }
 
@@ -97,7 +74,7 @@ namespace OpenChart.UI.Widgets
                 beatLines.SetSizeRequest(NoteFieldWidth, e.Allocation.Height);
             };
 
-            ChartEvents.ObjectAdded += (o, e) =>
+            NoteFieldData.ChartEvents.ObjectAdded += (o, e) =>
             {
                 Keys[e.Object.KeyIndex.Value].Add(e.Object);
             };
@@ -110,16 +87,9 @@ namespace OpenChart.UI.Widgets
             scrollWidget(widget);
         }
 
-        public int GetYPosOfTime(Time time)
-        {
-            return (int)Math.Floor(time.Value * TimeSpacing);
-        }
-
         protected override bool OnDrawn(Cairo.Context cr)
         {
-            var bg = BackgroundColor;
-
-            cr.SetSourceRGBA(bg.Red, bg.Green, bg.Blue, bg.Alpha);
+            Gdk.CairoHelper.SetSourceRgba(cr, BackgroundColor);
             cr.Paint();
 
             foreach (var widget in widgetStack)
@@ -132,27 +102,17 @@ namespace OpenChart.UI.Widgets
 
         private void onScroll(object o, ScrollEventArgs e)
         {
-            var newY = ScrollTime.Value + (e.Event.DeltaY * scrollFactor);
+            NoteFieldData.UpdateScroll(e.Event.Y, AllocatedHeight);
 
-            if (newY < 0)
-                newY = 0;
-
-            if (ScrollTime.Value != newY)
+            foreach (var widget in widgetStack)
             {
-                ScrollTime.Value = newY;
-                ScrollIntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTime);
-                ScrollBeat = Chart.BPMList.Time.TimeToBeat(ScrollTime.Value, fromIndex: ScrollIntervalIndex);
-
-                foreach (var widget in widgetStack)
-                {
-                    scrollWidget(widget);
-                }
+                scrollWidget(widget);
             }
         }
 
         private void scrollWidget(Widget widget)
         {
-            Move(widget, 0, 0 - GetYPosOfTime(ScrollTime.Value));
+            Move(widget, 0, 0 - NoteFieldData.ScrollTop.Position);
         }
     }
 }

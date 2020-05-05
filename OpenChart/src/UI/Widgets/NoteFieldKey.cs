@@ -15,19 +15,14 @@ namespace OpenChart.UI.Widgets
         SortedList<Beat, INoteFieldChartObject> objects;
 
         /// <summary>
-        /// The key mode skin that is used for the chart objects.
+        /// The note field data this widget should display.
         /// </summary>
-        public readonly KeyModeSkin NoteSkin;
+        readonly NoteFieldData NoteFieldData;
 
         /// <summary>
         /// The key index that this widget represents.
         /// </summary>
         public readonly KeyIndex KeyIndex;
-
-        /// <summary>
-        /// The note field this widget is for.
-        /// </summary>
-        public readonly NoteField NoteField;
 
         /// <summary>
         /// When set to true, objects are offset so that the center of the object is considered
@@ -39,16 +34,14 @@ namespace OpenChart.UI.Widgets
         /// Creates a new NoteFieldKey instance.
         /// </summary>
         public NoteFieldKey(
-            NoteField noteField,
+            NoteFieldData noteFieldData,
             KeyIndex keyIndex,
-            KeyModeSkin noteSkin,
             bool centerObjectsOnBeatLines
         )
         {
             CenterObjectsOnBeatLines = centerObjectsOnBeatLines;
-            NoteField = noteField;
+            NoteFieldData = noteFieldData;
             KeyIndex = keyIndex;
-            NoteSkin = noteSkin;
 
             objects = new SortedList<Beat, INoteFieldChartObject>();
         }
@@ -61,9 +54,9 @@ namespace OpenChart.UI.Widgets
         {
             // Create a widget for the object.
             var noteFieldObject = UIUtils.CreateWidgetForChartObject(
-                NoteField,
+                NoteFieldData,
                 chartObject,
-                NoteSkin.Keys[KeyIndex.Value]
+                NoteFieldData.NoteSkin.Keys[KeyIndex.Value]
             );
 
             // Add the widget to the container.
@@ -92,7 +85,7 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         private void updateObjectPosition(INoteFieldChartObject obj)
         {
-            int pos = (int)(obj.GetChartObject().Time.Value * NoteField.TimeSpacing);
+            var pos = NoteFieldData.GetPosition(obj.GetChartObject().Time);
 
             if (CenterObjectsOnBeatLines)
                 pos -= obj.GetWidgetCenterOffset();
