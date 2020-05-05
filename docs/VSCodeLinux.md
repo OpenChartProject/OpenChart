@@ -12,7 +12,7 @@ There are two environment variables injected by VSCode that cause the app to cra
 ```js
 // Fix for OpenChart
 "terminal.integrated.env.linux": {
-    // https://github.com/GtkSharp/GtkSharp/issues/147
+    // https://github.com/OpenChartProject/OpenChart/issues/45
     "GDK_PIXBUF_MODULE_FILE": null,
     // https://github.com/OpenChartProject/OpenChart/issues/47
     "XDG_RUNTIME_DIR": "/run/user/1000",
