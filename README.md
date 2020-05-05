@@ -17,7 +17,7 @@ We plan to add support for the following games:
 # FAQ
 - **Looking for the latest build?** Check out the automated [publish workflow](https://github.com/OpenChartProject/OpenChart/actions?query=workflow%3Apublish).
 
-- **Using VSCode on Linux?** [Please read this.](docs/VSCode.md)
+- **Using VSCode on Linux?** [Please read this.](docs/VSCodeLinux.md)
 
 # Building OpenChart 🔨
 
