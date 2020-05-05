@@ -28,10 +28,8 @@ namespace OpenChart.UI.Widgets
             noteWidget = new Image(noteImage);
             this.note = note;
 
-            var holdStartTime = note.Time.Value;
-            var holdEndTime = noteField.Chart.BPMList.Time.BeatToTime(note.Beat.Value + note.Length.Value);
-            var holdStartPos = noteField.GetYPosOfTime(holdStartTime);
-            var holdEndPos = noteField.GetYPosOfTime(holdEndTime);
+            var holdStartPos = noteField.GetYPosOfTime(note.Time.Value);
+            var holdEndPos = noteField.GetYPosOfTime(note.Duration.Value);
 
             holdBodyWidget.SetSizeRequest(noteField.KeyWidth, holdEndPos - holdStartPos);
 

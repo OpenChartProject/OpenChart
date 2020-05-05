@@ -8,7 +8,15 @@ namespace OpenChart.Charting.Objects
     /// </summary>
     public abstract class BaseLongObject : BaseObject, IPlacementValidator, IBeatDurationObject
     {
+        /// <summary>
+        /// The length of the object (in beats).
+        /// </summary>
         public BeatDuration Length { get; private set; }
+
+        /// <summary>
+        /// The duration of the object (in seconds).
+        /// </summary>
+        public Time Duration { get; set; }
 
         public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
