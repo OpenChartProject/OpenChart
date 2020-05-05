@@ -89,16 +89,20 @@ namespace OpenChart.UI
         /// </summary>
         /// <param name="chart">The chart this note field is displaying.</param>
         /// <param name="noteSkin">The note skin used by the note field.</param>
-        public NoteFieldData(Chart chart, KeyModeSkin noteSkin)
+        public NoteFieldData(Chart chart, KeyModeSkin noteSkin, int pixelsPerSecond)
         {
             if (chart == null)
                 throw new ArgumentNullException("Chart cannot be null.");
             else if (noteSkin == null)
                 throw new ArgumentNullException("Note skin cannot be null.");
+            else if (pixelsPerSecond <= 0)
+                throw new ArgumentOutOfRangeException("Pixels per second must be greater than zero.");
 
+            PixelsPerSecond = pixelsPerSecond;
             Chart = chart;
-            ChartEvents = new ChartEventBus(Chart);
             NoteSkin = noteSkin;
+
+            ChartEvents = new ChartEventBus(Chart);
             ScrollBottom = new ScrollState();
             ScrollTop = new ScrollState();
         }
