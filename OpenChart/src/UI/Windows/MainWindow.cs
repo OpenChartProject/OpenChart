@@ -38,6 +38,8 @@ namespace OpenChart.UI.Windows
             chart.Objects[2].Add(new NativeObjects.TapNote(2, 1.5));
             chart.Objects[3].Add(new NativeObjects.TapNote(3, 1.75));
 
+            chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
+
             Add(noteField);
 
             SetGeometryHints(

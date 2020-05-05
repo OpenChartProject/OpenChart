@@ -20,10 +20,9 @@ namespace OpenChart.UI.Widgets
 
         protected override bool OnDrawn(Context cr)
         {
-            // cr.Save();
             cr.SetSource(pattern);
             cr.Rectangle(0, 0, AllocatedWidth, AllocatedHeight);
-            // cr.Restore();
+            cr.Fill();
 
             return true;
         }
