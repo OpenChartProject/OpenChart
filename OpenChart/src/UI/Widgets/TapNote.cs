@@ -6,24 +6,24 @@ namespace OpenChart.UI.Widgets
 {
     public class TapNote : INoteFieldChartObject
     {
-        public readonly Image Widget;
-        public Gtk.Widget GetWidget() => Widget;
+        ChartingObjects.TapNote note;
+        Image widget;
 
-        public readonly ChartingObjects.TapNote Note;
-        public ChartingObjects.BaseObject GetChartObject() => Note;
+        public ChartingObjects.BaseObject GetChartObject() => note;
+        public Gtk.Widget GetWidget() => widget;
 
-        public TapNote(ImageAsset imageAsset, ChartingObjects.TapNote note)
+        public TapNote(ImageAsset noteImage, ChartingObjects.TapNote note)
         {
             if (note == null)
                 throw new ArgumentNullException("Tap note object cannot be null.");
 
-            Widget = new Image(imageAsset);
-            Note = note;
+            widget = new Image(noteImage);
+            this.note = note;
         }
 
         public int GetWidgetCenterOffset()
         {
-            return Widget.AllocatedHeight / 2;
+            return widget.ImageAsset.Pixbuf.Height / 2;
         }
     }
 }
