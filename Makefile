@@ -27,7 +27,7 @@ build:
 	fi
 
 	@# Clean up any __original__ dirs that got copied
-	@find bin/ -wholename "$(output_dir)/**/$(original_assets_dir)" -type d \
+	@find $(output_dir) -wholename "$(output_dir)/**/$(original_assets_dir)" -type d \
 		| xargs rm -r
 
 .PHONY: clean
