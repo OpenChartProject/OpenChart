@@ -64,16 +64,8 @@ namespace OpenChart.UI.Widgets
 
             // Add the widget to the container.
             Add(noteFieldObject.GetWidget());
-
-            // Store the object in a list.
             objects[noteFieldObject.GetChartObject().Beat] = noteFieldObject;
-
-            // The widget hasn't been rendered yet so we don't know its size, update its position
-            // once the size has been allocated.
-            noteFieldObject.GetWidget().SizeAllocated += delegate
-            {
-                updateObjectPosition(noteFieldObject);
-            };
+            updateObjectPosition(noteFieldObject);
         }
 
         /// <summary>
