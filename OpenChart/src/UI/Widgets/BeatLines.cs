@@ -9,6 +9,8 @@ namespace OpenChart.UI.Widgets
     /// </summary>
     public class BeatLines : DrawingArea
     {
+        const int MaxBeatLinesDrawn = 500;
+
         readonly int lineThickness = 1;
         readonly RGBA lineColor = new RGBA
         {
@@ -58,6 +60,8 @@ namespace OpenChart.UI.Widgets
             // The y-position of beat lines that occur during a measure.
             var duringMeasure = new List<int>();
 
+            var lineCount = 0;
+
             foreach (var beatTime in iterator)
             {
                 var y = noteFieldData.GetPosition(beatTime.Time);
@@ -69,6 +73,12 @@ namespace OpenChart.UI.Widgets
                     startOfMeasure.Add(y);
                 else
                     duringMeasure.Add(y);
+
+                lineCount++;
+
+                // Avoid drawing a large number of lines.
+                if (lineCount >= MaxBeatLinesDrawn)
+                    break;
             }
 
             drawBeatLines(cr, startOfMeasure.ToArray(), measureLineThickness, measureLineColor);
