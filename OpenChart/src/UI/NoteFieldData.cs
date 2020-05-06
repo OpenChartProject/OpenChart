@@ -82,6 +82,8 @@ namespace OpenChart.UI
 
         /// <summary>
         /// The length of the chart to display, in seconds.
+        ///
+        /// TODO: This should be cached and only reran when the chart changes.
         /// </summary>
         public Time ChartLength
         {
@@ -148,6 +150,9 @@ namespace OpenChart.UI
         /// </summary>
         /// <param name="chart">The chart this note field is displaying.</param>
         /// <param name="noteSkin">The note skin used by the note field.</param>
+        /// <param name="keyWidth">The width of each key in the note field.</param>
+        /// <param name="pixelsPerSecond">How many pixels 1 second represents.</param>
+        /// <param name="timeOffset">How much to offset the top of the screen.</param>
         public NoteFieldData(
             Chart chart,
             KeyModeSkin noteSkin,
