@@ -71,6 +71,12 @@ namespace OpenChart.UI
         int stepsPerSecond = 1;
 
         /// <summary>
+        /// When set to true, objects are offset so that the center of the object is considered
+        /// the origin. When false, the origin is considered the top of the object.
+        /// </summary>
+        public bool CenterObjectsOnBeatLines { get; private set; }
+
+        /// <summary>
         /// The Chart those note field is displaying.
         /// </summary>
         public readonly Chart Chart;
@@ -153,12 +159,14 @@ namespace OpenChart.UI
         /// <param name="keyWidth">The width of each key in the note field.</param>
         /// <param name="pixelsPerSecond">How many pixels 1 second represents.</param>
         /// <param name="timeOffset">How much to offset the top of the screen.</param>
+        /// <param name="centerObjectsOnBeatLines">Centers note objects along beat lines.</param>
         public NoteFieldData(
             Chart chart,
             KeyModeSkin noteSkin,
             int keyWidth,
             int pixelsPerSecond,
-            Time timeOffset
+            Time timeOffset,
+            bool centerObjectsOnBeatLines
         )
         {
             if (chart == null)
@@ -173,6 +181,7 @@ namespace OpenChart.UI
             KeyWidth = keyWidth;
 
             Chart = chart;
+            CenterObjectsOnBeatLines = centerObjectsOnBeatLines;
             NoteSkin = noteSkin;
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 

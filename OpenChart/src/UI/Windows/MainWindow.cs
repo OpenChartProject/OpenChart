@@ -32,7 +32,8 @@ namespace OpenChart.UI.Windows
                 noteSkin,
                 keyWidth: 96,
                 pixelsPerSecond: 200,
-                timeOffset: 0.5
+                timeOffset: 0.5,
+                centerObjectsOnBeatLines: true
             );
 
             var noteField = new NoteField(noteFieldData);

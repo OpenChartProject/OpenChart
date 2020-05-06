@@ -38,7 +38,7 @@ namespace OpenChart.UI.Widgets
 
             for (var i = 0; i < NoteFieldData.Chart.KeyCount.Value; i++)
             {
-                Keys[i] = new NoteFieldKey(NoteFieldData, i, true);
+                Keys[i] = new NoteFieldKey(NoteFieldData, i);
                 keyContainer.Add(Keys[i]);
             }
 
