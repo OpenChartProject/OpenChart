@@ -62,7 +62,7 @@ namespace OpenChart.UI
         /// <summary>
         /// The raw number of input scroll "ticks" the note field has been scrolled by.
         /// </summary>
-        double rawInputStepsScrolled;
+        double stepsScrolled;
         int oldViewportHeight;
 
         /// <summary>
@@ -226,19 +226,29 @@ namespace OpenChart.UI
         /// <returns>True if the scroll position was changed.</returns>
         public bool UpdateScroll(double scrollDelta, int viewportHeight)
         {
-            var oldSteps = rawInputStepsScrolled;
-            rawInputStepsScrolled += scrollDelta * ScrollScalar;
+            var newStepsScrolled = stepsScrolled + (scrollDelta * ScrollScalar);
 
-            if (rawInputStepsScrolled < 0)
-                rawInputStepsScrolled = 0;
+            if (newStepsScrolled < 0)
+                newStepsScrolled = 0;
+            else
+            {
+                var maxScroll = (ChartLength.Value - TopTimeMargin.Value) * stepsPerSecond;
+
+                if (newStepsScrolled > maxScroll)
+                    newStepsScrolled = maxScroll;
+            }
 
             // Nothing changed.
-            if (oldSteps == rawInputStepsScrolled && viewportHeight == oldViewportHeight)
+            if (newStepsScrolled == stepsScrolled && viewportHeight == oldViewportHeight)
                 return false;
 
             oldViewportHeight = viewportHeight;
+            stepsScrolled = newStepsScrolled;
 
-            var absTime = (rawInputStepsScrolled * stepsPerSecond) - TopTimeMargin.Value;
+            var absTime = (stepsScrolled * stepsPerSecond) - TopTimeMargin.Value;
+
+            if (absTime > ChartLength.Value)
+                absTime = ChartLength.Value;
 
             if (absTime < 0)
                 ScrollTop.positionOffset = (int)Math.Round(Math.Abs(absTime) * PixelsPerSecond);
@@ -252,6 +262,7 @@ namespace OpenChart.UI
             ScrollBottom.Time = ScrollTop.Time.Value + Math.Floor((double)viewportHeight / PixelsPerSecond);
             ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
             ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);
+
 
             return true;
         }

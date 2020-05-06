@@ -68,7 +68,7 @@ namespace OpenChart.Charting
 
                 if (obj == null)
                     continue;
-                else if (obj.Beat.Value > last.Beat.Value)
+                else if (last == null || obj.Beat.Value > last.Beat.Value)
                     last = obj;
             }
 
