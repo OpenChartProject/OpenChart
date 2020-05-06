@@ -54,6 +54,27 @@ namespace OpenChart.Charting
             }
         }
 
+        /// <summary>
+        /// Gets the length of the chart, in beats. The end of the chart is the beat where the
+        /// last object is placed. If the chart is empty, the beat length is zero.
+        /// </summary>
+        public BaseObject GetLastObject()
+        {
+            BaseObject last = null;
+
+            foreach (var key in Objects)
+            {
+                var obj = key.Last();
+
+                if (obj == null)
+                    continue;
+                else if (obj.Beat.Value > last.Beat.Value)
+                    last = obj;
+            }
+
+            return last;
+        }
+
         public override bool Equals(object obj)
         {
             var chart = obj as Chart;

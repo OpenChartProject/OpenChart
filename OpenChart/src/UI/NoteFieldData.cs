@@ -76,9 +76,37 @@ namespace OpenChart.UI
         public readonly Chart Chart;
 
         /// <summary>
+        /// The height of the chart, in pixels.
+        /// </summary>
+        public int ChartHeight => (int)Math.Ceiling(ChartLength.Value * PixelsPerSecond);
+
+        /// <summary>
+        /// The length of the chart to display, in seconds.
+        /// </summary>
+        public Time ChartLength
+        {
+            get
+            {
+                var beat = Chart.GetLastObject()?.Beat ?? 0;
+                return Chart.BPMList.Time.BeatToTime(beat.Value + ExtraEndBeats.Value);
+            }
+        }
+
+        /// <summary>
         /// The chart event bus for the displayed chart.
         /// </summary>
         public readonly ChartEventBus ChartEvents;
+
+        /// <summary>
+        /// The number of extra beats to add to the end of the chart.
+        /// </summary>
+        /// <value></value>
+        public Beat ExtraEndBeats { get; private set; }
+
+        /// <summary>
+        /// The width (in pixels) of each note field key widget.
+        /// </summary>
+        public int KeyWidth { get; private set; }
 
         /// <summary>
         /// The note skin to use for objects on the note field.
@@ -109,7 +137,6 @@ namespace OpenChart.UI
         /// </summary>
         public ScrollState ScrollTop { get; private set; }
 
-
         /// <summary>
         /// The margin (in seconds) applied to the top of the note field. This is the amount of
         /// time (and therefore, pixels) that the user can scroll beyond the beginning of hte chart.
@@ -117,27 +144,35 @@ namespace OpenChart.UI
         public Time TopTimeMargin { get; private set; }
 
         /// <summary>
-        /// The top time margin, in pixels.
-        /// </summary>
-        public int TopTimeMarginPosition => (int)Math.Round(TopTimeMargin.Value * PixelsPerSecond);
-
-        /// <summary>
         /// Creates a new NoteFieldData instance.
         /// </summary>
         /// <param name="chart">The chart this note field is displaying.</param>
         /// <param name="noteSkin">The note skin used by the note field.</param>
-        public NoteFieldData(Chart chart, KeyModeSkin noteSkin, int pixelsPerSecond, Time timeOffset)
+        public NoteFieldData(
+            Chart chart,
+            KeyModeSkin noteSkin,
+            int keyWidth,
+            int pixelsPerSecond,
+            Time timeOffset
+        )
         {
             if (chart == null)
                 throw new ArgumentNullException("Chart cannot be null.");
             else if (noteSkin == null)
                 throw new ArgumentNullException("Note skin cannot be null.");
+            else if (keyWidth <= 0)
+                throw new ArgumentOutOfRangeException("Key width must be greater than zero.");
             else if (pixelsPerSecond <= 0)
                 throw new ArgumentOutOfRangeException("Pixels per second must be greater than zero.");
 
+            KeyWidth = keyWidth;
+
             Chart = chart;
             NoteSkin = noteSkin;
+            NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
+            // 4 measures
+            ExtraEndBeats = 16;
             PixelsPerSecond = pixelsPerSecond;
             ScrollScalar = 0.25;
             TopTimeMargin = timeOffset;
@@ -146,7 +181,7 @@ namespace OpenChart.UI
             ScrollBottom = new ScrollState(this);
             ScrollTop = new ScrollState(this);
 
-            ScrollTop.positionOffset = TopTimeMarginPosition;
+            ScrollTop.positionOffset = (int)Math.Round(TopTimeMargin.Value * PixelsPerSecond);
         }
 
         /// <summary>
