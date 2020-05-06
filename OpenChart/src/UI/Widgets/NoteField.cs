@@ -35,7 +35,6 @@ namespace OpenChart.UI.Widgets
         }
 
         public int NoteFieldWidth => KeyWidth * NoteFieldData.Chart.KeyCount.Value;
-        public const int VerticalMargin = 100;
 
         public readonly NoteFieldData NoteFieldData;
         public readonly NoteFieldKey[] Keys;
