@@ -35,6 +35,12 @@ namespace OpenChart.UI
             /// </summary>
             public int Position => (int)Math.Round(Time.Value * data.PixelsPerSecond);
 
+            /// <summary>
+            /// The scroll position, including the offset (in pixels). Used by the note field
+            /// to offset widgets.
+            ///
+            /// You are probably looking for <see cref="Position" />
+            /// </summary>
             public int PositionWithOffset => Position - positionOffset;
 
             /// <summary>
