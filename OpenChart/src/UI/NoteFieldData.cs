@@ -259,10 +259,9 @@ namespace OpenChart.UI
             ScrollTop.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTop.Time);
             ScrollTop.Beat = Chart.BPMList.Time.TimeToBeat(ScrollTop.Time, ScrollTop.IntervalIndex);
 
-            ScrollBottom.Time = ScrollTop.Time.Value + Math.Floor((double)viewportHeight / PixelsPerSecond);
+            ScrollBottom.Time = absTime + Math.Floor((double)viewportHeight / PixelsPerSecond);
             ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
             ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);
-
 
             return true;
         }
