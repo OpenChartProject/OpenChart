@@ -105,15 +105,15 @@ namespace OpenChart.UI
 
 
         /// <summary>
-        /// The amount of time to offset the note field components by. This is to allow for
-        /// a margin so that beat #0 is not right up against the edge of the widget.
+        /// The margin (in seconds) applied to the top of the note field. This is the amount of
+        /// time (and therefore, pixels) that the user can scroll beyond the beginning of hte chart.
         /// </summary>
-        public Time TimeOffset { get; private set; }
+        public Time TopTimeMargin { get; private set; }
 
         /// <summary>
-        /// The time offset, in pixels.
+        /// The top time margin, in pixels.
         /// </summary>
-        public int TimeOffsetPosition => (int)Math.Round(TimeOffset.Value * PixelsPerSecond);
+        public int TopTimeMarginPosition => (int)Math.Round(TopTimeMargin.Value * PixelsPerSecond);
 
         /// <summary>
         /// Creates a new NoteFieldData instance.
@@ -134,13 +134,13 @@ namespace OpenChart.UI
 
             PixelsPerSecond = pixelsPerSecond;
             ScrollScalar = 0.25;
-            TimeOffset = timeOffset;
+            TopTimeMargin = timeOffset;
 
             ChartEvents = new ChartEventBus(Chart);
             ScrollBottom = new ScrollState(this);
             ScrollTop = new ScrollState(this);
 
-            ScrollTop.positionOffset = TimeOffsetPosition;
+            ScrollTop.positionOffset = TopTimeMarginPosition;
         }
 
         /// <summary>
@@ -197,7 +197,7 @@ namespace OpenChart.UI
 
             oldViewportHeight = viewportHeight;
 
-            var absTime = (rawInputStepsScrolled * stepsPerSecond) - TimeOffset.Value;
+            var absTime = (rawInputStepsScrolled * stepsPerSecond) - TopTimeMargin.Value;
 
             if (absTime < 0)
                 ScrollTop.positionOffset = (int)Math.Round(Math.Abs(absTime) * PixelsPerSecond);
