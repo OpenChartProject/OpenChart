@@ -17,7 +17,12 @@ namespace OpenChart.UI.Widgets
         public Gtk.Widget GetWidget() => containerWidget;
         public ChartingObjects.BaseObject GetChartObject() => note;
 
-        public HoldNote(NoteFieldData noteFieldData, ImageAsset noteImage, ImageAsset holdBody, ChartingObjects.HoldNote note)
+        public HoldNote(
+            NoteFieldData noteFieldData,
+            ImageAsset noteImage,
+            ImageAsset holdBody,
+            ChartingObjects.HoldNote note
+        )
         {
             if (note == null)
                 throw new ArgumentNullException("Hold note object cannot be null.");
@@ -32,7 +37,7 @@ namespace OpenChart.UI.Widgets
             var holdStartPos = noteFieldData.GetPosition(note.Time);
             var holdEndPos = noteFieldData.GetPosition(new Time(note.Time.Value + note.Duration.Value));
 
-            holdBodyWidget.SetSizeRequest(1, holdEndPos - holdStartPos);
+            holdBodyWidget.SetSizeRequest(noteFieldData.KeyWidth, holdEndPos - holdStartPos);
 
             containerWidget.Put(holdBodyWidget, 0, GetWidgetCenterOffset());
             containerWidget.Put(noteWidget, 0, 0);

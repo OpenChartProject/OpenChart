@@ -145,6 +145,17 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
+        /// Returns the last element in the list.
+        /// </summary>
+        public T Last()
+        {
+            if (objects.Count == 0)
+                return null;
+
+            return objects.Last.Value;
+        }
+
+        /// <summary>
         /// Removes the given object.
         /// </summary>
         public bool Remove(T obj)

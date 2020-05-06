@@ -19,37 +19,17 @@ namespace OpenChart.UI.Widgets
             Alpha = 1.0,
         };
 
-        int _keyWidth;
-        public int KeyWidth
-        {
-            get => _keyWidth;
-            private set
-            {
-                if (value <= 0)
-                    throw new ArgumentOutOfRangeException("Width must be greater than zero.");
-
-                _keyWidth = value;
-
-                NoteFieldData.NoteSkin.ScaleToNoteFieldKeyWidth(_keyWidth);
-            }
-        }
-
-        public int NoteFieldWidth => KeyWidth * NoteFieldData.Chart.KeyCount.Value;
+        public int NoteFieldWidth => NoteFieldData.KeyWidth * NoteFieldData.Chart.KeyCount.Value;
 
         public readonly NoteFieldData NoteFieldData;
         public readonly NoteFieldKey[] Keys;
 
-        public NoteField(NoteFieldData noteFieldData, int keyWidth) : base(null, null)
+        public NoteField(NoteFieldData noteFieldData) : base(null, null)
         {
             if (noteFieldData == null)
                 throw new ArgumentNullException("Note field data cannot be null.");
-            else if (keyWidth <= 0)
-                throw new ArgumentOutOfRangeException("Key width must be greater than zero.");
 
             NoteFieldData = noteFieldData;
-
-            KeyWidth = keyWidth;
-            NoteFieldData.NoteSkin.ScaleToNoteFieldKeyWidth(keyWidth);
 
             widgetStack = new List<Widget>();
             beatLines = new BeatLines(NoteFieldData);
@@ -62,6 +42,8 @@ namespace OpenChart.UI.Widgets
                 keyContainer.Add(Keys[i]);
             }
 
+            beatLines.SetSizeRequest(NoteFieldWidth, NoteFieldData.ChartHeight);
+
             Add(beatLines);
             Add(keyContainer);
 
@@ -69,7 +51,6 @@ namespace OpenChart.UI.Widgets
             SizeAllocated += (o, e) =>
             {
                 NoteFieldData.UpdateScroll(0, e.Allocation.Height);
-                beatLines.SetSizeRequest(NoteFieldWidth, e.Allocation.Height);
             };
 
             NoteFieldData.ChartEvents.ObjectAdded += (o, e) =>
