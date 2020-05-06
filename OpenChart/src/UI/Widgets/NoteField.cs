@@ -111,7 +111,7 @@ namespace OpenChart.UI.Widgets
 
         private void scrollWidget(Widget widget)
         {
-            Move(widget, 0, 0 - NoteFieldData.ScrollTop.Position);
+            Move(widget, 0, 0 - NoteFieldData.ScrollTop.PositionWithOffset);
         }
     }
 }

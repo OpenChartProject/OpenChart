@@ -64,10 +64,10 @@ namespace OpenChart.UI.Widgets
 
             foreach (var beatTime in iterator)
             {
-                var y = noteFieldData.GetPosition(beatTime.Time);
-
-                if (y > noteFieldData.ScrollBottom.Position)
+                if (beatTime.Time.Value > noteFieldData.ScrollBottom.Time.Value)
                     break;
+
+                var y = noteFieldData.GetPosition(beatTime.Time);
 
                 if (beatTime.Beat.IsStartOfMeasure())
                     startOfMeasure.Add(y);
