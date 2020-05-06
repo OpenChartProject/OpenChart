@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using OpenChart.Charting;
+using OpenChart.Charting.Exceptions;
+using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 using System;
 using System.Collections.Generic;
@@ -51,6 +53,40 @@ namespace OpenChart.Tests.Charting
             var list = new BeatObjectList<BPM>();
             list.Add(new BPM(100, 0));
             Assert.Throws<ArgumentException>(() => list.Add(new BPM(200, 0)));
+        }
+
+        [Test]
+        public void Test_Add_TapNoteOverlapsHoldNote()
+        {
+            var list = new BeatObjectList<BaseObject>();
+            list.Add(new HoldNote(0, 0, 1));
+            list.Add(new TapNote(0, 2));
+            Assert.Throws<ObjectOverlapException>(() => list.Add(new TapNote(0, 1)));
+        }
+
+        [Test]
+        public void Test_Add_HoldNoteOverlapsTapNote()
+        {
+            var list = new BeatObjectList<BaseObject>();
+            list.Add(new TapNote(0, 1));
+            list.Add(new TapNote(0, 2));
+            Assert.Throws<ObjectOverlapException>(() => list.Add(new HoldNote(0, 0, 1)));
+        }
+
+        [Test]
+        public void Test_Add_TapNoteOverlapsHoldNoteEndOfList()
+        {
+            var list = new BeatObjectList<BaseObject>();
+            list.Add(new HoldNote(0, 0, 1));
+            Assert.Throws<ObjectOverlapException>(() => list.Add(new TapNote(0, 1)));
+        }
+
+        [Test]
+        public void Test_Add_HoldNoteOverlapsTapNoteEndOfList()
+        {
+            var list = new BeatObjectList<BaseObject>();
+            list.Add(new TapNote(0, 1));
+            Assert.Throws<ObjectOverlapException>(() => list.Add(new HoldNote(0, 0, 1)));
         }
 
         [Test]

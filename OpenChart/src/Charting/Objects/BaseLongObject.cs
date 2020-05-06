@@ -27,6 +27,7 @@ namespace OpenChart.Charting.Objects
             if (prev is IPlacementValidator validatable)
                 validatable.ValidatePlacement(null, this);
 
+            // Check if this overlaps with the next object.
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
                 throw new ObjectOverlapException();
         }
