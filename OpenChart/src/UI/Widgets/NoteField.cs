@@ -63,19 +63,13 @@ namespace OpenChart.UI.Widgets
                 keyContainer.Add(Keys[i]);
             }
 
-            keyContainer.MarginTop = VerticalMargin;
-            keyContainer.MarginBottom = VerticalMargin;
-
-            beatLines.MarginTop = VerticalMargin;
-            beatLines.MarginBottom = VerticalMargin;
-
             Add(beatLines);
             Add(keyContainer);
 
             ScrollEvent += onScroll;
-
             SizeAllocated += (o, e) =>
             {
+                NoteFieldData.UpdateScroll(0, e.Allocation.Height);
                 beatLines.SetSizeRequest(NoteFieldWidth, e.Allocation.Height);
             };
 

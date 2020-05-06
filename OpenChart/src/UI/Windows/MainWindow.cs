@@ -26,7 +26,7 @@ namespace OpenChart.UI.Windows
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
             var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
-            var noteFieldData = new NoteFieldData(chart, noteSkin, pixelsPerSecond: 200);
+            var noteFieldData = new NoteFieldData(chart, noteSkin, pixelsPerSecond: 200, timeOffset: 0.5);
             var noteField = new NoteField(noteFieldData, 96);
 
             chart.Objects[0].Add(new NativeObjects.TapNote(0, 0));
