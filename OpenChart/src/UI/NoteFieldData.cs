@@ -17,7 +17,7 @@ namespace OpenChart.UI
         public class ScrollState
         {
             NoteFieldData data;
-            internal double positionOffset;
+            internal int positionOffset;
 
             /// <summary>
             /// The scroll position (in beats).
@@ -33,7 +33,9 @@ namespace OpenChart.UI
             /// <summary>
             /// The scroll position (in pixels).
             /// </summary>
-            public int Position => (int)Math.Round(positionOffset + Time.Value * data.PixelsPerSecond);
+            public int Position => (int)Math.Round(Time.Value * data.PixelsPerSecond);
+
+            public int PositionWithOffset => Position - positionOffset;
 
             /// <summary>
             /// The scroll position (in seconds).
@@ -55,7 +57,7 @@ namespace OpenChart.UI
         /// The raw number of input scroll "ticks" the note field has been scrolled by.
         /// </summary>
         double rawInputStepsScrolled;
-        int? oldViewportHeight;
+        int oldViewportHeight;
 
         /// <summary>
         /// How much time 1 scroll step represents.
@@ -127,8 +129,6 @@ namespace OpenChart.UI
             else if (pixelsPerSecond <= 0)
                 throw new ArgumentOutOfRangeException("Pixels per second must be greater than zero.");
 
-            oldViewportHeight = null;
-
             Chart = chart;
             NoteSkin = noteSkin;
 
@@ -139,6 +139,8 @@ namespace OpenChart.UI
             ChartEvents = new ChartEventBus(Chart);
             ScrollBottom = new ScrollState(this);
             ScrollTop = new ScrollState(this);
+
+            ScrollTop.positionOffset = TimeOffsetPosition;
         }
 
         /// <summary>
@@ -198,7 +200,7 @@ namespace OpenChart.UI
             var absTime = (rawInputStepsScrolled * stepsPerSecond) - TimeOffset.Value;
 
             if (absTime < 0)
-                ScrollTop.positionOffset = absTime * PixelsPerSecond;
+                ScrollTop.positionOffset = (int)Math.Round(Math.Abs(absTime) * PixelsPerSecond);
             else
                 ScrollTop.positionOffset = 0;
 
