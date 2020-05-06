@@ -34,8 +34,8 @@ namespace OpenChart.UI.Widgets
             noteWidget = new Image(noteImage);
             this.note = note;
 
-            var holdStartPos = noteFieldData.GetPosition(note.Time);
-            var holdEndPos = noteFieldData.GetPosition(new Time(note.Time.Value + note.Duration.Value));
+            var holdStartPos = noteFieldData.GetPosition(note.Beat);
+            var holdEndPos = noteFieldData.GetPosition(new Beat(note.Beat.Value + note.Length.Value));
 
             holdBodyWidget.SetSizeRequest(noteFieldData.KeyWidth, holdEndPos - holdStartPos);
 

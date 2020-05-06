@@ -13,11 +13,6 @@ namespace OpenChart.Charting.Objects
         /// </summary>
         public BeatDuration Length { get; private set; }
 
-        /// <summary>
-        /// The duration of the object (in seconds).
-        /// </summary>
-        public Time Duration { get; set; }
-
         public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
             Length = length;
