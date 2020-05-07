@@ -222,18 +222,10 @@ namespace OpenChart.UI
         /// the top and bottom of the viewport. The viewport is the visible part of the
         /// widget on screen (i.e. the widget's size).
         ///
-        /// To support margins so that the top and bottom of the note field aren't cut off,
-        /// you can actually scroll a bit past the note field in either direction, so long
-        /// as it stays on screen.
-        ///
-        /// One caveat with this is the fact that Beat and Time objects can't have a negative
-        /// value. So, for example, you can't technically scroll to a beat/time "before" the
-        /// beginning of the chart because the concept of a negative beat/time doesn't exist.
-        ///
-        /// The solution to this is to simply cap the Beat/Time, but still change the Position.
-        /// When scrolled before the beginning of the chart, the position is negative, but the
-        /// Beat/Time remain at 0. In a sense, what this is doing is pretending the viewport
-        /// is smaller than it really is when we're beyond the bounds of the chart.
+        /// The Beat/Time of the scroll top and bottom are always capped to within the
+        /// bounds of the chart, i.e. what's visible on the note field. However, the
+        /// Position can go beyond those boundaries. This is useful when there is a margin
+        /// for the note field, such that y=0 is not beat=0.
         /// </summary>
         /// <param name="scrollDelta">The number of scroll steps the widget is scrolled.</param>
         /// <param name="viewportHeight">The height of the viewport (in pixels).</param>
@@ -242,6 +234,7 @@ namespace OpenChart.UI
         {
             var newStepsScrolled = stepsScrolled + (scrollDelta * ScrollScalar);
 
+            // Ensure we didn't scroll beyond the bounds of the chart.
             if (newStepsScrolled < 0)
                 newStepsScrolled = 0;
             else
@@ -252,27 +245,28 @@ namespace OpenChart.UI
                     newStepsScrolled = maxScroll;
             }
 
-            // Nothing changed.
+            // Nothing to update.
             if (newStepsScrolled == stepsScrolled && viewportHeight == oldViewportHeight)
                 return false;
 
             oldViewportHeight = viewportHeight;
             stepsScrolled = newStepsScrolled;
 
+            // The absolute time that the top of the screen is scrolled to. When there is a margin
+            // to offset the note field, this means the absolute time is negative while in the margin.
             var absTime = (stepsScrolled * stepsPerSecond) - TopTimeMargin.Value;
-
-            if (absTime > ChartLength.Value)
-                absTime = ChartLength.Value;
 
             if (absTime < 0)
                 ScrollTop.positionOffset = (int)Math.Round(Math.Abs(absTime) * PixelsPerSecond);
             else
                 ScrollTop.positionOffset = 0;
 
+            // ScrollTop represents the position/time at the top of the viewport.
             ScrollTop.Time = Math.Max(absTime, 0);
             ScrollTop.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTop.Time);
             ScrollTop.Beat = Chart.BPMList.Time.TimeToBeat(ScrollTop.Time, ScrollTop.IntervalIndex);
 
+            // ScrollBottom represents the position/time at the bottom of the viewport.
             ScrollBottom.Time = absTime + Math.Floor((double)viewportHeight / PixelsPerSecond);
             ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
             ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);

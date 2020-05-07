@@ -5,6 +5,9 @@ using OpenChart.UI.Assets;
 
 namespace OpenChart.UI.Widgets
 {
+    /// <summary>
+    /// Widget for the hold note body. Renders a repeating image for the length of the hold note.
+    /// </summary>
     public class HoldNoteBody : DrawingArea
     {
         ImageAsset image;
@@ -12,10 +15,15 @@ namespace OpenChart.UI.Widgets
         static Surface surface;
         static SurfacePattern pattern;
 
+        /// <summary>
+        /// Creates a new HoldNoteBody instance.
+        /// </summary>
+        /// <param name="image">The image of the hold note body.</param>
         public HoldNoteBody(ImageAsset image)
         {
             this.image = image;
 
+            // Create a new surface for the image so we can repeat it.
             if (surfacePixbuf != image.Pixbuf)
             {
                 surfacePixbuf = image.Pixbuf;

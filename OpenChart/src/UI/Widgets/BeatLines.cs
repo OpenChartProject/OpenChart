@@ -5,13 +5,22 @@ using System.Collections.Generic;
 namespace OpenChart.UI.Widgets
 {
     /// <summary>
-    /// Note field widget for drawing beat lines.
+    /// Note field widget for drawing beat lines. Beat lines are drawn for beats which are
+    /// whole numbers (1, 2, 3, etc.). Beat lines which mark the start of a measure are
+    /// drawn bold.
     /// </summary>
     public class BeatLines : DrawingArea
     {
         const int MaxBeatLinesDrawn = 500;
 
+        /// <summary>
+        /// The line thickness (in pixels) for beat lines which occur during a measure.
+        /// </summary>
         readonly int lineThickness = 1;
+
+        /// <summary>
+        /// The line color for beat lines which occur during a measure.
+        /// </summary>
         readonly RGBA lineColor = new RGBA
         {
             Red = 0.5,
@@ -20,7 +29,14 @@ namespace OpenChart.UI.Widgets
             Alpha = 1.0
         };
 
+        /// <summary>
+        /// The line thickness (in pixels) for beat lines which occur at the start of a measure.
+        /// </summary>
         readonly int measureLineThickness = 2;
+
+        /// <summary>
+        /// The line color for beat lines which occur at the start of a measure.
+        /// </summary>
         readonly RGBA measureLineColor = new RGBA
         {
             Red = 0.7,
@@ -48,6 +64,7 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         protected override bool OnDrawn(Cairo.Context cr)
         {
+            // Get the beats that are visible on the screen.
             var iterator = noteFieldData.Chart.BPMList.Time.GetBeats(
                 noteFieldData.ScrollTop.Time,
                 noteFieldData.ScrollTop.IntervalIndex
@@ -64,7 +81,10 @@ namespace OpenChart.UI.Widgets
 
             foreach (var beatTime in iterator)
             {
+                // Beat line is off screen, we're done.
                 if (beatTime.Time.Value > noteFieldData.ScrollBottom.Time.Value)
+                    break;
+                else if (lineCount >= MaxBeatLinesDrawn)
                     break;
 
                 var y = noteFieldData.GetPosition(beatTime.Time);
@@ -75,10 +95,6 @@ namespace OpenChart.UI.Widgets
                     duringMeasure.Add(y);
 
                 lineCount++;
-
-                // Avoid drawing a large number of lines.
-                if (lineCount >= MaxBeatLinesDrawn)
-                    break;
             }
 
             drawBeatLines(cr, startOfMeasure.ToArray(), measureLineThickness, measureLineColor);
