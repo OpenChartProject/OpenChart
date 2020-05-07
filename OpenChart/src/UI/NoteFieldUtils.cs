@@ -8,7 +8,7 @@ namespace OpenChart.UI
     /// <summary>
     /// Static utility class that contains some helpful UI functions.
     /// </summary>
-    public static class UIUtils
+    public static class NoteFieldUtils
     {
         /// <summary>
         /// Creates a new widget for the given chart object. The widget matches the type

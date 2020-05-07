@@ -1,3 +1,4 @@
+using OpenChart.Charting.Properties;
 using System;
 
 namespace OpenChart.NoteSkins
@@ -7,22 +8,7 @@ namespace OpenChart.NoteSkins
     /// </summary>
     public class KeyModeSkin
     {
-        int _keyCount;
-
-        /// <summary>
-        /// The number of keys for this keymode.
-        /// </summary>
-        public int KeyCount
-        {
-            get => _keyCount;
-            private set
-            {
-                if (value <= 0)
-                    throw new ArgumentException("Key count must be greater than zero.");
-
-                _keyCount = value;
-            }
-        }
+        public KeyCount KeyCount;
 
         /// <summary>
         /// The images for each individual key. The leftmost key is at index `0` and the
@@ -34,10 +20,10 @@ namespace OpenChart.NoteSkins
         /// Creates a new noteskin instance.
         /// </summary>
         /// <param name="keyCount">The number of keys (columns) this noteskin supports.</param>
-        public KeyModeSkin(int keyCount)
+        public KeyModeSkin(KeyCount keyCount)
         {
             KeyCount = keyCount;
-            Keys = new NoteSkinKey[keyCount];
+            Keys = new NoteSkinKey[KeyCount.Value];
         }
 
         /// <summary>
@@ -60,12 +46,12 @@ namespace OpenChart.NoteSkins
         /// </summary>
         /// <param name="key">The key index, from `0` to `KeyCount - 1`.</param>
         /// <param name="keyImage">The noteskin images for the key.</param>
-        public void Set(int key, NoteSkinKey keyImage)
+        public void Set(KeyIndex key, NoteSkinKey keyImage)
         {
-            if (key < 0 || key >= KeyCount)
-                throw new ArgumentException($"Key must be between 0 and {KeyCount - 1}.");
+            if (key.Value >= KeyCount.Value)
+                throw new ArgumentException($"Key index is out of range.");
 
-            Keys[key] = keyImage;
+            Keys[key.Value] = keyImage;
         }
     }
 }

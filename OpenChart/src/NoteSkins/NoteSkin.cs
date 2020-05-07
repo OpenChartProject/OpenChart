@@ -1,3 +1,4 @@
+using OpenChart.Charting.Properties;
 using System;
 using System.Collections.Generic;
 
@@ -47,11 +48,8 @@ namespace OpenChart.NoteSkins
         /// </summary>
         /// <param name="keyCount">The keycount for the keymode to get the skin of.</param>
         /// <returns>The keymode's noteskin, or null if none is set.</returns>
-        public KeyModeSkin GetKeyModeSkin(int keyCount)
+        public KeyModeSkin GetKeyModeSkin(KeyCount keyCount)
         {
-            if (keyCount <= 0)
-                throw new ArgumentException("Key count must be greater than zero.");
-
             return keyModes.Find(km => km.KeyCount == keyCount);
         }
     }
