@@ -42,7 +42,7 @@ namespace OpenChart.UI.Widgets
         public void Add(NativeObjects.BaseObject chartObject)
         {
             // Create a widget for the object.
-            var noteFieldObject = UIUtils.CreateWidgetForChartObject(
+            var noteFieldObject = NoteFieldUtils.CreateWidgetForChartObject(
                 noteFieldData,
                 chartObject,
                 noteFieldData.NoteSkin.Keys[KeyIndex.Value]
