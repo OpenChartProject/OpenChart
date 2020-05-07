@@ -54,9 +54,8 @@ namespace OpenChart.UI.Assets
         /// <param name="height">The height to resize to (in pixels).</param>
         public void Resize(int width, int height)
         {
-            // FIXME: This creates a new pixbuf instance instead of resizing the current one.
-            // This means existing widgets using the image won't be resized. This method should
-            // resize and then copy the new data into this pixbuf, if possible.
+            // Not using any scaling functions here because if we shrink and then enlarge
+            // the pixbuf we'll lose some image clarity.
             Pixbuf = new Pixbuf(Data, width, height);
         }
 
