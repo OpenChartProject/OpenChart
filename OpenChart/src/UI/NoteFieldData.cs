@@ -31,13 +31,14 @@ namespace OpenChart.UI
             public uint IntervalIndex { get; internal set; }
 
             /// <summary>
-            /// The scroll position (in pixels).
+            /// The scroll position (in pixels) relative to the first beat of the chart.
+            /// This does not take into account any note field offsets.
             /// </summary>
             public int Position => (int)Math.Round(Time.Value * data.PixelsPerSecond);
 
             /// <summary>
             /// The scroll position, including the offset (in pixels). Used by the note field
-            /// to offset widgets.
+            /// to offset widgets. This value can be negative.
             ///
             /// You are probably looking for <see cref="Position" />
             /// </summary>
@@ -63,7 +64,6 @@ namespace OpenChart.UI
         /// The raw number of input scroll "ticks" the note field has been scrolled by.
         /// </summary>
         double stepsScrolled;
-        int oldViewportHeight;
 
         /// <summary>
         /// How much time 1 scroll step represents.
@@ -132,14 +132,14 @@ namespace OpenChart.UI
         public double ScrollScalar { get; private set; }
 
         /// <summary>
-        /// The scroll state for the bottom of the note field viewport.
+        /// The scroll position of the bottom of the viewport.
         ///
         /// <seealso cref="UpdateScroll" />
         /// </summary>
         public ScrollState ScrollBottom { get; private set; }
 
         /// <summary>
-        /// The scroll state for the top of the note field viewport.
+        /// The scroll position of the top of the viewport.
         ///
         /// <seealso cref="UpdateScroll" />
         /// </summary>
@@ -195,7 +195,27 @@ namespace OpenChart.UI
             ScrollBottom = new ScrollState(this);
             ScrollTop = new ScrollState(this);
 
-            ScrollTop.positionOffset = (int)Math.Round(TopTimeMargin.Value * PixelsPerSecond);
+            // Initialize the scroll positions.
+            updateScrollTop();
+            updateScrollBottom(0);
+        }
+
+        /// <summary>
+        /// Gets the absolute time of the current scroll position. The absolute time has no bounds,
+        /// and takes into account any note field margins. Hence, the absolute time can be negative.
+        /// </summary>
+        public double GetAbsoluteTime()
+        {
+            return GetAbsoluteTime(stepsScrolled);
+        }
+
+        /// <summary>
+        /// Gets the absolute time at the given step count.
+        /// </summary>
+        /// <param name="steps">The number of scroll steps.</param>
+        public double GetAbsoluteTime(double steps)
+        {
+            return (steps * stepsPerSecond) - TopTimeMargin.Value;
         }
 
         /// <summary>
@@ -215,63 +235,68 @@ namespace OpenChart.UI
         }
 
         /// <summary>
-        /// Updates the ScrollTop and ScrollBottom properties with the new scroll state
-        /// of the note field widget.
-        ///
-        /// ScrollTop and ScrollBottom represent the note field's position, relative to
-        /// the top and bottom of the viewport. The viewport is the visible part of the
-        /// widget on screen (i.e. the widget's size).
-        ///
-        /// The Beat/Time of the scroll top and bottom are always capped to within the
-        /// bounds of the chart, i.e. what's visible on the note field. However, the
-        /// Position can go beyond those boundaries. This is useful when there is a margin
-        /// for the note field, such that y=0 is not beat=0.
+        /// Updates the scroll positions in response to the viewport being resized.
         /// </summary>
-        /// <param name="scrollDelta">The number of scroll steps the widget is scrolled.</param>
-        /// <param name="viewportHeight">The height of the viewport (in pixels).</param>
-        /// <returns>True if the scroll position was changed.</returns>
-        public bool UpdateScroll(double scrollDelta, int viewportHeight)
+        /// <param name="height">The height of the viewport (in pixels).</param>
+        public void OnViewportResize(int height)
         {
-            var newStepsScrolled = stepsScrolled + (scrollDelta * ScrollScalar);
+            updateScrollBottom(height);
+        }
 
-            // Ensure we didn't scroll beyond the bounds of the chart.
-            if (newStepsScrolled < 0)
-                newStepsScrolled = 0;
-            else
-            {
-                var maxScroll = (ChartLength.Value - TopTimeMargin.Value) * stepsPerSecond;
+        /// <summary>
+        /// Updates the scroll positions in response to the user scrolling the note field.
+        ///
+        /// Returns true if the scroll position changed due to the scroll input.
+        /// </summary>
+        /// <param name="delta">The scroll steps.</param>
+        /// <param name="height">The height of the viewport (in pixels).</param>
+        public bool OnScroll(double delta, int viewportHeight)
+        {
+            var maxScroll = (ChartLength.Value - TopTimeMargin.Value) * stepsPerSecond;
+            var newStepsScrolled = stepsScrolled + (delta * ScrollScalar);
 
-                if (newStepsScrolled > maxScroll)
-                    newStepsScrolled = maxScroll;
-            }
+            newStepsScrolled = Math.Clamp(newStepsScrolled, 0, maxScroll);
 
             // Nothing to update.
-            if (newStepsScrolled == stepsScrolled && viewportHeight == oldViewportHeight)
+            if (newStepsScrolled == stepsScrolled)
                 return false;
 
-            oldViewportHeight = viewportHeight;
             stepsScrolled = newStepsScrolled;
 
-            // The absolute time that the top of the screen is scrolled to. When there is a margin
-            // to offset the note field, this means the absolute time is negative while in the margin.
-            var absTime = (stepsScrolled * stepsPerSecond) - TopTimeMargin.Value;
+            updateScrollBottom(viewportHeight);
+            updateScrollTop();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Updates ScrollTop using the current scroll position.
+        /// </summary>
+        private void updateScrollTop()
+        {
+            var absTime = GetAbsoluteTime();
 
             if (absTime < 0)
-                ScrollTop.positionOffset = (int)Math.Round(Math.Abs(absTime) * PixelsPerSecond);
+                ScrollTop.positionOffset = (int)Math.Abs(Math.Round(absTime * PixelsPerSecond));
             else
                 ScrollTop.positionOffset = 0;
 
-            // ScrollTop represents the position/time at the top of the viewport.
-            ScrollTop.Time = Math.Max(absTime, 0);
+            ScrollTop.Time = Math.Max(0, absTime);
             ScrollTop.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollTop.Time);
             ScrollTop.Beat = Chart.BPMList.Time.TimeToBeat(ScrollTop.Time, ScrollTop.IntervalIndex);
+        }
 
-            // ScrollBottom represents the position/time at the bottom of the viewport.
-            ScrollBottom.Time = absTime + Math.Floor((double)viewportHeight / PixelsPerSecond);
+        /// <summary>
+        /// Updates ScrollBottom using the current scroll position.
+        /// </summary>
+        private void updateScrollBottom(int viewportHeight)
+        {
+            var absTime = GetAbsoluteTime();
+            var heightToTime = (double)viewportHeight / PixelsPerSecond;
+
+            ScrollBottom.Time = Math.Max(0, absTime + heightToTime);
             ScrollBottom.IntervalIndex = Chart.BPMList.Time.GetIndexAtTime(ScrollBottom.Time);
             ScrollBottom.Beat = Chart.BPMList.Time.TimeToBeat(ScrollBottom.Time, ScrollBottom.IntervalIndex);
-
-            return true;
         }
     }
 }

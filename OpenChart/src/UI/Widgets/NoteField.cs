@@ -86,9 +86,19 @@ namespace OpenChart.UI.Widgets
             Add(BeatLines);
             Add(keyContainer);
 
-            // Update visuals when scrolled or resized.
-            ScrollEvent += onScroll;
-            SizeAllocated += (o, e) => NoteFieldData.UpdateScroll(0, e.Allocation.Height);
+            // Handle the user scrolling the note field.
+            ScrollEvent += (o, e) =>
+            {
+                // "Scroll" (move) the widgets if the scroll position changed.
+                if (NoteFieldData.OnScroll(e.Event.DeltaY, AllocatedHeight))
+                    scrollAllWidgets();
+            };
+
+            // Handle the widget resizing.
+            SizeAllocated += (o, e) =>
+            {
+                NoteFieldData.OnViewportResize(e.Allocation.Height);
+            };
 
             // Handle a new object being added to the chart.
             NoteFieldData.ChartEvents.ObjectAdded += (o, e) => Keys[e.Object.KeyIndex.Value].Add(e.Object);
@@ -118,12 +128,8 @@ namespace OpenChart.UI.Widgets
             return true;
         }
 
-        private void onScroll(object o, ScrollEventArgs e)
+        private void scrollAllWidgets()
         {
-            // Update the scroll state and return early if nothing was changed.
-            if (!NoteFieldData.UpdateScroll(e.Event.DeltaY, AllocatedHeight))
-                return;
-
             foreach (var widget in widgetStack)
             {
                 scrollWidget(widget);
