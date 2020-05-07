@@ -65,6 +65,9 @@ namespace OpenChart.UI.Widgets
             return noteWidget.ImageAsset.Pixbuf.Height / 2;
         }
 
+        /// <summary>
+        /// Updates the size of the hold note body.
+        /// </summary>
         public void Update()
         {
             var holdStartPos = noteFieldData.GetPosition(note.Beat);
