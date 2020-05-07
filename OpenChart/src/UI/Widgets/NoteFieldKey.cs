@@ -55,6 +55,14 @@ namespace OpenChart.UI.Widgets
         }
 
         /// <summary>
+        /// Removes the chart object at the given beat, and returns true if it was removed.
+        /// </summary>
+        public bool RemoveAtBeat(Beat beat)
+        {
+            return objects.Remove(beat);
+        }
+
+        /// <summary>
         /// Draws the chart object/widgets. This method is overridden because we want to draw
         /// the objects in the correct order, otherwise newer added objects will be rendered on
         /// top of existing objects even if they are at an earlier beat.

@@ -100,8 +100,17 @@ namespace OpenChart.UI.Widgets
                 NoteFieldData.OnViewportResize(e.Allocation.Height);
             };
 
-            // Handle a new object being added to the chart.
-            NoteFieldData.ChartEvents.ObjectAdded += (o, e) => Keys[e.Object.KeyIndex.Value].Add(e.Object);
+            // Display an object when it's added to the chart.
+            NoteFieldData.ChartEvents.ObjectAdded += (o, e) =>
+            {
+                Keys[e.Object.KeyIndex.Value].Add(e.Object);
+            };
+
+            // Remove the object from the note field when it's deleted from the chart.
+            NoteFieldData.ChartEvents.ObjectRemoved += (o, e) =>
+            {
+                Keys[e.Object.KeyIndex.Value].RemoveAtBeat(e.Object.Beat);
+            };
         }
 
         /// <summary>
