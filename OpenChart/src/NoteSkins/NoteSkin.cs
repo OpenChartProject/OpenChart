@@ -37,7 +37,7 @@ namespace OpenChart.NoteSkins
         public void AddKeyModeSkin(KeyModeSkin keyMode)
         {
             // Check if there is already a skin loaded with the same key count
-            if (keyModes.Exists(km => km.KeyCount == keyMode.KeyCount))
+            if (keyModes.Exists(km => km.KeyCount.Value == keyMode.KeyCount.Value))
                 throw new ArgumentException($"Cannot add duplicate keymode (KeyCount={keyMode.KeyCount}) to noteskin '{Name}'.");
 
             keyModes.Add(keyMode);
@@ -50,7 +50,7 @@ namespace OpenChart.NoteSkins
         /// <returns>The keymode's noteskin, or null if none is set.</returns>
         public KeyModeSkin GetKeyModeSkin(KeyCount keyCount)
         {
-            return keyModes.Find(km => km.KeyCount == keyCount);
+            return keyModes.Find(km => km.KeyCount.Value == keyCount.Value);
         }
     }
 }
