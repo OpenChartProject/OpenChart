@@ -15,7 +15,8 @@ namespace OpenChart.UI.Assets
         public readonly byte[] Data;
 
         /// <summary>
-        /// The absolute path to the image file.
+        /// The absolute path to the image file. The path is null if the constructor is
+        /// passed the image data directly.
         /// </summary>
         public readonly string Path;
 
@@ -38,14 +39,12 @@ namespace OpenChart.UI.Assets
         /// <summary>
         /// Creates a new ImageAsset instance.
         /// </summary>
-        /// <param name="path">The path to the image file.</param>
-        /// <param name="width">The width to resize to (in pixels).</param>
-        /// <param name="height">The height to resize to (in pixels).</param>
-        public ImageAsset(string path, int width, int height)
+        /// <param name="data">The raw image data.</param>
+        public ImageAsset(byte[] data)
         {
-            Data = File.ReadAllBytes(path);
-            Path = path;
-            Pixbuf = new Pixbuf(Data, width, height);
+            Data = data;
+            Path = null;
+            Pixbuf = new Pixbuf(Data);
         }
 
         /// <summary>
