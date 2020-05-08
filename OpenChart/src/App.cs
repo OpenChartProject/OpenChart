@@ -2,7 +2,7 @@ using ManagedBass;
 using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
-using OpenChart.UI;
+using OpenChart.UI.Windows;
 using System;
 using System.IO;
 using System.Reflection;

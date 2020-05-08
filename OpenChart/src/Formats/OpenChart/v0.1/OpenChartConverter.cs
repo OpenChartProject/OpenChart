@@ -59,7 +59,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                     var chart = new Chart(c.KeyCount);
                     project.Charts.Add(chart);
 
-                    chart.BPMs.AddMultiple(c.BPMs);
+                    chart.BPMList.BPMs.AddMultiple(c.BPMs);
                     chart.Author = c.Author;
                     chart.ChartName = c.ChartName;
 
@@ -125,7 +125,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
                 chart.KeyCount = c.KeyCount;
                 chart.Author = c.Author;
                 chart.ChartName = c.ChartName;
-                chart.BPMs = c.BPMs.ToArray();
+                chart.BPMs = c.BPMList.BPMs.ToArray();
 
                 // Beat rows are stored as a dictionary. This is necessary because the
                 // native Chart class stores objects by key index, whereas the file

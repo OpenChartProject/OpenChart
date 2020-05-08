@@ -3,6 +3,7 @@ assets_dir := OpenChart/assets
 lib_dir := OpenChart/lib
 output_dir := bin
 publish_dir := dist
+original_assets_dir := __original__
 
 # OS detection. Do not assume the existence of uname on Windows.
 ifeq ($(OS), Windows_NT)
@@ -24,6 +25,10 @@ build:
 	else \
 		cp -r $(lib_dir)/x64/* $(assets_dir)/* $(output_dir); \
 	fi
+
+	@# Clean up any __original__ dirs that got copied
+	@find $(output_dir) -wholename "$(output_dir)/**/$(original_assets_dir)" -type d \
+		| xargs rm -r
 
 .PHONY: clean
 clean:

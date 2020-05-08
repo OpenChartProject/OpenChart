@@ -38,7 +38,7 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Add(bpm);
             Assert.AreEqual(1, calls);
         }
 
@@ -57,7 +57,7 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Add(bpm);
 
             bpm.Value = 150;
 
@@ -79,8 +79,8 @@ namespace OpenChart.Tests.Charting
                 calls++;
             };
 
-            chart.BPMs.Add(bpm);
-            chart.BPMs.Remove(bpm);
+            chart.BPMList.BPMs.Add(bpm);
+            chart.BPMList.BPMs.Remove(bpm);
 
             Assert.AreEqual(1, calls);
         }
@@ -92,6 +92,8 @@ namespace OpenChart.Tests.Charting
         public void Test_ObjectAdded(int keyIndex)
         {
             var chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
             var events = new ChartEventBus(chart);
             var obj = new TapNote(keyIndex, 0);
             var calls = 0;
@@ -115,6 +117,8 @@ namespace OpenChart.Tests.Charting
         public void Test_ObjectRemoved(int keyIndex)
         {
             var chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
             var events = new ChartEventBus(chart);
             var obj = new TapNote(keyIndex, 0);
             var calls = 0;

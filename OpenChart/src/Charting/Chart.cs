@@ -12,7 +12,7 @@ namespace OpenChart.Charting
     /// </summary>
     public class Chart
     {
-        public BeatObjectList<BPM> BPMs { get; private set; }
+        public BPMList BPMList { get; private set; }
 
         /// <summary>
         /// The key count for the chart.
@@ -44,13 +44,50 @@ namespace OpenChart.Charting
         public Chart(KeyCount keyCount)
         {
             KeyCount = keyCount;
-            BPMs = new BeatObjectList<BPM>();
+            BPMList = new BPMList(new BeatObjectList<BPM>());
             Objects = new BeatObjectList<BaseObject>[KeyCount.Value];
 
             for (var i = 0; i < KeyCount.Value; i++)
             {
                 Objects[i] = new BeatObjectList<BaseObject>();
+                Objects[i].Added += (o, e) => updateObjectTime(e.Object);
             }
+        }
+
+        /// <summary>
+        /// Returns the length of the chart, in beats.
+        /// </summary>
+        public Beat GetBeatLength()
+        {
+            return GetLastObject()?.Beat ?? 0;
+        }
+
+        /// <summary>
+        /// Returns the length of the chart, in seconds.
+        /// </summary>
+        public Time GetTimeLength()
+        {
+            return BPMList.Time.BeatToTime(GetBeatLength());
+        }
+
+        /// <summary>
+        /// Returns the object placed at the end of the chart. If the chart is empty, returns null.
+        /// </summary>
+        public BaseObject GetLastObject()
+        {
+            BaseObject last = null;
+
+            foreach (var key in Objects)
+            {
+                var obj = key.Last();
+
+                if (obj == null)
+                    continue;
+                else if (last == null || obj.Beat.Value > last.Beat.Value)
+                    last = obj;
+            }
+
+            return last;
         }
 
         public override bool Equals(object obj)
@@ -62,14 +99,24 @@ namespace OpenChart.Charting
 
             return (
                 KeyCount == chart.KeyCount
-                && BPMs.Equals(chart.BPMs)
+                && BPMList.Equals(chart.BPMList)
                 && Objects.Equals(chart.Objects)
             );
         }
 
         public override int GetHashCode()
         {
-            return Tuple.Create(KeyCount, BPMs, Objects).GetHashCode();
+            return Tuple.Create(KeyCount, BPMList, Objects).GetHashCode();
+        }
+
+        /// <summary>
+        /// Calculates the time that the object occurs in the chart, given the current
+        /// list of BPMs.
+        /// </summary>
+        /// <param name="obj">The object to update.</param>
+        private void updateObjectTime(BaseObject obj)
+        {
+            obj.Time = BPMList.Time.BeatToTime(obj.Beat);
         }
     }
 }

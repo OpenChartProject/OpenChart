@@ -58,6 +58,11 @@ namespace OpenChart.Charting
             objects = new LinkedList<T>();
         }
 
+        public BeatObjectList(T[] objs) : this()
+        {
+            AddMultiple(objs);
+        }
+
         /// <summary>
         /// Adds an object to the list. Multiple object changes cannot occur on the same beat.
         /// </summary>
@@ -140,6 +145,17 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
+        /// Returns the last element in the list.
+        /// </summary>
+        public T Last()
+        {
+            if (objects.Count == 0)
+                return null;
+
+            return objects.Last.Value;
+        }
+
+        /// <summary>
         /// Removes the given object.
         /// </summary>
         public bool Remove(T obj)
@@ -203,6 +219,7 @@ namespace OpenChart.Charting
             if (cur == null)
                 cur = objects.First;
 
+            IPlacementValidator prevValidatable = null;
             var validatable = obj as IPlacementValidator;
 
             while (cur != null)
@@ -213,7 +230,10 @@ namespace OpenChart.Charting
                 {
                     if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
                     {
-                        validatable?.ValidatePlacement(cur.Previous?.Value, cur.Next?.Value);
+                        prevValidatable = cur.Previous?.Value as IPlacementValidator;
+
+                        prevValidatable?.ValidatePlacement(null, obj);
+                        validatable?.ValidatePlacement(cur.Previous?.Value, cur.Value);
 
                         return objects.AddBefore(cur, obj);
                     }
@@ -222,6 +242,8 @@ namespace OpenChart.Charting
                 cur = cur.Next;
             }
 
+            prevValidatable = objects.Last?.Value as IPlacementValidator;
+            prevValidatable?.ValidatePlacement(null, obj);
             validatable?.ValidatePlacement(objects.Last?.Value, null);
 
             return objects.AddLast(obj);

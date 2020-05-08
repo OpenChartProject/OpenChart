@@ -160,7 +160,7 @@ namespace OpenChart.Tests.Formats.OpenChart
             var native = converter.ToNative(data);
 
             Assert.AreEqual(1, native.Charts.Count);
-            Assert.IsEmpty(native.Charts[0].BPMs);
+            Assert.IsEmpty(native.Charts[0].BPMList.BPMs);
             Assert.AreEqual(chart.KeyCount.Value, native.Charts[0].Objects.Length);
             Assert.AreEqual(chart.Author, native.Charts[0].Author);
             Assert.AreEqual(chart.ChartName, native.Charts[0].ChartName);
@@ -206,7 +206,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             var native = converter.ToNative(data);
 
-            Assert.AreEqual(chart.BPMs, native.Charts[0].BPMs.ToArray());
+            Assert.AreEqual(chart.BPMs, native.Charts[0].BPMList.BPMs.ToArray());
         }
 
         [Test]
@@ -216,14 +216,14 @@ namespace OpenChart.Tests.Formats.OpenChart
             var chart = new Chart(4);
             native.Charts.Add(chart);
 
-            chart.BPMs.AddMultiple(new BPM[] {
+            chart.BPMList.BPMs.AddMultiple(new BPM[] {
                 new BPM(100, 0),
                 new BPM(200, 10.5),
             });
 
             var data = converter.FromNative(native);
 
-            Assert.AreEqual(chart.BPMs.ToArray(), data.Charts[0].BPMs);
+            Assert.AreEqual(chart.BPMList.BPMs.ToArray(), data.Charts[0].BPMs);
         }
 
         [Test]
@@ -235,6 +235,7 @@ namespace OpenChart.Tests.Formats.OpenChart
 
             chart.KeyCount = 4;
             chart.Rows = formatBeatData;
+            chart.BPMs = new BPM[] { new BPM(120, 0) };
 
             var native = converter.ToNative(data);
 
@@ -249,6 +250,8 @@ namespace OpenChart.Tests.Formats.OpenChart
         {
             var native = new Project();
             var chart = new Chart(4);
+
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
             native.Charts.Add(chart);
 
             for (var keyIndex = 0; keyIndex < nativeBeatData.Length; keyIndex++)
