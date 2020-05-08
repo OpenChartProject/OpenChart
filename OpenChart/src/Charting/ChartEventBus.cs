@@ -42,6 +42,13 @@ namespace OpenChart.Charting
         public readonly Chart Chart;
 
         /// <summary>
+        /// A catch-all event handler that is fired when any of the other events are fired.
+        /// This should be reserved for cases where the listener needs to evaluate the chart
+        /// as a whole, and therefore any change will require an update.
+        /// </summary>
+        public event EventHandler Anything;
+
+        /// <summary>
         /// Fired when a new BPM is added.
         /// </summary>
         public event EventHandler<BPMEventArgs> BPMAdded;
@@ -73,8 +80,8 @@ namespace OpenChart.Charting
 
             Chart = chart;
 
-            Chart.BPMs.Added += onBPMAdded;
-            Chart.BPMs.Removed += onBPMRemoved;
+            Chart.BPMList.BPMs.Added += onBPMAdded;
+            Chart.BPMList.BPMs.Removed += onBPMRemoved;
 
             // Listen to the object lists for each key.
             foreach (var keyObjects in Chart.Objects)
@@ -91,6 +98,7 @@ namespace OpenChart.Charting
             e.Object.Changed += onBPMChanged;
 
             BPMAdded?.Invoke(this, outgoingArgs);
+            Anything?.Invoke(this, null);
         }
 
         private void onBPMChanged(object o, EventArgs e)
@@ -99,6 +107,7 @@ namespace OpenChart.Charting
             var outgoingArgs = new BPMEventArgs(bpm);
 
             BPMChanged?.Invoke(this, outgoingArgs);
+            Anything?.Invoke(this, null);
         }
 
         private void onBPMRemoved(object o, ObjectListEventArgs<BPM> e)
@@ -109,6 +118,7 @@ namespace OpenChart.Charting
             incomingArgs.Object.Changed -= onBPMChanged;
 
             BPMRemoved?.Invoke(this, outgoingArgs);
+            Anything?.Invoke(this, null);
         }
 
         private void onObjectAdded(object o, ObjectListEventArgs<BaseObject> e)
@@ -116,6 +126,7 @@ namespace OpenChart.Charting
             var outgoingArgs = new ObjectEventArgs(e.Object);
 
             ObjectAdded?.Invoke(this, outgoingArgs);
+            Anything?.Invoke(this, null);
         }
 
         private void onObjectRemoved(object o, ObjectListEventArgs<BaseObject> e)
@@ -123,6 +134,7 @@ namespace OpenChart.Charting
             var outgoingArgs = new ObjectEventArgs(e.Object);
 
             ObjectRemoved?.Invoke(this, outgoingArgs);
+            Anything?.Invoke(this, null);
         }
     }
 }

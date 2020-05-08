@@ -5,7 +5,7 @@ namespace OpenChart.Charting.Properties
     /// <summary>
     /// Represents a beat duration.
     /// </summary>
-    public class BeatDuration : IChangeNotifier
+    public class BeatDuration : IChangeNotifier, IComparable
     {
         double _value;
 

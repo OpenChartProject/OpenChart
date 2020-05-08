@@ -8,6 +8,9 @@ namespace OpenChart.Charting.Objects
     /// </summary>
     public abstract class BaseLongObject : BaseObject, IPlacementValidator, IBeatDurationObject
     {
+        /// <summary>
+        /// The length of the object (in beats).
+        /// </summary>
         public BeatDuration Length { get; private set; }
 
         public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
@@ -24,6 +27,7 @@ namespace OpenChart.Charting.Objects
             if (prev is IPlacementValidator validatable)
                 validatable.ValidatePlacement(null, this);
 
+            // Check if this overlaps with the next object.
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
                 throw new ObjectOverlapException();
         }
