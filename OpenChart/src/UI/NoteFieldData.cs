@@ -97,7 +97,11 @@ namespace OpenChart.UI
             {
                 // Cache the value.
                 if (_chartLength == null)
-                    _chartLength = getChartLength();
+                {
+                    _chartLength = Chart.BPMList.Time.BeatToTime(
+                        Chart.GetBeatLength().Value + ExtraEndBeats.Value
+                    );
+                }
 
                 return _chartLength;
             }
@@ -271,15 +275,6 @@ namespace OpenChart.UI
             updateScrollTop();
 
             return true;
-        }
-
-        /// <summary>
-        /// Returns the chart length, in seconds.
-        /// </summary>
-        private Time getChartLength()
-        {
-            var beat = Chart.GetLastObject()?.Beat ?? 0;
-            return Chart.BPMList.Time.BeatToTime(beat.Value + ExtraEndBeats.Value);
         }
 
         /// <summary>
