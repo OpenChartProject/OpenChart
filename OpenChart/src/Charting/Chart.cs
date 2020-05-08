@@ -55,8 +55,23 @@ namespace OpenChart.Charting
         }
 
         /// <summary>
-        /// Gets the length of the chart, in beats. The end of the chart is the beat where the
-        /// last object is placed. If the chart is empty, the beat length is zero.
+        /// Returns the length of the chart, in beats.
+        /// </summary>
+        public Beat GetBeatLength()
+        {
+            return GetLastObject()?.Beat ?? 0;
+        }
+
+        /// <summary>
+        /// Returns the length of the chart, in seconds.
+        /// </summary>
+        public Time GetTimeLength()
+        {
+            return BPMList.Time.BeatToTime(GetBeatLength());
+        }
+
+        /// <summary>
+        /// Returns the object placed at the end of the chart. If the chart is empty, returns null.
         /// </summary>
         public BaseObject GetLastObject()
         {
