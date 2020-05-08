@@ -52,11 +52,17 @@ namespace OpenChart.Charting.Properties
             Beat.Changed += delegate { onChanged(); };
         }
 
+        /// <summary>
+        /// Returns the number of beats that occur in one second for this BPM.
+        /// </summary>
         public double BeatsPerSecond()
         {
             return Value / 60;
         }
 
+        /// <summary>
+        /// Returns how long each beat is in seconds for this BPM.
+        /// </summary>
         public double SecondsPerBeat()
         {
             return 60 / Value;
