@@ -1,6 +1,5 @@
 using Gdk;
 using Gtk;
-using OpenChart.Charting.Properties;
 using System;
 using System.Collections.Generic;
 
