@@ -86,17 +86,20 @@ namespace OpenChart.UI
         /// </summary>
         public int ChartHeight => (int)Math.Ceiling(ChartLength.Value * PixelsPerSecond);
 
+        Time _chartLength;
+
         /// <summary>
         /// The length of the chart to display, in seconds.
-        ///
-        /// TODO: This should be cached and only reran when the chart changes.
         /// </summary>
         public Time ChartLength
         {
             get
             {
-                var beat = Chart.GetLastObject()?.Beat ?? 0;
-                return Chart.BPMList.Time.BeatToTime(beat.Value + ExtraEndBeats.Value);
+                // Cache the value.
+                if (_chartLength == null)
+                    _chartLength = getChartLength();
+
+                return _chartLength;
             }
         }
 
@@ -177,21 +180,22 @@ namespace OpenChart.UI
             else if (pixelsPerSecond <= 0)
                 throw new ArgumentOutOfRangeException("Pixels per second must be greater than zero.");
 
-            KeyWidth = keyWidth;
-
-            Chart = chart;
             CenterObjectsOnBeatLines = centerObjectsOnBeatLines;
+            ExtraEndBeats = 16;
+            KeyWidth = keyWidth;
+            PixelsPerSecond = pixelsPerSecond;
+            ScrollScalar = 0.25;
+            StepsPerSecond = 1;
+            TopTimeMargin = timeOffset;
+
             NoteSkin = noteSkin;
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
-            // 4 measures.
-            ExtraEndBeats = 16;
-            PixelsPerSecond = pixelsPerSecond;
-            ScrollScalar = 0.25;
-            TopTimeMargin = timeOffset;
-            StepsPerSecond = 1;
-
+            Chart = chart;
             ChartEvents = new ChartEventBus(Chart);
+
+            ChartEvents.Anything += delegate { invalidateChartLength(); };
+
             ScrollBottom = new ScrollState(this);
             ScrollTop = new ScrollState(this);
 
@@ -267,6 +271,24 @@ namespace OpenChart.UI
             updateScrollTop();
 
             return true;
+        }
+
+        /// <summary>
+        /// Returns the chart length, in seconds.
+        /// </summary>
+        private Time getChartLength()
+        {
+            var beat = Chart.GetLastObject()?.Beat ?? 0;
+            return Chart.BPMList.Time.BeatToTime(beat.Value + ExtraEndBeats.Value);
+        }
+
+        /// <summary>
+        /// Invalidates the cached value for the ChartLength, so that the next time it's accessed
+        /// it is recalculated.
+        /// </summary>
+        private void invalidateChartLength()
+        {
+            _chartLength = null;
         }
 
         /// <summary>

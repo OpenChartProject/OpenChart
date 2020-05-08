@@ -42,6 +42,13 @@ namespace OpenChart.Charting
         public readonly Chart Chart;
 
         /// <summary>
+        /// A catch-all event handler that is fired when any of the other events are fired.
+        /// This should be reserved for cases where the listener needs to evaluate the chart
+        /// as a whole, and therefore any change will require an update.
+        /// </summary>
+        public event EventHandler Anything;
+
+        /// <summary>
         /// Fired when a new BPM is added.
         /// </summary>
         public event EventHandler<BPMEventArgs> BPMAdded;
@@ -90,6 +97,7 @@ namespace OpenChart.Charting
 
             e.Object.Changed += onBPMChanged;
 
+            Anything?.Invoke(this, null);
             BPMAdded?.Invoke(this, outgoingArgs);
         }
 
@@ -98,6 +106,7 @@ namespace OpenChart.Charting
             var bpm = o as BPM;
             var outgoingArgs = new BPMEventArgs(bpm);
 
+            Anything?.Invoke(this, null);
             BPMChanged?.Invoke(this, outgoingArgs);
         }
 
@@ -108,6 +117,7 @@ namespace OpenChart.Charting
 
             incomingArgs.Object.Changed -= onBPMChanged;
 
+            Anything?.Invoke(this, null);
             BPMRemoved?.Invoke(this, outgoingArgs);
         }
 
@@ -115,6 +125,7 @@ namespace OpenChart.Charting
         {
             var outgoingArgs = new ObjectEventArgs(e.Object);
 
+            Anything?.Invoke(this, null);
             ObjectAdded?.Invoke(this, outgoingArgs);
         }
 
@@ -122,6 +133,7 @@ namespace OpenChart.Charting
         {
             var outgoingArgs = new ObjectEventArgs(e.Object);
 
+            Anything?.Invoke(this, null);
             ObjectRemoved?.Invoke(this, outgoingArgs);
         }
     }
