@@ -63,18 +63,18 @@ namespace OpenChart.UI
         /// <summary>
         /// The raw number of input scroll "ticks" the note field has been scrolled by.
         /// </summary>
-        double stepsScrolled;
+        public double StepsScrolled { get; private set; }
 
         /// <summary>
         /// How much time 1 scroll step represents.
         /// </summary>
-        int stepsPerSecond = 1;
+        public double StepsPerSecond { get; private set; }
 
         /// <summary>
         /// When set to true, objects are offset so that the center of the object is considered
         /// the origin. When false, the origin is considered the top of the object.
         /// </summary>
-        public bool CenterObjectsOnBeatLines { get; private set; }
+        public bool CenterObjectsOnBeatLines { get; set; }
 
         /// <summary>
         /// The Chart those note field is displaying.
@@ -108,13 +108,12 @@ namespace OpenChart.UI
         /// <summary>
         /// The number of extra beats to add to the end of the chart.
         /// </summary>
-        /// <value></value>
-        public Beat ExtraEndBeats { get; private set; }
+        public Beat ExtraEndBeats { get; set; }
 
         /// <summary>
         /// The width (in pixels) of each note field key widget.
         /// </summary>
-        public int KeyWidth { get; private set; }
+        public int KeyWidth { get; set; }
 
         /// <summary>
         /// The note skin to use for objects on the note field.
@@ -124,32 +123,32 @@ namespace OpenChart.UI
         /// <summary>
         /// The number of pixels one second of time represents.
         /// </summary>
-        public int PixelsPerSecond { get; private set; }
+        public int PixelsPerSecond { get; set; }
 
         /// <summary>
         /// A multiplier for manipulating the scroll speed of the note field.
         /// </summary>
-        public double ScrollScalar { get; private set; }
+        public double ScrollScalar { get; set; }
 
         /// <summary>
         /// The scroll position of the bottom of the viewport.
         ///
         /// <seealso cref="UpdateScroll" />
         /// </summary>
-        public ScrollState ScrollBottom { get; private set; }
+        public ScrollState ScrollBottom { get; set; }
 
         /// <summary>
         /// The scroll position of the top of the viewport.
         ///
         /// <seealso cref="UpdateScroll" />
         /// </summary>
-        public ScrollState ScrollTop { get; private set; }
+        public ScrollState ScrollTop { get; set; }
 
         /// <summary>
         /// The margin (in seconds) applied to the top of the note field. This is the amount of
         /// time (and therefore, pixels) that the user can scroll beyond the beginning of hte chart.
         /// </summary>
-        public Time TopTimeMargin { get; private set; }
+        public Time TopTimeMargin { get; set; }
 
         /// <summary>
         /// Creates a new NoteFieldData instance.
@@ -185,11 +184,12 @@ namespace OpenChart.UI
             NoteSkin = noteSkin;
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
-            // 4 measures
+            // 4 measures.
             ExtraEndBeats = 16;
             PixelsPerSecond = pixelsPerSecond;
             ScrollScalar = 0.25;
             TopTimeMargin = timeOffset;
+            StepsPerSecond = 1;
 
             ChartEvents = new ChartEventBus(Chart);
             ScrollBottom = new ScrollState(this);
@@ -206,7 +206,7 @@ namespace OpenChart.UI
         /// </summary>
         public double GetAbsoluteTime()
         {
-            return GetAbsoluteTime(stepsScrolled);
+            return GetAbsoluteTime(StepsScrolled);
         }
 
         /// <summary>
@@ -215,7 +215,7 @@ namespace OpenChart.UI
         /// <param name="steps">The number of scroll steps.</param>
         public double GetAbsoluteTime(double steps)
         {
-            return (steps * stepsPerSecond) - TopTimeMargin.Value;
+            return (steps * StepsPerSecond) - TopTimeMargin.Value;
         }
 
         /// <summary>
@@ -252,16 +252,16 @@ namespace OpenChart.UI
         /// <param name="height">The height of the viewport (in pixels).</param>
         public bool OnScroll(double delta, int viewportHeight)
         {
-            var maxScroll = (ChartLength.Value - TopTimeMargin.Value) * stepsPerSecond;
-            var newStepsScrolled = stepsScrolled + (delta * ScrollScalar);
+            var maxScroll = (ChartLength.Value - TopTimeMargin.Value) * StepsPerSecond;
+            var newStepsScrolled = StepsScrolled + (delta * ScrollScalar);
 
             newStepsScrolled = Math.Clamp(newStepsScrolled, 0, maxScroll);
 
             // Nothing to update.
-            if (newStepsScrolled == stepsScrolled)
+            if (newStepsScrolled == StepsScrolled)
                 return false;
 
-            stepsScrolled = newStepsScrolled;
+            StepsScrolled = newStepsScrolled;
 
             updateScrollBottom(viewportHeight);
             updateScrollTop();
