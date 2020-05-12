@@ -5,7 +5,6 @@ using OpenChart.NoteSkins;
 using OpenChart.UI.Windows;
 using System;
 using System.IO;
-using System.Reflection;
 
 namespace OpenChart
 {
@@ -41,7 +40,7 @@ namespace OpenChart
         {
             // Get the path to the folder where the executable is.
             AppFolder = Path.GetDirectoryName(
-                Assembly.GetExecutingAssembly().Location
+                System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
             );
 
             Directory.SetCurrentDirectory(AppFolder);
