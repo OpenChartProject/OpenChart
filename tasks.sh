@@ -96,14 +96,15 @@ function fnPublish() {
     Builds OpenChart bundled as a single executable.
     '
     local out_dir=$PUBLISH_DIR/$PLATFORM-x64
+    local lib_dir=$out_dir/lib
 
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM-x64 -c Release OpenChart
     fnCopyAssets $out_dir
-    mkdir $out_dir/lib
-    fnCopyLibs $out_dir/lib
+    mkdir $lib_dir
+    fnCopyLibs $lib_dir
 }
 
 function fnRun() {
@@ -125,6 +126,7 @@ function fnTest() {
     : '
     Runs the test suite.
     '
+    echo "-> Running test suite"
     dotnet test
 }
 
