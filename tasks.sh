@@ -95,7 +95,7 @@ function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
     '
-    local out_dir=$PUBLISH_DIR/$PLATFORM
+    local out_dir=$PUBLISH_DIR/$PLATFORM-x64
 
     echo "-> Publishing OpenChart to $out_dir/"
 

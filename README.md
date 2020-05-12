@@ -44,18 +44,11 @@ Alternatively, if `pacman` is installed:
 pacman -S mingw-w64-x86_64-gtk3
 ```
 
-### Makefile
+### Tasks
 
-- `make`: builds and runs OpenChart.
-- `make build`: compiles OpenChart and copies dependencies to the output folder.
-- `make run`: starts OpenChart.
-- `make test`: runs the test suite.
-- `make clean`: cleans `bin/` folders.
-- `make cleanall`: cleans both `bin/` and `obj/` folders. Run `dotnet restore` to redownload dependencies.
-- `make publish`: publishes the project for Linux, macOS, and Windows into `dist/`.
-- `make publish-linux`: publishes the project for Linux x64 into `dist/`.
-- `make publish-osx`: publishes the project for macOS x64 into `dist/`.
-- `make publish-win`: publishes the project for Windows x64 into `dist/`.
+There is an included `tasks.sh` script for automating a lot of the development tasks, such as building and running the test suite.
+
+Run `./tasks.sh --help` for usage info.
 
 # License
 
