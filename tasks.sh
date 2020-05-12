@@ -3,37 +3,6 @@
 set -e
 
 : '
-    ~~~~~~~~~~~~~~~~
-    |  OS Helpers  |
-    ~~~~~~~~~~~~~~~~
-'
-
-function isLinux() {
-    : '
-    Returns true if this is running on Linux.
-    '
-    [[ $DETECTED_OS == "Linux" ]]
-}
-
-function isMacOS() {
-    : '
-    Returns true if this is running on MacOS.
-    '
-    [[ $DETECTED_OS == "Darwin" ]]
-}
-
-function isWindows() {
-    : '
-    Returns true if this is running on Windows.
-    '
-    [[ $DETECTED_OS == "Windows_NT" ]]
-}
-
-function isSupportedOS() {
-    isLinux || isMacOS || isWindows
-}
-
-: '
     ~~~~~~~~~~~~~~~
     |  Functions  |
     ~~~~~~~~~~~~~~~
@@ -95,13 +64,13 @@ function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
     '
-    local out_dir=$PUBLISH_DIR/$PLATFORM-x64
+    local out_dir=$PUBLISH_DIR/$PLATFORM
     local lib_dir=$out_dir/lib
 
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
-    dotnet publish -o $out_dir -r $PLATFORM-x64 -c Release OpenChart
+    dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
     fnCopyAssets $out_dir
     mkdir $lib_dir
     fnCopyLibs $lib_dir
@@ -154,6 +123,37 @@ function fnUsage() {
 }
 
 : '
+    ~~~~~~~~~~~~~~~~
+    |  OS Helpers  |
+    ~~~~~~~~~~~~~~~~
+'
+
+function isLinux() {
+    : '
+    Returns true if this is running on Linux.
+    '
+    [[ $DETECTED_OS == "Linux" ]]
+}
+
+function isMacOS() {
+    : '
+    Returns true if this is running on MacOS.
+    '
+    [[ $DETECTED_OS == "Darwin" ]]
+}
+
+function isWindows() {
+    : '
+    Returns true if this is running on Windows.
+    '
+    [[ $DETECTED_OS == "Windows_NT" ]]
+}
+
+function isSupportedOS() {
+    isLinux || isMacOS || isWindows
+}
+
+: '
     ~~~~~~~~~~~~~~~
     |  Variables  |
     ~~~~~~~~~~~~~~~
@@ -173,11 +173,11 @@ if [[ -z $DETECTED_OS ]]; then
 fi
 
 if isLinux; then
-    PLATFORM=linux
+    PLATFORM=linux-x64
 elif isMacOS; then
-    PLATFORM=osx
+    PLATFORM=osx-x64
 elif isWindows; then
-    PLATFORM=win
+    PLATFORM=win-x64
 fi
 
 : '
