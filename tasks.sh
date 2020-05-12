@@ -215,7 +215,6 @@ cd ${0%/*}
 
 if [[ $# == 0 ]]; then
     fnBuild $OUTPUT_DIR
-    fnCopyAssets $OUTPUT_DIR
     fnRun
 else
     if [[ $1 == "build" ]]; then

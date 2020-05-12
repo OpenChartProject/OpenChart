@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "build",
-            "command": "make",
+            "command": "./tasks.sh",
             "type": "process",
             "args": [
                 "build"
@@ -12,7 +12,7 @@
         },
         {
             "label": "publish",
-            "command": "make",
+            "command": "./tasks.sh",
             "type": "process",
             "args": [
                 "publish"
