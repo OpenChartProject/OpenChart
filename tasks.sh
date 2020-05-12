@@ -10,11 +10,16 @@ set -e
 
 function fnBuild() {
     : '
-    Builds OpenChart.
+    Builds OpenChart in debug mode.
     * Arg 1: The build output path.
     '
     echo "-> Building OpenChart to $1/"
+
 	dotnet build -o $1 $PROJECT_FILE
+    fnCopyAssets $1
+    mkdir -p $1/lib
+    fnCopyLibs $1/lib
+    fnCopyScripts $1
 }
 
 function fnClean() {
@@ -60,20 +65,36 @@ function fnCopyLibs() {
     fi
 }
 
+function fnCopyScripts() {
+    : '
+    Copies scripts to the output directory.
+    * Arg 1: The copy destination path.
+    '
+    echo "-> Copying scripts to $1/"
+
+    if isLinux; then
+		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+    elif isMacOS; then
+		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+    elif isWindows; then
+		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+    fi
+}
+
 function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
     '
     local out_dir=$PUBLISH_DIR/$PLATFORM
-    local lib_dir=$out_dir/lib
 
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
     fnCopyAssets $out_dir
-    mkdir $lib_dir
-    fnCopyLibs $lib_dir
+    mkdir -p $out_dir/lib
+    fnCopyLibs $out_dir/lib
+    fnCopyScripts $out_dir
 }
 
 function fnRun() {
@@ -82,12 +103,10 @@ function fnRun() {
     '
     echo "-> Starting OpenChart"
 
-    if isLinux; then
-        $OUTPUT_DIR/OpenChart
-    elif isMacOS; then
-        dotnet $OUTPUT_DIR/OpenChart.dll
+    if isLinux || isMacOS; then
+        $OUTPUT_DIR/launch.sh
     elif isWindows; then
-        $OUTPUT_DIR/OpenChart.exe
+        $OUTPUT_DIR/launch.bat
     fi
 }
 
@@ -163,6 +182,7 @@ PROJECT_DIR=OpenChart
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
 ASSETS_DIR=$PROJECT_DIR/assets
 LIB_DIR=$PROJECT_DIR/lib
+SCRIPTS_DIR=$PROJECT_DIR/scripts
 OUTPUT_DIR=bin
 PUBLISH_DIR=dist
 ORIGINAL_ASSETS_DIR=__original__
