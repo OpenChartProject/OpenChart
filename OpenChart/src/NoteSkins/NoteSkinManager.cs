@@ -1,4 +1,5 @@
 using OpenChart.UI.Assets;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -50,12 +51,12 @@ namespace OpenChart.NoteSkins
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Exception while trying to load noteskin {name}: {e}");
+                    Log.Error(e, $"Exception while trying to load noteskin '{name}'.");
                     continue;
                 }
 
                 noteSkins.Add(ns);
-                Console.WriteLine($"Loaded noteskin '{ns.Name}'.");
+                Log.Information($"Loaded noteskin '{ns.Name}' ({ns.KeyModes.Count} key skin(s) found).");
             }
         }
 
@@ -79,10 +80,7 @@ namespace OpenChart.NoteSkins
                 var match = reNoteSkinKeyModeDir.Match(Path.GetFileName(dir));
 
                 if (!match.Success)
-                {
-                    Console.WriteLine($"Skipping directory '{dir}'.");
                     continue;
-                }
 
                 var keyCount = int.Parse(match.Groups[1].Value);
                 loadKeyModeSkin(noteSkin, keyCount, dir);
