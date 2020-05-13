@@ -1,7 +1,7 @@
 @ECHO OFF
 
 SETLOCAL
-SET "PATH=%PATH%;lib;lib\gtk\bin"
+SET "PATH=%PATH%;lib;lib\gtk"
 
 cd /D "%~dp0"
 

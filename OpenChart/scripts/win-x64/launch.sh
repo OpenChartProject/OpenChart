@@ -2,5 +2,5 @@
 
 cd ${0%/*}
 
-export PATH=$PATH:lib:lib/gtk/bin
+export PATH=$PATH:lib:lib/gtk
 ./OpenChart.exe
