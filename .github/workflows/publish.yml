@@ -92,7 +92,10 @@ jobs:
           name: build
 
       - name: Publish
-        run: bash -c './tasks.sh publish'
+        run: bash -c 'GtkSkipInstall=True ./tasks.sh publish'
+
+      - name: Bundle Gtk
+        run: bash -c 'wget https://github.com/GtkSharp/Dependencies/raw/master/gtk-3.24.zip && unzip gtk-3.24.zip -d dist/win-x64/lib/gtk'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
