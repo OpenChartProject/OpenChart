@@ -92,10 +92,20 @@ jobs:
           name: build
 
       - name: Publish
-        run: bash -c 'GtkSkipInstall=True ./tasks.sh publish'
+        run: GtkSkipInstall=True ./tasks.sh publish
+        shell: bash
 
-      - name: Bundle Gtk
-        run: bash -c 'wget https://github.com/GtkSharp/Dependencies/raw/master/gtk-3.24.zip && unzip gtk-3.24.zip -d dist/win-x64/lib/gtk'
+      - name: Download Gtk
+        run: Invoke-WebRequest https://github.com/GtkSharp/Dependencies/raw/master/gtk-3.24.zip -OutFile gtk-3.24.zip
+        shell: pwsh
+
+      - name: Extract Gtk
+        run: Expand-Archive .\gtk-3.24.zip dist\win-x64\lib\gtk\
+        shell: pwsh
+
+      - name: Clean Gtk
+        run: Remove-Item -Recurse dist\win-x64\lib\gtk\share, dist\win-x64\lib\gtk\ssl
+        shell: pwsh
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
