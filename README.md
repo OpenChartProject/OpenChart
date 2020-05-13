@@ -21,41 +21,36 @@ We plan to add support for the following games:
 
 # Building OpenChart 🔨
 
-OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [Gtk 3.24](https://www.gtk.org/).
 
-[GTK v3.x](https://www.gtk.org/) must be installed to build and run the project. This really should come already bundled with the project (like how `libbass` is). If you would like to add these dependencies it would be greatly appreciated!
+The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
 
-### GTK for Ubuntu/Debian
-```
+### Build Script
+
+There is an included `tasks.sh` script for automating a lot of the development tasks, such as building and running the test suite.
+
+Run `./tasks.sh --help` for usage info.
+
+## Windows
+In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
+
+Windows users don't need to install Gtk. The repo includes the Gtk binaries for Windows.
+
+## Linux
+Linux users will need to install Gtk before the app can be run.
+
+**Ubuntu/Debian**
+
+```bash
 sudo apt install libgtk-3-0
 ```
 
-### GTK for macOS
-```
+## MacOS
+Mac users will need to install Gtk before the app can be run.
+
+```bash
 brew install gtk+3
 ```
-
-### GTK for Windows
-Follow the installation directions [here](https://www.gtk.org/docs/installations/windows/).
-
-Alternatively, if `pacman` is installed:
-
-```
-pacman -S mingw-w64-x86_64-gtk3
-```
-
-### Makefile
-
-- `make`: builds and runs OpenChart.
-- `make build`: compiles OpenChart and copies dependencies to the output folder.
-- `make run`: starts OpenChart.
-- `make test`: runs the test suite.
-- `make clean`: cleans `bin/` folders.
-- `make cleanall`: cleans both `bin/` and `obj/` folders. Run `dotnet restore` to redownload dependencies.
-- `make publish`: publishes the project for Linux, macOS, and Windows into `dist/`.
-- `make publish-linux`: publishes the project for Linux x64 into `dist/`.
-- `make publish-osx`: publishes the project for macOS x64 into `dist/`.
-- `make publish-win`: publishes the project for Windows x64 into `dist/`.
 
 # License
 

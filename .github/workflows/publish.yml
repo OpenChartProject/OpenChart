@@ -16,7 +16,7 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Build
-        run: make build
+        run: ./tasks.sh build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v1
@@ -41,7 +41,7 @@ jobs:
           name: build
 
       - name: Publish
-        run: make publish-linux
+        run: ./tasks.sh publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
@@ -66,7 +66,7 @@ jobs:
           name: build
 
       - name: Publish
-        run: make publish-osx
+        run: ./tasks.sh publish
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
@@ -91,7 +91,7 @@ jobs:
           name: build
 
       - name: Publish
-        run: make publish-win
+        run: bash -c './tasks.sh publish'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
