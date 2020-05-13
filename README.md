@@ -23,7 +23,7 @@ We plan to add support for the following games:
 
 OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
 
-[GTK v3.x](https://www.gtk.org/) must be installed to build and run the project. This really should come already bundled with the project (like how `libbass` is). If you would like to add these dependencies it would be greatly appreciated!
+[GTK v3.24.x](https://www.gtk.org/) must be installed to start OpenChart. Windows users don't need to do anything here, as GTK binaries for Windows come bundled in the repo. Non-Windows users can install GTK via the terminal:
 
 ### GTK for Ubuntu/Debian
 ```
@@ -33,15 +33,6 @@ sudo apt install libgtk-3-0
 ### GTK for macOS
 ```
 brew install gtk+3
-```
-
-### GTK for Windows
-Follow the installation directions [here](https://www.gtk.org/docs/installations/windows/).
-
-Alternatively, if `pacman` is installed:
-
-```
-pacman -S mingw-w64-x86_64-gtk3
 ```
 
 ### Tasks
