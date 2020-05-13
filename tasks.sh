@@ -79,11 +79,11 @@ function fnCopyScripts() {
     echo "-> Copying scripts to $1/"
 
     if isLinux; then
-		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
     elif isMacOS; then
-		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
     elif isWindows; then
-		cp -r --preserve $SCRIPTS_DIR/$PLATFORM/* $1
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
     fi
 }
 
