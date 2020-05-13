@@ -21,9 +21,11 @@ We plan to add support for the following games:
 
 # Building OpenChart 🔨
 
-OpenChart uses the [.NET Core v3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1).
+OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [GTK 3.24](https://www.gtk.org/).
 
-[GTK v3.24.x](https://www.gtk.org/) must be installed to start OpenChart. Windows users don't need to do anything here, as GTK binaries for Windows come bundled in the repo. Non-Windows users can install GTK via the terminal:
+Windows users don't need to download GTK. The repo includes the GTK binaries for Windows. Non-Windows users can easily install GTK via terminal. (See below)
+
+The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
 
 ### GTK for Ubuntu/Debian
 ```
