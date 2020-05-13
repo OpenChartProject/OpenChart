@@ -19,17 +19,17 @@ We plan to add support for the following games:
 
 - **Using VSCode on Linux?** [Please read this.](docs/VSCodeLinux.md)
 
-## Build Script
-
-There is an included `tasks.sh` script for automating a lot of the development tasks, such as building and running the test suite.
-
-Run `./tasks.sh --help` for usage info.
-
 # Building OpenChart 🔨
 
 OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [Gtk 3.24](https://www.gtk.org/).
 
 The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
+
+### Build Script
+
+There is an included `tasks.sh` script for automating a lot of the development tasks, such as building and running the test suite.
+
+Run `./tasks.sh --help` for usage info.
 
 ## Windows
 In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
