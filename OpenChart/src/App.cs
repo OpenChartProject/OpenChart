@@ -3,6 +3,7 @@ using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
 using OpenChart.UI.Windows;
+using Serilog;
 using System;
 using System.IO;
 
@@ -45,20 +46,43 @@ namespace OpenChart
 
             Directory.SetCurrentDirectory(AppFolder);
 
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.With(new ShortLevelEnricher())
+                .MinimumLevel.Debug()
+                .WriteTo.Console(
+                    outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
+                )
+                .WriteTo.File(
+                    "logs/OpenChart.log",
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] {ShortLevel}   {Message:lj}{NewLine}{Exception}"
+                )
+                .CreateLogger();
+
+            Log.Information("------------------------");
+            Log.Information("Initializing...");
+            Log.Debug($"Set current directory to {AppFolder}");
+
             // Initialize libbass
             if (!Bass.Init())
             {
-                Console.WriteLine("Failed to initialize libbass");
-                App.Quit();
+                Log.Fatal("Failed to initialize libbass.");
+                Environment.Exit(1);
             }
 
+            Log.Information("libbass init OK.");
+
             Gtk.Application.Init();
+            Log.Information("Gtk init OK.");
 
             Formats = new FormatManager();
             Formats.AddFormat(new OpenChartFormatHandler());
 
             NoteSkins = new NoteSkinManager();
+
+            Log.Information("Finding noteskins...");
             NoteSkins.LoadAll();
+
+            Log.Information("OpenChart init OK.");
         }
 
         /// <summary>
@@ -66,6 +90,7 @@ namespace OpenChart
         /// </summary>
         public static void Run()
         {
+            Log.Information("Displaying main window.");
             new MainWindow();
             Gtk.Application.Run();
         }
@@ -75,6 +100,7 @@ namespace OpenChart
         /// </summary>
         public static void Quit()
         {
+            Log.Information("Quitting.");
             Gtk.Application.Quit();
         }
     }
