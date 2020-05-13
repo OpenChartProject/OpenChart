@@ -19,7 +19,6 @@ namespace OpenChart
             {
                 Log.Fatal(e, "Uncaught exception.");
             }
-
         }
     }
 }
