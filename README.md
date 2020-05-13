@@ -19,29 +19,38 @@ We plan to add support for the following games:
 
 - **Using VSCode on Linux?** [Please read this.](docs/VSCodeLinux.md)
 
-# Building OpenChart 🔨
-
-OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [GTK 3.24](https://www.gtk.org/).
-
-Windows users don't need to download GTK. The repo includes the GTK binaries for Windows. Non-Windows users can easily install GTK via terminal. (See below)
-
-The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
-
-### GTK for Ubuntu/Debian
-```
-sudo apt install libgtk-3-0
-```
-
-### GTK for macOS
-```
-brew install gtk+3
-```
-
-### Tasks
+## Build Script
 
 There is an included `tasks.sh` script for automating a lot of the development tasks, such as building and running the test suite.
 
 Run `./tasks.sh --help` for usage info.
+
+# Building OpenChart 🔨
+
+OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [Gtk 3.24](https://www.gtk.org/).
+
+The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
+
+## Windows
+In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
+
+Windows users don't need to install Gtk. The repo includes the Gtk binaries for Windows.
+
+## Linux
+Linux users will need to install Gtk before the app can be run.
+
+**Ubuntu/Debian**
+
+```bash
+sudo apt install libgtk-3-0
+```
+
+## MacOS
+Mac users will need to install Gtk before the app can be run.
+
+```bash
+brew install gtk+3
+```
 
 # License
 
