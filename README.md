@@ -34,7 +34,11 @@ Run `./tasks.sh --help` for usage info.
 ## Windows
 In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
 
-Windows users don't need to install Gtk. The repo includes the Gtk binaries for Windows.
+The official Windows builds come bundled with Gtk already. They are not included for development. If you want to build on Windows, do the following:
+
+- [Download Gtk 3.24](https://github.com/GtkSharp/Dependencies/raw/master/gtk-3.24.zip)
+- Extract the zip somewhere (e.g. `C:\Gtk-3.24`)
+- Add the extracted folder to your PATH
 
 ## Linux
 Linux users will need to install Gtk before the app can be run.
