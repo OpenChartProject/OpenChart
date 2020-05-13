@@ -6,6 +6,7 @@ using OpenChart.UI.Windows;
 using Serilog;
 using System;
 using System.IO;
+using System.Runtime;
 
 namespace OpenChart
 {
@@ -37,7 +38,7 @@ namespace OpenChart
         /// <summary>
         /// Initializes the app.
         /// </summary>
-        public static void Init()
+        public static bool Init()
         {
             // Get the path to the folder where the executable is.
             AppFolder = Path.GetDirectoryName(
@@ -62,16 +63,40 @@ namespace OpenChart
             Log.Information("Initializing...");
             Log.Debug($"Set current directory to {AppFolder}");
 
-            // Initialize libbass
-            if (!Bass.Init())
+            try
             {
-                Log.Fatal("Failed to initialize libbass.");
-                Environment.Exit(1);
+                // Initialize libbass
+                if (!Bass.Init())
+                {
+                    var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
+
+                    Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
+                    return false;
+                }
+            }
+            catch (DllNotFoundException e)
+            {
+                Log.Fatal(e, "Failed to initialize libbass (DLL not found).");
+                return false;
             }
 
             Log.Information("libbass init OK.");
 
-            Gtk.Application.Init();
+            try
+            {
+                Gtk.Application.Init();
+            }
+            catch (TypeInitializationException e)
+            {
+                var msg = "Failed to initialize Gtk";
+
+                if (e.InnerException is DllNotFoundException)
+                    msg += " (DLL not found)";
+
+                Log.Fatal(e, msg);
+                return false;
+            }
+
             Log.Information("Gtk init OK.");
 
             Formats = new FormatManager();
@@ -83,6 +108,8 @@ namespace OpenChart
             NoteSkins.LoadAll();
 
             Log.Information("OpenChart init OK.");
+
+            return true;
         }
 
         /// <summary>

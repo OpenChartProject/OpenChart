@@ -12,7 +12,12 @@ namespace OpenChart
         {
             try
             {
-                App.Init();
+                if (!App.Init())
+                {
+                    Log.Fatal("Initialization failed, quitting...");
+                    Environment.Exit(1);
+                }
+
                 App.Run();
             }
             catch (Exception e)
