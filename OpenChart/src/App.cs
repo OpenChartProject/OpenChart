@@ -48,13 +48,14 @@ namespace OpenChart
             Directory.SetCurrentDirectory(AppFolder);
 
             Log.Logger = new LoggerConfiguration()
+                .Enrich.With(new ShortLevelEnricher())
                 .MinimumLevel.Debug()
                 .WriteTo.Console(
                     outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
                 )
                 .WriteTo.File(
                     "logs/OpenChart.log",
-                    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] {Message:lj}{NewLine}{Exception}"
+                    outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] {ShortLevel}   {Message:lj}{NewLine}{Exception}"
                 )
                 .CreateLogger();
 
