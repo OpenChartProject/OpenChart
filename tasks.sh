@@ -45,7 +45,13 @@ function fnCopyAssets() {
 		cp -r $ASSETS_DIR/* $1
     fi
 
-    find $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
+    local find_path=find
+
+    if [[ $TERM == "cygwin" ]]; then
+        find_path=/bin/$find_path
+    fi
+
+    $find_path $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
 		| xargs rm -r
 }
 
@@ -106,7 +112,11 @@ function fnRun() {
     if isLinux || isMacOS; then
         $OUTPUT_DIR/launch.sh
     elif isWindows; then
-        $OUTPUT_DIR/launch.bat
+        if [[ $TERM == "cygwin" ]]; then
+            $OUTPUT_DIR/launch.sh
+        else
+            $OUTPUT_DIR/launch.cmd
+        fi
     fi
 }
 
