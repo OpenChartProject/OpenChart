@@ -2,24 +2,22 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifiers>win-x64;osx-x64;linux-x64</RuntimeIdentifiers>
   </PropertyGroup>
-
-  <!-- Publish configuration -->
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugType>None</DebugType>
-    <PublishSingleFile>false</PublishSingleFile>
+    <PublishSingleFile>true</PublishSingleFile>
     <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
-
   <ItemGroup>
-    <None Remove="**\*.glade" />
+    <None Remove="**\*.glade"/>
     <EmbeddedResource Include="**\*.glade">
       <LogicalName>%(Filename)%(Extension)</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="GtkSharp" Version="3.22.25.*" />
-    <PackageReference Include="ManagedBass" Version="2.0.4" />
+    <PackageReference Include="GtkSharp" Version="3.22.25.*"/>
+    <PackageReference Include="ManagedBass" Version="2.0.4"/>
   </ItemGroup>
 </Project>
