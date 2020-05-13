@@ -1,3 +1,6 @@
+using Serilog;
+using System;
+
 namespace OpenChart
 {
     /// <summary>
@@ -7,8 +10,16 @@ namespace OpenChart
     {
         public static void Main()
         {
-            App.Init();
-            App.Run();
+            try
+            {
+                App.Init();
+                App.Run();
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e, "Uncaught exception.");
+            }
+
         }
     }
 }
