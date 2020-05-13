@@ -18,7 +18,7 @@ namespace OpenChart.NoteSkins
         /// <summary>
         /// A list of skins for various keymodes. Noteskins support separate skins for 4k, 7k, etc.
         /// </summary>
-        List<KeyModeSkin> keyModes;
+        public List<KeyModeSkin> KeyModes;
 
         /// <summary>
         /// Creates a new noteskin instance.
@@ -27,7 +27,7 @@ namespace OpenChart.NoteSkins
         public NoteSkin(string name)
         {
             Name = name;
-            keyModes = new List<KeyModeSkin>();
+            KeyModes = new List<KeyModeSkin>();
         }
 
         /// <summary>
@@ -37,10 +37,10 @@ namespace OpenChart.NoteSkins
         public void AddKeyModeSkin(KeyModeSkin keyMode)
         {
             // Check if there is already a skin loaded with the same key count
-            if (keyModes.Exists(km => km.KeyCount.Value == keyMode.KeyCount.Value))
+            if (KeyModes.Exists(km => km.KeyCount.Value == keyMode.KeyCount.Value))
                 throw new ArgumentException($"Cannot add duplicate keymode (KeyCount={keyMode.KeyCount}) to noteskin '{Name}'.");
 
-            keyModes.Add(keyMode);
+            KeyModes.Add(keyMode);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace OpenChart.NoteSkins
         /// <returns>The keymode's noteskin, or null if none is set.</returns>
         public KeyModeSkin GetKeyModeSkin(KeyCount keyCount)
         {
-            return keyModes.Find(km => km.KeyCount.Value == keyCount.Value);
+            return KeyModes.Find(km => km.KeyCount.Value == keyCount.Value);
         }
     }
 }
