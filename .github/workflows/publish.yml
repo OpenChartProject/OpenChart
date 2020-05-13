@@ -91,7 +91,7 @@ jobs:
           name: build
 
       - name: Publish
-        run: ./tasks.sh publish
+        run: bash -c './tasks.sh publish'
 
       - name: Upload artifact
         uses: actions/upload-artifact@v1
