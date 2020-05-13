@@ -5,8 +5,9 @@ using OpenChart.NoteSkins;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;
+using System.Globalization;
 using System.IO;
-using System.Runtime;
+using System.Threading;
 
 namespace OpenChart
 {
@@ -40,6 +41,14 @@ namespace OpenChart
         /// </summary>
         public static bool Init()
         {
+            var culture = new CultureInfo("en-US");
+
+            // Use en-US locale throughout the app. We still retain the user's locale with the
+            // `DefaultThreadCurrentUICulture` property. This override ensures that things like
+            // file formats consistently use the same formatting.
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            Thread.CurrentThread.CurrentCulture = culture;
+
             // Get the path to the folder where the executable is.
             AppFolder = Path.GetDirectoryName(
                 System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName

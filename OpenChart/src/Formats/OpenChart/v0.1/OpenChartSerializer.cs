@@ -1,6 +1,5 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
-using System;
 using System.Text;
 using System.Text.Json;
 
@@ -11,18 +10,21 @@ namespace OpenChart.Formats.OpenChart.Version0_1
     /// </summary>
     public class OpenChartSerializer : IFormatSerializer<ProjectData>
     {
-        public static JsonSerializerOptions jsonOptions;
+        /// <summary>
+        /// The options used by the serializer.
+        /// </summary>
+        public static JsonSerializerOptions JsonOptions;
 
         static OpenChartSerializer()
         {
-            jsonOptions = new JsonSerializerOptions();
+            JsonOptions = new JsonSerializerOptions();
 
-            jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            jsonOptions.Converters.Add(new BeatConverter());
-            jsonOptions.Converters.Add(new BeatDurationConverter());
-            jsonOptions.Converters.Add(new KeyIndexConverter());
-            jsonOptions.Converters.Add(new KeyCountConverter());
-            jsonOptions.Converters.Add(new ChartObjectConverter());
+            JsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            JsonOptions.Converters.Add(new BeatConverter());
+            JsonOptions.Converters.Add(new BeatDurationConverter());
+            JsonOptions.Converters.Add(new KeyIndexConverter());
+            JsonOptions.Converters.Add(new KeyCountConverter());
+            JsonOptions.Converters.Add(new ChartObjectConverter());
         }
 
         /// <summary>
@@ -31,7 +33,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), jsonOptions);
+            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), JsonOptions);
         }
 
         /// <summary>
@@ -40,7 +42,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="fd">The FileData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
-            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, jsonOptions));
+            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, JsonOptions));
         }
     }
 }
