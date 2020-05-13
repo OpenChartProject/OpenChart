@@ -70,7 +70,7 @@ namespace OpenChart
                 {
                     var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
 
-                    Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
+                    Log.Fatal($"Failed to initialize libbass. ({Bass.LastError} error)");
                     return false;
                 }
             }
