@@ -5,7 +5,7 @@
 #include "inno-download-plugin\idp.iss"
 
 #define AppName "OpenChart"
-#define AppVersion "0.1.0"
+#define AppVersion "$VERSION"
 #define AppPublisher "OpenChartProject"
 #define AppURL "https://openchart.io"
 #define AppExeName "OpenChart.exe"

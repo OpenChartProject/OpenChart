@@ -116,21 +116,22 @@ function fnVersion() {
     case "$1" in
         "")
         echo $VERSION
+        exit
         ;;
 
         major)
-        echo "$((VERSION_MAJOR + 1)).0.0" > VERSION
-        cat VERSION
+        VERSION_MAJOR=$((VERSION_MAJOR + 1))
+        VERSION_MINOR=0
+        VERSION_PATCH=0
         ;;
 
         minor)
-        echo "$VERSION_MAJOR.$((VERSION_MINOR + 1)).0" > VERSION
-        cat VERSION
+        VERSION_MINOR=$((VERSION_MINOR + 1))
+        VERSION_PATCH=0
         ;;
 
         patch)
-        echo "$VERSION_MAJOR.$VERSION_MINOR.$((VERSION_PATCH + 1))" > VERSION
-        cat VERSION
+        VERSION_PATCH=$((VERSION_PATCH + 1))
         ;;
 
         *)
@@ -145,6 +146,14 @@ function fnVersion() {
         echo
         ;;
     esac
+
+    # Write to the VERSION file.
+    export VERSION=$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
+    echo $VERSION > VERSION
+
+    # Update the version across the project files.
+    envsubst < OpenChart/OpenChart.csproj.template > OpenChart/OpenChart.csproj
+    envsubst < OpenChart/installer/win-x64/setup.isl.template  > OpenChart/installer/win-x64/setup.isl
 }
 
 function fnUsage() {
@@ -217,7 +226,7 @@ PROJECT_DIR=OpenChart
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
 PUBLISH_DIR=dist
 SCRIPTS_DIR=$PROJECT_DIR/scripts
-VERSION=`head VERSION -n 1`
+VERSION=`cat VERSION`
 VERSION_ARRAY=(`echo $VERSION | tr '.' ' '`)
 VERSION_MAJOR=${VERSION_ARRAY[0]}
 VERSION_MINOR=${VERSION_ARRAY[1]}
