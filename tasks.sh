@@ -36,16 +36,21 @@ function fnCopyAssets() {
     echo "-> Copying assets to $1/"
 
     if isLinux; then
-		cp -r $ASSETS_DIR/* $1
+        cp -r $ASSETS_DIR/* $1
     elif isMacOS; then
-		cp -r $ASSETS_DIR/* $1
+        cp -r $ASSETS_DIR/* $1
     elif isWindows; then
-		cp -r $ASSETS_DIR/* $1
+        cp -r $ASSETS_DIR/* $1
     fi
 
-    # MinGW has a name conflict with `find` so we need to explicitly use the unix executable.
-    /bin/find $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
-		| xargs rm -r
+    local find_path=find
+
+    if [[ $TERM == "cygwin" ]]; then
+        find_path=/bin/$find_path
+    fi
+
+    $find_path $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
+        | xargs rm -r
 }
 
 function fnCopyLibs() {
@@ -56,11 +61,11 @@ function fnCopyLibs() {
     echo "-> Copying libs to $1/"
 
     if isLinux; then
-		cp -r $LIB_DIR/$PLATFORM/* $1
+        cp -r $LIB_DIR/$PLATFORM/* $1
     elif isMacOS; then
-		cp -r $LIB_DIR/$PLATFORM/* $1
+        cp -r $LIB_DIR/$PLATFORM/* $1
     elif isWindows; then
-		cp -r $LIB_DIR/$PLATFORM/* $1
+        cp -r $LIB_DIR/$PLATFORM/* $1
     fi
 }
 
