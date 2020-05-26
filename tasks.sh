@@ -108,6 +108,45 @@ function fnTest() {
     dotnet test
 }
 
+function fnVersion() {
+    : '
+    Prints the current version, or modifies the version if an arg is given.
+    * Arg 1: (optional) Can be <major|minor|patch>
+    '
+    case "$1" in
+        "")
+        echo $VERSION
+        ;;
+
+        major)
+        echo "$((VERSION_MAJOR + 1)).0.0" > VERSION
+        cat VERSION
+        ;;
+
+        minor)
+        echo "$VERSION_MAJOR.$((VERSION_MINOR + 1)).0" > VERSION
+        cat VERSION
+        ;;
+
+        patch)
+        echo "$VERSION_MAJOR.$VERSION_MINOR.$((VERSION_PATCH + 1))" > VERSION
+        cat VERSION
+        ;;
+
+        *)
+        echo "Usage: $0 version [command]"
+        echo
+        echo "COMMANDS"
+        echo "If no command is given, prints the current version."
+        echo
+        echo "  major   Increments the major version"
+        echo "  minor   Increments the minor version"
+        echo "  patch   Increments the patch version"
+        echo
+        ;;
+    esac
+}
+
 function fnUsage() {
     : '
     Prints the usage message and exits with code 1.
@@ -124,6 +163,7 @@ function fnUsage() {
     echo "  publish   Builds the project for release"
     echo "  run       Runs OpenChart from $OUTPUT_DIR/"
     echo "  test      Runs the test suite"
+    echo "  version   Prints the current version"
     echo
     echo "EXIT CODE"
     echo "Returns 0 if everything is OK."
@@ -168,15 +208,20 @@ function isSupportedOS() {
     ~~~~~~~~~~~~~~~
 '
 
+ASSETS_DIR=$PROJECT_DIR/assets
+DETECTED_OS=$OS
+LIB_DIR=$PROJECT_DIR/lib
+ORIGINAL_ASSETS_DIR=__original__
+OUTPUT_DIR=bin
 PROJECT_DIR=OpenChart
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
-ASSETS_DIR=$PROJECT_DIR/assets
-LIB_DIR=$PROJECT_DIR/lib
-SCRIPTS_DIR=$PROJECT_DIR/scripts
-OUTPUT_DIR=bin
 PUBLISH_DIR=dist
-ORIGINAL_ASSETS_DIR=__original__
-DETECTED_OS=$OS
+SCRIPTS_DIR=$PROJECT_DIR/scripts
+VERSION=`head VERSION -n 1`
+VERSION_ARRAY=(`echo $VERSION | tr '.' ' '`)
+VERSION_MAJOR=${VERSION_ARRAY[0]}
+VERSION_MINOR=${VERSION_ARRAY[1]}
+VERSION_PATCH=${VERSION_ARRAY[2]}
 
 if [[ -z $DETECTED_OS ]]; then
     DETECTED_OS=$(uname)
@@ -203,25 +248,43 @@ fi
 
 cd ${0%/*}
 
-if [[ $# == 0 ]]; then
+case "$1" in
+    "")
     fnBuild $OUTPUT_DIR
     fnRun
-else
-    if [[ $1 == "build" ]]; then
-        fnBuild $OUTPUT_DIR
-    elif [[ $1 == "clean" ]]; then
-        fnClean
-    elif [[ $1 == "publish" ]]; then
-        fnPublish
-    elif [[ $1 == "run" ]]; then
-        fnRun
-    elif [[ $1 == "test" ]]; then
-        fnTest
-    elif [[ $1 == "help" ]] || [[ $1 == "-h" ]] || [[ $1 == "--help" ]]; then
-        fnUsage
-    else
-        echo "ERROR: Unrecognized command."
-        echo
-        fnUsage
-    fi
-fi
+    ;;
+
+    build)
+    fnBuild $OUTPUT_DIR
+    ;;
+
+    clean)
+    fnClean
+    ;;
+
+    publish)
+    fnPublish
+    ;;
+
+    run)
+    fnRun
+    ;;
+
+    test)
+    fnTest
+    ;;
+
+    version)
+    fnVersion $2
+    ;;
+
+    help | "-h" | "--help")
+    fnUsage
+    ;;
+
+    *)
+    echo "ERROR: Unrecognized command: $1"
+    echo
+    fnUsage
+    ;;
+esac
