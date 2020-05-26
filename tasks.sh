@@ -15,7 +15,7 @@ function fnBuild() {
     '
     echo "-> Building OpenChart to $1/"
 
-	dotnet build -o $1 $PROJECT_FILE
+    dotnet build -o $1 $PROJECT_FILE
     fnCopyAssets $1
     fnCopyLibs $1
 }
@@ -25,7 +25,7 @@ function fnClean() {
     Removes all directories that are generated from building/publishing.
     '
     echo "-> Removing build files"
-	rm -rf $OUTPUT_DIR $PUBLISH_DIR OpenChart/bin/ OpenChart/obj/ OpenChart.Tests/bin/ OpenChart.Tests/obj/
+    rm -rf $OUTPUT_DIR $PUBLISH_DIR OpenChart/bin/ OpenChart/obj/ OpenChart.Tests/bin/ OpenChart.Tests/obj/
 }
 
 function fnCopyAssets() {
@@ -43,13 +43,8 @@ function fnCopyAssets() {
 		cp -r $ASSETS_DIR/* $1
     fi
 
-    local find_path=find
-
-    if [[ $TERM == "cygwin" ]]; then
-        find_path=/bin/$find_path
-    fi
-
-    $find_path $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
+    # MinGW has a name conflict with `find` so we need to explicitly use the unix executable.
+    /bin/find $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
 		| xargs rm -r
 }
 
@@ -149,7 +144,9 @@ function fnVersion() {
 
     # Write to the VERSION file.
     export VERSION=$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
+    
     echo $VERSION > VERSION
+    echo "Incremented version to $VERSION"
 
     # Update the version across the project files.
     envsubst < OpenChart/OpenChart.csproj.template > OpenChart/OpenChart.csproj
