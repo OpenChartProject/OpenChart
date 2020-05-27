@@ -41,8 +41,7 @@ function fnBuild() {
 
     dotnet build -o $1 $PROJECT_FILE
     fnCopyAssets $1
-    mkdir -p $1/lib
-    fnCopyLibs $1/lib
+    fnCopyLibs $1
     fnCopyMisc $1
 }
 
@@ -125,8 +124,7 @@ function fnPublish() {
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
     fnCopyAssets $out_dir
-    mkdir -p $out_dir/lib
-    fnCopyLibs $out_dir/lib
+    fnCopyLibs $out_dir
     fnCopyMisc $out_dir
 }
 
