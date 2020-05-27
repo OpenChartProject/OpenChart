@@ -11,7 +11,7 @@ namespace OpenChart.NoteSkins
     {
         /// <summary>
         /// The name of the noteskin. This is the skin's folder name.
-        /// <seealso cref="App.NoteSkinFolder"/>
+        /// <seealso cref="ApplicationData.NoteSkinFolder"/>
         /// </summary>
         public readonly string Name;
 

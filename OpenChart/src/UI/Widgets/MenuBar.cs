@@ -16,13 +16,13 @@ namespace OpenChart.UI.Widgets
                 subMenu = new Menu();
                 menu.Submenu = subMenu;
 
-                subMenu.Add(new MenuItem("New Project"));
-                subMenu.Add(new MenuItem("Open Project"));
+                addMenuItem(subMenu, "New Project", null);
+                addMenuItem(subMenu, "Open Project", null);
                 subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Save"));
-                subMenu.Add(new MenuItem("Save As..."));
+                addMenuItem(subMenu, "Save", null);
+                addMenuItem(subMenu, "Save As...", null);
                 subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Exit"));
+                addMenuItem(subMenu, "Exit", null);
             }
 
             {
@@ -32,12 +32,12 @@ namespace OpenChart.UI.Widgets
                 subMenu = new Menu();
                 menu.Submenu = subMenu;
 
-                subMenu.Add(new MenuItem("Undo"));
-                subMenu.Add(new MenuItem("Redo"));
+                addMenuItem(subMenu, "Undo", null);
+                addMenuItem(subMenu, "Redo", null);
                 subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Cut"));
-                subMenu.Add(new MenuItem("Copy"));
-                subMenu.Add(new MenuItem("Paste"));
+                addMenuItem(subMenu, "Cut", null);
+                addMenuItem(subMenu, "Copy", null);
+                addMenuItem(subMenu, "Paste", null);
             }
 
             {
@@ -47,9 +47,16 @@ namespace OpenChart.UI.Widgets
                 subMenu = new Menu();
                 menu.Submenu = subMenu;
 
-                subMenu.Add(new MenuItem("About"));
-                subMenu.Add(new MenuItem("Visit Website"));
+                addMenuItem(subMenu, "About", null);
+                addMenuItem(subMenu, "Visit Website", null);
             }
+        }
+
+        private void addMenuItem(Menu subMenu, string label, string actionName)
+        {
+            var item = new MenuItem(label);
+            item.ActionName = actionName;
+            subMenu.Add(item);
         }
     }
 }

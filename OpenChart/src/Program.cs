@@ -10,15 +10,26 @@ namespace OpenChart
     {
         public static void Main()
         {
+            Application gtkApp;
+
             try
             {
-                if (!App.Init())
-                {
-                    Log.Fatal("Initialization failed, quitting...");
-                    Environment.Exit(1);
-                }
+                gtkApp = new Application();
+            }
+            catch (TypeInitializationException e)
+            {
+                var msg = "Failed to initialize Gtk";
 
-                App.Run();
+                if (e.InnerException is DllNotFoundException)
+                    msg += " (DLL not found)";
+
+                Log.Fatal(e, msg);
+                Environment.Exit(1);
+            }
+
+            try
+            {
+                Gtk.Application.Run();
             }
             catch (Exception e)
             {

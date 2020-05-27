@@ -33,14 +33,14 @@ namespace OpenChart.NoteSkins
         }
 
         /// <summary>
-        /// Loads all noteskins found in the noteskins folder. <seealso cref="App.NoteSkinFolder" />
+        /// Loads all noteskins found in the noteskins folder. <seealso cref="ApplicationData.NoteSkinFolder" />
         /// </summary>
         public void LoadAll()
         {
-            if (!Directory.Exists(App.NoteSkinFolder))
-                throw new Exception($"The noteskins folder ('{App.NoteSkinFolder}') does not exist.");
+            if (!Directory.Exists(ApplicationData.NoteSkinFolder))
+                throw new Exception($"The noteskins folder ('{ApplicationData.NoteSkinFolder}') does not exist.");
 
-            foreach (var dir in Directory.GetDirectories(App.NoteSkinFolder))
+            foreach (var dir in Directory.GetDirectories(ApplicationData.NoteSkinFolder))
             {
                 var name = Path.GetFileName(dir);
                 NoteSkin ns;
@@ -63,11 +63,11 @@ namespace OpenChart.NoteSkins
         /// <summary>
         /// Attempts to load a noteskin with the given name.
         /// </summary>
-        /// <param name="skinName">The name of the folder for the noteskin. <seealso cref="App.NoteSkinFolder" /></param>
+        /// <param name="skinName">The name of the folder for the noteskin. <seealso cref="ApplicationData.NoteSkinFolder" /></param>
         /// <returns>The loaded noteskin.</returns>
         private NoteSkin loadNoteSkin(string skinName)
         {
-            var dirName = Path.Join(App.NoteSkinFolder, skinName);
+            var dirName = Path.Join(ApplicationData.NoteSkinFolder, skinName);
 
             if (!Directory.Exists(dirName))
                 throw new Exception($"Unable to find a noteskin with the name '{skinName}'.");
