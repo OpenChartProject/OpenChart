@@ -41,7 +41,9 @@ function fnBuild() {
 
     dotnet build -o $1 $PROJECT_FILE
     fnCopyAssets $1
-    fnCopyLibs $1
+    mkdir -p $1/lib
+    fnCopyLibs $1/lib
+    fnCopyScripts $1
 }
 
 function fnBundle() {
@@ -113,6 +115,22 @@ function fnCopyLibs() {
     fi
 }
 
+function fnCopyScripts() {
+    : '
+    Copies scripts to the output directory.
+    * Arg 1: The copy destination path.
+    '
+    echo "-> Copying scripts to $1/"
+
+    if isLinux; then
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
+    elif isMacOS; then
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
+    elif isWindows; then
+		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
+    fi
+}
+
 function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
@@ -126,7 +144,9 @@ function fnPublish() {
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
     fnCopyAssets $out_dir
-    fnCopyLibs $out_dir
+    mkdir -p $out_dir/lib
+    fnCopyLibs $out_dir/lib
+    fnCopyScripts $out_dir
 }
 
 function fnRun() {
