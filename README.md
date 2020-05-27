@@ -15,7 +15,7 @@ We plan to add support for the following games:
 - [Osu! (mania)](https://osu.ppy.sh/)
 
 # FAQ
-- **Looking for the latest build?** Check out the automated [publish workflow](https://github.com/OpenChartProject/OpenChart/actions?query=workflow%3Apublish).
+- **Looking for the latest build?** Check out the automated [publish workflow](https://github.com/OpenChartProject/OpenChart/actions?query=workflow%3Apublish). NOTE: You must be logged in to GitHub to download automated builds.
 
 - **Using VSCode on Linux?** [Please read this.](docs/VSCodeLinux.md)
 
