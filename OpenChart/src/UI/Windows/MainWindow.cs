@@ -16,8 +16,12 @@ namespace OpenChart.UI.Windows
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
-        public MainWindow() : base("OpenChart")
+        VBox container;
+        MenuBar menuBar;
+
+        public MainWindow() : base(WindowType.Toplevel)
         {
+            Title = "OpenChart";
             DeleteEvent += onDelete;
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
@@ -50,7 +54,14 @@ namespace OpenChart.UI.Windows
 
             chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
 
-            Add(noteField);
+            container = new VBox();
+
+            buildMenuBar();
+
+            container.PackStart(menuBar, false, false, 0);
+            container.Add(noteField);
+
+            Add(container);
 
             SetGeometryHints(
                 null,
@@ -69,6 +80,56 @@ namespace OpenChart.UI.Windows
         private void onDelete(object o, DeleteEventArgs e)
         {
             App.Quit();
+        }
+
+        private void buildMenuBar()
+        {
+            Menu subMenu;
+            MenuItem item;
+
+            menuBar = new MenuBar();
+
+            {
+                item = new MenuItem("_File");
+                menuBar.Add(item);
+
+                subMenu = new Menu();
+                item.Submenu = subMenu;
+
+                subMenu.Add(new MenuItem("New Project"));
+                subMenu.Add(new MenuItem("Open Project"));
+                subMenu.Add(new SeparatorMenuItem());
+                subMenu.Add(new MenuItem("Save"));
+                subMenu.Add(new MenuItem("Save As..."));
+                subMenu.Add(new SeparatorMenuItem());
+                subMenu.Add(new MenuItem("Exit"));
+            }
+
+            {
+                item = new MenuItem("_Edit");
+                menuBar.Add(item);
+
+                subMenu = new Menu();
+                item.Submenu = subMenu;
+
+                subMenu.Add(new MenuItem("Undo"));
+                subMenu.Add(new MenuItem("Redo"));
+                subMenu.Add(new SeparatorMenuItem());
+                subMenu.Add(new MenuItem("Cut"));
+                subMenu.Add(new MenuItem("Copy"));
+                subMenu.Add(new MenuItem("Paste"));
+            }
+
+            {
+                item = new MenuItem("_Help");
+                menuBar.Add(item);
+
+                subMenu = new Menu();
+                item.Submenu = subMenu;
+
+                subMenu.Add(new MenuItem("About"));
+                subMenu.Add(new MenuItem("Visit Website"));
+            }
         }
     }
 }
