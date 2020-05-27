@@ -39,6 +39,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[Dirs]
+Name: "{app}\logs"; Permissions: users-modify;
+
 [Files]
 Source: "win-x64\OpenChart.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "win-x64\*.dll"; DestDir: "{app}"; Flags: ignoreversion
