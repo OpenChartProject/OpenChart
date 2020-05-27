@@ -95,8 +95,12 @@ jobs:
         run: GtkSkipInstall=True ./tasks.sh publish
         shell: bash
 
+      - name: Bundle
+        run: ./tasks.sh bundle
+        shell: bash
+
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
           name: win-x64
-          path: dist/win-x64
+          path: bundle/Output/install-OpenChart.exe
