@@ -17,7 +17,6 @@ namespace OpenChart.UI.Windows
         const int MinimumWindowHeight = 240;
 
         VBox container;
-        MenuBar menuBar;
 
         public MainWindow() : base(WindowType.Toplevel)
         {
@@ -55,10 +54,7 @@ namespace OpenChart.UI.Windows
             chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
 
             container = new VBox();
-
-            buildMenuBar();
-
-            container.PackStart(menuBar, false, false, 0);
+            container.PackStart(new Widgets.MenuBar(), false, false, 0);
             container.Add(noteField);
 
             Add(container);
@@ -74,62 +70,13 @@ namespace OpenChart.UI.Windows
             );
 
             SetDefaultSize(InitialWindowWidth, InitialWindowHeight);
+            SetPosition(WindowPosition.Center);
             ShowAll();
         }
 
         private void onDelete(object o, DeleteEventArgs e)
         {
             App.Quit();
-        }
-
-        private void buildMenuBar()
-        {
-            Menu subMenu;
-            MenuItem item;
-
-            menuBar = new MenuBar();
-
-            {
-                item = new MenuItem("_File");
-                menuBar.Add(item);
-
-                subMenu = new Menu();
-                item.Submenu = subMenu;
-
-                subMenu.Add(new MenuItem("New Project"));
-                subMenu.Add(new MenuItem("Open Project"));
-                subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Save"));
-                subMenu.Add(new MenuItem("Save As..."));
-                subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Exit"));
-            }
-
-            {
-                item = new MenuItem("_Edit");
-                menuBar.Add(item);
-
-                subMenu = new Menu();
-                item.Submenu = subMenu;
-
-                subMenu.Add(new MenuItem("Undo"));
-                subMenu.Add(new MenuItem("Redo"));
-                subMenu.Add(new SeparatorMenuItem());
-                subMenu.Add(new MenuItem("Cut"));
-                subMenu.Add(new MenuItem("Copy"));
-                subMenu.Add(new MenuItem("Paste"));
-            }
-
-            {
-                item = new MenuItem("_Help");
-                menuBar.Add(item);
-
-                subMenu = new Menu();
-                item.Submenu = subMenu;
-
-                subMenu.Add(new MenuItem("About"));
-                subMenu.Add(new MenuItem("Visit Website"));
-            }
         }
     }
 }
