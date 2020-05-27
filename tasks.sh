@@ -8,6 +8,30 @@ set -e
     ~~~~~~~~~~~~~~~
 '
 
+function fnApplyVersion() {
+    : '
+    Updates the files in the project which reference the project version.
+    This function expects each file to have a corresponding .template file
+    which contains the $VERSION* vars to be substituted.
+    '
+    local files=(
+        OpenChart/OpenChart.csproj
+        OpenChart/installer/win-x64/setup.isl
+    )
+
+    export VERSION VERSION_MAJOR VERSION_MINOR VERSION_PATCH
+
+    # Update the version across the project files.
+    for f in "${files[@]}"; do
+        if [[ ! -e "$f.template" ]]; then
+            echo "WARNING: Template file is missing at: $f.template"
+        else
+            envsubst < $f.template > $f
+            echo "Updated $f.template  -->  $f"
+        fi
+    done
+}
+
 function fnBuild() {
     : '
     Builds OpenChart in debug mode.
@@ -137,6 +161,11 @@ function fnVersion() {
         exit
         ;;
 
+        apply)
+        fnApplyVersion
+        exit
+        ;;
+
         major)
         VERSION_MAJOR=$((VERSION_MAJOR + 1))
         VERSION_MINOR=0
@@ -158,22 +187,21 @@ function fnVersion() {
         echo "COMMANDS"
         echo "If no command is given, prints the current version."
         echo
+        echo "  apply   Applies the current version to any files which depend on it"
         echo "  major   Increments the major version"
         echo "  minor   Increments the minor version"
         echo "  patch   Increments the patch version"
         echo
+        exit
         ;;
     esac
 
-    # Write to the VERSION file.
+    # Update the version.
     export VERSION=$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
-
     echo $VERSION > VERSION
     echo "Incremented version to $VERSION"
 
-    # Update the version across the project files.
-    envsubst < OpenChart/OpenChart.csproj.template > OpenChart/OpenChart.csproj
-    envsubst < OpenChart/installer/win-x64/setup.isl.template  > OpenChart/installer/win-x64/setup.isl
+    fnApplyVersion
 }
 
 function fnUsage() {
