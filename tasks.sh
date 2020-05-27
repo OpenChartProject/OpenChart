@@ -20,6 +20,26 @@ function fnBuild() {
     fnCopyLibs $1
 }
 
+function fnBundle() {
+    : '
+    Bundles the published app into an installer.
+    * Arg 1: The path containing the published app.
+    * Arg 2: The path to the installer files.
+    '
+    if isWindows; then
+        mkdir $BUNDLE_DIR
+        cp -R $INSTALLER_DIR/$PLATFORM/* $BUNDLE_DIR
+        cp -R $PUBLISH_DIR/$PLATFORM $BUNDLE_DIR/$PLATFORM
+
+        local setup_path=`pwd`/$BUNDLE_DIR/setup.isl
+
+        # Run Inno setup.
+        iscc "$setup_path"
+    else
+        echo "Bundling is not supported on this OS."
+    fi
+}
+
 function fnClean() {
     : '
     Removes all directories that are generated from building/publishing.
@@ -166,13 +186,14 @@ function fnUsage() {
     echo "COMMANDS"
     echo "If no command is given, runs 'build' then 'run'."
     echo
-    echo "  build     Builds the project to $OUTPUT_DIR/"
-    echo "  clean     Cleans all build-related files"
-    echo "  help      Prints this help message"
-    echo "  publish   Builds the project for release"
-    echo "  run       Runs OpenChart from $OUTPUT_DIR/"
-    echo "  test      Runs the test suite"
-    echo "  version   Prints the current version"
+    echo "  build       Builds the project to $OUTPUT_DIR/"
+    echo "  bundle      Bundles a published project to $BUNDLE_DIR/"
+    echo "  clean       Cleans all build-related files"
+    echo "  help        Prints this help message"
+    echo "  publish     Builds the project for release"
+    echo "  run         Runs OpenChart from $OUTPUT_DIR/"
+    echo "  test        Runs the test suite"
+    echo "  version     Prints the current version"
     echo
     echo "EXIT CODE"
     echo "Returns 0 if everything is OK."
@@ -222,8 +243,10 @@ ORIGINAL_ASSETS_DIR=__original__
 
 PROJECT_DIR=OpenChart
 ASSETS_DIR=$PROJECT_DIR/assets
+BUNDLE_DIR=$PROJECT_DIR/bundle
 LIB_DIR=$PROJECT_DIR/lib
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
+INSTALLER_DIR=$PROJECT_DIR/installer
 
 VERSION=`cat VERSION`
 VERSION_ARRAY=(`echo $VERSION | tr '.' ' '`)
@@ -266,6 +289,10 @@ case "$1" in
 
     build)
     fnBuild $OUTPUT_DIR
+    ;;
+
+    bundle)
+    fnBundle "$PUBLISH_DIR/$PLATFORM" "$INSTALLER_DIR/$PLATFORM"
     ;;
 
     clean)
