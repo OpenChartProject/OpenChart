@@ -109,14 +109,12 @@ function fnRun() {
     '
     echo "-> Starting OpenChart"
 
-    if isLinux || isMacOS; then
-        $OUTPUT_DIR/launch.sh
+    if isLinux; then
+        $OUTPUT_DIR/OpenChart
+    elif isMacOS; then
+        dotnet $OUTPUT_DIR/OpenChart.dll
     elif isWindows; then
-        if [[ $TERM == "cygwin" ]]; then
-            $OUTPUT_DIR/launch.sh
-        else
-            $OUTPUT_DIR/launch.cmd
-        fi
+        $OUTPUT_DIR/OpenChart.exe
     fi
 }
 
