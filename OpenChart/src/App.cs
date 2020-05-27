@@ -6,7 +6,6 @@ using OpenChart.UI.Windows;
 using Serilog;
 using System;
 using System.IO;
-using System.Runtime;
 
 namespace OpenChart
 {
@@ -54,7 +53,7 @@ namespace OpenChart
                     outputTemplate: "[{Timestamp:HH:mm:ss.fff} {Level:u3}] {Message:lj}{NewLine}{Exception}"
                 )
                 .WriteTo.File(
-                    "logs/OpenChart.log",
+                    Path.Join("logs", "OpenChart.log"),
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] {ShortLevel}   {Message:lj}{NewLine}{Exception}"
                 )
                 .CreateLogger();
@@ -70,7 +69,7 @@ namespace OpenChart
                 {
                     var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
 
-                    Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
+                    Log.Fatal($"Failed to initialize libbass. ({Bass.LastError} error)");
                     return false;
                 }
             }
