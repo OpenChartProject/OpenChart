@@ -40,7 +40,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Dirs]
-Name: "{app}\logs"; Permissions: users-modify;
+Name: "{app}"; Permissions: users-modify;
 
 [Files]
 Source: "win-x64\OpenChart.exe"; DestDir: "{app}"; Flags: ignoreversion
