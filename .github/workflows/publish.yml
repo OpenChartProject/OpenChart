@@ -92,7 +92,7 @@ jobs:
           name: build
 
       - name: Publish
-        run: GtkSkipInstall=True ./tasks.sh publish
+        run: ./tasks.sh publish
         shell: bash
 
       - name: Bundle
