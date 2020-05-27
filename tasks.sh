@@ -43,7 +43,7 @@ function fnBuild() {
     fnCopyAssets $1
     mkdir -p $1/lib
     fnCopyLibs $1/lib
-    fnCopyScripts $1
+    fnCopyMisc $1
 }
 
 function fnBundle() {
@@ -80,14 +80,7 @@ function fnCopyAssets() {
     * Arg 1: The copy destination path.
     '
     echo "-> Copying assets to $1/"
-
-    if isLinux; then
-        cp -r $ASSETS_DIR/* $1
-    elif isMacOS; then
-        cp -r $ASSETS_DIR/* $1
-    elif isWindows; then
-        cp -r $ASSETS_DIR/* $1
-    fi
+    cp -r $ASSETS_DIR/* $1
 
     local find_path=find
 
@@ -105,29 +98,17 @@ function fnCopyLibs() {
     * Arg 1: The copy destination path.
     '
     echo "-> Copying libs to $1/"
-
-    if isLinux; then
-        cp -r $LIB_DIR/$PLATFORM/* $1
-    elif isMacOS; then
-        cp -r $LIB_DIR/$PLATFORM/* $1
-    elif isWindows; then
-        cp -r $LIB_DIR/$PLATFORM/* $1
-    fi
+    cp -r $LIB_DIR/$PLATFORM/* $1
 }
 
-function fnCopyScripts() {
+function fnCopyMisc() {
     : '
-    Copies scripts to the output directory.
+    Copies all other files to the output directory.
     * Arg 1: The copy destination path.
     '
-    echo "-> Copying scripts to $1/"
-
-    if isLinux; then
-		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
-    elif isMacOS; then
-		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
-    elif isWindows; then
-		cp -r -p $SCRIPTS_DIR/$PLATFORM/* $1
+    if [[ -e "$MISC_DIR/$PLATFORM/" ]]; then
+        echo "-> Copying runtime assets to $1/"
+		cp -r -p $MISC_DIR/$PLATFORM/* $1
     fi
 }
 
@@ -146,7 +127,7 @@ function fnPublish() {
     fnCopyAssets $out_dir
     mkdir -p $out_dir/lib
     fnCopyLibs $out_dir/lib
-    fnCopyScripts $out_dir
+    fnCopyMisc $out_dir
 }
 
 function fnRun() {
@@ -155,10 +136,8 @@ function fnRun() {
     '
     echo "-> Starting OpenChart"
 
-    if isLinux; then
-        $OUTPUT_DIR/OpenChart
-    elif isMacOS; then
-        dotnet $OUTPUT_DIR/OpenChart.dll
+    if isLinux or isMacOS; then
+        $OUTPUT_DIR/OpenChart.sh
     elif isWindows; then
         $OUTPUT_DIR/OpenChart.exe
     fi
@@ -293,10 +272,12 @@ PUBLISH_DIR=dist
 ORIGINAL_ASSETS_DIR=__original__
 
 PROJECT_DIR=OpenChart
-ASSETS_DIR=$PROJECT_DIR/assets
-LIB_DIR=$PROJECT_DIR/lib
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
+
+ASSETS_DIR=$PROJECT_DIR/assets
 INSTALLER_DIR=$PROJECT_DIR/installer
+LIB_DIR=$PROJECT_DIR/lib
+MISC_DIR=$PROJECT_DIR/misc
 
 VERSION=`cat VERSION`
 VERSION_ARRAY=(`echo $VERSION | tr '.' ' '`)
