@@ -167,7 +167,7 @@ function fnVersion() {
 
     # Write to the VERSION file.
     export VERSION=$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
-    
+
     echo $VERSION > VERSION
     echo "Incremented version to $VERSION"
 
@@ -237,13 +237,13 @@ function isSupportedOS() {
     |  Variables  |
     ~~~~~~~~~~~~~~~
 '
+BUNDLE_DIR=bundle
 OUTPUT_DIR=bin
 PUBLISH_DIR=dist
 ORIGINAL_ASSETS_DIR=__original__
 
 PROJECT_DIR=OpenChart
 ASSETS_DIR=$PROJECT_DIR/assets
-BUNDLE_DIR=$PROJECT_DIR/bundle
 LIB_DIR=$PROJECT_DIR/lib
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
 INSTALLER_DIR=$PROJECT_DIR/installer
