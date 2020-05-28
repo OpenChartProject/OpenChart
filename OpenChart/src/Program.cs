@@ -10,11 +10,9 @@ namespace OpenChart
     {
         public static void Main()
         {
-            Application gtkApp;
-
             try
             {
-                gtkApp = new Application();
+                Gtk.Application.Init();
             }
             catch (TypeInitializationException e)
             {
@@ -26,6 +24,9 @@ namespace OpenChart
                 Log.Fatal(e, msg);
                 Environment.Exit(1);
             }
+
+            var gtkApp = new Application();
+            gtkApp.Activate();
 
             try
             {

@@ -15,6 +15,8 @@ namespace OpenChart
         {
             Application.Instance = this;
             AppData = new ApplicationData();
+
+            Register(GLib.Cancellable.Current);
         }
 
         public bool InitApplication()
@@ -22,12 +24,16 @@ namespace OpenChart
             SetApplicationDir();
             InitLogging();
 
+            Log.Information("------------------------");
+            Log.Information("Initializing...");
             Log.Debug($"Set current directory to {AppData.AppFolder}");
 
             if (!InitAudio())
                 return false;
 
             AppData.Init();
+
+            Log.Information("Initialization complete.");
 
             return true;
         }
@@ -69,9 +75,6 @@ namespace OpenChart
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] {ShortLevel}   {Message:lj}{NewLine}{Exception}"
                 )
                 .CreateLogger();
-
-            Log.Information("------------------------");
-            Log.Information("Initializing...");
         }
 
         public void SetApplicationDir()
@@ -86,16 +89,25 @@ namespace OpenChart
 
         protected override void OnActivated()
         {
-            new MainWindow(this);
+            Log.Information("Displaying main window.");
+
+            var window = new MainWindow();
+
+            AddWindow(window);
+            window.ShowAll();
         }
 
         protected override void OnShutdown()
         {
+            base.OnShutdown();
+
             Log.Information("OnShutdown");
         }
 
         protected override void OnStartup()
         {
+            base.OnStartup();
+
             if (!InitApplication())
             {
                 Log.Fatal("Failed to initialize, quitting...");

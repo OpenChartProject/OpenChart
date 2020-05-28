@@ -9,7 +9,7 @@ namespace OpenChart.UI.Windows
     /// <summary>
     /// The main window of the application.
     /// </summary>
-    public class MainWindow : ApplicationWindow
+    public class MainWindow : Window
     {
         const int InitialWindowWidth = 800;
         const int InitialWindowHeight = 600;
@@ -18,7 +18,7 @@ namespace OpenChart.UI.Windows
 
         VBox container;
 
-        public MainWindow(Gtk.Application application) : base(application)
+        public MainWindow() : base("OpenChart")
         {
             Title = "OpenChart";
             DeleteEvent += onDelete;
@@ -28,7 +28,13 @@ namespace OpenChart.UI.Windows
             var chart = new Chart(4);
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
-            var noteSkin = ApplicationData.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
+            var noteSkin = OpenChart
+                .Application
+                .Instance
+                .AppData
+                .NoteSkins
+                .GetNoteSkin("default_arrow")
+                .GetKeyModeSkin(chart.KeyCount.Value);
 
             var noteFieldData = new NoteFieldData(
                 chart,
@@ -71,12 +77,11 @@ namespace OpenChart.UI.Windows
 
             SetDefaultSize(InitialWindowWidth, InitialWindowHeight);
             SetPosition(WindowPosition.Center);
-            ShowAll();
         }
 
         private void onDelete(object o, DeleteEventArgs e)
         {
-            ApplicationData.Quit();
+            Gtk.Application.Quit();
         }
     }
 }

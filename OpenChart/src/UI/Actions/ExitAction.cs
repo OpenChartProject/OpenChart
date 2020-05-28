@@ -13,7 +13,7 @@ namespace OpenChart.UI.Actions
 
         protected override void OnActivated(Variant variant)
         {
-            ApplicationData.Quit();
+            Gtk.Application.Quit();
         }
     }
 }
