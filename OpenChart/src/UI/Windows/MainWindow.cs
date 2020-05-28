@@ -2,6 +2,7 @@ using Gtk;
 using OpenChart.Charting;
 using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
+using OpenChart.UI.Actions;
 using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.Windows
@@ -16,10 +17,12 @@ namespace OpenChart.UI.Windows
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
+        Application application;
         VBox container;
 
-        public MainWindow() : base("OpenChart")
+        public MainWindow(Application application) : base("OpenChart")
         {
+            this.application = application;
             Title = "OpenChart";
             DeleteEvent += onDelete;
 
@@ -60,7 +63,7 @@ namespace OpenChart.UI.Windows
             chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
 
             container = new VBox();
-            container.PackStart(new Widgets.MenuBar(), false, false, 0);
+            container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);
             container.Add(noteField);
 
             Add(container);

@@ -1,4 +1,5 @@
 using ManagedBass;
+using OpenChart.UI.Actions;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;
@@ -25,7 +26,7 @@ namespace OpenChart
         /// <summary>
         /// The relative path where logs are written to.
         /// </summary>
-        public string LogFile => Path.Combine("logs", "OpenChart.log");
+        public string LogFile { get; private set; }
 
         /// <summary>
         /// Creates a new Application instance.
@@ -33,6 +34,7 @@ namespace OpenChart
         public Application() : base("io.openchart", GLib.ApplicationFlags.None)
         {
             Application.Instance = this;
+            LogFile = Path.Combine("logs", "OpenChart.log");
 
             Register(GLib.Cancellable.Current);
         }
@@ -129,7 +131,7 @@ namespace OpenChart
         {
             Log.Information("Displaying main window.");
 
-            var window = new MainWindow();
+            var window = new MainWindow(this);
 
             AddWindow(window);
             window.ShowAll();
