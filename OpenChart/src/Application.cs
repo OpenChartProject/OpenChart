@@ -39,6 +39,13 @@ namespace OpenChart
             Register(GLib.Cancellable.Current);
         }
 
+        public void InitActions()
+        {
+            var action = new QuitAction();
+            AddAction(action.Action);
+            // SetAccelsForAction(QuitAction.Name, "<Control>Q");
+        }
+
         /// <summary>
         /// Initializes the application. This sets up the components of the app, such as logging,
         /// loading the audio library, loading noteskins, etc.
@@ -57,6 +64,8 @@ namespace OpenChart
 
             AppData = new ApplicationData(path);
             AppData.Init();
+
+            InitActions();
 
             Log.Information("Ready.");
 
@@ -114,10 +123,15 @@ namespace OpenChart
         /// </summary>
         public string SetApplicationPath()
         {
-            // Get the path to the folder where the executable is.
-            var path = Path.GetDirectoryName(
-                System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
-            );
+            var path = Environment.GetEnvironmentVariable("OPENCHART_DIR");
+
+            if (string.IsNullOrEmpty(path))
+            {
+                // Get the path to the folder where the executable is.
+                path = Path.GetDirectoryName(
+                    System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
+                );
+            }
 
             Directory.SetCurrentDirectory(path);
 
