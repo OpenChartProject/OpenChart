@@ -41,9 +41,9 @@ namespace OpenChart
 
         public void InitActions()
         {
-            var action = new QuitAction();
-            AddAction(action.Action);
-            // SetAccelsForAction(QuitAction.Name, "<Control>Q");
+            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
+            // type of argument, resulting in a segfault.
+            AddAction(new QuitAction().Action);
         }
 
         /// <summary>
