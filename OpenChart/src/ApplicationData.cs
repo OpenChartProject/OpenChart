@@ -13,12 +13,12 @@ namespace OpenChart
         /// <summary>
         /// The absolute path to the folder where the OpenChart executable is.
         /// </summary>
-        public string AppFolder { get; set; }
+        public string AppFolder { get; private set; }
 
         /// <summary>
         /// The manager for different file formats.
         /// </summary>
-        public FormatManager Formats { get; set; }
+        public FormatManager Formats { get; private set; }
 
         /// <summary>
         /// The location of the noteskins folder.
@@ -28,22 +28,29 @@ namespace OpenChart
         /// <summary>
         /// The noteskins that are loaded into the app.
         /// </summary>
-        public NoteSkinManager NoteSkins { get; set; }
+        public NoteSkinManager NoteSkins { get; private set; }
 
         /// <summary>
-        /// Initializes the app data.
+        /// Creates a new ApplicationData instance.
+        /// </summary>
+        /// <param name="appFolder">The path the OpenChart executable is in.</param>
+        public ApplicationData(string appFolder)
+        {
+            AppFolder = appFolder;
+            Formats = new FormatManager();
+            NoteSkins = new NoteSkinManager();
+        }
+
+        /// <summary>
+        /// Initializes the application data.
         /// </summary>
         public void Init()
         {
-            Formats = new FormatManager();
+            Log.Debug("Setting up file formats.");
             Formats.AddFormat(new OpenChartFormatHandler());
-
-            NoteSkins = new NoteSkinManager();
 
             Log.Information("Finding noteskins...");
             NoteSkins.LoadAll();
-
-            Log.Information("OpenChart init OK.");
         }
     }
 }
