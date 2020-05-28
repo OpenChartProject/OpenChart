@@ -2,6 +2,9 @@ using GLib;
 
 namespace OpenChart.UI.Actions
 {
+    /// <summary>
+    /// An action that triggers the application to quit.
+    /// </summary>
     public class QuitAction : Actions.IAction
     {
         public static string Hotkey => "<Control>Q";
@@ -10,6 +13,9 @@ namespace OpenChart.UI.Actions
         SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
+        /// <summary>
+        /// Creates a new QuitAction instance.
+        /// </summary>
         public QuitAction()
         {
             _action = new SimpleAction(Name, null);
