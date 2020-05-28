@@ -11,22 +11,22 @@ namespace OpenChart.UI.Actions
         public MenuModel()
         {
             FileMenu = new Menu();
-            FileMenu.Append("New Project", null);
-            FileMenu.Append("Open Project", null);
-            FileMenu.Append("Save", null);
-            FileMenu.Append("Save As...", null);
-            FileMenu.Append("Exit", null);
+            FileMenu.Append("New Project", "file.new_project");
+            FileMenu.Append("Open Project", "file.open_project");
+            FileMenu.Append("Save", "file.save");
+            FileMenu.Append("Save As...", "file.save_as");
+            FileMenu.Append("Quit", QuitAction.Name);
 
             EditMenu = new Menu();
-            EditMenu.Append("Undo", null);
-            EditMenu.Append("Redo", null);
-            EditMenu.Append("Cut", null);
-            EditMenu.Append("Copy", null);
-            EditMenu.Append("Paste", null);
+            EditMenu.Append("Undo", "edit.undo");
+            EditMenu.Append("Redo", "edit.redo");
+            EditMenu.Append("Cut", "edit.cut");
+            EditMenu.Append("Copy", "edit.copy");
+            EditMenu.Append("Paste", "edit.paste");
 
             HelpMenu = new Menu();
-            HelpMenu.Append("About", null);
-            HelpMenu.Append("Website", null);
+            HelpMenu.Append("About", "help.about");
+            HelpMenu.Append("Website", "help.website");
         }
 
         public GLib.MenuModel GetModel()

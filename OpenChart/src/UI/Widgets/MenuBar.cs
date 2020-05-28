@@ -1,5 +1,3 @@
-using Gtk;
-
 namespace OpenChart.UI.Widgets
 {
     public class MenuBar : Gtk.MenuBar
