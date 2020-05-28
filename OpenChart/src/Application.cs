@@ -39,6 +39,15 @@ namespace OpenChart
             Register(GLib.Cancellable.Current);
         }
 
+        /// <summary>
+        /// This method is called after Gtk.Application.Quit() is called. It's the last thing
+        /// that runs before the program ends.
+        /// </summary>
+        public void Cleanup()
+        {
+            Log.Information("Shutting down...");
+        }
+
         public void InitActions()
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
@@ -149,13 +158,6 @@ namespace OpenChart
 
             AddWindow(window);
             window.ShowAll();
-        }
-
-        protected override void OnShutdown()
-        {
-            base.OnShutdown();
-
-            Log.Information("OnShutdown");
         }
 
         /// <summary>

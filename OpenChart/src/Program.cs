@@ -35,7 +35,10 @@ namespace OpenChart
             catch (Exception e)
             {
                 Log.Fatal(e, "Uncaught exception.");
+                Environment.Exit(1);
             }
+
+            gtkApp.Cleanup();
         }
     }
 }

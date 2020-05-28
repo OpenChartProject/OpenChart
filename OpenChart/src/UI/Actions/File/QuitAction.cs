@@ -1,4 +1,5 @@
 using GLib;
+using Serilog;
 
 namespace OpenChart.UI.Actions
 {
@@ -25,6 +26,7 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, ActivatedArgs args)
         {
+            Serilog.Log.Debug($"{this.GetType().Name} triggered.");
             Gtk.Application.Quit();
         }
     }
