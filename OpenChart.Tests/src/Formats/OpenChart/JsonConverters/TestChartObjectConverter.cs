@@ -13,7 +13,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         [OneTimeSetUp]
         public void SetUp()
         {
-            options = OpenChartSerializer.jsonOptions;
+            options = OpenChartSerializer.JsonOptions;
         }
 
         public void Test_Read_Null()
