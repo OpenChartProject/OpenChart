@@ -9,10 +9,10 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class NewProjectAction : Actions.IAction
     {
-        public static string Hotkey => "<Control>n";
+        public const string Hotkey = "<Control>n";
         public string GetHotkey() => Hotkey;
 
-        public static string Name => "file.new_project";
+        public const string Name = "file.new_project";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
@@ -26,11 +26,6 @@ namespace OpenChart.UI.Actions
             _action = new GLib.SimpleAction(GetName(), null);
             _action.Activated += OnActivated;
             _action.Enabled = true;
-        }
-
-        public void SetEnabled(bool enabled)
-        {
-            _action.Enabled = enabled;
         }
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)

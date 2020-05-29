@@ -7,10 +7,10 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class QuitAction : Actions.IAction
     {
-        public static string Hotkey => "<Control>Q";
+        public const string Hotkey = "<Control>Q";
         public string GetHotkey() => Hotkey;
 
-        public static string Name => "file.quit";
+        public const string Name = "file.quit";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
@@ -24,11 +24,6 @@ namespace OpenChart.UI.Actions
             _action = new GLib.SimpleAction(Name, null);
             _action.Activated += OnActivated;
             _action.Enabled = true;
-        }
-
-        public void SetEnabled(bool enabled)
-        {
-            _action.Enabled = enabled;
         }
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
