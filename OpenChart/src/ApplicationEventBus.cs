@@ -1,4 +1,4 @@
-using OpenChart.Projects;
+using OpenChart.UI.Actions;
 using System;
 
 namespace OpenChart
@@ -40,6 +40,9 @@ namespace OpenChart
             // Add listeners to the new project.
             if (e.NewProject != null)
                 e.NewProject.Renamed += onCurrentProjectRenamed;
+
+            // Set the close project action to be enabled only if there is an active project open.
+            app.ActionDict[CloseProjectAction.Name].SetEnabled(e.NewProject != null);
 
             CurrentProjectChanged?.Invoke(this, e);
         }

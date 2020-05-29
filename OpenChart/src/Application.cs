@@ -3,6 +3,7 @@ using OpenChart.UI.Actions;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace OpenChart
@@ -13,16 +14,11 @@ namespace OpenChart
     public class Application : Gtk.Application
     {
         static Application instance;
-        /// <summary>
-        /// A singleton Application instance.
-        /// </summary>
-        public static Application GetInstance()
-        {
-            if (instance == null)
-                instance = new Application();
 
-            return instance;
-        }
+        /// <summary>
+        /// A dictionary of action names --> actions.
+        /// </summary>
+        public Dictionary<string, IAction> ActionDict { get; private set; }
 
         /// <summary>
         /// Internal data used by the app.
@@ -41,6 +37,7 @@ namespace OpenChart
 
         private Application() : base("io.openchart", GLib.ApplicationFlags.None)
         {
+            ActionDict = new Dictionary<string, IAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
         }
 
@@ -50,15 +47,19 @@ namespace OpenChart
         /// </summary>
         public void Cleanup()
         {
+            // TODO: Handle save logic.
             Log.Information("Shutting down...");
         }
 
+        /// <summary>
+        /// Initializes the actions for the application.
+        /// </summary>
         public void InitActions()
         {
-            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
-            // type of argument, resulting in a segfault.
-            AddAction(new NewProjectAction().Action);
-            AddAction(new QuitAction().Action);
+            // File actions
+            addAction(new NewProjectAction());
+            addAction(new CloseProjectAction());
+            addAction(new QuitAction());
         }
 
         /// <summary>
@@ -135,6 +136,17 @@ namespace OpenChart
         }
 
         /// <summary>
+        /// A singleton Application instance.
+        /// </summary>
+        public static Application GetInstance()
+        {
+            if (instance == null)
+                instance = new Application();
+
+            return instance;
+        }
+
+        /// <summary>
         /// Sets the current working directory to the path where the executable is. This ensures
         /// that relative paths work correctly.
         /// </summary>
@@ -181,6 +193,14 @@ namespace OpenChart
                 Log.Fatal("Failed to initialize, quitting...");
                 Environment.Exit(1);
             }
+        }
+
+        private void addAction(IAction action)
+        {
+            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
+            // type of argument, resulting in a segfault.
+            ActionDict.Add(action.GetName(), action);
+            AddAction(action.Action);
         }
     }
 }

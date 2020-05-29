@@ -35,6 +35,9 @@ namespace OpenChart
         Project _currentProject;
         /// <summary>
         /// The current active project. This is null when no project is open.
+        ///
+        /// NOTE: If you want the save prompt to be triggered you should call
+        /// <see cref="CloseCurrentProject" /> instead of directly setting this to null.
         /// </summary>
         public Project CurrentProject
         {
@@ -76,6 +79,18 @@ namespace OpenChart
             AppFolder = appFolder;
             Formats = new FormatManager();
             NoteSkins = new NoteSkinManager();
+        }
+
+        public void CloseCurrentProject()
+        {
+            if (CurrentProject == null)
+                return;
+
+            Log.Information($"Closing the '{CurrentProject.Name}' project.");
+
+            CurrentProject = null;
+
+            // TODO: Handle save logic.
         }
 
         /// <summary>

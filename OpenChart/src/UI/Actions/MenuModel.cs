@@ -28,8 +28,9 @@ namespace OpenChart.UI.Actions
         public MenuModel()
         {
             FileMenu = new Menu();
-            FileMenu.Append("New Project", NewProjectAction.Name);
-            FileMenu.Append("Open Project", "file.open_project");
+            FileMenu.Append("New", NewProjectAction.Name);
+            FileMenu.Append("Open", "file.open_project");
+            FileMenu.Append("Close", CloseProjectAction.Name);
             FileMenu.Append("Save", "file.save");
             FileMenu.Append("Save As...", "file.save_as");
             FileMenu.Append("Quit", QuitAction.Name);

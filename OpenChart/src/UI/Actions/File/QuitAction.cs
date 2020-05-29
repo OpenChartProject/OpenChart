@@ -1,4 +1,3 @@
-using GLib;
 using Serilog;
 
 namespace OpenChart.UI.Actions
@@ -9,9 +8,12 @@ namespace OpenChart.UI.Actions
     public class QuitAction : Actions.IAction
     {
         public static string Hotkey => "<Control>Q";
-        public static string Name => "file.quit";
+        public string GetHotkey() => Hotkey;
 
-        SimpleAction _action;
+        public static string Name => "file.quit";
+        public string GetName() => Name;
+
+        GLib.SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
         /// <summary>
@@ -19,14 +21,19 @@ namespace OpenChart.UI.Actions
         /// </summary>
         public QuitAction()
         {
-            _action = new SimpleAction(Name, null);
+            _action = new GLib.SimpleAction(Name, null);
             _action.Activated += OnActivated;
             _action.Enabled = true;
         }
 
-        protected void OnActivated(object o, ActivatedArgs args)
+        public void SetEnabled(bool enabled)
         {
-            Serilog.Log.Debug($"{this.GetType().Name} triggered.");
+            _action.Enabled = enabled;
+        }
+
+        protected void OnActivated(object o, GLib.ActivatedArgs args)
+        {
+            Log.Debug($"{this.GetType().Name} triggered.");
             Gtk.Application.Quit();
         }
     }
