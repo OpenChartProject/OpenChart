@@ -107,7 +107,7 @@ function fnCopyMisc() {
     '
     if [[ -e "$MISC_DIR/$PLATFORM/" ]]; then
         echo "-> Copying runtime assets to $1/"
-		cp -r -p $MISC_DIR/$PLATFORM/* $1
+        cp -r -p $MISC_DIR/$PLATFORM/* $1
     fi
 }
 
