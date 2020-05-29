@@ -105,7 +105,7 @@ namespace OpenChart
             Formats.AddFormat(new OpenChartFormatHandler());
 
             Log.Information("Finding noteskins...");
-            NoteSkins.LoadAll();
+            NoteSkins.LoadAll(NoteSkinFolder);
         }
     }
 }
