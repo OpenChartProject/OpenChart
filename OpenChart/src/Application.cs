@@ -9,7 +9,12 @@ using System.IO;
 namespace OpenChart
 {
     /// <summary>
-    /// The main application class (singleton).
+    /// The main application class (singleton). The purpose of this class is to handle all
+    /// of the startup initialization and act as a central source of truth for resources that
+    /// are shared throughout the app.
+    ///
+    /// This class should not contain any domain logic. It's only responsibility is to bootstrap
+    /// the application and get everything setup.
     /// </summary>
     public class Application : Gtk.Application
     {

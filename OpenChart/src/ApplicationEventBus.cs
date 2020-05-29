@@ -41,9 +41,6 @@ namespace OpenChart
             if (e.NewProject != null)
                 e.NewProject.Renamed += onCurrentProjectRenamed;
 
-            // Set the close project action to be enabled only if there is an active project open.
-            app.ActionDict[CloseProjectAction.Name].SetEnabled(e.NewProject != null);
-
             CurrentProjectChanged?.Invoke(this, e);
         }
 
