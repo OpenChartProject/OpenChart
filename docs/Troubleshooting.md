@@ -25,14 +25,16 @@ This doc lists some common issues and possible solutions/workarounds.
 
 ## There is an error in the logs that says Gtk can't be found.
 **Windows**:
+
 - Try reinstalling OpenChart (this will automatically install Gtk if it's missing).
 - Try installing Gtk manually ([download](https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2020-05-19/gtk3-runtime-3.24.18-2020-05-19-ts-win64.exe)).
 Accept the defaults for the installer, and make sure the option to include Gtk in your PATH is checked.
 
 **Linux/MacOS**:
+
 - Try installing the gtk package for your system ([more info](https://github.com/OpenChartProject/OpenChart#linux)).
 - Try verifying the libs exist: `find /usr -name "libgtk*" -type f,l`
-- Try editing the `OpenChart.sh` script and append the Gtk lib path to the *_LIBRARY_PATH var
+- Try editing the `OpenChart.sh` script and append the Gtk lib path to the \*\_LIBRARY\_PATH var
   - On Ubuntu: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:/usr/lib/x86_64-linux-gnu`
 
 ## (Windows) There is an error popup that mentions something about a procedure entry-point.
