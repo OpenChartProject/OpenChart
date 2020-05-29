@@ -4,16 +4,16 @@ using OpenChart.UI.Actions;
 
 namespace OpenChart.Tests.Actions
 {
-    public class TestCloseProjectAction
+    public class TestSaveAsAction
     {
         DummyApp app;
-        CloseProjectAction action;
+        SaveAsAction action;
 
         [SetUp]
         public void SetUp()
         {
             app = new DummyApp();
-            action = new CloseProjectAction(app);
+            action = new SaveAsAction(app);
         }
 
         [Test]
@@ -30,14 +30,6 @@ namespace OpenChart.Tests.Actions
 
             app.GetData().CurrentProject = null;
             Assert.False(action.Action.Enabled);
-        }
-
-        [Test]
-        public void Test_OnActivate_ClosesCurrentProject()
-        {
-            app.GetData().CurrentProject = new Project();
-            action.Action.Activate(null);
-            Assert.Null(app.GetData().CurrentProject);
         }
     }
 }
