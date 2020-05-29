@@ -25,7 +25,9 @@ namespace OpenChart
                 Environment.Exit(1);
             }
 
-            var gtkApp = new Application();
+            var gtkApp = Application.GetInstance();
+
+            gtkApp.Register(GLib.Cancellable.Current);
             gtkApp.Activate();
 
             try

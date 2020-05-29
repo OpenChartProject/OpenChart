@@ -8,15 +8,21 @@ using System.IO;
 namespace OpenChart
 {
     /// <summary>
-    /// The main application class.
+    /// The main application class (singleton).
     /// </summary>
     public class Application : Gtk.Application
     {
+        static Application instance;
         /// <summary>
-        /// The application instance. Use this if you need to access the application or
-        /// the application data.
+        /// A singleton Application instance.
         /// </summary>
-        public static Application Instance;
+        public static Application GetInstance()
+        {
+            if (instance == null)
+                instance = new Application();
+
+            return instance;
+        }
 
         /// <summary>
         /// OpenChart-specific application data.
@@ -28,15 +34,9 @@ namespace OpenChart
         /// </summary>
         public string LogFile { get; private set; }
 
-        /// <summary>
-        /// Creates a new Application instance.
-        /// </summary>
-        public Application() : base("io.openchart", GLib.ApplicationFlags.None)
+        private Application() : base("io.openchart", GLib.ApplicationFlags.None)
         {
-            Application.Instance = this;
             LogFile = Path.Combine("logs", "OpenChart.log");
-
-            Register(GLib.Cancellable.Current);
         }
 
         /// <summary>

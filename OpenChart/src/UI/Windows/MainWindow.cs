@@ -33,7 +33,7 @@ namespace OpenChart.UI.Windows
 
             var noteSkin = OpenChart
                 .Application
-                .Instance
+                .GetInstance()
                 .AppData
                 .NoteSkins
                 .GetNoteSkin("default_arrow")
