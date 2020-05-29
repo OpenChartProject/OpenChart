@@ -7,7 +7,6 @@ using OpenChart.Projects;
 using OpenChart.Songs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OpenChart.Formats.OpenChart.Version0_1
 {
