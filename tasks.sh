@@ -150,6 +150,8 @@ function fnTest() {
 
     local path=$TEST_DIR/bin/Debug/netcoreapp3.1
 
+    mkdir -p $path
+
     fnCopyAssets $path
     fnCopyLibs $path
     fnCopyMisc $path
