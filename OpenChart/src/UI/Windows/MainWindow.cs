@@ -4,6 +4,7 @@ using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 using OpenChart.UI.Actions;
 using OpenChart.UI.Widgets;
+using Serilog;
 
 namespace OpenChart.UI.Windows
 {
@@ -84,7 +85,7 @@ namespace OpenChart.UI.Windows
 
         private void onDelete(object o, DeleteEventArgs e)
         {
-            Gtk.Application.Quit();
+            application.ActivateAction(QuitAction.Name, null);
         }
     }
 }
