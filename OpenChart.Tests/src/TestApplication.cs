@@ -24,13 +24,13 @@ namespace OpenChart.Tests
         [Test]
         public void Test_InitApplication_OK()
         {
-            Assert.True(app.InitApplication());
+            Assert.True(app.InitApplication(skipAudio: true));
         }
 
         [Test]
         public void Test_InitApplication_AddsActions()
         {
-            app.InitApplication();
+            app.InitApplication(skipAudio: true);
 
             Assert.True(app.ActionDict.ContainsKey(NewProjectAction.Name));
             Assert.True(app.ActionDict.ContainsKey(CloseProjectAction.Name));
