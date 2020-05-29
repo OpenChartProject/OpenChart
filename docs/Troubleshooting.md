@@ -35,10 +35,10 @@ Accept the defaults for the installer, and make sure the option to include Gtk i
 - Try editing the `OpenChart.sh` script and append the Gtk lib path to the *_LIBRARY_PATH var
   - On Ubuntu: `export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:/usr/lib/x86_64-linux-gnu`
 
-## (Windows) There is an error popup that mentions something about a procedure endpoint.
+## (Windows) There is an error popup that mentions something about a procedure entry-point.
 Example:
 
-![](img/missing-procedure-endpoint.png)
+![](img/missing-procedure-entry-point.png)
 
 This error can happen when trying to initialize Gtk. It's caused by Gtk and another app on your system both having a DLL
 with the same name, but they are different versions. The naming conflict results in Gtk accidentally loading the wrong DLL.
