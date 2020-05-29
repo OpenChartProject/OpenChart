@@ -14,6 +14,8 @@ namespace OpenChart
     /// </summary>
     public class Application : Gtk.Application, IApplication
     {
+        public const string AppId = "io.openchart";
+
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
@@ -32,7 +34,7 @@ namespace OpenChart
         /// </summary>
         public string LogFile { get; private set; }
 
-        public Application() : base("io.openchart", GLib.ApplicationFlags.None)
+        public Application() : base(AppId, GLib.ApplicationFlags.None)
         {
             ActionDict = new Dictionary<string, IAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
