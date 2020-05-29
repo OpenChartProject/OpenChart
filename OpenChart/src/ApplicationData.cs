@@ -1,7 +1,9 @@
 using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
+using OpenChart.Projects;
 using Serilog;
+using System;
 
 namespace OpenChart
 {
@@ -14,6 +16,25 @@ namespace OpenChart
         /// The absolute path to the folder where the OpenChart executable is.
         /// </summary>
         public string AppFolder { get; private set; }
+
+        Project _currentProject;
+        /// <summary>
+        /// The current active project. This is null when no project is open.
+        /// </summary>
+        public Project CurrentProject
+        {
+            get => _currentProject;
+            set
+            {
+                _currentProject = value;
+                ProjectChanged?.Invoke(this, CurrentProject);
+            }
+        }
+
+        /// <summary>
+        /// An event fired when the current project changes.
+        /// </summary>
+        public event EventHandler<Project> ProjectChanged;
 
         /// <summary>
         /// The manager for different file formats.

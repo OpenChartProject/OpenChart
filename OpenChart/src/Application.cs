@@ -52,6 +52,7 @@ namespace OpenChart
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
             // type of argument, resulting in a segfault.
+            AddAction(new NewProjectAction().Action);
             AddAction(new QuitAction().Action);
         }
 
