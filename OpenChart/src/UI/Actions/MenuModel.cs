@@ -27,24 +27,9 @@ namespace OpenChart.UI.Actions
         /// </summary>
         public MenuModel()
         {
-            FileMenu = new Menu();
-            FileMenu.Append("New", NewProjectAction.Name);
-            FileMenu.Append("Open", "file.open_project");
-            FileMenu.Append("Close", CloseProjectAction.Name);
-            FileMenu.Append("Save", SaveAction.Name);
-            FileMenu.Append("Save As...", SaveAsAction.Name);
-            FileMenu.Append("Quit", QuitAction.Name);
-
-            EditMenu = new Menu();
-            EditMenu.Append("Undo", "edit.undo");
-            EditMenu.Append("Redo", "edit.redo");
-            EditMenu.Append("Cut", "edit.cut");
-            EditMenu.Append("Copy", "edit.copy");
-            EditMenu.Append("Paste", "edit.paste");
-
-            HelpMenu = new Menu();
-            HelpMenu.Append("About", "help.about");
-            HelpMenu.Append("Website", "help.website");
+            FileMenu = buildFileMenu();
+            EditMenu = buildEditMenu();
+            HelpMenu = buildHelpMenu();
         }
 
         /// <summary>
@@ -59,6 +44,67 @@ namespace OpenChart.UI.Actions
             model.AppendSubmenu("_Help", HelpMenu);
 
             return model;
+        }
+
+        private Menu buildFileMenu()
+        {
+            Menu section;
+            var menu = new Menu();
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            section.Append("New", NewProjectAction.Name);
+            section.Append("Open", "file.open_project");
+            section.Append("Close", CloseProjectAction.Name);
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            section.Append("Save", SaveAction.Name);
+            section.Append("Save As...", SaveAsAction.Name);
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            section.Append("Quit", QuitAction.Name);
+
+            return menu;
+        }
+
+        private Menu buildEditMenu()
+        {
+            Menu section;
+            var menu = new Menu();
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            menu.Append("Undo", "edit.undo");
+            menu.Append("Redo", "edit.redo");
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            menu.Append("Cut", "edit.cut");
+            menu.Append("Copy", "edit.copy");
+            menu.Append("Paste", "edit.paste");
+
+            return menu;
+        }
+
+        private Menu buildHelpMenu()
+        {
+            Menu section;
+            var menu = new Menu();
+
+            section = new Menu();
+            menu.AppendSection(null, section);
+
+            menu.Append("About", "help.about");
+            menu.Append("Website", "help.website");
+
+            return menu;
         }
     }
 }
