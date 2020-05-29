@@ -8,7 +8,7 @@ namespace OpenChart
     /// </summary>
     public class ApplicationEventBus
     {
-        Application app;
+        ApplicationData appData;
 
         /// <summary>
         /// An event fired when the current active project for the app changes.
@@ -20,11 +20,11 @@ namespace OpenChart
         /// </summary>
         public event EventHandler CurrentProjectRenamed;
 
-        public ApplicationEventBus(Application app)
+        public ApplicationEventBus(ApplicationData appData)
         {
-            this.app = app;
+            this.appData = appData;
 
-            app.AppData.ProjectChanged += onCurrentProjectChanged;
+            appData.ProjectChanged += onCurrentProjectChanged;
         }
 
         /// <summary>

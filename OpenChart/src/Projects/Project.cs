@@ -27,6 +27,8 @@ namespace OpenChart.Projects
             {
                 if (string.IsNullOrWhiteSpace(value))
                     throw new ArgumentException("Project name cannot be blank.");
+                else if (value == Name)
+                    return;
 
                 _name = value;
                 Renamed?.Invoke(this, null);

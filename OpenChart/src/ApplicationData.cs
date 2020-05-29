@@ -44,6 +44,9 @@ namespace OpenChart
             get => _currentProject;
             set
             {
+                if (CurrentProject == value)
+                    return;
+
                 var old = _currentProject;
                 _currentProject = value;
                 ProjectChanged?.Invoke(this, new ProjectChangedEventArgs(old, value));
