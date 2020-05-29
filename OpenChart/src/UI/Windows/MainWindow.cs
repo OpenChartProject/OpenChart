@@ -2,6 +2,7 @@ using Gtk;
 using OpenChart.Charting;
 using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
+using OpenChart.Projects;
 using OpenChart.UI.Actions;
 using OpenChart.UI.Widgets;
 using Serilog;
@@ -13,18 +14,22 @@ namespace OpenChart.UI.Windows
     /// </summary>
     public class MainWindow : Window
     {
+        const string baseTitle = "OpenChart";
+
         const int InitialWindowWidth = 800;
         const int InitialWindowHeight = 600;
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
-        Application application;
+        Application app;
         VBox container;
 
-        public MainWindow(Application application) : base("OpenChart")
+        public MainWindow(Application app) : base(baseTitle)
         {
-            this.application = application;
-            Title = "OpenChart";
+            this.app = app;
+
+            app.EventBus.CurrentProjectChanged += delegate { renameWindowToMatchProject(); };
+            app.EventBus.CurrentProjectRenamed += delegate { renameWindowToMatchProject(); };
             DeleteEvent += onDelete;
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
@@ -83,9 +88,20 @@ namespace OpenChart.UI.Windows
             SetPosition(WindowPosition.Center);
         }
 
+        private void renameWindowToMatchProject()
+        {
+            var project = app.AppData.CurrentProject;
+            var title = baseTitle;
+
+            if (project != null)
+                title += " - " + project.Name;
+
+            Title = title;
+        }
+
         private void onDelete(object o, DeleteEventArgs e)
         {
-            application.ActivateAction(QuitAction.Name, null);
+            app.ActivateAction(QuitAction.Name, null);
         }
     }
 }
