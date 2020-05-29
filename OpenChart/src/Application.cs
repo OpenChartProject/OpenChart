@@ -86,9 +86,11 @@ namespace OpenChart
             AppData = new ApplicationData(path);
             AppData.Init();
 
-            InitActions();
-
             EventBus = new ApplicationEventBus(this);
+
+            // Actions should be initialized last since they may require other parts of the application
+            // during setup.
+            InitActions();
 
             Log.Information("Ready.");
 
