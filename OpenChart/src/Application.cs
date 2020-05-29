@@ -102,19 +102,24 @@ namespace OpenChart
                 // Initialize libbass
                 if (!Bass.Init())
                 {
-                    var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
+                    if (Bass.LastError != Errors.Already)
+                    {
+                        var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
 
-                    Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
-                    return false;
+                        Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
+                        return false;
+                    }
+                    else
+                        Log.Information("Tried to initialize libbass but it was already loaded, ignoring...");
                 }
+                else
+                    Log.Information("libbass init OK.");
             }
             catch (DllNotFoundException e)
             {
                 Log.Fatal(e, "Failed to initialize libbass (DLL not found).");
                 return false;
             }
-
-            Log.Information("libbass init OK.");
 
             return true;
         }

@@ -154,6 +154,8 @@ function fnTest() {
     fnCopyLibs $path
     fnCopyMisc $path
 
+    rm -rf $path/logs
+
     OPENCHART_DIR=`pwd`/$path dotnet test
 }
 
