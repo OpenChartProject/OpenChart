@@ -33,6 +33,8 @@ namespace OpenChart.UI.Actions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
+
+            // TODO: Handle save logic.
             Gtk.Application.Quit();
         }
     }

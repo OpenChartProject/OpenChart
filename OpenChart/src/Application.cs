@@ -46,7 +46,6 @@ namespace OpenChart
         /// </summary>
         public void Cleanup()
         {
-            // TODO: Handle save logic.
             Log.Information("Shutting down...");
         }
 
@@ -58,6 +57,8 @@ namespace OpenChart
             // File actions
             addAction(new NewProjectAction(this));
             addAction(new CloseProjectAction(this));
+            addAction(new SaveAction(this));
+            addAction(new SaveAsAction(this));
             addAction(new QuitAction(this));
         }
 

@@ -1,31 +1,31 @@
+using Serilog;
+
 namespace OpenChart.UI.Actions
 {
     /// <summary>
-    /// An action that triggers the current active project to close. This action
-    /// is only enabled when an active project is open.
+    /// An action that triggers the application to save the current project.
     /// </summary>
-    public class CloseProjectAction : Actions.IAction
+    public class SaveAsAction : Actions.IAction
     {
         Application app;
 
-        public const string Hotkey = null;
+        public const string Hotkey = "<Control><Shift>S";
         public string GetHotkey() => Hotkey;
 
-        public const string Name = "file.close_project";
+        public const string Name = "file.save_as";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
         /// <summary>
-        /// Creates a new CloseProjectAction instance.
+        /// Creates a new SaveAsAction instance.
         /// </summary>
-        /// <param name="app">The application instance.</param>
-        public CloseProjectAction(Application app)
+        public SaveAsAction(Application app)
         {
             this.app = app;
 
-            _action = new GLib.SimpleAction(GetName(), null);
+            _action = new GLib.SimpleAction(Name, null);
             _action.Activated += OnActivated;
             _action.Enabled = false;
 
@@ -38,7 +38,7 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
-            app.AppData.CloseCurrentProject();
+            Log.Debug($"{this.GetType().Name} triggered.");
         }
     }
 }
