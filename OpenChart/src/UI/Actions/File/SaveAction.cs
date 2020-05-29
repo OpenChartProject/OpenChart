@@ -7,7 +7,7 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class SaveAction : Actions.IAction
     {
-        Application app;
+        IApplication app;
 
         public const string Hotkey = "<Control>S";
         public string GetHotkey() => Hotkey;
@@ -21,7 +21,7 @@ namespace OpenChart.UI.Actions
         /// <summary>
         /// Creates a new SaveAction instance.
         /// </summary>
-        public SaveAction(Application app)
+        public SaveAction(IApplication app)
         {
             this.app = app;
 
@@ -30,7 +30,7 @@ namespace OpenChart.UI.Actions
             _action.Enabled = false;
 
             // Enable the action only when a project is open.
-            app.EventBus.CurrentProjectChanged += (o, e) =>
+            app.GetEvents().CurrentProjectChanged += (o, e) =>
             {
                 _action.Enabled = (e.NewProject != null);
             };

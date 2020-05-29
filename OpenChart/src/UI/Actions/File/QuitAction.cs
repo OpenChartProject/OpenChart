@@ -7,7 +7,7 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class QuitAction : Actions.IAction
     {
-        Application app;
+        IApplication app;
 
         public const string Hotkey = "<Control>Q";
         public string GetHotkey() => Hotkey;
@@ -21,7 +21,7 @@ namespace OpenChart.UI.Actions
         /// <summary>
         /// Creates a new QuitAction instance.
         /// </summary>
-        public QuitAction(Application app)
+        public QuitAction(IApplication app)
         {
             this.app = app;
 

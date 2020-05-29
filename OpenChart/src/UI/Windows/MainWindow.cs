@@ -12,7 +12,7 @@ namespace OpenChart.UI.Windows
     /// </summary>
     public class MainWindow : Window
     {
-        Application app;
+        IApplication app;
         VBox container;
 
         const string baseTitle = "OpenChart";
@@ -22,12 +22,12 @@ namespace OpenChart.UI.Windows
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
-        public MainWindow(Application app) : base(baseTitle)
+        public MainWindow(IApplication app) : base(baseTitle)
         {
             this.app = app;
 
-            app.EventBus.CurrentProjectChanged += delegate { renameWindowToMatchProject(); };
-            app.EventBus.CurrentProjectRenamed += delegate { renameWindowToMatchProject(); };
+            app.GetEvents().CurrentProjectChanged += delegate { renameWindowToMatchProject(); };
+            app.GetEvents().CurrentProjectRenamed += delegate { renameWindowToMatchProject(); };
             DeleteEvent += onDelete;
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
@@ -35,7 +35,7 @@ namespace OpenChart.UI.Windows
             var chart = new Chart(4);
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
-            var noteSkin = app.AppData.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
+            var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
 
             var noteFieldData = new NoteFieldData(
                 chart,
@@ -82,7 +82,7 @@ namespace OpenChart.UI.Windows
 
         private void renameWindowToMatchProject()
         {
-            var project = app.AppData.CurrentProject;
+            var project = app.GetData().CurrentProject;
             var title = baseTitle;
 
             if (project != null)
@@ -93,7 +93,7 @@ namespace OpenChart.UI.Windows
 
         private void onDelete(object o, DeleteEventArgs e)
         {
-            app.ActivateAction(QuitAction.Name, null);
+            app.GetGtk().ActivateAction(QuitAction.Name, null);
         }
     }
 }

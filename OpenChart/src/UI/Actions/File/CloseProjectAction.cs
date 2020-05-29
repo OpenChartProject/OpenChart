@@ -6,7 +6,7 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class CloseProjectAction : Actions.IAction
     {
-        Application app;
+        IApplication app;
 
         public const string Hotkey = null;
         public string GetHotkey() => Hotkey;
@@ -21,7 +21,7 @@ namespace OpenChart.UI.Actions
         /// Creates a new CloseProjectAction instance.
         /// </summary>
         /// <param name="app">The application instance.</param>
-        public CloseProjectAction(Application app)
+        public CloseProjectAction(IApplication app)
         {
             this.app = app;
 
@@ -30,7 +30,7 @@ namespace OpenChart.UI.Actions
             _action.Enabled = false;
 
             // Enable the action only when a project is open.
-            app.EventBus.CurrentProjectChanged += (o, e) =>
+            app.GetEvents().CurrentProjectChanged += (o, e) =>
             {
                 _action.Enabled = (e.NewProject != null);
             };
@@ -38,7 +38,7 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
-            app.AppData.CloseCurrentProject();
+            app.GetData().CloseCurrentProject();
         }
     }
 }

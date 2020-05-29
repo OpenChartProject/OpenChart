@@ -9,7 +9,7 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class NewProjectAction : Actions.IAction
     {
-        Application app;
+        IApplication app;
 
         public const string Hotkey = "<Control>n";
         public string GetHotkey() => Hotkey;
@@ -23,7 +23,7 @@ namespace OpenChart.UI.Actions
         /// <summary>
         /// Creates a new NewProjectAction instance.
         /// </summary>
-        public NewProjectAction(Application app)
+        public NewProjectAction(IApplication app)
         {
             this.app = app;
 
@@ -34,11 +34,11 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
-            if (app.AppData.CurrentProject != null)
+            if (app.GetData().CurrentProject != null)
             {
                 // TODO: Check if the project has been modified and prompt the user to save.
                 var dialog = new MessageDialog(
-                    app.ActiveWindow,
+                    app.GetGtk().ActiveWindow,
                     DialogFlags.Modal,
                     MessageType.Warning,
                     ButtonsType.Ok,
@@ -50,7 +50,7 @@ namespace OpenChart.UI.Actions
             }
             else
             {
-                app.AppData.CurrentProject = new Project();
+                app.GetData().CurrentProject = new Project();
                 Log.Information("Created a new project instance.");
             }
         }

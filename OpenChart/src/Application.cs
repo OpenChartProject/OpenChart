@@ -12,22 +12,20 @@ namespace OpenChart
     /// The main application class. This class is responsible for initializing and bootstrapping
     /// the app by loading in any necessary resources. It should not contain domain logic.
     /// </summary>
-    public class Application : Gtk.Application
+    public class Application : Gtk.Application, IApplication
     {
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
         public Dictionary<string, IAction> ActionDict { get; private set; }
 
-        /// <summary>
-        /// Internal data used by the app.
-        /// </summary>
-        public ApplicationData AppData { get; private set; }
+        ApplicationData applicationData;
+        public ApplicationData GetData() => applicationData;
 
-        /// <summary>
-        /// An event bus for application-wide events.
-        /// </summary>
-        public ApplicationEventBus EventBus { get; private set; }
+        ApplicationEventBus eventBus;
+        public ApplicationEventBus GetEvents() => eventBus;
+
+        public Gtk.Application GetGtk() => this;
 
         /// <summary>
         /// The relative path where logs are written to.
@@ -78,10 +76,10 @@ namespace OpenChart
             if (!InitAudio())
                 return false;
 
-            AppData = new ApplicationData(path);
-            AppData.Init();
+            applicationData = new ApplicationData(path);
+            applicationData.Init();
 
-            EventBus = new ApplicationEventBus(AppData);
+            eventBus = new ApplicationEventBus(applicationData);
 
             // Actions should be initialized last since they may require other parts of the application
             // during setup.
