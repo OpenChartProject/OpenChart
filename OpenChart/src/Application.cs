@@ -9,17 +9,11 @@ using System.IO;
 namespace OpenChart
 {
     /// <summary>
-    /// The main application class (singleton). The purpose of this class is to handle all
-    /// of the startup initialization and act as a central source of truth for resources that
-    /// are shared throughout the app.
-    ///
-    /// This class should not contain any domain logic. It's only responsibility is to bootstrap
-    /// the application and get everything setup.
+    /// The main application class. This class is responsible for initializing and bootstrapping
+    /// the app by loading in any necessary resources. It should not contain domain logic.
     /// </summary>
     public class Application : Gtk.Application
     {
-        static Application instance;
-
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
@@ -40,7 +34,7 @@ namespace OpenChart
         /// </summary>
         public string LogFile { get; private set; }
 
-        private Application() : base("io.openchart", GLib.ApplicationFlags.None)
+        public Application() : base("io.openchart", GLib.ApplicationFlags.None)
         {
             ActionDict = new Dictionary<string, IAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
@@ -140,17 +134,6 @@ namespace OpenChart
                     outputTemplate: "[{Timestamp:yyyy-MM-dd HH:mm:ss.fff}] {ShortLevel}   {Message:lj}{NewLine}{Exception}"
                 )
                 .CreateLogger();
-        }
-
-        /// <summary>
-        /// A singleton Application instance.
-        /// </summary>
-        public static Application GetInstance()
-        {
-            if (instance == null)
-                instance = new Application();
-
-            return instance;
         }
 
         /// <summary>

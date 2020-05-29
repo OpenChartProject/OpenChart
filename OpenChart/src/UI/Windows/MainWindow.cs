@@ -2,10 +2,8 @@ using Gtk;
 using OpenChart.Charting;
 using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
-using OpenChart.Projects;
 using OpenChart.UI.Actions;
 using OpenChart.UI.Widgets;
-using Serilog;
 
 namespace OpenChart.UI.Windows
 {
@@ -14,15 +12,15 @@ namespace OpenChart.UI.Windows
     /// </summary>
     public class MainWindow : Window
     {
+        Application app;
+        VBox container;
+
         const string baseTitle = "OpenChart";
 
         const int InitialWindowWidth = 800;
         const int InitialWindowHeight = 600;
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
-
-        Application app;
-        VBox container;
 
         public MainWindow(Application app) : base(baseTitle)
         {
@@ -37,13 +35,7 @@ namespace OpenChart.UI.Windows
             var chart = new Chart(4);
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
-            var noteSkin = OpenChart
-                .Application
-                .GetInstance()
-                .AppData
-                .NoteSkins
-                .GetNoteSkin("default_arrow")
-                .GetKeyModeSkin(chart.KeyCount.Value);
+            var noteSkin = app.AppData.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
 
             var noteFieldData = new NoteFieldData(
                 chart,
