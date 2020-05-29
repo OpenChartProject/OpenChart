@@ -29,14 +29,14 @@ namespace OpenChart.Projects
                     throw new ArgumentException("Project name cannot be blank.");
 
                 _name = value;
-                NameChanged?.Invoke(this, Name);
+                Renamed?.Invoke(this, null);
             }
         }
 
         /// <summary>
         /// An event fired when the project's name changes.
         /// </summary>
-        public event EventHandler<string> NameChanged;
+        public event EventHandler Renamed;
 
         /// <summary>
         /// The metadata for the song. Can be null.

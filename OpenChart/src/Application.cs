@@ -25,9 +25,14 @@ namespace OpenChart
         }
 
         /// <summary>
-        /// OpenChart-specific application data.
+        /// Internal data used by the app.
         /// </summary>
         public ApplicationData AppData { get; private set; }
+
+        /// <summary>
+        /// An event bus for application-wide events.
+        /// </summary>
+        public ApplicationEventBus EventBus { get; private set; }
 
         /// <summary>
         /// The relative path where logs are written to.
@@ -76,6 +81,8 @@ namespace OpenChart
             AppData.Init();
 
             InitActions();
+
+            EventBus = new ApplicationEventBus(this);
 
             Log.Information("Ready.");
 

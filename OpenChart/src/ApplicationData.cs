@@ -8,7 +8,22 @@ using System;
 namespace OpenChart
 {
     /// <summary>
-    ///
+    /// Event args used for the ProjectChanged event.
+    /// </summary>
+    public class ProjectChangedEventArgs : EventArgs
+    {
+        public readonly Project OldProject;
+        public readonly Project NewProject;
+
+        public ProjectChangedEventArgs(Project oldProject, Project newProject)
+        {
+            OldProject = oldProject;
+            NewProject = newProject;
+        }
+    }
+
+    /// <summary>
+    /// The state of the application.
     /// </summary>
     public class ApplicationData
     {
@@ -26,15 +41,16 @@ namespace OpenChart
             get => _currentProject;
             set
             {
+                var old = _currentProject;
                 _currentProject = value;
-                ProjectChanged?.Invoke(this, CurrentProject);
+                ProjectChanged?.Invoke(this, new ProjectChangedEventArgs(old, value));
             }
         }
 
         /// <summary>
         /// An event fired when the current project changes.
         /// </summary>
-        public event EventHandler<Project> ProjectChanged;
+        public event EventHandler<ProjectChangedEventArgs> ProjectChanged;
 
         /// <summary>
         /// The manager for different file formats.
