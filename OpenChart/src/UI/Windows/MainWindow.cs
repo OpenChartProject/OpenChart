@@ -2,6 +2,7 @@ using Gtk;
 using OpenChart.Charting;
 using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
+using OpenChart.UI.Actions;
 using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.Windows
@@ -16,8 +17,13 @@ namespace OpenChart.UI.Windows
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
-        public MainWindow() : base("OpenChart")
+        Application application;
+        VBox container;
+
+        public MainWindow(Application application) : base("OpenChart")
         {
+            this.application = application;
+            Title = "OpenChart";
             DeleteEvent += onDelete;
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
@@ -25,7 +31,13 @@ namespace OpenChart.UI.Windows
             var chart = new Chart(4);
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
-            var noteSkin = App.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
+            var noteSkin = OpenChart
+                .Application
+                .Instance
+                .AppData
+                .NoteSkins
+                .GetNoteSkin("default_arrow")
+                .GetKeyModeSkin(chart.KeyCount.Value);
 
             var noteFieldData = new NoteFieldData(
                 chart,
@@ -50,7 +62,11 @@ namespace OpenChart.UI.Windows
 
             chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
 
-            Add(noteField);
+            container = new VBox();
+            container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);
+            container.Add(noteField);
+
+            Add(container);
 
             SetGeometryHints(
                 null,
@@ -63,12 +79,12 @@ namespace OpenChart.UI.Windows
             );
 
             SetDefaultSize(InitialWindowWidth, InitialWindowHeight);
-            ShowAll();
+            SetPosition(WindowPosition.Center);
         }
 
         private void onDelete(object o, DeleteEventArgs e)
         {
-            App.Quit();
+            Gtk.Application.Quit();
         }
     }
 }
