@@ -62,9 +62,9 @@ namespace OpenChart
         public void InitActions()
         {
             // File actions
-            addAction(new NewProjectAction());
-            addAction(new CloseProjectAction());
-            addAction(new QuitAction());
+            addAction(new NewProjectAction(this));
+            addAction(new CloseProjectAction(this));
+            addAction(new QuitAction(this));
         }
 
         /// <summary>

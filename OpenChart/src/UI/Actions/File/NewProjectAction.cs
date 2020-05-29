@@ -9,6 +9,8 @@ namespace OpenChart.UI.Actions
     /// </summary>
     public class NewProjectAction : Actions.IAction
     {
+        Application app;
+
         public const string Hotkey = "<Control>n";
         public string GetHotkey() => Hotkey;
 
@@ -21,8 +23,10 @@ namespace OpenChart.UI.Actions
         /// <summary>
         /// Creates a new NewProjectAction instance.
         /// </summary>
-        public NewProjectAction()
+        public NewProjectAction(Application app)
         {
+            this.app = app;
+
             _action = new GLib.SimpleAction(GetName(), null);
             _action.Activated += OnActivated;
             _action.Enabled = true;
@@ -30,8 +34,6 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
-            var app = Application.GetInstance();
-
             if (app.AppData.CurrentProject != null)
             {
                 // TODO: Check if the project has been modified and prompt the user to save.
