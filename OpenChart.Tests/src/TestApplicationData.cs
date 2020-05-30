@@ -5,12 +5,19 @@ namespace OpenChart.Tests
 {
     public class TestApplicationData
     {
+        ApplicationData appData;
+        const string appId = "test";
+
+        [SetUp]
+        public void SetUp()
+        {
+            appData = new ApplicationData(appId);
+        }
+
         [Test]
         public void Test_Init()
         {
-            var appData = new ApplicationData("test");
-
-            Assert.AreEqual("test", appData.AppFolder);
+            Assert.AreEqual(appId, appData.AppFolder);
             Assert.IsNull(appData.CurrentProject);
             Assert.NotNull(appData.Formats);
             Assert.NotNull(appData.NoteSkins);
@@ -20,7 +27,6 @@ namespace OpenChart.Tests
         [Test]
         public void Test_ProjectChanged_EventArgs()
         {
-            var appData = new ApplicationData("");
             var project = new Project();
             ProjectChangedEventArgs lastArgs = null;
 
@@ -41,7 +47,6 @@ namespace OpenChart.Tests
         [Test]
         public void Test_ProjectChanged_FiresOnlyWhenChanged()
         {
-            var appData = new ApplicationData("");
             var calls = 0;
 
             appData.ProjectChanged += delegate { calls++; };
