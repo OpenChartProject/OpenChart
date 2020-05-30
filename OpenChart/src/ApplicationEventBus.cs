@@ -52,11 +52,17 @@ namespace OpenChart
         {
             // Remove listeners on the old project.
             if (e.OldProject != null)
+            {
+                e.NewProject.ChartAdded += onChartAdded;
                 e.OldProject.Renamed -= onCurrentProjectRenamed;
+            }
 
             // Add listeners to the new project.
             if (e.NewProject != null)
+            {
+                e.NewProject.ChartAdded += onChartAdded;
                 e.NewProject.Renamed += onCurrentProjectRenamed;
+            }
 
             CurrentProjectChanged?.Invoke(this, e);
         }

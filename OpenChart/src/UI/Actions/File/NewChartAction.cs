@@ -1,4 +1,5 @@
 using OpenChart.Charting;
+using OpenChart.Charting.Properties;
 using Serilog;
 
 namespace OpenChart.UI.Actions
@@ -42,7 +43,10 @@ namespace OpenChart.UI.Actions
             Log.Debug($"{this.GetType().Name} triggered.");
 
             // Add a new blank 4k chart.
-            app.GetData().CurrentProject.AddChart(new Chart(4));
+            Chart chart = new Chart(4);
+            chart.BPMList.BPMs.Add(new BPM(120, 0));
+
+            app.GetData().CurrentProject.AddChart(chart);
         }
     }
 }
