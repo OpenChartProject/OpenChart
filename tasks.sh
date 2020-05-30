@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+cd ${0%/*}
 
 : '
     ~~~~~~~~~~~~~~~
@@ -146,7 +147,18 @@ function fnTest() {
     Runs the test suite.
     '
     echo "-> Running test suite"
-    dotnet test
+
+    local path=$TEST_DIR/bin/Debug/netcoreapp3.1
+
+    mkdir -p $path
+
+    fnCopyAssets $path
+    fnCopyLibs $path
+    fnCopyMisc $path
+
+    rm -rf $path/logs
+
+    OPENCHART_DIR=`pwd`/$path dotnet test
 }
 
 function fnVersion() {
@@ -272,6 +284,8 @@ ORIGINAL_ASSETS_DIR=__original__
 PROJECT_DIR=OpenChart
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
 
+TEST_DIR=OpenChart.Tests
+
 ASSETS_DIR=$PROJECT_DIR/assets
 INSTALLER_DIR=$PROJECT_DIR/installer
 LIB_DIR=$PROJECT_DIR/lib
@@ -307,8 +321,6 @@ if ! isSupportedOS; then
     echo "ERROR: This OS is not supported ($DETECTED_OS)."
     exit 1
 fi
-
-cd ${0%/*}
 
 case "$1" in
     "")

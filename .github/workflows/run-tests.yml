@@ -1,4 +1,4 @@
-name: build-and-test
+name: run-tests
 on:
   pull_request:
   push:
@@ -16,8 +16,5 @@ jobs:
         with:
           dotnet-version: 3.1.101
 
-      - name: Build
-        run: ./tasks.sh build
-
-      - name: Test
+      - name: Run tests
         run: xvfb-run ./tasks.sh test

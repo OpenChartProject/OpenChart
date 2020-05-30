@@ -3,40 +3,41 @@ using OpenChart.UI.Actions;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace OpenChart
 {
     /// <summary>
-    /// The main application class.
+    /// The main application class. This class is responsible for initializing and bootstrapping
+    /// the app by loading in any necessary resources. It should not contain domain logic.
     /// </summary>
-    public class Application : Gtk.Application
+    public class Application : Gtk.Application, IApplication
     {
-        /// <summary>
-        /// The application instance. Use this if you need to access the application or
-        /// the application data.
-        /// </summary>
-        public static Application Instance;
+        public const string AppId = "io.openchart";
 
         /// <summary>
-        /// OpenChart-specific application data.
+        /// A dictionary of action names --> actions.
         /// </summary>
-        public ApplicationData AppData { get; private set; }
+        public Dictionary<string, IAction> ActionDict { get; private set; }
+
+        ApplicationData applicationData;
+        public ApplicationData GetData() => applicationData;
+
+        ApplicationEventBus eventBus;
+        public ApplicationEventBus GetEvents() => eventBus;
+
+        public Gtk.Application GetGtk() => this;
 
         /// <summary>
         /// The relative path where logs are written to.
         /// </summary>
         public string LogFile { get; private set; }
 
-        /// <summary>
-        /// Creates a new Application instance.
-        /// </summary>
-        public Application() : base("io.openchart", GLib.ApplicationFlags.None)
+        public Application() : base(AppId, GLib.ApplicationFlags.None)
         {
-            Application.Instance = this;
+            ActionDict = new Dictionary<string, IAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
-
-            Register(GLib.Cancellable.Current);
         }
 
         /// <summary>
@@ -48,18 +49,25 @@ namespace OpenChart
             Log.Information("Shutting down...");
         }
 
+        /// <summary>
+        /// Initializes the actions for the application.
+        /// </summary>
         public void InitActions()
         {
-            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
-            // type of argument, resulting in a segfault.
-            AddAction(new QuitAction().Action);
+            // File actions
+            addAction(new NewProjectAction(this));
+            addAction(new CloseProjectAction(this));
+            addAction(new SaveAction(this));
+            addAction(new SaveAsAction(this));
+            addAction(new QuitAction(this));
         }
 
         /// <summary>
         /// Initializes the application. This sets up the components of the app, such as logging,
         /// loading the audio library, loading noteskins, etc.
         /// </summary>
-        public bool InitApplication()
+        /// <param name="skipAudio">Skips the audio initialization if set to true.</param>
+        public bool InitApplication(bool skipAudio = false)
         {
             var path = SetApplicationPath();
             InitLogging();
@@ -68,12 +76,18 @@ namespace OpenChart
             Log.Information("Initializing...");
             Log.Debug($"Set current directory to {path}");
 
-            if (!InitAudio())
+            if (skipAudio)
+                Log.Information("skipAudio = true, not loading libbass.");
+            else if (!InitAudio())
                 return false;
 
-            AppData = new ApplicationData(path);
-            AppData.Init();
+            applicationData = new ApplicationData(path);
+            applicationData.Init();
 
+            eventBus = new ApplicationEventBus(applicationData);
+
+            // Actions should be initialized last since they may require other parts of the application
+            // during setup.
             InitActions();
 
             Log.Information("Ready.");
@@ -91,19 +105,24 @@ namespace OpenChart
                 // Initialize libbass
                 if (!Bass.Init())
                 {
-                    var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
+                    if (Bass.LastError != Errors.Already)
+                    {
+                        var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
 
-                    Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
-                    return false;
+                        Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
+                        return false;
+                    }
+                    else
+                        Log.Information("Tried to initialize libbass but it was already loaded, ignoring...");
                 }
+                else
+                    Log.Information("libbass init OK.");
             }
             catch (DllNotFoundException e)
             {
                 Log.Fatal(e, "Failed to initialize libbass (DLL not found).");
                 return false;
             }
-
-            Log.Information("libbass init OK.");
 
             return true;
         }
@@ -173,6 +192,14 @@ namespace OpenChart
                 Log.Fatal("Failed to initialize, quitting...");
                 Environment.Exit(1);
             }
+        }
+
+        private void addAction(IAction action)
+        {
+            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
+            // type of argument, resulting in a segfault.
+            ActionDict.Add(action.GetName(), action);
+            AddAction(action.Action);
         }
     }
 }

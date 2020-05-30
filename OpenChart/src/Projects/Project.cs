@@ -1,5 +1,6 @@
 using OpenChart.Charting;
 using OpenChart.Songs;
+using System;
 using System.Collections.Generic;
 
 namespace OpenChart.Projects
@@ -15,6 +16,30 @@ namespace OpenChart.Projects
         /// </summary>
         public List<Chart> Charts { get; private set; }
 
+        string _name;
+        /// <summary>
+        /// The name of the project.
+        /// </summary>
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentException("Project name cannot be blank.");
+                else if (value == Name)
+                    return;
+
+                _name = value;
+                Renamed?.Invoke(this, null);
+            }
+        }
+
+        /// <summary>
+        /// An event fired when the project's name changes.
+        /// </summary>
+        public event EventHandler Renamed;
+
         /// <summary>
         /// The metadata for the song. Can be null.
         /// </summary>
@@ -23,9 +48,16 @@ namespace OpenChart.Projects
         /// <summary>
         /// Creates a new Project instance.
         /// </summary>
-        public Project()
+        public Project() : this("New Project") { }
+
+        /// <summary>
+        /// Creates a new Project instance.
+        /// </summary>
+        /// <param name="name">The name of the project.</param>
+        public Project(string name)
         {
             Charts = new List<Chart>();
+            Name = name;
             SongMetadata = null;
         }
     }

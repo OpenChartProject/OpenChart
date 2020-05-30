@@ -33,12 +33,11 @@ namespace OpenChart.NoteSkins
         }
 
         /// <summary>
-        /// Loads all noteskins found in the noteskins folder. <seealso cref="ApplicationData.NoteSkinFolder" />
+        /// Loads all noteskins found in the given path.
         /// </summary>
-        public void LoadAll()
+        /// <param name="path">The path to the noteskins folder.</param>
+        public void LoadAll(string path)
         {
-            var path = Application.Instance.AppData.NoteSkinFolder;
-
             if (!Directory.Exists(path))
                 throw new Exception($"The noteskins folder ('{path}') does not exist.");
 
@@ -49,7 +48,7 @@ namespace OpenChart.NoteSkins
 
                 try
                 {
-                    ns = loadNoteSkin(name);
+                    ns = loadNoteSkin(path, name);
                 }
                 catch (Exception e)
                 {
@@ -67,17 +66,17 @@ namespace OpenChart.NoteSkins
         /// </summary>
         /// <param name="skinName">The name of the folder for the noteskin. <seealso cref="ApplicationData.NoteSkinFolder" /></param>
         /// <returns>The loaded noteskin.</returns>
-        private NoteSkin loadNoteSkin(string skinName)
+        private NoteSkin loadNoteSkin(string path, string skinName)
         {
-            var dirName = Path.Join(Application.Instance.AppData.NoteSkinFolder, skinName);
+            var skinPath = Path.Combine(path, skinName);
 
-            if (!Directory.Exists(dirName))
+            if (!Directory.Exists(skinPath))
                 throw new Exception($"Unable to find a noteskin with the name '{skinName}'.");
 
             var noteSkin = new NoteSkin(skinName);
 
             // Look for keymode folders inside the noteskin folder.
-            foreach (var dir in Directory.EnumerateDirectories(dirName))
+            foreach (var dir in Directory.EnumerateDirectories(skinPath))
             {
                 var match = reNoteSkinKeyModeDir.Match(Path.GetFileName(dir));
 
@@ -96,8 +95,8 @@ namespace OpenChart.NoteSkins
         /// </summary>
         /// <param name="noteSkin">The NoteSkin object to load the keymode into.</param>
         /// <param name="keyCount">The keymode's key count.</param>
-        /// <param name="dir">The noteskin directory path.</param>
-        private void loadKeyModeSkin(NoteSkin noteSkin, int keyCount, string dir)
+        /// <param name="path">The noteskin directory path.</param>
+        private void loadKeyModeSkin(NoteSkin noteSkin, int keyCount, string path)
         {
             KeyModeSkin kms = new KeyModeSkin(keyCount);
 
@@ -105,10 +104,10 @@ namespace OpenChart.NoteSkins
             {
                 NoteSkinKey key = new NoteSkinKey();
 
-                // key.Receptor = new ImageAsset(Path.Join(dir, $"receptor_{i}.png"));
-                key.TapNote = new ImageAsset(Path.Join(dir, $"tap_{i}.png"));
-                key.HoldNote = new ImageAsset(Path.Join(dir, $"hold_{i}.png"));
-                key.HoldNoteBody = new ImageAsset(Path.Join(dir, $"hold_body_{i}.png"));
+                // key.Receptor = new ImageAsset(Path.Join(path, $"receptor_{i}.png"));
+                key.TapNote = new ImageAsset(Path.Join(path, $"tap_{i}.png"));
+                key.HoldNote = new ImageAsset(Path.Join(path, $"hold_{i}.png"));
+                key.HoldNoteBody = new ImageAsset(Path.Join(path, $"hold_body_{i}.png"));
 
                 kms.Set(i - 1, key);
             }

@@ -12,18 +12,22 @@ namespace OpenChart.UI.Windows
     /// </summary>
     public class MainWindow : Window
     {
+        IApplication app;
+        VBox container;
+
+        const string baseTitle = "OpenChart";
+
         const int InitialWindowWidth = 800;
         const int InitialWindowHeight = 600;
         const int MinimumWindowWidth = 360;
         const int MinimumWindowHeight = 240;
 
-        Application application;
-        VBox container;
-
-        public MainWindow(Application application) : base("OpenChart")
+        public MainWindow(IApplication app) : base(baseTitle)
         {
-            this.application = application;
-            Title = "OpenChart";
+            this.app = app;
+
+            app.GetEvents().CurrentProjectChanged += delegate { renameWindowToMatchProject(); };
+            app.GetEvents().CurrentProjectRenamed += delegate { renameWindowToMatchProject(); };
             DeleteEvent += onDelete;
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
@@ -31,13 +35,7 @@ namespace OpenChart.UI.Windows
             var chart = new Chart(4);
             chart.BPMList.BPMs.Add(new BPM(120, 0));
 
-            var noteSkin = OpenChart
-                .Application
-                .Instance
-                .AppData
-                .NoteSkins
-                .GetNoteSkin("default_arrow")
-                .GetKeyModeSkin(chart.KeyCount.Value);
+            var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
 
             var noteFieldData = new NoteFieldData(
                 chart,
@@ -82,9 +80,20 @@ namespace OpenChart.UI.Windows
             SetPosition(WindowPosition.Center);
         }
 
+        private void renameWindowToMatchProject()
+        {
+            var project = app.GetData().CurrentProject;
+            var title = baseTitle;
+
+            if (project != null)
+                title += " - " + project.Name;
+
+            Title = title;
+        }
+
         private void onDelete(object o, DeleteEventArgs e)
         {
-            Gtk.Application.Quit();
+            app.GetGtk().ActivateAction(QuitAction.Name, null);
         }
     }
 }
