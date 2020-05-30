@@ -1,29 +1,28 @@
+using OpenChart.Charting;
 using Serilog;
 
 namespace OpenChart.UI.Actions
 {
     /// <summary>
-    /// An action that triggers the current active project to close. This action
-    /// is only enabled when an active project is open.
+    /// An action that triggers the application to create a new chart.
     /// </summary>
-    public class CloseProjectAction : Actions.IAction
+    public class NewChartAction : Actions.IAction
     {
         IApplication app;
 
-        public const string Hotkey = null;
+        public const string Hotkey = "<Control><Shift>n";
         public string GetHotkey() => Hotkey;
 
-        public const string Name = "file.close_project";
+        public const string Name = "file.new_chart";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
         /// <summary>
-        /// Creates a new CloseProjectAction instance.
+        /// Creates a new NewChartAction instance.
         /// </summary>
-        /// <param name="app">The application instance.</param>
-        public CloseProjectAction(IApplication app)
+        public NewChartAction(IApplication app)
         {
             this.app = app;
 
@@ -41,7 +40,9 @@ namespace OpenChart.UI.Actions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
-            app.GetData().CloseCurrentProject();
+
+            // Add a new blank 4k chart.
+            app.GetData().CurrentProject.AddChart(new Chart(4));
         }
     }
 }
