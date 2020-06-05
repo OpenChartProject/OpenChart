@@ -1,0 +1,17 @@
+using OpenChart.Charting;
+
+namespace OpenChart.UI.NoteField
+{
+    /// <summary>
+    /// The complete representation of a note field. This class includes all of the necessary
+    /// components for a note field.
+    /// </summary>
+    public class NoteFieldView
+    {
+        public BeatLines BeatLines { get; private set; }
+        public KeyContainer Keys { get; private set; }
+
+        public DisplaySettings DisplaySettings { get; private set; }
+
+    }
+}
