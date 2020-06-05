@@ -3,7 +3,6 @@ using OpenChart.Charting;
 using NativeObjects = OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 using OpenChart.UI.Actions;
-using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.Windows
 {
@@ -46,7 +45,7 @@ namespace OpenChart.UI.Windows
                 centerObjectsOnBeatLines: true
             );
 
-            var noteField = new NoteField(noteFieldData);
+            var noteField = new Widgets.NoteField(noteFieldData);
 
             chart.Objects[0].Add(new NativeObjects.TapNote(0, 0));
             chart.Objects[1].Add(new NativeObjects.TapNote(1, 0));
