@@ -46,11 +46,20 @@ namespace OpenChart.UI.NoteField
 
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
+
+            drawingArea.SetSizeRequest(400, 2000);
+
+            drawingArea.SizeAllocated += (o, e) =>
+            {
+                Serilog.Log.Debug($"Drawing area allocated: {e.Allocation.Width}x{e.Allocation.Height}");
+            };
         }
 
         private void onDrawn(object o, DrawnArgs e)
         {
+            var clip = e.Cr.ClipExtents();
 
+            Serilog.Log.Debug($"onDrawn: ({clip.X}, {clip.Y}) {clip.Width}x{clip.Height}");
         }
     }
 }
