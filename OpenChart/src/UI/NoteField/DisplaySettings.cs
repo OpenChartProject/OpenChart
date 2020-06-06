@@ -1,4 +1,5 @@
 using OpenChart.Charting;
+using System;
 
 namespace OpenChart.UI.NoteField
 {
@@ -11,6 +12,11 @@ namespace OpenChart.UI.NoteField
         /// The chart the note field is displaying.
         /// </summary>
         public Chart Chart { get; private set; }
+
+        /// <summary>
+        /// The height of the chart, in pixels.
+        /// </summary>
+        public int ChartHeight => (int)Math.Ceiling(Chart.GetTimeLength().Value * PixelsPerSecond);
 
         /// <summary>
         /// The number of pixels that represent a full second. This is used to calculate where to
