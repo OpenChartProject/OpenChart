@@ -26,8 +26,15 @@ namespace OpenChart.UI.NoteField.Objects
             if (chartObject is Charting.Objects.TapNote tapNote)
                 obj = new TapNote(keySkin.TapNote, tapNote);
             else if (chartObject is Charting.Objects.HoldNote holdNote)
+            {
                 // TODO: Cache the hold note body on the note skin
-                obj = new HoldNote(keySkin.HoldNote, new ImagePattern(keySkin.HoldNoteBody), holdNote);
+                obj = new HoldNote(
+                    NoteFieldSettings,
+                    keySkin.HoldNote,
+                    new ImagePattern(keySkin.HoldNoteBody),
+                    holdNote
+                );
+            }
             else
                 throw new Exception("Unknown chart object type.");
 

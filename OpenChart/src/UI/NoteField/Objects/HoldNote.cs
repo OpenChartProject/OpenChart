@@ -1,5 +1,6 @@
 using Gtk;
 using OpenChart.UI.Assets;
+using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.NoteField.Objects
 {
@@ -13,7 +14,7 @@ namespace OpenChart.UI.NoteField.Objects
         Charting.Objects.HoldNote chartObject;
         public Charting.Objects.BaseObject GetChartObject() => chartObject;
 
-        VBox container;
+        SortedContainer<int> container;
         public Widget GetWidget() => container;
 
         /// <summary>
@@ -26,6 +27,8 @@ namespace OpenChart.UI.NoteField.Objects
         /// </summary>
         public HoldNoteHead Head { get; private set; }
 
+        public NoteFieldSettings NoteFieldSettings { get; private set; }
+
         /// <summary>
         /// Creates a new HoldNote instance.
         /// </summary>
@@ -33,18 +36,32 @@ namespace OpenChart.UI.NoteField.Objects
         /// <param name="bodyImage">The pattern for the body.</param>
         /// <param name="chartObject">The note object from the chart.</param>
         public HoldNote(
+            NoteFieldSettings noteFieldSettings,
             ImageAsset headImage,
             ImagePattern bodyImage,
             Charting.Objects.HoldNote chartObject
         )
         {
-            Body = new HoldNoteBody(bodyImage);
+            NoteFieldSettings = noteFieldSettings;
+            Body = new HoldNoteBody(bodyImage, NoteFieldSettings.KeyWidth);
             Head = new HoldNoteHead(headImage);
             this.chartObject = chartObject;
 
-            container = new VBox();
-            container.Add(Head.GetWidget());
-            container.Add(Body.GetWidget());
+            container = new SortedContainer<int>();
+            container.Add(0, Body.GetWidget());
+            container.Add(1, Head.GetWidget());
+
+            chartObject.Length.Changed += delegate { UpdateLength(); };
+
+            UpdateLength();
+        }
+
+        /// <summary>
+        /// Updates the length of the hold note.
+        /// </summary>
+        public void UpdateLength()
+        {
+            Body.SetHeight(NoteFieldSettings.BeatToPosition(chartObject.EndBeat));
         }
     }
 }
