@@ -45,14 +45,11 @@ namespace OpenChart.UI.Widgets
         /// Removes a widget from the container.
         /// </summary>
         /// <param name="widget">The widget to remove.</param>
-        public new void Remove(Widget widget)
+        public void Remove(T key)
         {
-            var index = sortedChildren.IndexOfValue(widget);
+            var widget = sortedChildren[key];
 
-            if (index == -1)
-                return;
-
-            sortedChildren.RemoveAt(index);
+            sortedChildren.Remove(key);
             base.Remove(widget);
         }
 

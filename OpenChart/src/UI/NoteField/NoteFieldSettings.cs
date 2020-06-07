@@ -1,5 +1,6 @@
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
+using OpenChart.NoteSkins;
 using System;
 
 namespace OpenChart.UI.NoteField
@@ -50,6 +51,11 @@ namespace OpenChart.UI.NoteField
         public int NoteFieldWidth => Chart.KeyCount.Value * KeyWidth;
 
         /// <summary>
+        /// The note skin to use for the note field.
+        /// </summary>
+        public KeyModeSkin NoteSkin { get; private set; }
+
+        /// <summary>
         /// The number of pixels that represent a full second. This is used to calculate where to
         /// draw things like beat lines and notes.
         /// </summary>
@@ -59,12 +65,14 @@ namespace OpenChart.UI.NoteField
         /// Creates a new NoteFieldSettings instance.
         /// </summary>
         /// <param name="chart">The chart to display.</param>
+        /// <param name="noteSkin">The note skin for the note field.</param>
         /// <param name="pixelsPerSecond">The time to pixel ratio.</param>
         /// <param name="keyWidth">The width, in pixels, of a single key.</param>
-        public NoteFieldSettings(Chart chart, int pixelsPerSecond, int keyWidth)
+        public NoteFieldSettings(Chart chart, KeyModeSkin noteSkin, int pixelsPerSecond, int keyWidth)
         {
             Chart = chart;
             ChartEventBus = new ChartEventBus(Chart);
+            NoteSkin = noteSkin;
             PixelsPerSecond = pixelsPerSecond;
             KeyWidth = keyWidth;
         }

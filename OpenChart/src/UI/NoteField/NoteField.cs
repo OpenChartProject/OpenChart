@@ -52,7 +52,7 @@ namespace OpenChart.UI.NoteField
         public void ShowBeatLines(BeatLineSettings beatLineSettings)
         {
             BeatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
-            container.AddSorted(Components.BeatLines, BeatLines.GetWidget());
+            container.Add(Components.BeatLines, BeatLines.GetWidget());
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace OpenChart.UI.NoteField
         public void ShowKeys()
         {
             Keys = new KeyContainer(NoteFieldSettings);
-            container.AddSorted(Components.Keys, Keys.GetWidget());
+            container.Add(Components.Keys, Keys.GetWidget());
         }
     }
 }
