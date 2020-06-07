@@ -22,9 +22,21 @@ namespace OpenChart.UI.Windows
                 MeasureLineColor = new Color(1, 1, 1),
                 MeasureLineThickness = 2
             };
-            container.Put(new BeatLines(dSettings, blSettings).GetWidget(), 0, -1200);
+            var beatLines = new BeatLines(dSettings, blSettings);
+            container.Put(beatLines.GetWidget(), 0, 0);
             Add(container);
             ShowAll();
+
+            var x = 0.0;
+            var y = 0.0;
+
+            container.ScrollEvent += (o, e) =>
+            {
+                x += e.Event.DeltaX * 25;
+                y -= e.Event.DeltaY * 25;
+
+                container.Move(beatLines.GetWidget(), (int)x, (int)y);
+            };
         }
     }
 }
