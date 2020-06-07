@@ -12,6 +12,11 @@ namespace OpenChart.UI.NoteField
     public class NoteFieldSettings
     {
         /// <summary>
+        /// The alignment for note field objects.
+        /// </summary>
+        public NoteFieldObjectAlignment Alignment { get; private set; }
+
+        /// <summary>
         /// The chart the note field is displaying.
         /// </summary>
         public Chart Chart { get; private set; }
@@ -74,8 +79,15 @@ namespace OpenChart.UI.NoteField
         /// <param name="noteSkin">The note skin for the note field.</param>
         /// <param name="pixelsPerSecond">The time to pixel ratio.</param>
         /// <param name="keyWidth">The width, in pixels, of a single key.</param>
-        public NoteFieldSettings(Chart chart, KeyModeSkin noteSkin, int pixelsPerSecond, int keyWidth)
+        public NoteFieldSettings(
+            Chart chart,
+            KeyModeSkin noteSkin,
+            int pixelsPerSecond,
+            int keyWidth,
+            NoteFieldObjectAlignment alignment
+        )
         {
+            Alignment = alignment;
             Chart = chart;
             NoteSkin = noteSkin;
             PixelsPerSecond = pixelsPerSecond;

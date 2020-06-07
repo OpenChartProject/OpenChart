@@ -1,4 +1,5 @@
 using Gtk;
+using ChartObjects = OpenChart.Charting.Objects;
 using OpenChart.UI.NoteField;
 
 namespace OpenChart.UI.Windows
@@ -11,13 +12,19 @@ namespace OpenChart.UI.Windows
 
             Resize(640, 480);
 
-            var container = new Layout(null, null);
-
             var chart = new Charting.Chart(4);
             chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
 
             var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
-            var noteFieldSettings = new NoteFieldSettings(chart, noteSkin, 200, 96);
+
+            var noteFieldSettings = new NoteFieldSettings(
+                chart,
+                noteSkin,
+                200,
+                96,
+                NoteFieldObjectAlignment.Top
+            );
+
             var beatLineSettings = new BeatLineSettings
             {
                 BeatLineColor = new Color(0.5, 0.5, 0.5),
@@ -31,9 +38,10 @@ namespace OpenChart.UI.Windows
             noteField.ShowBeatLines(beatLineSettings);
             noteField.ShowKeys();
 
+            var container = new Layout(null, null);
             container.Add(noteField.GetWidget());
-
             Add(container);
+
             ShowAll();
 
             var x = 0.0;
