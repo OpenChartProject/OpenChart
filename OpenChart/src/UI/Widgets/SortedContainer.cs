@@ -23,9 +23,21 @@ namespace OpenChart.UI.Widgets
         /// </summary>
         /// <param name="key">The child's sort value.</param>
         /// <param name="widget">The child's widget.</param>
-        public void AddSorted(T key, Widget widget)
+        public void Add(T key, Widget widget)
         {
-            Add(widget);
+            Put(key, widget, 0, 0);
+        }
+
+        /// <summary>
+        /// Adds a widget to the container at the given position.
+        /// </summary>
+        /// <param name="key">The child's sort value.</param>
+        /// <param name="widget">The child's widget.</param>
+        /// <param name="x">X position.</param>
+        /// <param name="y">Y position.</param>
+        public void Put(T key, Widget widget, int x, int y)
+        {
+            Put(widget, x, y);
             sortedChildren.Add(key, widget);
         }
 
