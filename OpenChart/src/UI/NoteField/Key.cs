@@ -41,12 +41,27 @@ namespace OpenChart.UI.NoteField
         {
             var noteFieldObject = NoteFieldSettings.ObjectFactory.Create(chartObject);
 
-            container.Put(
-                noteFieldObject.GetChartObject().Beat,
-                noteFieldObject.GetWidget(),
-                0,
-                NoteFieldSettings.BeatToPosition(noteFieldObject.GetChartObject().Beat)
-            );
+            noteFieldObject.GetWidget().SizeAllocated += delegate
+            {
+                UpdateObjectPosition(noteFieldObject);
+            };
+
+            container.Add(noteFieldObject.GetChartObject().Beat, noteFieldObject.GetWidget());
+        }
+
+        /// <summary>
+        /// Gets the pixel offset of the object given the current alignment settings.
+        /// </summary>
+        public int GetObjectOffset(INoteFieldObject obj)
+        {
+            if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Top)
+                return 0;
+            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Center)
+                return obj.GetHeight() / 2;
+            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Bottom)
+                return obj.GetHeight();
+
+            return 0;
         }
 
         /// <summary>
@@ -55,6 +70,17 @@ namespace OpenChart.UI.NoteField
         public void RemoveObject(BaseObject obj)
         {
             container.Remove(obj.Beat);
+        }
+
+        /// <summary>
+        /// Updates the object's position.
+        /// </summary>
+        public void UpdateObjectPosition(INoteFieldObject noteFieldObject)
+        {
+            var y = NoteFieldSettings.BeatToPosition(noteFieldObject.GetChartObject().Beat);
+            y -= GetObjectOffset(noteFieldObject);
+
+            container.Move(noteFieldObject.GetWidget(), 0, y);
         }
     }
 }

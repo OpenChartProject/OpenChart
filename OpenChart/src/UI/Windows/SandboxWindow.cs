@@ -22,7 +22,7 @@ namespace OpenChart.UI.Windows
                 noteSkin,
                 200,
                 96,
-                NoteFieldObjectAlignment.Top
+                NoteFieldObjectAlignment.Center
             );
 
             var beatLineSettings = new BeatLineSettings
