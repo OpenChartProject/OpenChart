@@ -4,7 +4,7 @@ using OpenChart.UI.Widgets;
 namespace OpenChart.UI.NoteField.Objects
 {
     /// <summary>
-    /// Represents the head of a hold note.
+    /// Widget for the head of a hold note.
     /// </summary>
     public class HoldNoteHead : IWidget
     {
