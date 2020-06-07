@@ -93,6 +93,8 @@ namespace OpenChart.UI.NoteField
             PixelsPerSecond = pixelsPerSecond;
             KeyWidth = keyWidth;
 
+            NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
+
             ChartEventBus = new ChartEventBus(Chart);
             ObjectFactory = new NoteFieldObjectFactory(this);
         }
