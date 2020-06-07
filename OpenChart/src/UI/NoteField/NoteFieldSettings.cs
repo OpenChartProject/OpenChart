@@ -1,4 +1,5 @@
 using OpenChart.Charting;
+using OpenChart.Charting.Properties;
 using System;
 
 namespace OpenChart.UI.NoteField
@@ -39,7 +40,7 @@ namespace OpenChart.UI.NoteField
                 var measure = Math.Ceiling(Chart.GetBeatLength().Value / 4) + ExtraMeasures;
                 var beat = measure * 4;
 
-                return (int)Math.Ceiling(Chart.BPMList.Time.BeatToTime(beat).Value * PixelsPerSecond);
+                return BeatToPosition(beat);
             }
         }
 
@@ -66,6 +67,22 @@ namespace OpenChart.UI.NoteField
             ChartEventBus = new ChartEventBus(Chart);
             PixelsPerSecond = pixelsPerSecond;
             KeyWidth = keyWidth;
+        }
+
+        /// <summary>
+        /// Returns the position of the given beat.
+        /// </summary>
+        public int BeatToPosition(Beat beat)
+        {
+            return TimeToPosition(Chart.BPMList.Time.BeatToTime(beat));
+        }
+
+        /// <summary>
+        /// Returns the position of the given time.
+        /// </summary>
+        public int TimeToPosition(Time time)
+        {
+            return (int)Math.Round(time.Value * PixelsPerSecond);
         }
     }
 }
