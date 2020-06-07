@@ -9,7 +9,7 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class HoldNote : INoteFieldObject
     {
-        public int GetHeight() => Head.GetWidget().AllocatedHeight;
+        public int GetHeight() => Head.ImageAsset.Pixbuf.Height;
 
         Charting.Objects.HoldNote chartObject;
         public Charting.Objects.BaseObject GetChartObject() => chartObject;
@@ -61,7 +61,7 @@ namespace OpenChart.UI.NoteField.Objects
         /// </summary>
         public void UpdateLength()
         {
-            Body.SetHeight(NoteFieldSettings.BeatToPosition(chartObject.EndBeat));
+            // Body.SetHeight(NoteFieldSettings.BeatToPosition(chartObject.EndBeat));
         }
     }
 }

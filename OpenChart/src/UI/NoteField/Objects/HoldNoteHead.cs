@@ -8,6 +8,8 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class HoldNoteHead : IWidget
     {
+        public ImageAsset ImageAsset { get; private set; }
+
         Image widget;
         public Gtk.Widget GetWidget() => widget;
 
@@ -16,7 +18,8 @@ namespace OpenChart.UI.NoteField.Objects
         /// </summary>
         public HoldNoteHead(ImageAsset image)
         {
-            widget = new Image(image);
+            ImageAsset = image;
+            widget = new Image(ImageAsset);
         }
     }
 }
