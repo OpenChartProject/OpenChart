@@ -6,7 +6,7 @@ namespace OpenChart.UI.NoteField
     /// <summary>
     /// Note field settings for modifying how the note field looks.
     /// </summary>
-    public class DisplaySettings
+    public class NoteFieldSettings
     {
         /// <summary>
         /// The chart the note field is displaying.
@@ -55,12 +55,12 @@ namespace OpenChart.UI.NoteField
         public int PixelsPerSecond { get; private set; }
 
         /// <summary>
-        /// Creates a new DisplaySettings instance.
+        /// Creates a new NoteFieldSettings instance.
         /// </summary>
         /// <param name="chart">The chart to display.</param>
         /// <param name="pixelsPerSecond">The time to pixel ratio.</param>
         /// <param name="keyWidth">The width, in pixels, of a single key.</param>
-        public DisplaySettings(Chart chart, int pixelsPerSecond, int keyWidth)
+        public NoteFieldSettings(Chart chart, int pixelsPerSecond, int keyWidth)
         {
             Chart = chart;
             ChartEventBus = new ChartEventBus(Chart);

@@ -43,7 +43,7 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// The display settings for the note field the beat lines are for.
         /// </summary>
-        public DisplaySettings DisplaySettings { get; private set; }
+        public NoteFieldSettings NoteFieldSettings { get; private set; }
 
         DrawingArea drawingArea;
         public Widget GetWidget() => drawingArea;
@@ -51,18 +51,18 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// Creates a new BeatLines instance.
         /// </summary>
-        /// <param name="displaySettings">The settings for the note field.</param>
+        /// <param name="noteFieldSettings">The settings for the note field.</param>
         /// <param name="beatLineSettings">The settings for the BeatLines instance.</param>
-        public BeatLines(DisplaySettings displaySettings, BeatLineSettings beatLineSettings)
+        public BeatLines(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
             BeatLineSettings = beatLineSettings;
-            DisplaySettings = displaySettings;
+            NoteFieldSettings = noteFieldSettings;
 
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
 
             // Resize the widget when the note field is updated.
-            DisplaySettings.ChartEventBus.Anything += delegate { resizeToFit(); };
+            NoteFieldSettings.ChartEventBus.Anything += delegate { resizeToFit(); };
             resizeToFit();
         }
 
@@ -93,19 +93,19 @@ namespace OpenChart.UI.NoteField
             var clip = e.Cr.ClipExtents();
 
             // The time in the chart that the top of the drawing area is.
-            var topTime = clip.Y / DisplaySettings.PixelsPerSecond;
-            var bottomTime = (clip.Y + clip.Height) / DisplaySettings.PixelsPerSecond;
+            var topTime = clip.Y / NoteFieldSettings.PixelsPerSecond;
+            var bottomTime = (clip.Y + clip.Height) / NoteFieldSettings.PixelsPerSecond;
 
             var beatLines = new List<int>();
             var measureLines = new List<int>();
 
             // Iterate through the beats in the chart and record the y positions of each line
-            foreach (var beat in DisplaySettings.Chart.BPMList.Time.GetBeats(topTime))
+            foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(topTime))
             {
                 if (beat.Time.Value >= bottomTime)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * DisplaySettings.PixelsPerSecond);
+                var y = (int)Math.Round(beat.Time.Value * NoteFieldSettings.PixelsPerSecond);
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);
@@ -137,7 +137,7 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         private void resizeToFit()
         {
-            drawingArea.SetSizeRequest(DisplaySettings.NoteFieldWidth, DisplaySettings.NoteFieldHeight);
+            drawingArea.SetSizeRequest(NoteFieldSettings.NoteFieldWidth, NoteFieldSettings.NoteFieldHeight);
         }
     }
 }

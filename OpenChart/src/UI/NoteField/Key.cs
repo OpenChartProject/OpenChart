@@ -8,16 +8,16 @@ namespace OpenChart.UI.NoteField
     /// </summary>
     public class Key : IWidget
     {
-        public DisplaySettings DisplaySettings { get; private set; }
+        public NoteFieldSettings NoteFieldSettings { get; private set; }
         /// <summary>
         /// The key index in the chart that this widget represents.
         /// </summary>
         public KeyIndex KeyIndex { get; private set; }
         public Gtk.Widget GetWidget() => null;
 
-        public Key(DisplaySettings settings, KeyIndex index)
+        public Key(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
-            DisplaySettings = settings;
+            NoteFieldSettings = noteFieldSettings;
             KeyIndex.Value = index.Value;
         }
     }

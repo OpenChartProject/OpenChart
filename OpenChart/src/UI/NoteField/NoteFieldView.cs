@@ -9,7 +9,7 @@ namespace OpenChart.UI.NoteField
         public BeatLines BeatLines { get; private set; }
         public KeyContainer Keys { get; private set; }
 
-        public DisplaySettings DisplaySettings { get; private set; }
+        public NoteFieldSettings NoteFieldSettings { get; private set; }
 
         public Gtk.Widget GetWidget() => null;
     }

@@ -7,13 +7,13 @@ namespace OpenChart.UI.NoteField
     /// </summary>
     public class KeyContainer : IWidget
     {
-        public DisplaySettings DisplaySettings { get; private set; }
+        public NoteFieldSettings NoteFieldSettings { get; private set; }
         public Key[] Keys { get; private set; }
         public Gtk.Widget GetWidget() => null;
 
-        public KeyContainer(DisplaySettings settings)
+        public KeyContainer(NoteFieldSettings noteFieldSettings)
         {
-            DisplaySettings = settings;
+            NoteFieldSettings = noteFieldSettings;
 
             createKeys();
         }
@@ -22,9 +22,9 @@ namespace OpenChart.UI.NoteField
         {
             var keyList = new List<Key>();
 
-            for (var i = 0; i < DisplaySettings.Chart.KeyCount.Value; i++)
+            for (var i = 0; i < NoteFieldSettings.Chart.KeyCount.Value; i++)
             {
-                keyList.Add(new Key(DisplaySettings, i));
+                keyList.Add(new Key(NoteFieldSettings, i));
             }
 
             Keys = keyList.ToArray();
