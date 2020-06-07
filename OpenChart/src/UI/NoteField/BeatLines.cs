@@ -15,7 +15,7 @@ namespace OpenChart.UI.NoteField
         public BeatLineSettings BeatLineSettings { get; private set; }
 
         /// <summary>
-        /// The display settings for the note field the beat lines are for.
+        /// The settings for the note field.
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 

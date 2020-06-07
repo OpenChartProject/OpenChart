@@ -8,7 +8,11 @@ namespace OpenChart.UI.NoteField
     /// </summary>
     public class Key : IWidget
     {
+        /// <summary>
+        /// The settings for the note field.
+        /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
+
         /// <summary>
         /// The key index in the chart that this widget represents.
         /// </summary>

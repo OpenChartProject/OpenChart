@@ -7,6 +7,9 @@ namespace OpenChart.UI.NoteField
     /// </summary>
     public class KeyContainer : IWidget
     {
+        /// <summary>
+        /// The settings for the note field.
+        /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
         public Key[] Keys { get; private set; }
         public Gtk.Widget GetWidget() => null;
