@@ -38,22 +38,10 @@ namespace OpenChart.UI.Windows
             noteField.ShowBeatLines(beatLineSettings);
             noteField.ShowKeys();
 
-            var container = new Layout(null, null);
-            container.Add(noteField.GetWidget());
-            Add(container);
+            var view = new NoteFieldView(noteField);
+            Add(view.GetWidget());
 
             ShowAll();
-
-            var x = 0.0;
-            var y = 0.0;
-
-            container.ScrollEvent += (o, e) =>
-            {
-                x += e.Event.DeltaX * 25;
-                y -= e.Event.DeltaY * 25;
-
-                container.Move(noteField.GetWidget(), (int)x, (int)y);
-            };
 
             chart.Objects[0].Add(new ChartObjects.TapNote(0, 0));
             chart.Objects[1].Add(new ChartObjects.TapNote(1, 0));
