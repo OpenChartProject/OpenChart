@@ -5,16 +5,19 @@ namespace OpenChart.UI.Windows
 {
     public class SandboxWindow : Window
     {
-        public SandboxWindow() : base("sandbox")
+        public SandboxWindow(IApplication app) : base("sandbox")
         {
             DeleteEvent += delegate { Gtk.Application.Quit(); };
 
             Resize(640, 480);
 
             var container = new Layout(null, null);
+
             var chart = new Charting.Chart(4);
             chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
-            var dSettings = new NoteFieldSettings(chart, 200, 96);
+
+            var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
+            var dSettings = new NoteFieldSettings(chart, noteSkin, 200, 96);
             var blSettings = new BeatLineSettings
             {
                 BeatLineColor = new Color(0.5, 0.5, 0.5),
@@ -22,7 +25,9 @@ namespace OpenChart.UI.Windows
                 MeasureLineColor = new Color(1, 1, 1),
                 MeasureLineThickness = 2
             };
+
             var beatLines = new BeatLines(dSettings, blSettings);
+
             container.Put(beatLines.GetWidget(), 0, 0);
             Add(container);
             ShowAll();

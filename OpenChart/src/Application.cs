@@ -174,7 +174,7 @@ namespace OpenChart
             Log.Information("Displaying main window.");
 
             //var window = new MainWindow(this);
-            var window = new SandboxWindow();
+            var window = new SandboxWindow(this);
 
             AddWindow(window);
             window.ShowAll();
