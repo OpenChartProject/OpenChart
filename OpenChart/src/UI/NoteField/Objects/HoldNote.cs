@@ -43,12 +43,12 @@ namespace OpenChart.UI.NoteField.Objects
         )
         {
             NoteFieldSettings = noteFieldSettings;
-            Body = new HoldNoteBody(bodyImage, NoteFieldSettings.KeyWidth);
+            Body = new HoldNoteBody(bodyImage);
             Head = new HoldNoteHead(headImage);
             this.chartObject = chartObject;
 
             container = new SortedContainer<int>();
-            container.Add(0, Body.GetWidget());
+            container.Put(0, Body.GetWidget(), 0, GetHeight() / 2);
             container.Add(1, Head.GetWidget());
 
             chartObject.Length.Changed += delegate { UpdateLength(); };
@@ -61,7 +61,10 @@ namespace OpenChart.UI.NoteField.Objects
         /// </summary>
         public void UpdateLength()
         {
-            // Body.SetHeight(NoteFieldSettings.BeatToPosition(chartObject.EndBeat));
+            var start = NoteFieldSettings.BeatToPosition(chartObject.Beat);
+            var end = NoteFieldSettings.BeatToPosition(chartObject.EndBeat);
+
+            Body.SetHeight(end - start);
         }
     }
 }

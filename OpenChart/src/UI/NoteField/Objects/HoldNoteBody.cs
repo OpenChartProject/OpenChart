@@ -20,14 +20,12 @@ namespace OpenChart.UI.NoteField.Objects
         /// Creates a new HoldNoteBody instance.
         /// </summary>
         /// <param name="image">The image of the hold note body.</param>
-        public HoldNoteBody(ImagePattern imagePattern, int width)
+        public HoldNoteBody(ImagePattern imagePattern)
         {
             BodyImage = imagePattern;
 
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
-
-            drawingArea.SetSizeRequest(width, 500);
         }
 
         /// <summary>
@@ -36,7 +34,7 @@ namespace OpenChart.UI.NoteField.Objects
         /// <param name="height">The height, in pixels.</param>
         public void SetHeight(int height)
         {
-            drawingArea.SetSizeRequest(drawingArea.AllocatedWidth, height);
+            drawingArea.SetSizeRequest(BodyImage.ImageAsset.Pixbuf.Width, height);
         }
 
         private void onDrawn(object o, DrawnArgs e)
