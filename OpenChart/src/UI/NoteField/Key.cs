@@ -22,6 +22,9 @@ namespace OpenChart.UI.NoteField
         SortedContainer<double> container;
         public Gtk.Widget GetWidget() => container;
 
+        /// <summary>
+        /// Creates a new Key instance.
+        /// </summary>
         public Key(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
             NoteFieldSettings = noteFieldSettings;
