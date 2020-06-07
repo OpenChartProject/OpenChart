@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.NoteField
 {
@@ -17,12 +18,15 @@ namespace OpenChart.UI.NoteField
         /// The key index in the chart that this widget represents.
         /// </summary>
         public KeyIndex KeyIndex { get; private set; }
-        public Gtk.Widget GetWidget() => null;
+
+        SortedContainer<double> container;
+        public Gtk.Widget GetWidget() => container;
 
         public Key(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
             NoteFieldSettings = noteFieldSettings;
             KeyIndex.Value = index.Value;
+            container = new SortedContainer<double>();
         }
     }
 }

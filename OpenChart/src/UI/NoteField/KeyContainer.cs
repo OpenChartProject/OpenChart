@@ -11,26 +11,31 @@ namespace OpenChart.UI.NoteField
         /// The settings for the note field.
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
-        public Key[] Keys { get; private set; }
-        public Gtk.Widget GetWidget() => null;
 
+        /// <summary>
+        /// The list of Key instances in this container.
+        /// </summary>
+        public List<Key> Keys { get; private set; }
+
+        Gtk.HBox container;
+        public Gtk.Widget GetWidget() => container;
+
+        /// <summary>
+        /// Creates a new KeyContainer instance.
+        /// </summary>
         public KeyContainer(NoteFieldSettings noteFieldSettings)
         {
+            Keys = new List<Key>();
             NoteFieldSettings = noteFieldSettings;
+            container = new Gtk.HBox();
 
-            createKeys();
-        }
-
-        private void createKeys()
-        {
-            var keyList = new List<Key>();
-
+            // Create a Key instance for the number of keys in the chart.
             for (var i = 0; i < NoteFieldSettings.Chart.KeyCount.Value; i++)
             {
-                keyList.Add(new Key(NoteFieldSettings, i));
+                var key = new Key(NoteFieldSettings, i);
+                Keys.Add(key);
+                container.Add(key.GetWidget());
             }
-
-            Keys = keyList.ToArray();
         }
     }
 }
