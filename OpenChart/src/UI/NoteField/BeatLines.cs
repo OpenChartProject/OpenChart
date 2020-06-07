@@ -59,7 +59,25 @@ namespace OpenChart.UI.NoteField
         {
             var clip = e.Cr.ClipExtents();
 
-            Serilog.Log.Debug($"onDrawn: ({clip.X}, {clip.Y}) {clip.Width}x{clip.Height}");
+            // The time in the chart that the top of the drawing area is.
+            var topTime = clip.Y * DisplaySettings.PixelsPerSecond;
+            var bottomTime = (clip.Y + clip.Height) * DisplaySettings.PixelsPerSecond;
+
+            foreach (var beat in DisplaySettings.Chart.BPMList.Time.GetBeats(topTime))
+            {
+                // Done drawing.
+                if (beat.Time.Value > bottomTime)
+                    break;
+
+                var y = beat.Time.Value / DisplaySettings.PixelsPerSecond;
+
+                e.Cr.SetSourceColor(BeatLineSettings.BeatLineColor.AsCairoColor());
+                e.Cr.LineWidth = BeatLineSettings.BeatLineThickness;
+
+                e.Cr.MoveTo(0, y);
+                e.Cr.LineTo(clip.Width, y);
+                e.Cr.Stroke();
+            }
         }
     }
 }

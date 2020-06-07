@@ -33,5 +33,12 @@ namespace OpenChart.UI.NoteField
         /// The width, in pixels, of the entire note field.
         /// </summary>
         public int NoteFieldWidth => Chart.KeyCount.Value * KeyWidth;
+
+        public DisplaySettings(Chart chart, int pixelsPerSecond, int keyWidth)
+        {
+            Chart = chart;
+            PixelsPerSecond = pixelsPerSecond;
+            KeyWidth = keyWidth;
+        }
     }
 }
