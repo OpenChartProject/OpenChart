@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using OpenChart.UI.NoteField.Objects;
 using OpenChart.UI.Widgets;
 
 namespace OpenChart.UI.NoteField
@@ -19,7 +20,7 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public KeyIndex KeyIndex { get; private set; }
 
-        SortedContainer<double> container;
+        SortedContainer<Beat> container;
         public Gtk.Widget GetWidget() => container;
 
         /// <summary>
@@ -29,7 +30,30 @@ namespace OpenChart.UI.NoteField
         {
             NoteFieldSettings = noteFieldSettings;
             KeyIndex.Value = index.Value;
-            container = new SortedContainer<double>();
+            container = new SortedContainer<Beat>();
+        }
+
+        /// <summary>
+        /// Adds a note field object to the key.
+        /// </summary>
+        public void AddObject(INoteFieldObject obj)
+        {
+            var beat = obj.GetChartObject().Beat;
+
+            container.Put(
+                beat,
+                obj.GetWidget(),
+                0,
+                NoteFieldSettings.BeatToPosition(beat)
+            );
+        }
+
+        /// <summary>
+        /// Removes a note field object.
+        /// </summary>
+        public void RemoveObject(INoteFieldObject obj)
+        {
+            container.Remove(obj.GetChartObject().Beat);
         }
     }
 }
