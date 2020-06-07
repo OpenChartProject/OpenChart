@@ -54,6 +54,18 @@ namespace OpenChart.UI.Windows
 
                 container.Move(noteField.GetWidget(), (int)x, (int)y);
             };
+
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 0));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 0));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 0));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 0));
+
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 1));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 1.25));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 1.5));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 1.75));
+
+            chart.Objects[0].Add(new ChartObjects.HoldNote(0, 2, 2.4));
         }
     }
 }
