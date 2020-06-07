@@ -8,6 +8,8 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class TapNote : INoteFieldObject
     {
+        public int GetHeight() => widget.AllocatedHeight;
+
         Charting.Objects.TapNote chartObject;
         public Charting.Objects.BaseObject GetChartObject() => chartObject;
 

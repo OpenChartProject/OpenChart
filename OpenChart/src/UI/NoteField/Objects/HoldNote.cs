@@ -8,6 +8,8 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class HoldNote : INoteFieldObject
     {
+        public int GetHeight() => Head.GetWidget().AllocatedHeight;
+
         Charting.Objects.HoldNote chartObject;
         public Charting.Objects.BaseObject GetChartObject() => chartObject;
 

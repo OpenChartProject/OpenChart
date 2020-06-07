@@ -11,5 +11,11 @@ namespace OpenChart.UI.NoteField.Objects
         /// Gets the underlying chart object instance.
         /// </summary>
         BaseObject GetChartObject();
+
+        /// <summary>
+        /// Gets the height of the object, in pixels. This is used for aligning the object along
+        /// beat lines. For hold notes this is the height of the head, not the body.
+        /// </summary>
+        int GetHeight();
     }
 }
