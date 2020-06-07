@@ -17,8 +17,8 @@ namespace OpenChart.UI.Windows
             chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
 
             var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
-            var dSettings = new NoteFieldSettings(chart, noteSkin, 200, 96);
-            var blSettings = new BeatLineSettings
+            var noteFieldSettings = new NoteFieldSettings(chart, noteSkin, 200, 96);
+            var beatLineSettings = new BeatLineSettings
             {
                 BeatLineColor = new Color(0.5, 0.5, 0.5),
                 BeatLineThickness = 1,
@@ -26,9 +26,13 @@ namespace OpenChart.UI.Windows
                 MeasureLineThickness = 2
             };
 
-            var beatLines = new BeatLines(dSettings, blSettings);
+            var noteField = new NoteField.NoteField(noteFieldSettings);
 
-            container.Put(beatLines.GetWidget(), 0, 0);
+            noteField.ShowBeatLines(beatLineSettings);
+            noteField.ShowKeys();
+
+            container.Add(noteField.GetWidget());
+
             Add(container);
             ShowAll();
 
@@ -40,7 +44,7 @@ namespace OpenChart.UI.Windows
                 x += e.Event.DeltaX * 25;
                 y -= e.Event.DeltaY * 25;
 
-                container.Move(beatLines.GetWidget(), (int)x, (int)y);
+                container.Move(noteField.GetWidget(), (int)x, (int)y);
             };
         }
     }

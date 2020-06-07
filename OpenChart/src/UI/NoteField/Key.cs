@@ -30,7 +30,7 @@ namespace OpenChart.UI.NoteField
         public Key(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
             NoteFieldSettings = noteFieldSettings;
-            KeyIndex.Value = index.Value;
+            KeyIndex = index;
             container = new SortedContainer<Beat>();
         }
 
