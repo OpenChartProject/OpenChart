@@ -49,11 +49,17 @@ namespace OpenChart.UI.NoteField
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
 
-            drawingArea.SetSizeRequest(400, 2000);
+            drawingArea.SetSizeRequest(displaySettings.NoteFieldWidth, displaySettings.NoteFieldHeight);
+
+            displaySettings.ChartEventBus.Anything += delegate
+            {
+                drawingArea.SetSizeRequest(displaySettings.NoteFieldWidth, displaySettings.NoteFieldHeight);
+            };
         }
 
         private void onDrawn(object o, DrawnArgs e)
         {
+            // Get the area of the widget we are redrawing.
             var clip = e.Cr.ClipExtents();
 
             // The time in the chart that the top of the drawing area is.
@@ -66,7 +72,7 @@ namespace OpenChart.UI.NoteField
             // Iterate through the beats in the chart and record the y positions of each line
             foreach (var beat in DisplaySettings.Chart.BPMList.Time.GetBeats(topTime))
             {
-                if (beat.Time.Value > bottomTime)
+                if (beat.Time.Value >= bottomTime)
                     break;
 
                 var y = (int)Math.Round(beat.Time.Value * DisplaySettings.PixelsPerSecond);
