@@ -35,12 +35,24 @@ namespace OpenChart.UI.NoteField
     /// </summary>
     public class BeatLines : IWidget
     {
+        /// <summary>
+        /// The drawing settings to use for the beat lines.
+        /// </summary>
         public BeatLineSettings BeatLineSettings { get; private set; }
+
+        /// <summary>
+        /// The display settings for the note field the beat lines are for.
+        /// </summary>
         public DisplaySettings DisplaySettings { get; private set; }
 
         DrawingArea drawingArea;
         public Widget GetWidget() => drawingArea;
 
+        /// <summary>
+        /// Creates a new BeatLines instance.
+        /// </summary>
+        /// <param name="displaySettings">The settings for the note field.</param>
+        /// <param name="beatLineSettings">The settings for the BeatLines instance.</param>
         public BeatLines(DisplaySettings displaySettings, BeatLineSettings beatLineSettings)
         {
             BeatLineSettings = beatLineSettings;
@@ -49,12 +61,30 @@ namespace OpenChart.UI.NoteField
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
 
-            drawingArea.SetSizeRequest(displaySettings.NoteFieldWidth, displaySettings.NoteFieldHeight);
+            // Resize the widget when the note field is updated.
+            DisplaySettings.ChartEventBus.Anything += delegate { resizeToFit(); };
+            resizeToFit();
+        }
 
-            displaySettings.ChartEventBus.Anything += delegate
+        /// <summary>
+        /// Draws horizontal beat lines at the given positions.
+        /// </summary>
+        private void drawBeatLines(Cairo.Context cr, int width, Color color, int thickness, List<int> positions)
+        {
+            cr.SetSourceColor(color.AsCairoColor());
+            cr.LineWidth = thickness;
+
+            // Fix the line not being the right thickness if the thickness is an odd number.
+            var applyOffset = (thickness % 2 == 1);
+
+            foreach (var y in positions)
             {
-                drawingArea.SetSizeRequest(displaySettings.NoteFieldWidth, displaySettings.NoteFieldHeight);
-            };
+                var offsetY = y + (applyOffset ? 0.5 : 0);
+
+                cr.MoveTo(0, offsetY);
+                cr.LineTo(width, offsetY);
+                cr.Stroke();
+            }
         }
 
         private void onDrawn(object o, DrawnArgs e)
@@ -83,14 +113,7 @@ namespace OpenChart.UI.NoteField
                     beatLines.Add(y);
             }
 
-            drawBeatLines(
-                e.Cr,
-                (int)clip.Width,
-                BeatLineSettings.BeatLineColor,
-                BeatLineSettings.BeatLineThickness,
-                beatLines
-            );
-
+            // Draw the beat lines that occur at the start of a measure.
             drawBeatLines(
                 e.Cr,
                 (int)clip.Width,
@@ -98,24 +121,23 @@ namespace OpenChart.UI.NoteField
                 BeatLineSettings.MeasureLineThickness,
                 measureLines
             );
+
+            // Draw all of the other beat lines.
+            drawBeatLines(
+                e.Cr,
+                (int)clip.Width,
+                BeatLineSettings.BeatLineColor,
+                BeatLineSettings.BeatLineThickness,
+                beatLines
+            );
         }
 
-        private void drawBeatLines(Cairo.Context cr, int width, Color color, int thickness, List<int> positions)
+        /// <summary>
+        /// Resizes the widget to fit the size of the note field.
+        /// </summary>
+        private void resizeToFit()
         {
-            cr.SetSourceColor(color.AsCairoColor());
-            cr.LineWidth = thickness;
-
-            // Fix the line not being the right thickness if the thickness is an odd number.
-            var applyOffset = (thickness % 2 == 1);
-
-            foreach (var y in positions)
-            {
-                var offsetY = y + (applyOffset ? 0.5 : 0);
-
-                cr.MoveTo(0, offsetY);
-                cr.LineTo(width, offsetY);
-                cr.Stroke();
-            }
+            drawingArea.SetSizeRequest(DisplaySettings.NoteFieldWidth, DisplaySettings.NoteFieldHeight);
         }
     }
 }

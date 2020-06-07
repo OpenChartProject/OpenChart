@@ -24,16 +24,14 @@ namespace OpenChart.UI.NoteField
         public int ExtraMeasures = 4;
 
         /// <summary>
-        /// The number of pixels that represent a full second. This is used to calculate where to
-        /// draw things like beat lines and notes.
-        /// </summary>
-        public int PixelsPerSecond { get; private set; }
-
-        /// <summary>
         /// The width, in pixels, of each key in the note field.
         /// </summary>
         public int KeyWidth { get; private set; }
 
+        /// <summary>
+        /// The height of the note field, in pixels. This is the total height of the chart plus
+        /// the extra end measures.
+        /// </summary>
         public int NoteFieldHeight
         {
             get
@@ -50,6 +48,18 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public int NoteFieldWidth => Chart.KeyCount.Value * KeyWidth;
 
+        /// <summary>
+        /// The number of pixels that represent a full second. This is used to calculate where to
+        /// draw things like beat lines and notes.
+        /// </summary>
+        public int PixelsPerSecond { get; private set; }
+
+        /// <summary>
+        /// Creates a new DisplaySettings instance.
+        /// </summary>
+        /// <param name="chart">The chart to display.</param>
+        /// <param name="pixelsPerSecond">The time to pixel ratio.</param>
+        /// <param name="keyWidth">The width, in pixels, of a single key.</param>
         public DisplaySettings(Chart chart, int pixelsPerSecond, int keyWidth)
         {
             Chart = chart;
