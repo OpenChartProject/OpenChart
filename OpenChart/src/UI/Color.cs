@@ -7,11 +7,6 @@ namespace OpenChart.UI
     /// </summary>
     public class Color
     {
-        /// <summary>
-        /// A cached RGBA instance.
-        /// </summary>
-        Gdk.RGBA? gdkRGBA;
-
         double _red;
 
         /// <summary>
@@ -24,7 +19,6 @@ namespace OpenChart.UI
             {
                 checkValue(value);
                 _red = value;
-                gdkRGBA = null;
             }
         }
 
@@ -40,7 +34,6 @@ namespace OpenChart.UI
             {
                 checkValue(value);
                 _green = value;
-                gdkRGBA = null;
             }
         }
 
@@ -56,7 +49,6 @@ namespace OpenChart.UI
             {
                 checkValue(value);
                 _blue = value;
-                gdkRGBA = null;
             }
         }
 
@@ -72,7 +64,6 @@ namespace OpenChart.UI
             {
                 checkValue(value);
                 _alpha = value;
-                gdkRGBA = null;
             }
         }
 
@@ -88,22 +79,31 @@ namespace OpenChart.UI
         }
 
         /// <summary>
+        /// Returns the color as a <see cref="Cairo.Color" /> instance.
+        /// </summary>
+        public Cairo.Color AsCairoColor()
+        {
+            return new Cairo.Color
+            {
+                R = Red,
+                G = Green,
+                B = Blue,
+                A = Alpha
+            };
+        }
+
+        /// <summary>
         /// Returns the color as a <see cref="Gdk.RGBA" /> instance.
         /// </summary>
         public Gdk.RGBA AsGdkRGBA()
         {
-            if (gdkRGBA == null)
+            return new Gdk.RGBA
             {
-                gdkRGBA = new Gdk.RGBA
-                {
-                    Red = Red,
-                    Green = Green,
-                    Blue = Blue,
-                    Alpha = Alpha
-                };
-            }
-
-            return (Gdk.RGBA)gdkRGBA;
+                Red = Red,
+                Green = Green,
+                Blue = Blue,
+                Alpha = Alpha
+            };
         }
 
         /// <summary>
