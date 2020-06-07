@@ -27,7 +27,7 @@ namespace OpenChart.UI.NoteField.Objects
             drawingArea = new DrawingArea();
             drawingArea.Drawn += onDrawn;
 
-            drawingArea.SetSizeRequest(width, 1);
+            drawingArea.SetSizeRequest(width, 500);
         }
 
         /// <summary>
