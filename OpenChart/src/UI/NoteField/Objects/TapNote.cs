@@ -18,11 +18,11 @@ namespace OpenChart.UI.NoteField.Objects
         /// Creates a new TapNote instance.
         /// </summary>
         /// <param name="noteImage">The asset for the tap note.</param>
-        /// <param name="tapNote">The native note object.</param>
-        public TapNote(ImageAsset noteImage, Charting.Objects.TapNote tapNote)
+        /// <param name="chartObject">The note object from the chart.</param>
+        public TapNote(ImageAsset noteImage, Charting.Objects.TapNote chartObject)
         {
             widget = new Image(noteImage);
-            chartObject = tapNote;
+            this.chartObject = chartObject;
         }
     }
 }

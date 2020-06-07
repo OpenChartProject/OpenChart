@@ -1,3 +1,4 @@
+using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 using OpenChart.UI.NoteField.Objects;
 using OpenChart.UI.Widgets;
@@ -36,24 +37,24 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// Adds a note field object to the key.
         /// </summary>
-        public void AddObject(INoteFieldObject obj)
+        public void AddObject(BaseObject chartObject)
         {
-            var beat = obj.GetChartObject().Beat;
+            var noteFieldObject = NoteFieldSettings.ObjectFactory.Create(chartObject);
 
             container.Put(
-                beat,
-                obj.GetWidget(),
+                noteFieldObject.GetChartObject().Beat,
+                noteFieldObject.GetWidget(),
                 0,
-                NoteFieldSettings.BeatToPosition(beat)
+                NoteFieldSettings.BeatToPosition(noteFieldObject.GetChartObject().Beat)
             );
         }
 
         /// <summary>
         /// Removes a note field object.
         /// </summary>
-        public void RemoveObject(INoteFieldObject obj)
+        public void RemoveObject(BaseObject obj)
         {
-            container.Remove(obj.GetChartObject().Beat);
+            container.Remove(obj.Beat);
         }
     }
 }

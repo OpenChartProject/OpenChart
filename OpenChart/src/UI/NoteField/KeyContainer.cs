@@ -1,9 +1,11 @@
+using OpenChart.Charting;
 using System.Collections.Generic;
 
 namespace OpenChart.UI.NoteField
 {
     /// <summary>
-    /// Note field widget class that contains the key widgets for a chart.
+    /// Note field widget class that contains the key widgets for a chart. It also watches the chart
+    /// for changes and updates the keys as needed.
     /// </summary>
     public class KeyContainer : IWidget
     {
@@ -36,6 +38,19 @@ namespace OpenChart.UI.NoteField
                 Keys.Add(key);
                 container.Add(key.GetWidget());
             }
+
+            NoteFieldSettings.ChartEventBus.ObjectAdded += onObjectAdded;
+            NoteFieldSettings.ChartEventBus.ObjectRemoved += onObjectRemoved;
+        }
+
+        private void onObjectAdded(object o, ObjectEventArgs e)
+        {
+            Keys[e.Object.KeyIndex.Value].AddObject(e.Object);
+        }
+
+        private void onObjectRemoved(object o, ObjectEventArgs e)
+        {
+            Keys[e.Object.KeyIndex.Value].RemoveObject(e.Object);
         }
     }
 }
