@@ -54,7 +54,7 @@ namespace OpenChart.UI.NoteField
         /// Shows the beat lines on the note field.
         /// </summary>
         /// <param name="beatLineSettings">The settings for the beat lines.</param>
-        public void ShowBeatLines(BeatLineSettings beatLineSettings)
+        public void EnableBeatLines(BeatLineSettings beatLineSettings)
         {
             BeatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
             container.Add(Components.BeatLines, BeatLines.GetWidget());
@@ -63,7 +63,7 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// Shows the keys (chart objects) on the note field.
         /// </summary>
-        public void ShowKeys()
+        public void EnableKeys()
         {
             Keys = new KeyContainer(NoteFieldSettings);
             container.Add(Components.Keys, Keys.GetWidget());

@@ -42,6 +42,11 @@ namespace OpenChart.UI.NoteField
                 var key = new Key(NoteFieldSettings, i);
                 Keys.Add(key);
                 container.Add(key.GetWidget());
+
+                foreach (var obj in NoteFieldSettings.Chart.Objects[i])
+                {
+                    key.AddObject(obj);
+                }
             }
 
             NoteFieldSettings.ChartEventBus.ObjectAdded += onObjectAdded;

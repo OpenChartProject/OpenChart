@@ -33,6 +33,18 @@ namespace OpenChart.UI.Windows
             var chart = new Charting.Chart(4);
             chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
 
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 0));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 0));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 0));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 0));
+
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 1));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 1.25));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 1.5));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 1.75));
+
+            chart.Objects[0].Add(new ChartObjects.HoldNote(0, 2, 2.4));
+
             var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
 
             var noteFieldSettings = new NoteFieldSettings(
@@ -53,22 +65,12 @@ namespace OpenChart.UI.Windows
 
             var noteField = new NoteField.NoteField(noteFieldSettings);
 
-            noteField.ShowBeatLines(beatLineSettings);
-            noteField.ShowKeys();
+            noteField.EnableBeatLines(beatLineSettings);
+            noteField.EnableKeys();
 
             var view = new NoteFieldView(noteField);
 
-            chart.Objects[0].Add(new ChartObjects.TapNote(0, 0));
-            chart.Objects[1].Add(new ChartObjects.TapNote(1, 0));
-            chart.Objects[2].Add(new ChartObjects.TapNote(2, 0));
-            chart.Objects[3].Add(new ChartObjects.TapNote(3, 0));
 
-            chart.Objects[0].Add(new ChartObjects.TapNote(0, 1));
-            chart.Objects[1].Add(new ChartObjects.TapNote(1, 1.25));
-            chart.Objects[2].Add(new ChartObjects.TapNote(2, 1.5));
-            chart.Objects[3].Add(new ChartObjects.TapNote(3, 1.75));
-
-            chart.Objects[0].Add(new ChartObjects.HoldNote(0, 2, 2.4));
 
             container = new VBox();
             container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);
