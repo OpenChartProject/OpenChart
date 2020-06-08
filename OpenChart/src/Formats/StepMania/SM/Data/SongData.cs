@@ -46,5 +46,29 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Field: #GENRE
         /// </summary>
         public string Genre { get; set; }
+
+        /// <summary>
+        /// The path to the audio file.
+        /// Field: #MUSIC
+        /// </summary>
+        public string Music { get; set; }
+
+        /// <summary>
+        /// The path to the lyrics file. (not supported)
+        /// Field: #LYRICSPATH
+        /// </summary>
+        public string LyricsPath { get; set; }
+
+        /// <summary>
+        /// The start time of the audio sample to play on the music wheel.
+        /// Field: #SAMPLESTART
+        /// </summary>
+        public double SampleStart { get; set; }
+
+        /// <summary>
+        /// The length of the audio sample to play on the music wheel.
+        /// Field: #SAMPLELENGTH
+        /// </summary>
+        public double SampleLength { get; set; }
     }
 }
