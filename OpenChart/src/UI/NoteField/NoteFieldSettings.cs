@@ -27,7 +27,7 @@ namespace OpenChart.UI.NoteField
         public ChartEventBus ChartEventBus { get; private set; }
 
         /// <summary>
-        /// The number of extra beats to append to the end of the chart.
+        /// The number of extra measures to append to the end of the chart.
         /// </summary>
         public int ExtraMeasures = 4;
 

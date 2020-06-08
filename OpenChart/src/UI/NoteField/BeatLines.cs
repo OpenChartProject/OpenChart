@@ -78,14 +78,16 @@ namespace OpenChart.UI.NoteField
             e.Cr.Rectangle(clip.X, clip.Y - extendClip, clip.Width, clip.Height + (extendClip * 2));
             e.Cr.Clip();
 
-            // The time in the chart that the top of the drawing area is.
+            // Based on what's displayed on screen, get the time in the chart at the top of the
+            // widget for the beat lines. This is to prevent drawing beat lines that aren't visible.
+            // We don't need to worry about negative values here since clip.Y is never negative.
             var topTime = clip.Y / NoteFieldSettings.PixelsPerSecond;
             var bottomTime = (clip.Y + clip.Height) / NoteFieldSettings.PixelsPerSecond;
 
             var beatLines = new List<int>();
             var measureLines = new List<int>();
 
-            // Iterate through the beats in the chart and record the y positions of each line
+            // Iterate through the beats in the chart and record the y positions of each line.
             foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(topTime))
             {
                 if (beat.Time.Value >= bottomTime)
