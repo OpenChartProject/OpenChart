@@ -5,6 +5,6 @@ namespace OpenChart.Formats.StepMania.SM.Data
     /// </summary>
     public class StepFileData
     {
-
+        public SongData SongData { get; set; }
     }
 }
