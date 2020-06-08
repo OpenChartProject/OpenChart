@@ -20,6 +20,11 @@ namespace OpenChart.UI.NoteField
         public List<Key> Keys { get; private set; }
 
         Gtk.HBox container;
+
+        /// <summary>
+        /// Returns the widget for all of the keys in a container.
+        /// </summary>
+        /// <returns></returns>
         public Gtk.Widget GetWidget() => container;
 
         /// <summary>

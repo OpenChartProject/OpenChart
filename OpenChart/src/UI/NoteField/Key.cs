@@ -22,6 +22,10 @@ namespace OpenChart.UI.NoteField
         public KeyIndex KeyIndex { get; private set; }
 
         SortedContainer<Beat> container;
+
+        /// <summary>
+        /// Returns the widget for the key.
+        /// </summary>
         public Gtk.Widget GetWidget() => container;
 
         /// <summary>

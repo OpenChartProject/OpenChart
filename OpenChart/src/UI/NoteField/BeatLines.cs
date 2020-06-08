@@ -19,6 +19,10 @@ namespace OpenChart.UI.NoteField
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
         Gtk.DrawingArea drawingArea;
+
+        /// <summary>
+        /// Returns the widget for displaying beat lines.
+        /// </summary>
         public Gtk.Widget GetWidget() => drawingArea;
 
         /// <summary>

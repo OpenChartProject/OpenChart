@@ -13,6 +13,10 @@ namespace OpenChart.UI.NoteField.Objects
         public ImagePattern BodyImage { get; private set; }
 
         Gtk.DrawingArea drawingArea;
+
+        /// <summary>
+        /// Returns the Gtk widget for the hold note body.
+        /// </summary>
         public Gtk.Widget GetWidget() => drawingArea;
 
         /// <summary>

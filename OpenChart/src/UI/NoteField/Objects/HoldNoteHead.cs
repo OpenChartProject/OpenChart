@@ -8,9 +8,16 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class HoldNoteHead : IWidget
     {
+        /// <summary>
+        /// The image asset this is displaying.
+        /// </summary>
         public ImageAsset ImageAsset { get; private set; }
 
         Image widget;
+
+        /// <summary>
+        /// Returns the Gtk widget for the hold note head.
+        /// </summary>
         public Gtk.Widget GetWidget() => widget;
 
         /// <summary>

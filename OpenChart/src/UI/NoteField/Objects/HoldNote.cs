@@ -9,12 +9,24 @@ namespace OpenChart.UI.NoteField.Objects
     /// </summary>
     public class HoldNote : INoteFieldObject
     {
+        /// <summary>
+        /// The height of the hold note. This is for alignment purposes and thus is only the height
+        /// of the head element.
+        /// </summary>
         public int GetHeight() => Head.ImageAsset.Pixbuf.Height;
 
         Charting.Objects.HoldNote chartObject;
+
+        /// <summary>
+        /// Returns the hold note object from the chart.
+        /// </summary>
         public Charting.Objects.BaseObject GetChartObject() => chartObject;
 
         SortedContainer<int> container;
+
+        /// <summary>
+        /// Returns the Gtk widget for a hold note (head + body).
+        /// </summary>
         public Widget GetWidget() => container;
 
         /// <summary>

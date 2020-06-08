@@ -11,6 +11,11 @@ namespace OpenChart.UI.NoteField
         public NoteField NoteField { get; private set; }
 
         public Scrollable Container { get; private set; }
+
+        /// <summary>
+        /// Returns the full note field view. This restricts the viewport of the note field and
+        /// allows it to be scrolled.
+        /// </summary>
         public Gtk.Widget GetWidget() => Container.GetWidget();
 
         /// <summary>

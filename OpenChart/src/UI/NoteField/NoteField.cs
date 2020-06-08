@@ -33,6 +33,11 @@ namespace OpenChart.UI.NoteField
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
         SortedContainer<Components> container;
+
+        /// <summary>
+        /// Returns the widget for the note field. This widget is the full size of the note field,
+        /// and should be wrapped in a container which can scroll.
+        /// </summary>
         public Gtk.Widget GetWidget() => container;
 
         /// <summary>
