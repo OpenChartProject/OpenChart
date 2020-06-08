@@ -69,6 +69,15 @@ namespace OpenChart.UI.NoteField
             // Get the area of the widget we are redrawing.
             var clip = e.Cr.ClipExtents();
 
+            // The size of the vertical margin, in pixels. This fixes an issue where the first and
+            // last beat lines drawn are partially cutoff due to drawing on the edge of the widget.
+            var extendClip = 3;
+
+            // Resize the clip region to use the new margin.
+            e.Cr.ResetClip();
+            e.Cr.Rectangle(clip.X, clip.Y - extendClip, clip.Width, clip.Height + (extendClip * 2));
+            e.Cr.Clip();
+
             // The time in the chart that the top of the drawing area is.
             var topTime = clip.Y / NoteFieldSettings.PixelsPerSecond;
             var bottomTime = (clip.Y + clip.Height) / NoteFieldSettings.PixelsPerSecond;
