@@ -4,6 +4,8 @@ namespace OpenChart.Formats.StepMania.SM
 {
     /// <summary>
     /// Serializer class for importing .sm files.
+    ///
+    /// .sm docs: https://github.com/stepmania/stepmania/wiki/sm
     /// </summary>
     public class SMSerializer : IFormatSerializer<StepFileData>
     {
