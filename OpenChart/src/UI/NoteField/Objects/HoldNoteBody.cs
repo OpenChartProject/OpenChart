@@ -1,4 +1,3 @@
-using Gtk;
 using OpenChart.UI.Assets;
 
 namespace OpenChart.UI.NoteField.Objects
@@ -13,8 +12,8 @@ namespace OpenChart.UI.NoteField.Objects
         /// </summary>
         public ImagePattern BodyImage { get; private set; }
 
-        DrawingArea drawingArea;
-        public Widget GetWidget() => drawingArea;
+        Gtk.DrawingArea drawingArea;
+        public Gtk.Widget GetWidget() => drawingArea;
 
         /// <summary>
         /// Creates a new HoldNoteBody instance.
@@ -24,7 +23,7 @@ namespace OpenChart.UI.NoteField.Objects
         {
             BodyImage = imagePattern;
 
-            drawingArea = new DrawingArea();
+            drawingArea = new Gtk.DrawingArea();
             drawingArea.Drawn += onDrawn;
         }
 
@@ -37,7 +36,7 @@ namespace OpenChart.UI.NoteField.Objects
             drawingArea.SetSizeRequest(BodyImage.ImageAsset.Pixbuf.Width, height);
         }
 
-        private void onDrawn(object o, DrawnArgs e)
+        private void onDrawn(object o, Gtk.DrawnArgs e)
         {
             e.Cr.SetSource(BodyImage.Pattern);
             e.Cr.Rectangle(0, 0, drawingArea.AllocatedWidth, drawingArea.AllocatedHeight);

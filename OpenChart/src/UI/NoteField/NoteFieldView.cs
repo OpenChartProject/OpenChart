@@ -1,5 +1,3 @@
-using Gtk;
-
 namespace OpenChart.UI.NoteField
 {
     /// <summary>
@@ -13,7 +11,7 @@ namespace OpenChart.UI.NoteField
         public NoteField NoteField { get; private set; }
 
         public Scrollable Container { get; private set; }
-        public Widget GetWidget() => Container.GetWidget();
+        public Gtk.Widget GetWidget() => Container.GetWidget();
 
         /// <summary>
         /// Creates a new NoteFieldView instance.

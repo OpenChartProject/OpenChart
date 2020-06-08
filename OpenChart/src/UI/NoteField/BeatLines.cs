@@ -1,4 +1,3 @@
-using Gtk;
 using System;
 using System.Collections.Generic;
 
@@ -19,8 +18,8 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
-        DrawingArea drawingArea;
-        public Widget GetWidget() => drawingArea;
+        Gtk.DrawingArea drawingArea;
+        public Gtk.Widget GetWidget() => drawingArea;
 
         /// <summary>
         /// Creates a new BeatLines instance.
@@ -32,7 +31,7 @@ namespace OpenChart.UI.NoteField
             BeatLineSettings = beatLineSettings;
             NoteFieldSettings = noteFieldSettings;
 
-            drawingArea = new DrawingArea();
+            drawingArea = new Gtk.DrawingArea();
             drawingArea.Drawn += onDrawn;
 
             // Resize the widget when the note field is updated.
@@ -61,7 +60,7 @@ namespace OpenChart.UI.NoteField
             }
         }
 
-        private void onDrawn(object o, DrawnArgs e)
+        private void onDrawn(object o, Gtk.DrawnArgs e)
         {
             // Get the area of the widget we are redrawing.
             var clip = e.Cr.ClipExtents();
