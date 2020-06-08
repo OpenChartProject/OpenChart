@@ -52,11 +52,11 @@ namespace OpenChart.UI.NoteField
             cr.LineWidth = thickness;
 
             // Fix the line not being the right thickness if the thickness is an odd number.
-            var applyOffset = (thickness % 2 == 1);
+            var offset = (thickness % 2 == 1) ? 0.5 : 0;
 
             foreach (var y in positions)
             {
-                var offsetY = y + (applyOffset ? 0.5 : 0);
+                var offsetY = y + offset;
 
                 cr.MoveTo(0, offsetY);
                 cr.LineTo(width, offsetY);
