@@ -6,6 +6,11 @@ namespace OpenChart.Formats.StepMania.SM.Data
     public class StepFileData
     {
         /// <summary>
+        /// Display data for the step file.
+        /// </summary>
+        public DisplayData DisplayData { get; set; }
+
+        /// <summary>
         /// The song data.
         /// </summary>
         public SongData SongData { get; set; }
@@ -14,10 +19,5 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Metadata about the step file.
         /// </summary>
         public StepFileMetaData MetaData { get; set; }
-
-        /// <summary>
-        /// Graphical data for the step file.
-        /// </summary>
-        public GraphicData GraphicData { get; set; }
     }
 }

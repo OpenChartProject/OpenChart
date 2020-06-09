@@ -1,9 +1,9 @@
 namespace OpenChart.Formats.StepMania.SM.Data
 {
     /// <summary>
-    /// Images and other graphical data for the step file.
+    /// Data used for displaying the step file.
     /// </summary>
-    public class GraphicData
+    public class DisplayData
     {
         /// <summary>
         /// The path to the banner image.
@@ -16,6 +16,12 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Field: #BACKGROUND
         /// </summary>
         public string Background { get; set; }
+
+        /// <summary>
+        /// The BPM value to display.
+        /// FIELD: #DISPLAYBPM
+        /// </summary>
+        public BPMDisplay BPMDisplay { get; set; }
 
         /// <summary>
         /// The path to the CD title image.
