@@ -36,7 +36,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("#NAME:value;");
 
             Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual(fields["NAME"], "value");
+            Assert.AreEqual("value", fields["NAME"]);
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("#NAME:value;\n");
 
             Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual(fields["NAME"], "value");
+            Assert.AreEqual("value", fields["NAME"]);
         }
 
         [Test]
@@ -63,8 +63,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("#FIELD1:one;#FIELD2:two;");
 
             Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual(fields["FIELD1"], "one");
-            Assert.AreEqual(fields["FIELD2"], "two");
+            Assert.AreEqual("one", fields["FIELD1"]);
+            Assert.AreEqual("two", fields["FIELD2"]);
         }
 
         [Test]
@@ -73,8 +73,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("\n#FIELD1:one;\n#FIELD2:two;\n");
 
             Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual(fields["FIELD1"], "one");
-            Assert.AreEqual(fields["FIELD2"], "two");
+            Assert.AreEqual("one", fields["FIELD1"]);
+            Assert.AreEqual("two", fields["FIELD2"]);
         }
 
         [Test]
@@ -83,8 +83,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("\r\n#FIELD1:one;\r\n#FIELD2:two;\r\n");
 
             Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual(fields["FIELD1"], "one");
-            Assert.AreEqual(fields["FIELD2"], "two");
+            Assert.AreEqual("one", fields["FIELD1"]);
+            Assert.AreEqual("two", fields["FIELD2"]);
         }
 
         [Test]
@@ -93,7 +93,27 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var fields = serializer.ExtractFields("#FIELD:multi\r\nline;");
 
             Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual(fields["FIELD"], "multi\r\nline");
+            Assert.AreEqual("multi\r\nline", fields["FIELD"]);
+        }
+
+        [TestCase("//comment")]
+        [TestCase("// comment \n")]
+        [TestCase("// comment1\n// comment 2")]
+        [TestCase("//#FIELD:value;")]
+        public void Test_ExtractFields_Comment(string val)
+        {
+            var fields = serializer.ExtractFields(val);
+
+            Assert.AreEqual(0, fields.Count);
+        }
+
+        [Test]
+        public void Test_ExtractFields_CommentInValue()
+        {
+            var fields = serializer.ExtractFields("#FIELD:multi// oh yeah woo yeah\nline;");
+
+            Assert.AreEqual(1, fields.Count);
+            Assert.AreEqual("multi\nline", fields["FIELD"]);
         }
     }
 }
