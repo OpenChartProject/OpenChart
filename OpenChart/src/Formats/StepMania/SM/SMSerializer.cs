@@ -1,4 +1,5 @@
 using OpenChart.Formats.StepMania.SM.Data;
+using OpenChart.Formats.StepMania.SM.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 
@@ -101,7 +102,7 @@ namespace OpenChart.Formats.StepMania.SM
                             // Add the field to the dictionary.
                             dict[name] = buffer.ToString();
                             buffer.Clear();
-                            state = State.ReadingValue;
+                            state = State.LookingForField;
                         }
                         else
                             buffer.Append(c);
@@ -118,6 +119,9 @@ namespace OpenChart.Formats.StepMania.SM
 
                 last = c;
             }
+
+            if (state == State.ReadingName || state == State.ReadingValue)
+                throw new UnexpectedEOFException();
 
             return dict;
         }
