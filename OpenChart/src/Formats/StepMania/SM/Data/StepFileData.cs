@@ -11,13 +11,19 @@ namespace OpenChart.Formats.StepMania.SM.Data
         public DisplayData DisplayData { get; set; }
 
         /// <summary>
-        /// The song data.
-        /// </summary>
-        public SongData SongData { get; set; }
-
-        /// <summary>
         /// Metadata about the step file.
         /// </summary>
         public StepFileMetaData MetaData { get; set; }
+
+        /// <summary>
+        /// Play data for the step file.
+        /// </summary>
+        /// <value></value>
+        public PlayData PlayData { get; set; }
+
+        /// <summary>
+        /// The song data.
+        /// </summary>
+        public SongData SongData { get; set; }
     }
 }
