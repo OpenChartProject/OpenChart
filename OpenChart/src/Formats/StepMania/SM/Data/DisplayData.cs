@@ -19,7 +19,7 @@ namespace OpenChart.Formats.StepMania.SM.Data
 
         /// <summary>
         /// The BPM value to display.
-        /// Field: #DISPLAYBPM
+        /// FIELD: #DISPLAYBPM
         /// </summary>
         public BPMDisplay BPMDisplay { get; set; }
 

@@ -25,10 +25,5 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// The song data.
         /// </summary>
         public SongData SongData { get; set; }
-
-        /// <summary>
-        /// Graphical data for the step file.
-        /// </summary>
-        public GraphicData GraphicData { get; set; }
     }
 }
