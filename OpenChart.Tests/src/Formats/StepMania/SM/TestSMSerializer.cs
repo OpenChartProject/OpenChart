@@ -31,15 +31,6 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
-        public void Test_ExtractFields_SingleField()
-        {
-            var fields = serializer.ExtractFields("#NAME:value;");
-
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual("value", fields["NAME"]);
-        }
-
-        [Test]
         public void Test_ExtractFields_Unicode()
         {
             var fields = serializer.ExtractFields("#FIELD:こんにちは;");
@@ -48,52 +39,27 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual(fields["FIELD"], "こんにちは");
         }
 
-        [Test]
-        public void Test_ExtractFields_TrailingNewline()
+        [TestCase("#NAME:value;")]
+        [TestCase("#NAME:value;\n")]
+        [TestCase(" \n#NAME:value; ")]
+        public void Test_ExtractFields_SingleField(string val)
         {
-            var fields = serializer.ExtractFields("#NAME:value;\n");
+            var fields = serializer.ExtractFields(val);
 
             Assert.AreEqual(1, fields.Count);
             Assert.AreEqual("value", fields["NAME"]);
         }
 
-        [Test]
-        public void Test_ExtractFields_MultipleFields_NoWhitespace()
+        [TestCase("#FIELD1:one;#FIELD2:two;")]
+        [TestCase("#FIELD1:one;\n#FIELD2:two;")]
+        [TestCase("  #FIELD1:one;   #FIELD2:two;  ")]
+        public void Test_ExtractFields_MultipleFields(string val)
         {
-            var fields = serializer.ExtractFields("#FIELD1:one;#FIELD2:two;");
+            var fields = serializer.ExtractFields(val);
 
             Assert.AreEqual(2, fields.Count);
             Assert.AreEqual("one", fields["FIELD1"]);
             Assert.AreEqual("two", fields["FIELD2"]);
-        }
-
-        [Test]
-        public void Test_ExtractFields_MultipleFields_NewlineLF()
-        {
-            var fields = serializer.ExtractFields("\n#FIELD1:one;\n#FIELD2:two;\n");
-
-            Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual("one", fields["FIELD1"]);
-            Assert.AreEqual("two", fields["FIELD2"]);
-        }
-
-        [Test]
-        public void Test_ExtractFields_MultipleFields_NewlineCRLF()
-        {
-            var fields = serializer.ExtractFields("\r\n#FIELD1:one;\r\n#FIELD2:two;\r\n");
-
-            Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual("one", fields["FIELD1"]);
-            Assert.AreEqual("two", fields["FIELD2"]);
-        }
-
-        [Test]
-        public void Test_ExtractFields_MultiLineValue_CRLF()
-        {
-            var fields = serializer.ExtractFields("#FIELD:multi\r\nline;");
-
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual("multi\r\nline", fields["FIELD"]);
         }
 
         [TestCase("//comment")]
