@@ -67,6 +67,12 @@ namespace OpenChart.Formats.StepMania.SM
                 {
                     preCommentState = state;
                     state = State.InComment;
+
+                    // When a comment is found in the middle of a value, the first forward slash
+                    // will be added to the buffer.
+                    if (buffer.Length > 0)
+                        buffer.Remove(buffer.Length - 1, 1);
+
                     continue;
                 }
 
@@ -76,7 +82,10 @@ namespace OpenChart.Formats.StepMania.SM
                     // a comment.
                     case State.LookingForField:
                         if (c == TOKEN_FIELD_START)
+                        {
+                            buffer.Clear();
                             state = State.ReadingName;
+                        }
 
                         break;
 
@@ -112,7 +121,10 @@ namespace OpenChart.Formats.StepMania.SM
                     // Inside of a comment. Ignore the rest of the line.
                     case State.InComment:
                         if (c == TOKEN_NEWLINE)
+                        {
                             state = preCommentState;
+                            buffer.Append(TOKEN_NEWLINE);
+                        }
 
                         break;
                 }
