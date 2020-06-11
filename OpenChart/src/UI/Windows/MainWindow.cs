@@ -1,9 +1,7 @@
 using Gtk;
-using OpenChart.Charting;
-using NativeObjects = OpenChart.Charting.Objects;
-using OpenChart.Charting.Properties;
+using ChartObjects = OpenChart.Charting.Objects;
 using OpenChart.UI.Actions;
-using OpenChart.UI.Widgets;
+using OpenChart.UI.NoteField;
 
 namespace OpenChart.UI.Windows
 {
@@ -32,37 +30,51 @@ namespace OpenChart.UI.Windows
 
             SetIconFromFile(System.IO.Path.Join("icons", "AppIcon.ico"));
 
-            var chart = new Chart(4);
-            chart.BPMList.BPMs.Add(new BPM(120, 0));
+            var chart = new Charting.Chart(4);
+            chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
 
-            var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount.Value);
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 0));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 0));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 0));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 0));
 
-            var noteFieldData = new NoteFieldData(
+            chart.Objects[0].Add(new ChartObjects.TapNote(0, 1));
+            chart.Objects[1].Add(new ChartObjects.TapNote(1, 1.25));
+            chart.Objects[2].Add(new ChartObjects.TapNote(2, 1.5));
+            chart.Objects[3].Add(new ChartObjects.TapNote(3, 1.75));
+
+            chart.Objects[0].Add(new ChartObjects.HoldNote(0, 2, 2.4));
+
+            var noteSkin = app.GetData().NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
+
+            var noteFieldSettings = new NoteFieldSettings(
                 chart,
                 noteSkin,
-                keyWidth: 96,
-                pixelsPerSecond: 200,
-                timeOffset: 0.5,
-                centerObjectsOnBeatLines: true
+                200,
+                96,
+                NoteFieldObjectAlignment.Center
             );
 
-            var noteField = new NoteField(noteFieldData);
+            var beatLineSettings = new BeatLineSettings
+            {
+                BeatLineColor = new Color(0.5, 0.5, 0.5),
+                BeatLineThickness = 1,
+                MeasureLineColor = new Color(1, 1, 1),
+                MeasureLineThickness = 2
+            };
 
-            chart.Objects[0].Add(new NativeObjects.TapNote(0, 0));
-            chart.Objects[1].Add(new NativeObjects.TapNote(1, 0));
-            chart.Objects[2].Add(new NativeObjects.TapNote(2, 0));
-            chart.Objects[3].Add(new NativeObjects.TapNote(3, 0));
+            var noteField = new NoteField.NoteField(noteFieldSettings);
 
-            chart.Objects[0].Add(new NativeObjects.TapNote(0, 1));
-            chart.Objects[1].Add(new NativeObjects.TapNote(1, 1.25));
-            chart.Objects[2].Add(new NativeObjects.TapNote(2, 1.5));
-            chart.Objects[3].Add(new NativeObjects.TapNote(3, 1.75));
+            noteField.EnableBeatLines(beatLineSettings);
+            noteField.EnableKeys();
 
-            chart.Objects[0].Add(new NativeObjects.HoldNote(0, 2, 2.4));
+            var view = new NoteFieldView(noteField);
+
+
 
             container = new VBox();
             container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);
-            container.Add(noteField);
+            container.Add(view.GetWidget());
 
             Add(container);
 

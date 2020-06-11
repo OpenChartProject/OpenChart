@@ -13,6 +13,11 @@ namespace OpenChart.Charting.Objects
         /// </summary>
         public BeatDuration Length { get; private set; }
 
+        /// <summary>
+        /// The beat this object ends on.
+        /// </summary>
+        public Beat EndBeat => Beat.Value + Length.Value;
+
         public BaseLongObject(KeyIndex key, Beat beat, BeatDuration length) : base(key, beat)
         {
             Length = length;
