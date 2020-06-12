@@ -12,6 +12,8 @@ namespace OpenChart.Tests.Actions
 
         public Gtk.Application GetGtk() => null;
 
+        public Gtk.Window GetMainWindow() => null;
+
         public DummyApp()
         {
             AppData = new ApplicationData("");
