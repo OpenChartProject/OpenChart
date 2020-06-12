@@ -39,6 +39,9 @@ namespace OpenChart.UI.Actions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
+
+            // Open the save as dialog for now
+            app.GetGtk().ActivateAction(SaveAsAction.Name, null);
         }
     }
 }
