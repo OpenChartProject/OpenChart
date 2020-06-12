@@ -39,6 +39,32 @@ namespace OpenChart.UI.Actions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
+
+            var projectName = app.GetData().CurrentProject.Name;
+
+            var dialog = new Gtk.FileChooserDialog(
+                $"Save {projectName}",
+                app.GetMainWindow(),
+                Gtk.FileChooserAction.Save,
+                "_Cancel",
+                Gtk.ResponseType.Cancel,
+                "_Save",
+                Gtk.ResponseType.Accept,
+                null
+            );
+
+            dialog.DoOverwriteConfirmation = true;
+            dialog.CurrentName = projectName + ".oc";
+
+            var resp = dialog.Run();
+
+            if (resp == (int)Gtk.ResponseType.Accept)
+            {
+                var fileName = dialog.Filename;
+                Log.Information($"Saving OpenChart project to: {fileName}");
+            }
+
+            dialog.Dispose();
         }
     }
 }
