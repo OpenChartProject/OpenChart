@@ -29,6 +29,9 @@ namespace OpenChart
 
         public Gtk.Application GetGtk() => this;
 
+        Gtk.Window mainWindow;
+        public Gtk.Window GetMainWindow() => mainWindow;
+
         /// <summary>
         /// The relative path where logs are written to.
         /// </summary>
@@ -173,10 +176,10 @@ namespace OpenChart
         {
             Log.Information("Displaying main window.");
 
-            var window = new MainWindow(this);
+            mainWindow = new MainWindow(this);
 
-            AddWindow(window);
-            window.ShowAll();
+            AddWindow(mainWindow);
+            mainWindow.ShowAll();
         }
 
         /// <summary>

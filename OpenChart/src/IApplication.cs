@@ -8,5 +8,6 @@ namespace OpenChart
         ApplicationData GetData();
         ApplicationEventBus GetEvents();
         Gtk.Application GetGtk();
+        Gtk.Window GetMainWindow();
     }
 }
