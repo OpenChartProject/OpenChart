@@ -81,5 +81,18 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual(1, fields.Count);
             Assert.AreEqual("multi\nline", fields["FIELD"]);
         }
+
+
+        [TestCase("#FIELD:multi\r\nline;")]
+        [TestCase("#FIELD:multi// comment \r\nline;")]
+        public void Test_ExtractFields_IgnoresCRLF(string val)
+        {
+            var fields = serializer.ExtractFields(val);
+
+            Assert.AreEqual(1, fields.Count);
+
+            // Ensure the CRLF gets converted to LF.
+            Assert.AreEqual("multi\nline", fields["FIELD"]);
+        }
     }
 }

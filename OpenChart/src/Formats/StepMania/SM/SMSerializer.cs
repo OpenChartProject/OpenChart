@@ -61,6 +61,10 @@ namespace OpenChart.Formats.StepMania.SM
 
             foreach (var c in data)
             {
+                // Skip carriage returns to convert from CRLF -> LF.
+                if (c == '\r')
+                    continue;
+
                 // Check for comments first. Save the state we were in so we can return to that
                 // state after the comment.
                 if (c == TOKEN_COMMENT && last == TOKEN_COMMENT)
