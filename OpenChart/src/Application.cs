@@ -19,7 +19,7 @@ namespace OpenChart
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
-        public Dictionary<string, IAction> ActionDict { get; private set; }
+        public Dictionary<string, IMenuAction> ActionDict { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -36,7 +36,7 @@ namespace OpenChart
 
         public Application() : base(AppId, GLib.ApplicationFlags.None)
         {
-            ActionDict = new Dictionary<string, IAction>();
+            ActionDict = new Dictionary<string, IMenuAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
         }
 
@@ -194,7 +194,7 @@ namespace OpenChart
             }
         }
 
-        private void addAction(IAction action)
+        private void addAction(IMenuAction action)
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
             // type of argument, resulting in a segfault.

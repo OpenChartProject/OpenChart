@@ -5,7 +5,7 @@ namespace OpenChart.UI.MenuActions
     /// <summary>
     /// An action that triggers the application to save the current project.
     /// </summary>
-    public class SaveAsAction : MenuActions.IAction
+    public class SaveAsAction : MenuActions.IMenuAction
     {
         IApplication app;
 

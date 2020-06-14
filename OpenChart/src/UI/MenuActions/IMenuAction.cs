@@ -14,7 +14,7 @@ namespace OpenChart.UI.MenuActions
     /// to those events within the action class itself. Keeping all of the action-related code
     /// inside the action classes makes it easy to find later on.
     /// </summary>
-    public interface IAction
+    public interface IMenuAction
     {
         /// <summary>
         /// The GLib/Gtk action object.

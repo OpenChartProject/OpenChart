@@ -4,7 +4,7 @@ namespace OpenChart.UI.MenuActions
     /// An action that triggers the current active project to close. This action
     /// is only enabled when an active project is open.
     /// </summary>
-    public class CloseProjectAction : MenuActions.IAction
+    public class CloseProjectAction : MenuActions.IMenuAction
     {
         IApplication app;
 
