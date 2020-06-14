@@ -1,11 +1,11 @@
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the application to quit.
     /// </summary>
-    public class QuitAction : Actions.IAction
+    public class QuitAction : MenuActions.IAction
     {
         IApplication app;
 

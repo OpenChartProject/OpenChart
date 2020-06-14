@@ -1,4 +1,4 @@
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 using System;
 
 namespace OpenChart

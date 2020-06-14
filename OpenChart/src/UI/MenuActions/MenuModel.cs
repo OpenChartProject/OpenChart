@@ -1,6 +1,6 @@
 using GLib;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// The model/layout of the menu shown in the <see cref="OpenChart.UI.Widgets.MenuBar" /> widget.

@@ -1,5 +1,5 @@
 using ManagedBass;
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;

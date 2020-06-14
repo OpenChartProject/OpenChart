@@ -1,4 +1,4 @@
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An interface for an action. These actions are fairly analagous to the Command pattern,
@@ -28,7 +28,7 @@ namespace OpenChart.UI.Actions
 
         /// <summary>
         /// The name of the action. This is the name of the action referred to in
-        /// the code, not its display name. Display names are set in <see cref="OpenChart.UI.Actions.MenuModel" />
+        /// the code, not its display name. Display names are set in <see cref="OpenChart.UI.MenuActions.MenuModel" />
         /// </summary>
         string GetName();
     }

@@ -1,6 +1,6 @@
 using Gtk;
 using ChartObjects = OpenChart.Charting.Objects;
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 using OpenChart.UI.NoteField;
 
 namespace OpenChart.UI.Windows
