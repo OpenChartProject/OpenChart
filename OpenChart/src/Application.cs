@@ -55,11 +55,11 @@ namespace OpenChart
         public void InitActions()
         {
             // File actions
-            addAction(new NewProjectAction(this));
-            addAction(new CloseProjectAction(this));
-            addAction(new SaveAction(this));
-            addAction(new SaveAsAction(this));
-            addAction(new QuitAction(this));
+            addMenuAction(new NewProjectAction(this));
+            addMenuAction(new CloseProjectAction(this));
+            addMenuAction(new SaveAction(this));
+            addMenuAction(new SaveAsAction(this));
+            addMenuAction(new QuitAction(this));
         }
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace OpenChart
             }
         }
 
-        private void addAction(IMenuAction action)
+        private void addMenuAction(IMenuAction action)
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
             // type of argument, resulting in a segfault.
