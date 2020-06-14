@@ -1,9 +1,7 @@
 namespace OpenChart.UI.MenuActions
 {
     /// <summary>
-    /// An interface for an action. These actions are fairly analagous to the Command pattern,
-    /// the key difference being that once an action is created it lives for the lifecycle
-    /// of the application.
+    /// An interface for a menu action. These are actions which are invoked through the app menu.
     ///
     /// Action instances are stored in <see cref="OpenChart.Application.ActionDict" /> and can
     /// be retrieved by their name.
