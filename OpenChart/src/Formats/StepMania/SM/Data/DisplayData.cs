@@ -46,5 +46,10 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Field: #BGCHANGES
         /// </summary>
         public string ForegroundChanges { get; set; }
+
+        public DisplayData()
+        {
+            BPMDisplay = new BPMDisplay();
+        }
     }
 }
