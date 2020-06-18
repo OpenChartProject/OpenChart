@@ -7,7 +7,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
     public class TestFieldExtractor
     {
         [Test]
-        public void Test_ExtractFields_UnexpectedEOF()
+        public void Test_Extract_UnexpectedEOF()
         {
             Assert.Throws<UnexpectedEOFException>(
                 () => FieldExtractor.Extract("#NAME:value")
@@ -15,7 +15,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
-        public void Test_ExtractFields_Empty()
+        public void Test_Extract_Empty()
         {
             var fields = FieldExtractor.Extract("");
 
@@ -23,7 +23,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
-        public void Test_ExtractFields_Unicode()
+        public void Test_Extract_Unicode()
         {
             var fields = FieldExtractor.Extract("#FIELD:こんにちは;");
 
@@ -34,7 +34,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("#NAME:value;")]
         [TestCase("#NAME:value;\n")]
         [TestCase(" \n#NAME:value; ")]
-        public void Test_ExtractFields_SingleField(string val)
+        public void Test_Extract_SingleField(string val)
         {
             var fields = FieldExtractor.Extract(val);
 
@@ -45,7 +45,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("#FIELD1:one;#FIELD2:two;")]
         [TestCase("#FIELD1:one;\n#FIELD2:two;")]
         [TestCase("  #FIELD1:one;   #FIELD2:two;  ")]
-        public void Test_ExtractFields_MultipleFields(string val)
+        public void Test_Extract_MultipleFields(string val)
         {
             var fields = FieldExtractor.Extract(val);
 
@@ -58,7 +58,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("// comment \n")]
         [TestCase("// comment1\n// comment 2")]
         [TestCase("//#FIELD:value;")]
-        public void Test_ExtractFields_Comment(string val)
+        public void Test_Extract_Comment(string val)
         {
             var fields = FieldExtractor.Extract(val);
 
@@ -66,7 +66,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
-        public void Test_ExtractFields_CommentInValue()
+        public void Test_Extract_CommentInValue()
         {
             var fields = FieldExtractor.Extract("#FIELD:multi// oh yeah woo yeah\nline;");
 
@@ -77,7 +77,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
 
         [TestCase("#FIELD:multi\r\nline;")]
         [TestCase("#FIELD:multi// comment \r\nline;")]
-        public void Test_ExtractFields_IgnoresCRLF(string val)
+        public void Test_Extract_IgnoresCRLF(string val)
         {
             var fields = FieldExtractor.Extract(val);
 
@@ -85,6 +85,16 @@ namespace OpenChart.Tests.Formats.StepMania.SM
 
             // Ensure the CRLF gets converted to LF.
             Assert.AreEqual("multi\nline", fields["FIELD"]);
+        }
+
+        [TestCase("#FIELD: foo;")]
+        [TestCase("#FIELD:foo ;")]
+        [TestCase("#FIELD: foo ;")]
+        public void Test_Extract_TrimsValueWhitespace(string val)
+        {
+            var fields = FieldExtractor.Extract(val);
+            Assert.AreEqual(1, fields.Count);
+            Assert.AreEqual("foo", fields["FIELD"]);
         }
     }
 }

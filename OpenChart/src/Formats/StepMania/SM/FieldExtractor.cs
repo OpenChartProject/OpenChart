@@ -94,7 +94,7 @@ namespace OpenChart.Formats.StepMania.SM
                         if (c == TOKEN_FIELD_VALUE_END)
                         {
                             // Add the field to the dictionary.
-                            dict[name] = buffer.ToString();
+                            dict[name] = buffer.ToString().Trim();
                             buffer.Clear();
                             state = ReaderState.LookingForField;
                         }
