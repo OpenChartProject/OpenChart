@@ -1,33 +1,31 @@
-using OpenChart.Charting;
-using OpenChart.Charting.Properties;
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
-    /// An action that triggers the application to create a new chart.
+    /// An action that triggers the application to save the current project.
     /// </summary>
-    public class NewChartAction : Actions.IAction
+    public class SaveAction : IMenuAction
     {
         IApplication app;
 
-        public const string Hotkey = "<Control><Shift>n";
+        public const string Hotkey = "<Control>S";
         public string GetHotkey() => Hotkey;
 
-        public const string Name = "file.new_chart";
+        public const string Name = "file.save";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
         /// <summary>
-        /// Creates a new NewChartAction instance.
+        /// Creates a new SaveAction instance.
         /// </summary>
-        public NewChartAction(IApplication app)
+        public SaveAction(IApplication app)
         {
             this.app = app;
 
-            _action = new GLib.SimpleAction(GetName(), null);
+            _action = new GLib.SimpleAction(Name, null);
             _action.Activated += OnActivated;
             _action.Enabled = false;
 
@@ -41,12 +39,6 @@ namespace OpenChart.UI.Actions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
-
-            // Add a new blank 4k chart.
-            Chart chart = new Chart(4);
-            chart.BPMList.BPMs.Add(new BPM(120, 0));
-
-            app.GetData().CurrentProject.AddChart(chart);
         }
     }
 }

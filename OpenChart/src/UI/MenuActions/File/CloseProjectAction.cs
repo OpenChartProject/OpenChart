@@ -1,12 +1,12 @@
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the current active project to close. This action
     /// is only enabled when an active project is open.
     /// </summary>
-    public class CloseProjectAction : Actions.IAction
+    public class CloseProjectAction : IMenuAction
     {
         IApplication app;
 

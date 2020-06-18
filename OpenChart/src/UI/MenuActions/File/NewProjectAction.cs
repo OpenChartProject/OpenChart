@@ -2,12 +2,12 @@ using Gtk;
 using OpenChart.Projects;
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the application to create a new project.
     /// </summary>
-    public class NewProjectAction : Actions.IAction
+    public class NewProjectAction : IMenuAction
     {
         IApplication app;
 

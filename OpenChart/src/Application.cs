@@ -1,5 +1,5 @@
 using ManagedBass;
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
 using Serilog;
 using System;
@@ -19,7 +19,7 @@ namespace OpenChart
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
-        public Dictionary<string, IAction> ActionDict { get; private set; }
+        public Dictionary<string, IMenuAction> ActionDict { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -36,7 +36,7 @@ namespace OpenChart
 
         public Application() : base(AppId, GLib.ApplicationFlags.None)
         {
-            ActionDict = new Dictionary<string, IAction>();
+            ActionDict = new Dictionary<string, IMenuAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
         }
 
@@ -55,12 +55,12 @@ namespace OpenChart
         public void InitActions()
         {
             // File actions
-            addAction(new NewProjectAction(this));
-            addAction(new NewChartAction(this));
-            addAction(new CloseProjectAction(this));
-            addAction(new SaveAction(this));
-            addAction(new SaveAsAction(this));
-            addAction(new QuitAction(this));
+            addMenuAction(new NewProjectAction(this));
+            addMenuAction(new NewChartAction(this));
+            addMenuAction(new CloseProjectAction(this));
+            addMenuAction(new SaveAction(this));
+            addMenuAction(new SaveAsAction(this));
+            addMenuAction(new QuitAction(this));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace OpenChart
             }
         }
 
-        private void addAction(IAction action)
+        private void addMenuAction(IMenuAction action)
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
             // type of argument, resulting in a segfault.

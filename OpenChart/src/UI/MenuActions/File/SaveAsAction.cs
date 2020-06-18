@@ -1,27 +1,27 @@
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the application to save the current project.
     /// </summary>
-    public class SaveAction : Actions.IAction
+    public class SaveAsAction : IMenuAction
     {
         IApplication app;
 
-        public const string Hotkey = "<Control>S";
+        public const string Hotkey = "<Control><Shift>S";
         public string GetHotkey() => Hotkey;
 
-        public const string Name = "file.save";
+        public const string Name = "file.save_as";
         public string GetName() => Name;
 
         GLib.SimpleAction _action;
         public GLib.IAction Action => (GLib.IAction)_action;
 
         /// <summary>
-        /// Creates a new SaveAction instance.
+        /// Creates a new SaveAsAction instance.
         /// </summary>
-        public SaveAction(IApplication app)
+        public SaveAsAction(IApplication app)
         {
             this.app = app;
 
