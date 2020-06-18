@@ -7,7 +7,7 @@ namespace OpenChart.UI.MenuActions
     /// <summary>
     /// An action that triggers the application to create a new project.
     /// </summary>
-    public class NewProjectAction : MenuActions.IMenuAction
+    public class NewProjectAction : IMenuAction
     {
         IApplication app;
 

@@ -7,7 +7,7 @@ namespace OpenChart.UI.MenuActions
     /// <summary>
     /// An action that triggers the application to create a new chart.
     /// </summary>
-    public class NewChartAction : MenuActions.IMenuAction
+    public class NewChartAction : IMenuAction
     {
         IApplication app;
 

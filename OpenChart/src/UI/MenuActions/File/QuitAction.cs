@@ -5,7 +5,7 @@ namespace OpenChart.UI.MenuActions
     /// <summary>
     /// An action that triggers the application to quit.
     /// </summary>
-    public class QuitAction : MenuActions.IMenuAction
+    public class QuitAction : IMenuAction
     {
         IApplication app;
 
