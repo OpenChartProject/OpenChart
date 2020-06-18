@@ -4,9 +4,15 @@ using System.Text;
 
 namespace OpenChart.Formats.StepMania.SM
 {
+    /// <summary>
+    /// A static class for reading the fields in an SM file.
+    /// </summary>
     public static class FieldExtractor
     {
-        enum State
+        /// <summary>
+        /// The different states the reader can be in while extracting fields.
+        /// </summary>
+        enum ReaderState
         {
             LookingForField,
             ReadingName,
@@ -27,7 +33,7 @@ namespace OpenChart.Formats.StepMania.SM
         public static Dictionary<string, string> Extract(string data)
         {
             var dict = new Dictionary<string, string>();
-            var state = State.LookingForField;
+            var state = ReaderState.LookingForField;
             var preCommentState = state;
 
             var buffer = new StringBuilder();
@@ -45,7 +51,7 @@ namespace OpenChart.Formats.StepMania.SM
                 if (c == TOKEN_COMMENT && last == TOKEN_COMMENT)
                 {
                     preCommentState = state;
-                    state = State.InComment;
+                    state = ReaderState.InComment;
 
                     // When a comment is found in the middle of a value, the first forward slash
                     // will be added to the buffer.
@@ -59,23 +65,23 @@ namespace OpenChart.Formats.StepMania.SM
                 {
                     // Looking for the start of a field. Skip until we hit a field start or find
                     // a comment.
-                    case State.LookingForField:
+                    case ReaderState.LookingForField:
                         if (c == TOKEN_FIELD_START)
                         {
                             buffer.Clear();
-                            state = State.ReadingName;
+                            state = ReaderState.ReadingName;
                         }
 
                         break;
 
                     // Reading the field name. Fill the buffer until we hit the separator.
-                    case State.ReadingName:
+                    case ReaderState.ReadingName:
                         if (c == TOKEN_FIELD_NAME_END)
                         {
                             // Save the field name.
                             name = buffer.ToString().ToUpper();
                             buffer.Clear();
-                            state = State.ReadingValue;
+                            state = ReaderState.ReadingValue;
                         }
                         else
                             buffer.Append(c);
@@ -84,13 +90,13 @@ namespace OpenChart.Formats.StepMania.SM
 
                     // Reading the field value. Fill the buffer until we hit the end of the field,
                     // then add the field to the dictionary.
-                    case State.ReadingValue:
+                    case ReaderState.ReadingValue:
                         if (c == TOKEN_FIELD_VALUE_END)
                         {
                             // Add the field to the dictionary.
                             dict[name] = buffer.ToString();
                             buffer.Clear();
-                            state = State.LookingForField;
+                            state = ReaderState.LookingForField;
                         }
                         else
                             buffer.Append(c);
@@ -98,7 +104,7 @@ namespace OpenChart.Formats.StepMania.SM
                         break;
 
                     // Inside of a comment. Ignore the rest of the line.
-                    case State.InComment:
+                    case ReaderState.InComment:
                         if (c == TOKEN_NEWLINE)
                         {
                             state = preCommentState;
@@ -111,7 +117,8 @@ namespace OpenChart.Formats.StepMania.SM
                 last = c;
             }
 
-            if (state == State.ReadingName || state == State.ReadingValue)
+            // The file is incomplete if we hit the EOF while reading a field.
+            if (state == ReaderState.ReadingName || state == ReaderState.ReadingValue)
                 throw new UnexpectedEOFException();
 
             return dict;
