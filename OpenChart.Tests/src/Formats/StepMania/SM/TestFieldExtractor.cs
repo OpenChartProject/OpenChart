@@ -4,28 +4,20 @@ using OpenChart.Formats.StepMania.SM.Exceptions;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
 {
-    public class TestSMSerializer
+    public class TestFieldExtractor
     {
-        SMSerializer serializer;
-
-        [SetUp]
-        public void SetUp()
-        {
-            serializer = new SMSerializer();
-        }
-
         [Test]
         public void Test_ExtractFields_UnexpectedEOF()
         {
             Assert.Throws<UnexpectedEOFException>(
-                () => serializer.ExtractFields("#NAME:value")
+                () => FieldExtractor.Extract("#NAME:value")
             );
         }
 
         [Test]
         public void Test_ExtractFields_Empty()
         {
-            var fields = serializer.ExtractFields("");
+            var fields = FieldExtractor.Extract("");
 
             Assert.AreEqual(0, fields.Count);
         }
@@ -33,7 +25,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [Test]
         public void Test_ExtractFields_Unicode()
         {
-            var fields = serializer.ExtractFields("#FIELD:こんにちは;");
+            var fields = FieldExtractor.Extract("#FIELD:こんにちは;");
 
             Assert.AreEqual(1, fields.Count);
             Assert.AreEqual(fields["FIELD"], "こんにちは");
@@ -44,7 +36,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase(" \n#NAME:value; ")]
         public void Test_ExtractFields_SingleField(string val)
         {
-            var fields = serializer.ExtractFields(val);
+            var fields = FieldExtractor.Extract(val);
 
             Assert.AreEqual(1, fields.Count);
             Assert.AreEqual("value", fields["NAME"]);
@@ -55,7 +47,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("  #FIELD1:one;   #FIELD2:two;  ")]
         public void Test_ExtractFields_MultipleFields(string val)
         {
-            var fields = serializer.ExtractFields(val);
+            var fields = FieldExtractor.Extract(val);
 
             Assert.AreEqual(2, fields.Count);
             Assert.AreEqual("one", fields["FIELD1"]);
@@ -68,7 +60,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("//#FIELD:value;")]
         public void Test_ExtractFields_Comment(string val)
         {
-            var fields = serializer.ExtractFields(val);
+            var fields = FieldExtractor.Extract(val);
 
             Assert.AreEqual(0, fields.Count);
         }
@@ -76,7 +68,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [Test]
         public void Test_ExtractFields_CommentInValue()
         {
-            var fields = serializer.ExtractFields("#FIELD:multi// oh yeah woo yeah\nline;");
+            var fields = FieldExtractor.Extract("#FIELD:multi// oh yeah woo yeah\nline;");
 
             Assert.AreEqual(1, fields.Count);
             Assert.AreEqual("multi\nline", fields["FIELD"]);
@@ -87,7 +79,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("#FIELD:multi// comment \r\nline;")]
         public void Test_ExtractFields_IgnoresCRLF(string val)
         {
-            var fields = serializer.ExtractFields(val);
+            var fields = FieldExtractor.Extract(val);
 
             Assert.AreEqual(1, fields.Count);
 
