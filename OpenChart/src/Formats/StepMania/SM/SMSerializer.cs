@@ -29,14 +29,14 @@ namespace OpenChart.Formats.StepMania.SM
 
             stepFileData.MetaData.Credit = fields.GetString("CREDIT");
 
-            stepFileData.PlayData.Offset = fields.GetFloat("OFFSET");
+            stepFileData.PlayData.Offset = fields.GetDouble("OFFSET");
             // TODO: BPMs, Stops
 
             stepFileData.SongData.Genre = fields.GetString("GENRE");
             stepFileData.SongData.LyricsPath = fields.GetString("LYRICSPATH");
             stepFileData.SongData.Music = fields.GetString("MUSIC");
-            stepFileData.SongData.SampleLength = fields.GetFloat("SAMPLELENGTH");
-            stepFileData.SongData.SampleStart = fields.GetFloat("SAMPLESTART");
+            stepFileData.SongData.SampleLength = fields.GetDouble("SAMPLELENGTH");
+            stepFileData.SongData.SampleStart = fields.GetDouble("SAMPLESTART");
             stepFileData.SongData.Subtitle = fields.GetString("SUBTITLE");
             stepFileData.SongData.Title = fields.GetString("TITLE");
             stepFileData.SongData.TransliteratedArtist = fields.GetString("ARTISTTRANSLIT");

@@ -28,11 +28,11 @@ namespace OpenChart.Formats.StepMania.SM.Data
             }
         }
 
-        public float GetFloat(string key, float defaultValue = 0)
+        public double GetDouble(string key, double defaultValue = 0)
         {
             try
             {
-                return FieldDict[key].AsFloat();
+                return FieldDict[key].AsDouble();
             }
             catch (KeyNotFoundException)
             {

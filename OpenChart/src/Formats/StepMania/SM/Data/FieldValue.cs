@@ -14,9 +14,9 @@ namespace OpenChart.Formats.StepMania.SM.Data
             return Value == "yes" || Value == "1";
         }
 
-        public float AsFloat()
+        public double AsDouble()
         {
-            return float.Parse(Value);
+            return double.Parse(Value);
         }
 
         public int AsInt()
