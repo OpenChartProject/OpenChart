@@ -20,28 +20,28 @@ namespace OpenChart.Formats.StepMania.SM
             var fields = FieldExtractor.Extract(Encoding.UTF8.GetString(data));
             var stepFileData = new StepFileData();
 
-            stepFileData.DisplayData.Banner = getString(fields, "BANNER");
-            stepFileData.DisplayData.Background = getString(fields, "BACKGROUND");
-            stepFileData.DisplayData.BackgroundChanges = getString(fields, "BGCHANGES");
-            stepFileData.DisplayData.ForegroundChanges = getString(fields, "FGCHANGES");
-            stepFileData.DisplayData.CDTitle = getString(fields, "CDTITLE");
-            stepFileData.DisplayData.Selectable = getBool(fields, "SELECTABLE");
+            stepFileData.DisplayData.Banner = fields.GetString("BANNER");
+            stepFileData.DisplayData.Background = fields.GetString("BACKGROUND");
+            stepFileData.DisplayData.BackgroundChanges = fields.GetString("BGCHANGES");
+            stepFileData.DisplayData.ForegroundChanges = fields.GetString("FGCHANGES");
+            stepFileData.DisplayData.CDTitle = fields.GetString("CDTITLE");
+            stepFileData.DisplayData.Selectable = fields.GetBool("SELECTABLE");
 
-            stepFileData.MetaData.Credit = getString(fields, "CREDIT");
+            stepFileData.MetaData.Credit = fields.GetString("CREDIT");
 
-            stepFileData.PlayData.Offset = getFloat(fields, "OFFSET");
+            stepFileData.PlayData.Offset = fields.GetFloat("OFFSET");
             // TODO: BPMs, Stops
 
-            stepFileData.SongData.Genre = getString(fields, "GENRE");
-            stepFileData.SongData.LyricsPath = getString(fields, "LYRICSPATH");
-            stepFileData.SongData.Music = getString(fields, "MUSIC");
-            stepFileData.SongData.SampleLength = getFloat(fields, "SAMPLELENGTH");
-            stepFileData.SongData.SampleStart = getFloat(fields, "SAMPLESTART");
-            stepFileData.SongData.Subtitle = getString(fields, "SUBTITLE");
-            stepFileData.SongData.Title = getString(fields, "TITLE");
-            stepFileData.SongData.TransliteratedArtist = getString(fields, "ARTISTTRANSLIT");
-            stepFileData.SongData.TransliteratedSubtitle = getString(fields, "SUBTITLETRANSLIT");
-            stepFileData.SongData.TransliteratedTitle = getString(fields, "TITLETRANSLIT");
+            stepFileData.SongData.Genre = fields.GetString("GENRE");
+            stepFileData.SongData.LyricsPath = fields.GetString("LYRICSPATH");
+            stepFileData.SongData.Music = fields.GetString("MUSIC");
+            stepFileData.SongData.SampleLength = fields.GetFloat("SAMPLELENGTH");
+            stepFileData.SongData.SampleStart = fields.GetFloat("SAMPLESTART");
+            stepFileData.SongData.Subtitle = fields.GetString("SUBTITLE");
+            stepFileData.SongData.Title = fields.GetString("TITLE");
+            stepFileData.SongData.TransliteratedArtist = fields.GetString("ARTISTTRANSLIT");
+            stepFileData.SongData.TransliteratedSubtitle = fields.GetString("SUBTITLETRANSLIT");
+            stepFileData.SongData.TransliteratedTitle = fields.GetString("TITLETRANSLIT");
 
 
             return stepFileData;
@@ -53,56 +53,6 @@ namespace OpenChart.Formats.StepMania.SM
         public byte[] Serialize(StepFileData obj)
         {
             return null;
-        }
-
-        private bool getBool(Dictionary<string, string> dict, string key, bool defaultValue = false)
-        {
-            try
-            {
-                var val = dict[key];
-
-                return val == "yes" || val == "1";
-            }
-            catch (KeyNotFoundException)
-            {
-                return defaultValue;
-            }
-        }
-
-        private float getFloat(Dictionary<string, string> dict, string key, float defaultValue = 0)
-        {
-            try
-            {
-                return float.Parse(dict[key]);
-            }
-            catch (KeyNotFoundException)
-            {
-                return defaultValue;
-            }
-        }
-
-        private int getInt(Dictionary<string, string> dict, string key, int defaultValue = 0)
-        {
-            try
-            {
-                return int.Parse(dict[key]);
-            }
-            catch (KeyNotFoundException)
-            {
-                return defaultValue;
-            }
-        }
-
-        private string getString(Dictionary<string, string> dict, string key, string defaultValue = "")
-        {
-            try
-            {
-                return dict[key];
-            }
-            catch (KeyNotFoundException)
-            {
-                return defaultValue;
-            }
         }
     }
 }

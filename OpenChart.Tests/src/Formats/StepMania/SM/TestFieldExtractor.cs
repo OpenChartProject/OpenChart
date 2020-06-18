@@ -18,28 +18,23 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         public void Test_Extract_Empty()
         {
             var fields = FieldExtractor.Extract("");
-
-            Assert.AreEqual(0, fields.Count);
+            Assert.AreEqual(0, fields.FieldDict.Count);
         }
 
         [Test]
         public void Test_Extract_Unicode()
         {
             var fields = FieldExtractor.Extract("#FIELD:こんにちは;");
-
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual(fields["FIELD"], "こんにちは");
+            Assert.AreEqual("こんにちは", fields.GetString("FIELD"));
         }
 
-        [TestCase("#NAME:value;")]
-        [TestCase("#NAME:value;\n")]
-        [TestCase(" \n#NAME:value; ")]
+        [TestCase("#FIELD:value;")]
+        [TestCase("#FIELD:value;\n")]
+        [TestCase(" \n#FIELD:value; ")]
         public void Test_Extract_SingleField(string val)
         {
             var fields = FieldExtractor.Extract(val);
-
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual("value", fields["NAME"]);
+            Assert.AreEqual("value", fields.GetString("FIELD"));
         }
 
         [TestCase("#FIELD1:one;#FIELD2:two;")]
@@ -49,9 +44,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         {
             var fields = FieldExtractor.Extract(val);
 
-            Assert.AreEqual(2, fields.Count);
-            Assert.AreEqual("one", fields["FIELD1"]);
-            Assert.AreEqual("two", fields["FIELD2"]);
+            Assert.AreEqual("one", fields.GetString("FIELD1"));
+            Assert.AreEqual("two", fields.GetString("FIELD2"));
         }
 
         [TestCase("//comment")]
@@ -61,17 +55,14 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         public void Test_Extract_Comment(string val)
         {
             var fields = FieldExtractor.Extract(val);
-
-            Assert.AreEqual(0, fields.Count);
+            Assert.AreEqual(0, fields.FieldDict.Count);
         }
 
         [Test]
         public void Test_Extract_CommentInValue()
         {
             var fields = FieldExtractor.Extract("#FIELD:multi// oh yeah woo yeah\nline;");
-
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual("multi\nline", fields["FIELD"]);
+            Assert.AreEqual("multi\nline", fields.GetString("FIELD"));
         }
 
 
@@ -80,11 +71,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         public void Test_Extract_IgnoresCRLF(string val)
         {
             var fields = FieldExtractor.Extract(val);
-
-            Assert.AreEqual(1, fields.Count);
-
-            // Ensure the CRLF gets converted to LF.
-            Assert.AreEqual("multi\nline", fields["FIELD"]);
+            Assert.AreEqual("multi\nline", fields.GetString("FIELD"));
         }
 
         [TestCase("#FIELD: foo;")]
@@ -93,8 +80,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         public void Test_Extract_TrimsValueWhitespace(string val)
         {
             var fields = FieldExtractor.Extract(val);
-            Assert.AreEqual(1, fields.Count);
-            Assert.AreEqual("foo", fields["FIELD"]);
+            Assert.AreEqual("foo", fields.GetString("FIELD"));
         }
     }
 }

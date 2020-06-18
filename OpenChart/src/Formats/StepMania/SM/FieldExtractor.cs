@@ -1,3 +1,4 @@
+using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Formats.StepMania.SM.Exceptions;
 using System.Collections.Generic;
 using System.Text;
@@ -30,9 +31,9 @@ namespace OpenChart.Formats.StepMania.SM
         /// Extracts the raw fields from the step file. Returns a dictionary of the field names
         /// and values. Field names are transformed to uppercase.
         /// </summary>
-        public static Dictionary<string, string> Extract(string data)
+        public static Fields Extract(string data)
         {
-            var dict = new Dictionary<string, string>();
+            var fields = new Fields();
             var state = ReaderState.LookingForField;
             var preCommentState = state;
 
@@ -94,7 +95,7 @@ namespace OpenChart.Formats.StepMania.SM
                         if (c == TOKEN_FIELD_VALUE_END)
                         {
                             // Add the field to the dictionary.
-                            dict[name] = buffer.ToString().Trim();
+                            fields.Add(name, buffer.ToString().Trim());
                             buffer.Clear();
                             state = ReaderState.LookingForField;
                         }
@@ -121,7 +122,7 @@ namespace OpenChart.Formats.StepMania.SM
             if (state == ReaderState.ReadingName || state == ReaderState.ReadingValue)
                 throw new UnexpectedEOFException();
 
-            return dict;
+            return fields;
         }
     }
 }
