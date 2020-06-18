@@ -34,6 +34,8 @@ namespace OpenChart.UI.MenuActions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
+            Log.Debug($"{this.GetType().Name} triggered.");
+
             if (app.GetData().CurrentProject != null)
             {
                 // TODO: Check if the project has been modified and prompt the user to save.
@@ -50,7 +52,8 @@ namespace OpenChart.UI.MenuActions
             }
             else
             {
-                app.GetData().CurrentProject = new Project();
+                var project = new Project();
+                app.GetData().CurrentProject = project;
                 Log.Information("Created a new project instance.");
             }
         }

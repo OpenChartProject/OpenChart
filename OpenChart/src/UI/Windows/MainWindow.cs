@@ -70,7 +70,10 @@ namespace OpenChart.UI.Windows
 
             var view = new NoteFieldView(noteField);
 
-
+            app.GetEvents().ChartAdded += (o, e) =>
+            {
+                // TODO: Create a new tab to show the chart.
+            };
 
             container = new VBox();
             container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);

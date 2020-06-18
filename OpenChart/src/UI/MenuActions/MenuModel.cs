@@ -54,8 +54,9 @@ namespace OpenChart.UI.MenuActions
             section = new Menu();
             menu.AppendSection(null, section);
 
-            section.Append("New", NewProjectAction.Name);
-            section.Append("Open", "file.open_project");
+            section.Append("New Project", NewProjectAction.Name);
+            section.Append("New Chart", NewChartAction.Name);
+            section.Append("Open Project", "file.open_project");
             section.Append("Close", CloseProjectAction.Name);
 
             section = new Menu();

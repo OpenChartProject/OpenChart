@@ -56,6 +56,7 @@ namespace OpenChart
         {
             // File actions
             addMenuAction(new NewProjectAction(this));
+            addMenuAction(new NewChartAction(this));
             addMenuAction(new CloseProjectAction(this));
             addMenuAction(new SaveAction(this));
             addMenuAction(new SaveAsAction(this));
