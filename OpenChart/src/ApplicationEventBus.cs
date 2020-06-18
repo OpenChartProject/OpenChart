@@ -1,4 +1,5 @@
-using OpenChart.UI.Actions;
+using OpenChart.Charting;
+using OpenChart.Projects;
 using System;
 
 namespace OpenChart
@@ -8,7 +9,15 @@ namespace OpenChart
     /// </summary>
     public class ApplicationEventBus
     {
-        ApplicationData appData;
+        /// <summary>
+        /// The application data for this event bus.
+        /// </summary>
+        public ApplicationData ApplicationData;
+
+        /// <summary>
+        /// An event fired when a chart is added to the project.
+        /// </summary>
+        public event EventHandler<ChartAddedArgs> ChartAdded;
 
         /// <summary>
         /// An event fired when the current active project for the app changes.
@@ -22,9 +31,17 @@ namespace OpenChart
 
         public ApplicationEventBus(ApplicationData appData)
         {
-            this.appData = appData;
+            this.ApplicationData = appData;
 
             appData.ProjectChanged += onCurrentProjectChanged;
+        }
+
+        /// <summary>
+        /// Handler for when a new chart is added to the current project.
+        /// </summary>
+        private void onChartAdded(object o, ChartAddedArgs e)
+        {
+            ChartAdded?.Invoke(this, e);
         }
 
         /// <summary>
@@ -35,18 +52,24 @@ namespace OpenChart
         {
             // Remove listeners on the old project.
             if (e.OldProject != null)
+            {
+                e.OldProject.ChartAdded -= onChartAdded;
                 e.OldProject.Renamed -= onCurrentProjectRenamed;
+            }
 
             // Add listeners to the new project.
             if (e.NewProject != null)
+            {
+                e.NewProject.ChartAdded += onChartAdded;
                 e.NewProject.Renamed += onCurrentProjectRenamed;
+            }
 
             CurrentProjectChanged?.Invoke(this, e);
         }
 
         private void onCurrentProjectRenamed(object o, EventArgs e)
         {
-            CurrentProjectRenamed?.Invoke(o, e);
+            CurrentProjectRenamed?.Invoke(this, e);
         }
     }
 }
