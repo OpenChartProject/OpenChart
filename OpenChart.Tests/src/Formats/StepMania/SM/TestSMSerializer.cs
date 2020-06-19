@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM;
+using OpenChart.Formats.StepMania.SM.Enums;
 using System.Text;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
@@ -12,6 +13,30 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         public void SetUp()
         {
             serializer = new SMSerializer();
+        }
+
+        [Test]
+        public void Test_ParseDisplayBPM_Fixed()
+        {
+            var display = serializer.ParseDisplayBPM("120");
+            Assert.AreEqual(DisplayBPMType.Fixed, display.Type);
+            Assert.AreEqual(120, display.Min);
+        }
+
+        [Test]
+        public void Test_ParseDisplayBPM_Random()
+        {
+            var display = serializer.ParseDisplayBPM("*");
+            Assert.AreEqual(DisplayBPMType.Random, display.Type);
+        }
+
+        [Test]
+        public void Test_ParseDisplayBPM_Range()
+        {
+            var display = serializer.ParseDisplayBPM("60:120");
+            Assert.AreEqual(DisplayBPMType.Range, display.Type);
+            Assert.AreEqual(60, display.Min);
+            Assert.AreEqual(120, display.Max);
         }
 
         [TestCase("")]
@@ -63,6 +88,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             #SELECTABLE:yes;
             #CREDIT:credit;
             #OFFSET:123.45;
+            #DISPLAYBPM:*;
             #BPMS:0=120;
             #STOPS:0=1;
             #GENRE:genre;
@@ -83,6 +109,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual("background", data.DisplayData.Background);
             Assert.AreEqual("cdtitle", data.DisplayData.CDTitle);
             Assert.AreEqual(true, data.DisplayData.Selectable);
+            Assert.AreEqual(DisplayBPMType.Random, data.DisplayData.DisplayBPM.Type);
 
             Assert.AreEqual("credit", data.MetaData.Credit);
 
