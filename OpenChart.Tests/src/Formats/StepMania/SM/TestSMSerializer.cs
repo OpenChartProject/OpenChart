@@ -32,5 +32,24 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual(beat, bpms[0].Beat);
             Assert.AreEqual(bpm, bpms[0].Value);
         }
+
+        [TestCase("")]
+        [TestCase(" ")]
+        [TestCase(",")]
+        public void Test_ParseBPMs_NoStops(string val)
+        {
+            var stops = serializer.ParseStops(val);
+            Assert.AreEqual(0, stops.Count);
+        }
+
+        [TestCase("100=0", 100, 0)]
+        [TestCase("123.45=1.2345", 123.45, 1.2345)]
+        public void Test_ParseStops_Single(string val, double beat, double seconds)
+        {
+            var stops = serializer.ParseStops(val);
+            Assert.AreEqual(1, stops.Count);
+            Assert.AreEqual(beat, stops[0].Beat);
+            Assert.AreEqual(seconds, stops[0].Seconds);
+        }
     }
 }

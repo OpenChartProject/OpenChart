@@ -31,7 +31,8 @@ namespace OpenChart.Formats.StepMania.SM
             stepFileData.MetaData.Credit = fields.GetString("CREDIT");
 
             stepFileData.PlayData.Offset = fields.GetDouble("OFFSET");
-            // TODO: BPMs, Stops
+            stepFileData.PlayData.BPMs = ParseBPMs(fields.GetString("BPMS"));
+            stepFileData.PlayData.Stops = ParseStops(fields.GetString("STOPS"));
 
             stepFileData.SongData.Genre = fields.GetString("GENRE");
             stepFileData.SongData.LyricsPath = fields.GetString("LYRICSPATH");
@@ -86,6 +87,38 @@ namespace OpenChart.Formats.StepMania.SM
             }
 
             return bpms;
+        }
+
+        /// <summary>
+        /// Parse out a list of stops. Stops are formatted as `Beat=Seconds,Beat=Seconds,...`
+        /// </summary>
+        /// <param name="data">The string data from the STOPS field.</param>
+        public List<Stop> ParseStops(string data)
+        {
+            var stops = new List<Stop>();
+
+            foreach (var stop in data.Split(','))
+            {
+                // Ignore empty entries.
+                if (stop.Trim() == "")
+                    continue;
+
+                var parts = stop.Split('=');
+
+                if (parts.Length != 2)
+                    throw new FieldFormatException("BPMs are not formatted correctly.");
+
+                double beat;
+                double seconds;
+
+                // Try parsing the beat and BPM parts.
+                if (!double.TryParse(parts[0].Trim(), out beat) || !double.TryParse(parts[1].Trim(), out seconds))
+                    throw new FieldFormatException("BPMs are not formatted correctly.");
+
+                stops.Add(new Stop(beat, seconds));
+            }
+
+            return stops;
         }
     }
 }
