@@ -1,4 +1,5 @@
 using OpenChart.Formats.StepMania.SM.Data;
+using OpenChart.Formats.StepMania.SM.Exceptions;
 using System.Collections.Generic;
 using System.Text;
 
@@ -53,6 +54,38 @@ namespace OpenChart.Formats.StepMania.SM
         public byte[] Serialize(StepFileData obj)
         {
             return null;
+        }
+
+        /// <summary>
+        /// Parse out a list of BPM changes. BPMs are formatted as `Beat=BPM,Beat=BPM,...`
+        /// </summary>
+        /// <param name="data">The string data from the BPMS field.</param>
+        public List<BPM> ParseBPMs(string data)
+        {
+            var bpms = new List<BPM>();
+
+            foreach (var bpmChange in data.Split(','))
+            {
+                // Ignore empty entries.
+                if (bpmChange.Trim() == "")
+                    continue;
+
+                var parts = bpmChange.Split('=');
+
+                if (parts.Length != 2)
+                    throw new FieldFormatException("BPMs are not formatted correctly.");
+
+                double beat;
+                double bpm;
+
+                // Try parsing the beat and BPM parts.
+                if (!double.TryParse(parts[0].Trim(), out beat) || !double.TryParse(parts[1].Trim(), out bpm))
+                    throw new FieldFormatException("BPMs are not formatted correctly.");
+
+                bpms.Add(new BPM(beat, bpm));
+            }
+
+            return bpms;
         }
     }
 }
