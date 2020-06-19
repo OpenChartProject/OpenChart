@@ -10,12 +10,12 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// <summary>
         /// The min value of the display BPM.
         /// </summary>
-        public int Min { get; set; }
+        public double Min { get; set; }
 
         /// <summary>
         /// The max value of the display BPM.
         /// </summary>
-        public int Max { get; set; }
+        public double Max { get; set; }
 
         /// <summary>
         /// The display type.
@@ -26,7 +26,7 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Creates an instance for a fixed display.
         /// </summary>
         /// <param name="value">The BPM to display.</param>
-        public static DisplayBPM NewFixedDisplay(int value)
+        public static DisplayBPM NewFixedDisplay(double value)
         {
             return new DisplayBPM()
             {
@@ -52,7 +52,7 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// </summary>
         /// <param name="min">The minimum BPM.</param>
         /// <param name="max">The maximum BPM.</param>
-        public static DisplayBPM NewRangeDisplay(int min, int max)
+        public static DisplayBPM NewRangeDisplay(double min, double max)
         {
             return new DisplayBPM()
             {

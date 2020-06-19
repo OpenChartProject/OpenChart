@@ -33,9 +33,50 @@ namespace OpenChart.Formats.StepMania.SM
             return null;
         }
 
+        /// <summary>
+        /// Parses the display BPM. There are three types of BPM displays:
+        ///
+        /// - A fixed display that shows a single value: `#DISPLAYBPM:value;`
+        /// - A range display that has a lower and upper bound: `#DISPLAYBPM:lower:upper;`
+        /// - A random display: `#DISPLAYBPM:*;`
+        ///
+        /// </summary>
+        /// <param name="data">The string data from the DISPLAYBPM field</param>
         public DisplayBPM ParseDisplayBPM(string data)
         {
             DisplayBPM display = null;
+
+            var parts = data.Split(':');
+
+            if (parts.Length == 2)
+            {
+                double lower;
+                double upper;
+
+                if (
+                    !double.TryParse(parts[0].Trim(), out lower) ||
+                    !double.TryParse(parts[1].Trim(), out upper)
+                )
+                    throw new FieldFormatException("Display BPM is not formatted correctly.");
+
+                display = DisplayBPM.NewRangeDisplay(lower, upper);
+            }
+            else if (parts.Length == 1)
+            {
+                if (parts[0] == "*")
+                    display = DisplayBPM.NewRandomDisplay();
+                else
+                {
+                    double val;
+
+                    if (!double.TryParse(parts[0], out val))
+                        throw new FieldFormatException("Display BPM is not formatted correctly.");
+                    else
+                        display = DisplayBPM.NewFixedDisplay(val);
+                }
+            }
+            else
+                throw new FieldFormatException("Display BPM is not formatted correctly.");
 
             return display;
         }
