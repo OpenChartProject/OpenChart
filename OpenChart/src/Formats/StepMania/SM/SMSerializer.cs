@@ -83,14 +83,14 @@ namespace OpenChart.Formats.StepMania.SM
                 var parts = stop.Split('=');
 
                 if (parts.Length != 2)
-                    throw new FieldFormatException("BPMs are not formatted correctly.");
+                    throw new FieldFormatException("Stops are not formatted correctly.");
 
                 double beat;
                 double seconds;
 
                 // Try parsing the beat and BPM parts.
                 if (!double.TryParse(parts[0].Trim(), out beat) || !double.TryParse(parts[1].Trim(), out seconds))
-                    throw new FieldFormatException("BPMs are not formatted correctly.");
+                    throw new FieldFormatException("Stops are not formatted correctly.");
 
                 stops.Add(new Stop(beat, seconds));
             }
