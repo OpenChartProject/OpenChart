@@ -17,7 +17,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(",")]
-        public void Test_ParseBPMs_NoBPMs(string val)
+        public void Test_ParseBPMs_Empty(string val)
         {
             var bpms = serializer.ParseBPMs(val);
             Assert.AreEqual(0, bpms.Count);
@@ -37,7 +37,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(",")]
-        public void Test_ParseBPMs_NoStops(string val)
+        public void Test_ParseStops_Empty(string val)
         {
             var stops = serializer.ParseStops(val);
             Assert.AreEqual(0, stops.Count);
