@@ -5,7 +5,6 @@ using System.Text;
 
 namespace OpenChart.Formats.StepMania.SM
 {
-
     /// <summary>
     /// Serializer class for importing .sm files.
     ///
@@ -32,6 +31,13 @@ namespace OpenChart.Formats.StepMania.SM
         public byte[] Serialize(StepFileData obj)
         {
             return null;
+        }
+
+        public DisplayBPM ParseDisplayBPM(string data)
+        {
+            DisplayBPM display = null;
+
+            return display;
         }
 
         /// <summary>
@@ -112,6 +118,7 @@ namespace OpenChart.Formats.StepMania.SM
             stepFileData.DisplayData.ForegroundChanges = fields.GetString("FGCHANGES");
             stepFileData.DisplayData.CDTitle = fields.GetString("CDTITLE");
             stepFileData.DisplayData.Selectable = fields.GetBool("SELECTABLE");
+            stepFileData.DisplayData.DisplayBPM = ParseDisplayBPM(fields.GetString("DISPLAYBPM"));
 
             stepFileData.MetaData.Credit = fields.GetString("CREDIT");
 
