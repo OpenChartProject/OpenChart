@@ -129,7 +129,6 @@ namespace OpenChart.Formats.StepMania.SM
             stepFileData.SongData.TransliteratedArtist = fields.GetString("ARTISTTRANSLIT");
             stepFileData.SongData.TransliteratedSubtitle = fields.GetString("SUBTITLETRANSLIT");
             stepFileData.SongData.TransliteratedTitle = fields.GetString("TITLETRANSLIT");
-
         }
     }
 }
