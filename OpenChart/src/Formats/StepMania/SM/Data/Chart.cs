@@ -1,4 +1,5 @@
 using OpenChart.Formats.StepMania.SM.Enums;
+using System.Collections.Generic;
 
 namespace OpenChart.Formats.StepMania.SM.Data
 {
@@ -34,6 +35,17 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// </summary>
         public string GrooveRadarValues { get; set; }
 
-        // TODO: notedata
+        /// <summary>
+        /// The measures in the chart. This holds the note data.
+        /// </summary>
+        public List<Measure> Measures { get; set; }
+
+        /// <summary>
+        /// Creates a new Chart instance.
+        /// </summary>
+        public Chart()
+        {
+            Measures = new List<Measure>();
+        }
     }
 }
