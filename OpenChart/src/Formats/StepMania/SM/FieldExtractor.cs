@@ -1,6 +1,5 @@
 using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Formats.StepMania.SM.Exceptions;
-using System.Collections.Generic;
 using System.Text;
 
 namespace OpenChart.Formats.StepMania.SM

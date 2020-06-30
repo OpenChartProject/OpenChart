@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace OpenChart.Formats.StepMania.SM
 {
+    /// <summary>
+    /// A static class for parsing extracted field data.
+    /// </summary>
     public static class FieldParser
     {
         /// <summary>
