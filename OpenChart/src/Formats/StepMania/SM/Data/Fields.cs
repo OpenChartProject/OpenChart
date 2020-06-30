@@ -13,11 +13,17 @@ namespace OpenChart.Formats.StepMania.SM.Data
         public readonly Dictionary<string, FieldValue> FieldDict;
 
         /// <summary>
+        /// A list of fields for note data.
+        /// </summary>
+        public readonly List<FieldValue> NoteDataFields;
+
+        /// <summary>
         /// Creates a new Fields instance.
         /// </summary>
         public Fields()
         {
             FieldDict = new Dictionary<string, FieldValue>();
+            NoteDataFields = new List<FieldValue>();
         }
 
         /// <summary>
@@ -28,6 +34,15 @@ namespace OpenChart.Formats.StepMania.SM.Data
         public void Add(string key, string val)
         {
             FieldDict.Add(key, new FieldValue(val));
+        }
+
+        /// <summary>
+        /// Adds a note data field.
+        /// </summary>
+        /// <param name="val">The raw field value as a string.</param>
+        public void AddNoteData(string val)
+        {
+            NoteDataFields.Add(new FieldValue(val));
         }
 
         /// <summary>

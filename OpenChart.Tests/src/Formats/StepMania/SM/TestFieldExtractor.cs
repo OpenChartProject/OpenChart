@@ -19,6 +19,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         {
             var fields = FieldExtractor.Extract("");
             Assert.AreEqual(0, fields.FieldDict.Count);
+            Assert.AreEqual(0, fields.NoteDataFields.Count);
         }
 
         [Test]
@@ -81,6 +82,14 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         {
             var fields = FieldExtractor.Extract(val);
             Assert.AreEqual("foo", fields.GetString("FIELD"));
+        }
+
+        [TestCase("#NOTES:;", 1)]
+        [TestCase("#NOTES:;#NOTES:;", 2)]
+        public void Test_Extract_NoteData(string val, int count)
+        {
+            var fields = FieldExtractor.Extract(val);
+            Assert.AreEqual(count, fields.NoteDataFields.Count);
         }
     }
 }

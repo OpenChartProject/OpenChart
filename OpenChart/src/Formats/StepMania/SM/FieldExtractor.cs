@@ -25,6 +25,7 @@ namespace OpenChart.Formats.StepMania.SM
         const char TOKEN_FIELD_NAME_END = ':';
         const char TOKEN_FIELD_VALUE_END = ';';
         const char TOKEN_NEWLINE = '\n';
+        const string notesField = "NOTES";
 
         /// <summary>
         /// Extracts the raw fields from the step file. Returns a dictionary of the field names
@@ -93,8 +94,14 @@ namespace OpenChart.Formats.StepMania.SM
                     case ReaderState.ReadingValue:
                         if (c == TOKEN_FIELD_VALUE_END)
                         {
-                            // Add the field to the dictionary.
-                            fields.Add(name, buffer.ToString().Trim());
+                            var val = buffer.ToString().Trim();
+
+                            // Store the field.
+                            if (name == notesField)
+                                fields.AddNoteData(val);
+                            else
+                                fields.Add(name, val);
+
                             buffer.Clear();
                             state = ReaderState.LookingForField;
                         }
