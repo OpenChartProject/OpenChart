@@ -9,9 +9,7 @@ namespace OpenChart.Formats.StepMania.SM.Data
     public class Chart
     {
         /// <summary>
-        /// A string describing what type of chart this is, e.g. 'dance-single'. I chose not to
-        /// make this an enum just because there are so many different types and they aren't
-        /// documented well (or at all).
+        /// A string describing what type of chart this is, e.g. 'dance-single'.
         /// </summary>
         public string ChartType { get; set; }
 
@@ -46,6 +44,27 @@ namespace OpenChart.Formats.StepMania.SM.Data
         public Chart()
         {
             Measures = new List<Measure>();
+        }
+
+        /// <summary>
+        /// Gets the key count based on the chart type. If the chart type is unknown, returns -1.
+        /// </summary>
+        public int GetKeyCount()
+        {
+            switch (ChartType.ToLower())
+            {
+                case "dance-single":
+                    return 4;
+
+                case "dance-solo":
+                    return 6;
+
+                case "dance-double":
+                    return 8;
+
+                default:
+                    return -1;
+            }
         }
     }
 }

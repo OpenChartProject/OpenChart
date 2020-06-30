@@ -1,6 +1,11 @@
 using OpenChart.Formats.StepMania.SM.Data;
+using OpenChart.Formats.StepMania.SM.Enums;
 using OpenChart.Formats.StepMania.SM.Exceptions;
+using Serilog;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace OpenChart.Formats.StepMania.SM
 {
@@ -168,7 +173,7 @@ namespace OpenChart.Formats.StepMania.SM
                 throw new FieldFormatException("Note data is not formatted correctly (expected six arguments).");
 
             ParseChartHeaders(data, ref chart);
-            chart.Measures = ParseNoteData(parts[5]);
+            chart.Measures = ParseNoteData(parts[5], chart.GetKeyCount());
 
             return chart;
         }
@@ -180,18 +185,93 @@ namespace OpenChart.Formats.StepMania.SM
         /// <param name="chart">The chart object to write to.</param>
         public static void ParseChartHeaders(string data, ref Chart chart)
         {
+            var parts = data.Split(':');
 
+            // Trim any excess whitespace.
+            parts = parts.Select(p => p.Trim()).ToArray();
+
+            chart.ChartType = parts[0];
+            chart.Author = parts[1];
+            chart.Difficulty = ParseChartDifficulty(parts[2]);
+
+            try
+            {
+                chart.DifficultyRating = int.Parse(parts[3]);
+            }
+            catch (FormatException)
+            {
+                throw new FieldFormatException(
+                    "Chart data is not formatted correctly (numerical difficulty rating is not valid)."
+                );
+            }
+
+            chart.GrooveRadarValues = parts[4];
+
+            var keyCount = chart.GetKeyCount();
+
+            // We need to know the key count to parse the note data.
+            if (keyCount == -1)
+                throw new FieldFormatException($"Unrecognized chart type '{chart.ChartType}'.");
+        }
+
+        public static ChartDifficulty ParseChartDifficulty(string data)
+        {
+            data = data.ToLower();
+
+            switch (data)
+            {
+                case "beginner":
+                    return ChartDifficulty.Beginner;
+
+                case "easy":
+                    return ChartDifficulty.Easy;
+
+                case "medium":
+                    return ChartDifficulty.Medium;
+
+                case "hard":
+                    return ChartDifficulty.Hard;
+
+                case "challenge":
+                case "insane":
+                    return ChartDifficulty.Insane;
+
+                case "edit":
+                    return ChartDifficulty.Edit;
+
+                default:
+                    Log.Warning($"Unrecognized chart type '{data}'. Defaulting to 'Edit'.");
+                    return ChartDifficulty.Edit;
+            }
         }
 
         /// <summary>
-        /// Parses note data.
+        /// Parses note data and returns a list of measures.
         /// </summary>
         /// <param name="data">The note data. This is only the note data, it does not include the headers.</param>
-        public static List<Measure> ParseNoteData(string data)
+        public static List<Measure> ParseNoteData(string data, int keyCount)
         {
-            var measures = new List<Measure>();
+            var measureList = new List<Measure>();
 
-            return measures;
+            // Remove whitespace.
+            data = Regex.Replace(data, @"\s", "");
+            var measureData = data.Split(',');
+
+            // Loop through each measure.
+            for (var i = 0; i < measureData.Length; i++)
+            {
+                var curData = measureData[i];
+                var subdivisions = curData.Length / (float)keyCount;
+
+                if (subdivisions > Math.Floor(subdivisions))
+                {
+                    throw new FieldFormatException(
+                        "Chart data is not formatted correctly (note count is not divisible by key count)."
+                    );
+                }
+            }
+
+            return measureList;
         }
     }
 }
