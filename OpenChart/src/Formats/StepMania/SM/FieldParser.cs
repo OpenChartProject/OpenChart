@@ -280,47 +280,13 @@ namespace OpenChart.Formats.StepMania.SM
                     // Loop through each key in the beat row.
                     for (var k = 0; k < keyCount; k++)
                     {
-                        switch (curData[j])
-                        {
-                            case (char)NoteType.Empty:
-                                break;
+                        var note = curData[(j * keyCount) + k];
 
-                            case (char)NoteType.Fake:
-                                beatRow.Set(k, NoteType.Fake);
-                                break;
-
-                            case (char)NoteType.HoldHead:
-                                beatRow.Set(k, NoteType.HoldHead);
-                                break;
-
-                            case (char)NoteType.RollHead:
-                                beatRow.Set(k, NoteType.RollHead);
-                                break;
-
-                            case (char)NoteType.HoldRollTail:
-                                beatRow.Set(k, NoteType.HoldRollTail);
-                                break;
-
-                            case (char)NoteType.Tap:
-                                beatRow.Set(k, NoteType.Tap);
-                                break;
-
-                            case (char)NoteType.Mine:
-                                beatRow.Set(k, NoteType.Mine);
-                                break;
-
-                            case (char)NoteType.Lift:
-                                beatRow.Set(k, NoteType.Lift);
-                                break;
-
-                            case (char)NoteType.KeySound:
-                                beatRow.Set(k, NoteType.KeySound);
-                                break;
-
-                            default:
-                                Log.Warning($"Unknown note type '{curData[j]}'");
-                                break;
-                        }
+                        // Get the note type if it's valid.
+                        if (Enum.IsDefined(typeof(NoteType), note))
+                            beatRow.Set(k, (NoteType)note);
+                        else
+                            Log.Warning($"Unknown note type '{note}'");
                     }
 
                     measure.AddRow(j, beatRow);
