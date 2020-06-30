@@ -263,6 +263,12 @@ namespace OpenChart.Formats.StepMania.SM
                 var curData = measureData[i];
                 var subdivisions = curData.Length / (float)keyCount;
 
+                // Empty measure which can be skipped.
+                if (subdivisions == 0)
+                    continue;
+
+                // Each subdivision represents a beat row. The number of subdivisions should be a
+                // whole number, otherwise there would be a "partial" beat row which doesn't make sense.
                 if (subdivisions > Math.Floor(subdivisions))
                 {
                     throw new FieldFormatException(
