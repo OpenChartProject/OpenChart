@@ -297,6 +297,8 @@ namespace OpenChart.Formats.StepMania.SM
 
                     measure.AddRow(j, beatRow);
                 }
+
+                measureList.Add(measure);
             }
 
             return measureList;
