@@ -33,7 +33,7 @@ namespace OpenChart.Formats.StepMania.SM
                     !double.TryParse(parts[0].Trim(), out lower) ||
                     !double.TryParse(parts[1].Trim(), out upper)
                 )
-                    throw new FieldFormatException("Display BPM is not formatted correctly.");
+                    throw new FieldFormatException("Display BPM is not formatted correctly (not a valid number).");
 
                 display = DisplayBPM.NewRangeDisplay(lower, upper);
             }
@@ -46,13 +46,13 @@ namespace OpenChart.Formats.StepMania.SM
                     double val;
 
                     if (!double.TryParse(parts[0], out val))
-                        throw new FieldFormatException("Display BPM is not formatted correctly.");
+                        throw new FieldFormatException("Display BPM is not formatted correctly (not a valid number).");
                     else
                         display = DisplayBPM.NewFixedDisplay(val);
                 }
             }
             else
-                throw new FieldFormatException("Display BPM is not formatted correctly.");
+                throw new FieldFormatException("Display BPM is not formatted correctly (expected one or two arguments).");
 
             return display;
         }
@@ -74,14 +74,14 @@ namespace OpenChart.Formats.StepMania.SM
                 var parts = bpmChange.Split('=');
 
                 if (parts.Length != 2)
-                    throw new FieldFormatException("BPMs are not formatted correctly.");
+                    throw new FieldFormatException("BPMs are not formatted correctly (expected a beat=BPM pair).");
 
                 double beat;
                 double bpm;
 
                 // Try parsing the beat and BPM parts.
                 if (!double.TryParse(parts[0].Trim(), out beat) || !double.TryParse(parts[1].Trim(), out bpm))
-                    throw new FieldFormatException("BPMs are not formatted correctly.");
+                    throw new FieldFormatException("BPMs are not formatted correctly (not a valid number).");
 
                 bpms.Add(new BPM(beat, bpm));
             }
@@ -106,14 +106,14 @@ namespace OpenChart.Formats.StepMania.SM
                 var parts = stop.Split('=');
 
                 if (parts.Length != 2)
-                    throw new FieldFormatException("Stops are not formatted correctly.");
+                    throw new FieldFormatException("Stops are not formatted correctly (expected a beat=time pair).");
 
                 double beat;
                 double seconds;
 
-                // Try parsing the beat and BPM parts.
+                // Try parsing the beat and time parts.
                 if (!double.TryParse(parts[0].Trim(), out beat) || !double.TryParse(parts[1].Trim(), out seconds))
-                    throw new FieldFormatException("Stops are not formatted correctly.");
+                    throw new FieldFormatException("Stops are not formatted correctly (not a valid number).");
 
                 stops.Add(new Stop(beat, seconds));
             }
@@ -153,6 +153,45 @@ namespace OpenChart.Formats.StepMania.SM
             stepFileData.SongData.TransliteratedArtist = fields.GetString("ARTISTTRANSLIT");
             stepFileData.SongData.TransliteratedSubtitle = fields.GetString("SUBTITLETRANSLIT");
             stepFileData.SongData.TransliteratedTitle = fields.GetString("TITLETRANSLIT");
+        }
+
+        /// <summary>
+        /// Parses and returns a chart.
+        /// </summary>
+        /// <param name="data">The data from a #NOTES field.</param>
+        public static Chart ParseChart(string data)
+        {
+            var chart = new Chart();
+            var parts = data.Split(':');
+
+            if (parts.Length != 6)
+                throw new FieldFormatException("Note data is not formatted correctly (expected six arguments).");
+
+            ParseChartHeaders(data, ref chart);
+            chart.Measures = ParseNoteData(parts[5]);
+
+            return chart;
+        }
+
+        /// <summary>
+        /// Parses the headers/metadata for the chart.
+        /// </summary>
+        /// <param name="data">The data from a #NOTES field.</param>
+        /// <param name="chart">The chart object to write to.</param>
+        public static void ParseChartHeaders(string data, ref Chart chart)
+        {
+
+        }
+
+        /// <summary>
+        /// Parses note data.
+        /// </summary>
+        /// <param name="data">The note data. This is only the note data, it does not include the headers.</param>
+        public static List<Measure> ParseNoteData(string data)
+        {
+            var measures = new List<Measure>();
+
+            return measures;
         }
     }
 }
