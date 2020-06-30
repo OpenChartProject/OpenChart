@@ -127,7 +127,7 @@ namespace OpenChart.Formats.StepMania.SM
         /// </summary>
         /// <param name="fields">The fields to parse from.</param>
         /// <param name="stepFileData">The object to add the parsed data to.</param>
-        public static void ParseHeaders(Fields fields, StepFileData stepFileData)
+        public static void ParseHeaders(Fields fields, ref StepFileData stepFileData)
         {
             stepFileData.DisplayData.Banner = fields.GetString("BANNER");
             stepFileData.DisplayData.Background = fields.GetString("BACKGROUND");

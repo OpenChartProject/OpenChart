@@ -20,7 +20,7 @@ namespace OpenChart.Formats.StepMania.SM
             var fields = FieldExtractor.Extract(Encoding.UTF8.GetString(data));
             var stepFileData = new StepFileData();
 
-            FieldParser.ParseHeaders(fields, stepFileData);
+            FieldParser.ParseHeaders(fields, ref stepFileData);
 
             return stepFileData;
         }
