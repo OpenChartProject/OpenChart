@@ -269,6 +269,62 @@ namespace OpenChart.Formats.StepMania.SM
                         "Chart data is not formatted correctly (note count is not divisible by key count)."
                     );
                 }
+
+                var measure = new Measure(i, (int)subdivisions);
+
+                // Loop through each beat row.
+                for (var j = 0; j < subdivisions; j++)
+                {
+                    var beatRow = new BeatRow(keyCount);
+
+                    // Loop through each key in the beat row.
+                    for (var k = 0; k < keyCount; k++)
+                    {
+                        switch (curData[j])
+                        {
+                            case (char)NoteType.Empty:
+                                break;
+
+                            case (char)NoteType.Fake:
+                                beatRow.Set(k, NoteType.Fake);
+                                break;
+
+                            case (char)NoteType.HoldHead:
+                                beatRow.Set(k, NoteType.HoldHead);
+                                break;
+
+                            case (char)NoteType.RollHead:
+                                beatRow.Set(k, NoteType.RollHead);
+                                break;
+
+                            case (char)NoteType.HoldRollTail:
+                                beatRow.Set(k, NoteType.HoldRollTail);
+                                break;
+
+                            case (char)NoteType.Tap:
+                                beatRow.Set(k, NoteType.Tap);
+                                break;
+
+                            case (char)NoteType.Mine:
+                                beatRow.Set(k, NoteType.Mine);
+                                break;
+
+                            case (char)NoteType.Lift:
+                                beatRow.Set(k, NoteType.Lift);
+                                break;
+
+                            case (char)NoteType.KeySound:
+                                beatRow.Set(k, NoteType.KeySound);
+                                break;
+
+                            default:
+                                Log.Warning($"Unknown note type '{curData[j]}'");
+                                break;
+                        }
+                    }
+
+                    measure.AddRow(j, beatRow);
+                }
             }
 
             return measureList;
