@@ -285,27 +285,38 @@ namespace OpenChart.Formats.StepMania.SM
                 // Loop through each beat row.
                 for (var j = 0; j < subdivisions; j++)
                 {
-                    var beatRow = new BeatRow(keyCount);
-
-                    // Loop through each key in the beat row.
-                    for (var k = 0; k < keyCount; k++)
-                    {
-                        var note = curData[(j * keyCount) + k];
-
-                        // Get the note type if it's valid.
-                        if (Enum.IsDefined(typeof(NoteType), note))
-                            beatRow.Set(k, (NoteType)note);
-                        else
-                            Log.Warning($"Unknown note type '{note}'");
-                    }
-
-                    measure.AddRow(j, beatRow);
+                    var rowData = curData.Substring(j * keyCount, keyCount);
+                    measure.AddRow(j, ParseBeatRow(rowData, keyCount));
                 }
 
                 measureList.Add(measure);
             }
 
             return measureList;
+        }
+
+        /// <summary>
+        /// Parses a single beat row.
+        /// </summary>
+        /// <param name="data">The string data of the beat row. Should be at least as long as the key count.</param>
+        /// <param name="keyCount">The number of keys for the row.</param>
+        public static BeatRow ParseBeatRow(string data, int keyCount)
+        {
+            var beatRow = new BeatRow(keyCount);
+
+            // Loop through each key in the beat row.
+            for (var i = 0; i < keyCount; i++)
+            {
+                var note = data[i];
+
+                // Get the note type if it's valid.
+                if (Enum.IsDefined(typeof(NoteType), (int)note))
+                    beatRow.Set(i, (NoteType)note);
+                else
+                    Log.Warning($"Unknown note type '{note}'");
+            }
+
+            return beatRow;
         }
     }
 }

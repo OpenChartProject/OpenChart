@@ -2,6 +2,7 @@ using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM;
 using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Formats.StepMania.SM.Enums;
+using OpenChart.Formats.StepMania.SM.Exceptions;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
 {
@@ -94,6 +95,54 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual("author", chart.Author);
             Assert.AreEqual(ChartDifficulty.Easy, chart.Difficulty);
             Assert.AreEqual(5, chart.DifficultyRating);
+        }
+
+        [TestCase("")]
+        [TestCase("     ")]
+        public void Test_ParseNoteData_Empty(string data)
+        {
+            var measures = FieldParser.ParseNoteData(data, 4);
+            Assert.AreEqual(0, measures.Count);
+        }
+
+        [TestCase("0", 4)]
+        [TestCase("1111 111", 4)]
+        public void Test_ParseNoteData_KeyCountMismatch(string data, int keyCount)
+        {
+            Assert.Throws<FieldFormatException>(
+                () => FieldParser.ParseNoteData(data, keyCount)
+            );
+        }
+
+        [TestCase("0000", 4, 1)]
+        [TestCase("0000,", 4, 1)]
+        [TestCase("0000,0000", 4, 2)]
+        [TestCase("0000 0000 0000 0000 0000 0000 0000 0000", 4, 1)]
+        public void Test_ParseNoteData_MeasureCountOK(string data, int keyCount, int expected)
+        {
+            var measures = FieldParser.ParseNoteData(data, keyCount);
+            Assert.AreEqual(expected, measures.Count);
+        }
+
+        [Test]
+        public void Test_ParseBeatRow()
+        {
+            var row = FieldParser.ParseBeatRow("0000", 4);
+            Assert.AreEqual(NoteType.Empty, row.Notes[0]);
+            Assert.AreEqual(NoteType.Empty, row.Notes[1]);
+            Assert.AreEqual(NoteType.Empty, row.Notes[2]);
+            Assert.AreEqual(NoteType.Empty, row.Notes[3]);
+
+            row = FieldParser.ParseBeatRow("01234MKLF", 9);
+            Assert.AreEqual(NoteType.Empty, row.Notes[0]);
+            Assert.AreEqual(NoteType.Tap, row.Notes[1]);
+            Assert.AreEqual(NoteType.HoldHead, row.Notes[2]);
+            Assert.AreEqual(NoteType.HoldRollTail, row.Notes[3]);
+            Assert.AreEqual(NoteType.RollHead, row.Notes[4]);
+            Assert.AreEqual(NoteType.Mine, row.Notes[5]);
+            Assert.AreEqual(NoteType.KeySound, row.Notes[6]);
+            Assert.AreEqual(NoteType.Lift, row.Notes[7]);
+            Assert.AreEqual(NoteType.Fake, row.Notes[8]);
         }
     }
 }
