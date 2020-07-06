@@ -68,5 +68,18 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             Assert.AreEqual(beat, stops[0].Beat);
             Assert.AreEqual(seconds, stops[0].Seconds);
         }
+
+        [TestCase("Beginner", ChartDifficulty.Beginner)]
+        [TestCase("Easy", ChartDifficulty.Easy)]
+        [TestCase("Medium", ChartDifficulty.Medium)]
+        [TestCase("Hard", ChartDifficulty.Hard)]
+        [TestCase("Insane", ChartDifficulty.Insane)]
+        [TestCase("Edit", ChartDifficulty.Edit)]
+        [TestCase("foo", ChartDifficulty.Edit)]
+        public void Test_ParseChartDifficulty(string difficulty, ChartDifficulty expected)
+        {
+            var actual = FieldParser.ParseChartDifficulty(difficulty);
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

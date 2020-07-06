@@ -179,7 +179,8 @@ namespace OpenChart.Formats.StepMania.SM
         }
 
         /// <summary>
-        /// Parses the headers/metadata for the chart.
+        /// Parses the headers/metadata for the chart. The chart header contains multiple values
+        /// in a single field which are all separated by a colon.
         /// </summary>
         /// <param name="data">The data from a #NOTES field.</param>
         /// <param name="chart">The chart object to write to.</param>
@@ -214,11 +215,14 @@ namespace OpenChart.Formats.StepMania.SM
                 throw new FieldFormatException($"Unrecognized chart type '{chart.ChartType}'.");
         }
 
+        /// <summary>
+        /// Parses the name of the difficulty, e.g. "Beginner". If the difficulty was not
+        /// recognized, defaults to "Edit".
+        /// </summary>
+        /// <param name="data">The difficulty name.</param>
         public static ChartDifficulty ParseChartDifficulty(string data)
         {
-            data = data.ToLower();
-
-            switch (data)
+            switch (data.ToLower())
             {
                 case "beginner":
                     return ChartDifficulty.Beginner;
