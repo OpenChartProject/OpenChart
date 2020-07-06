@@ -22,6 +22,11 @@ namespace OpenChart.Formats.StepMania.SM
 
             FieldParser.ParseHeaders(fields, ref stepFileData);
 
+            foreach (var noteData in fields.NoteDataFields)
+            {
+                stepFileData.Charts.Add(FieldParser.ParseChart(noteData.AsString()));
+            }
+
             return stepFileData;
         }
 
