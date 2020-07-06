@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM;
+using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Formats.StepMania.SM.Enums;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
@@ -80,6 +81,19 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         {
             var actual = FieldParser.ParseChartDifficulty(difficulty);
             Assert.AreEqual(expected, actual);
+        }
+
+        [Test]
+        public void Test_ParseChartHeaders()
+        {
+            var chart = new Chart();
+
+            FieldParser.ParseChartHeaders("dance-single:author:easy:5:", ref chart);
+
+            Assert.AreEqual("dance-single", chart.ChartType);
+            Assert.AreEqual("author", chart.Author);
+            Assert.AreEqual(ChartDifficulty.Easy, chart.Difficulty);
+            Assert.AreEqual(5, chart.DifficultyRating);
         }
     }
 }
