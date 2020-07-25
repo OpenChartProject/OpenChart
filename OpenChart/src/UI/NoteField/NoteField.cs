@@ -15,6 +15,7 @@ namespace OpenChart.UI.NoteField
         {
             BeatLines = 0,
             Keys,
+            Receptors,
         }
 
         /// <summary>
@@ -26,6 +27,11 @@ namespace OpenChart.UI.NoteField
         /// The keys that display the chart objects.
         /// </summary>
         public KeyContainer Keys { get; private set; }
+
+        /// <summary>
+        /// The receptors for the note field.
+        /// </summary>
+        public ReceptorContainer Receptors { get; private set; }
 
         /// <summary>
         /// The settings for the note field.
@@ -67,6 +73,15 @@ namespace OpenChart.UI.NoteField
         {
             Keys = new KeyContainer(NoteFieldSettings);
             container.Add(Components.Keys, Keys.GetWidget());
+        }
+
+        /// <summary>
+        /// Show the receptors on the note field.
+        /// </summary>
+        public void EnableReceptors()
+        {
+            Receptors = new ReceptorContainer(NoteFieldSettings);
+            container.Add(Components.Receptors, Receptors.GetWidget());
         }
     }
 }

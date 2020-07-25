@@ -67,6 +67,7 @@ namespace OpenChart.UI.Windows
 
             noteField.EnableBeatLines(beatLineSettings);
             noteField.EnableKeys();
+            noteField.EnableReceptors();
 
             var view = new NoteFieldView(noteField);
 
