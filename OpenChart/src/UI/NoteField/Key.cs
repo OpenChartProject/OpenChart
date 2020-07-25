@@ -54,21 +54,6 @@ namespace OpenChart.UI.NoteField
         }
 
         /// <summary>
-        /// Gets the pixel offset of the object given the current alignment settings.
-        /// </summary>
-        public int GetObjectOffset(INoteFieldObject obj)
-        {
-            if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Top)
-                return 0;
-            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Center)
-                return obj.GetHeight() / 2;
-            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Bottom)
-                return obj.GetHeight();
-
-            return 0;
-        }
-
-        /// <summary>
         /// Removes a note field object.
         /// </summary>
         public void RemoveObject(BaseObject obj)
@@ -82,7 +67,7 @@ namespace OpenChart.UI.NoteField
         public void UpdateObjectPosition(INoteFieldObject noteFieldObject)
         {
             var y = NoteFieldSettings.BeatToPosition(noteFieldObject.GetChartObject().Beat);
-            y -= GetObjectOffset(noteFieldObject);
+            y += NoteFieldSettings.AlignmentOffset(noteFieldObject.GetHeight());
 
             container.Move(noteFieldObject.GetWidget(), 0, y);
         }

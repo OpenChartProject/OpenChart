@@ -15,15 +15,19 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public KeyIndex KeyIndex { get; private set; }
 
+        Gtk.Fixed container;
+
         Image image;
 
-        public Gtk.Widget GetWidget() => image;
+        public Gtk.Widget GetWidget() => container;
 
         public Receptor(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
             NoteFieldSettings = noteFieldSettings;
             KeyIndex = index;
             image = new Image(NoteFieldSettings.NoteSkin.Keys[KeyIndex.Value].Receptor);
+            container = new Gtk.Fixed();
+            container.Put(image, 0, NoteFieldSettings.AlignmentOffset(image.ImageAsset.Pixbuf.Height));
         }
     }
 }

@@ -106,6 +106,22 @@ namespace OpenChart.UI.NoteField
         }
 
         /// <summary>
+        /// Returns the vertical offset for a widget given the current alignment settings.
+        /// </summary>
+        /// <param name="widgetHeight">The height of the widget, in pixels.</param>
+        public int AlignmentOffset(int widgetHeight)
+        {
+            if (Alignment == NoteFieldObjectAlignment.Top)
+                return 0;
+            else if (Alignment == NoteFieldObjectAlignment.Center)
+                return -widgetHeight / 2;
+            else if (Alignment == NoteFieldObjectAlignment.Bottom)
+                return -widgetHeight;
+
+            throw new Exception("Unknown notefield object alignment type.");
+        }
+
+        /// <summary>
         /// Returns the position of the given beat.
         /// </summary>
         public int BeatToPosition(Beat beat)
