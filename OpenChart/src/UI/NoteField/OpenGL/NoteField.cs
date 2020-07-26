@@ -1,4 +1,5 @@
 using Serilog;
+using System;
 
 namespace OpenChart.UI.NoteField.OpenGL
 {
@@ -10,7 +11,7 @@ namespace OpenChart.UI.NoteField.OpenGL
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
         BeatLines beatLines;
-        Gtk.DrawingArea canvas;
+        Gtk.Layout canvas;
 
         public Gtk.Widget GetWidget() => canvas;
 
@@ -19,8 +20,14 @@ namespace OpenChart.UI.NoteField.OpenGL
             NoteFieldSettings = noteFieldSettings;
 
             beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
-            canvas = new Gtk.DrawingArea();
+            canvas = new Gtk.Layout(null, null);
             canvas.Drawn += onDraw;
+            canvas.ScrollEvent += (o, e) =>
+            {
+                NoteFieldSettings.X += (int)Math.Round(e.Event.DeltaX * 50);
+                NoteFieldSettings.Y += (int)Math.Round(e.Event.DeltaY * 50);
+                canvas.QueueDraw();
+            };
         }
 
         private void onDraw(object o, Gtk.DrawnArgs e)
@@ -31,6 +38,8 @@ namespace OpenChart.UI.NoteField.OpenGL
             ctx.SetSourceRGB(0, 0, 0);
             ctx.Rectangle(ctx.ClipExtents());
             ctx.Fill();
+
+            Log.Information(ctx.ClipExtents().ToString());
 
             beatLines.Draw(ctx);
         }

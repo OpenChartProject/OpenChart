@@ -1,3 +1,4 @@
+using Serilog;
 using System;
 using System.Collections.Generic;
 
@@ -23,17 +24,16 @@ namespace OpenChart.UI.NoteField.OpenGL
 
         public void Draw(Cairo.Context ctx)
         {
-            // Get the area of the widget we are redrawing.
-            var clip = ctx.ClipExtents();
-
-            // Based on what's displayed on screen, get the time in the chart at the top of the
-            // widget for the beat lines. This is to prevent drawing beat lines that aren't visible.
-            // We don't need to worry about negative values here since clip.Y is never negative.
-            var topTime = clip.Y / NoteFieldSettings.PixelsPerSecond;
-            var bottomTime = (clip.Y + clip.Height) / NoteFieldSettings.PixelsPerSecond;
-
             var beatLines = new List<int>();
             var measureLines = new List<int>();
+
+            var clip = ctx.ClipExtents();
+            var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
+            var topTime = (NoteFieldSettings.Y / pps);
+            var bottomTime = (NoteFieldSettings.Y + clip.Height) / pps;
+
+            topTime = topTime < 0 ? 0 : topTime;
+            bottomTime = bottomTime < 0 ? 0 : bottomTime;
 
             // Iterate through the beats in the chart and record the y positions of each line.
             foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(topTime))
@@ -41,7 +41,7 @@ namespace OpenChart.UI.NoteField.OpenGL
                 if (beat.Time.Value >= bottomTime)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * NoteFieldSettings.PixelsPerSecond);
+                var y = (int)Math.Round(beat.Time.Value * pps);
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);
