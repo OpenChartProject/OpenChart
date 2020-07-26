@@ -35,11 +35,9 @@ namespace OpenChart.UI.NoteField.OpenGL
             var ctx = e.Cr;
 
             // Clear the drawing area.
-            ctx.SetSourceRGB(0, 0, 0);
+            ctx.SetSourceRGB(0.07, 0.07, 0.07);
             ctx.Rectangle(ctx.ClipExtents());
             ctx.Fill();
-
-            Log.Information(ctx.ClipExtents().ToString());
 
             beatLines.Draw(ctx);
         }

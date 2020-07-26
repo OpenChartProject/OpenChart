@@ -32,8 +32,11 @@ namespace OpenChart.UI.NoteField.OpenGL
             var topTime = (NoteFieldSettings.Y / pps);
             var bottomTime = (NoteFieldSettings.Y + clip.Height) / pps;
 
-            topTime = topTime < 0 ? 0 : topTime;
-            bottomTime = bottomTime < 0 ? 0 : bottomTime;
+            if (topTime < 0)
+                topTime = 0;
+
+            if (bottomTime < 0)
+                bottomTime = 0;
 
             // Iterate through the beats in the chart and record the y positions of each line.
             foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(topTime))
@@ -41,7 +44,7 @@ namespace OpenChart.UI.NoteField.OpenGL
                 if (beat.Time.Value >= bottomTime)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * pps);
+                var y = (int)Math.Round(beat.Time.Value * pps) - NoteFieldSettings.Y;
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);
@@ -52,7 +55,7 @@ namespace OpenChart.UI.NoteField.OpenGL
             // Draw the beat lines that occur at the start of a measure.
             drawBeatLines(
                 ctx,
-                (int)clip.Width,
+                NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.MeasureLineColor,
                 BeatLineSettings.MeasureLineThickness,
                 measureLines
@@ -61,7 +64,7 @@ namespace OpenChart.UI.NoteField.OpenGL
             // Draw all of the other beat lines.
             drawBeatLines(
                 ctx,
-                (int)clip.Width,
+                NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.BeatLineColor,
                 BeatLineSettings.BeatLineThickness,
                 beatLines
