@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace OpenChart.UI.NoteField
 {
     /// <summary>
@@ -10,13 +12,13 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public NoteField NoteField { get; private set; }
 
-        public Scrollable Container { get; private set; }
+        Scrollable container;
 
         /// <summary>
         /// Returns the full note field view. This restricts the viewport of the note field and
         /// allows it to be scrolled.
         /// </summary>
-        public Gtk.Widget GetWidget() => Container.GetWidget();
+        public Gtk.Widget GetWidget() => container.GetWidget();
 
         /// <summary>
         /// Creates a new NoteFieldView instance.
@@ -25,8 +27,7 @@ namespace OpenChart.UI.NoteField
         public NoteFieldView(NoteField noteField)
         {
             NoteField = noteField;
-            Container = new Scrollable(NoteField.GetWidget(), 30, 30);
-            Container.Move(0, 100);
+            container = new Scrollable(NoteField.GetWidget(), 30, 30);
         }
 
         /// <summary>
@@ -34,8 +35,8 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public void CenterNoteField()
         {
-            var x = Container.GetWidget().AllocatedWidth - NoteField.NoteFieldSettings.NoteFieldWidth;
-            Container.Move(x / 2, Container.Y);
+            var x = container.GetWidget().AllocatedWidth - NoteField.NoteFieldSettings.NoteFieldWidth;
+            container.Move(x / 2, container.Y);
         }
     }
 }

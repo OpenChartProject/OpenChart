@@ -72,11 +72,26 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public int PixelsPerSecond { get; private set; }
 
+        Time _receptorPosition;
+
         /// <summary>
         /// The position of the receptors, in seconds. This changes as the user scrolls through the
         /// chart or while the song is playing.
         /// </summary>
-        public Time ReceptorPosition { get; set; }
+        public Time ReceptorTime
+        {
+            get => _receptorPosition;
+            set
+            {
+                _receptorPosition = value;
+                ReceptorPositionChanged?.Invoke(this, null);
+            }
+        }
+
+        /// <summary>
+        /// An event fired when the receptor position is changed.
+        /// </summary>
+        public event EventHandler ReceptorPositionChanged;
 
         /// <summary>
         /// Creates a new NoteFieldSettings instance.

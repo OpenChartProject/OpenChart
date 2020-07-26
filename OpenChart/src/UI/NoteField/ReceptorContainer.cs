@@ -14,23 +14,33 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public List<Receptor> Receptors { get; private set; }
 
-        Gtk.HBox container;
+        Gtk.Fixed positionContainer;
+        Gtk.HBox hboxContainer;
 
-        public Gtk.Widget GetWidget() => container;
+        public Gtk.Widget GetWidget() => positionContainer;
 
         public ReceptorContainer(NoteFieldSettings noteFieldSettings)
         {
             Receptors = new List<Receptor>();
             NoteFieldSettings = noteFieldSettings;
-            container = new Gtk.HBox();
+            hboxContainer = new Gtk.HBox();
+            positionContainer = new Gtk.Fixed();
 
             // Create a Receptor instance for the number of keys in the chart.
             for (var i = 0; i < NoteFieldSettings.Chart.KeyCount.Value; i++)
             {
                 var receptor = new Receptor(NoteFieldSettings, i);
                 Receptors.Add(receptor);
-                container.Add(receptor.GetWidget());
+                hboxContainer.Add(receptor.GetWidget());
             }
+
+            positionContainer.Add(hboxContainer);
+
+            NoteFieldSettings.ReceptorPositionChanged += delegate
+            {
+                var y = NoteFieldSettings.TimeToPosition(NoteFieldSettings.ReceptorTime);
+                positionContainer.Move(hboxContainer, 0, y);
+            };
         }
     }
 }
