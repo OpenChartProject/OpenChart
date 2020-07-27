@@ -29,8 +29,8 @@ namespace OpenChart.UI.NoteField.OpenGL
 
             var clip = ctx.ClipExtents();
             var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
-            var topTime = (NoteFieldSettings.Y / pps);
-            var bottomTime = (NoteFieldSettings.Y + clip.Height) / pps;
+            var topTime = clip.Y / pps;
+            var bottomTime = (clip.Height + clip.Y) / pps;
 
             if (topTime < 0)
                 topTime = 0;
@@ -44,7 +44,7 @@ namespace OpenChart.UI.NoteField.OpenGL
                 if (beat.Time.Value >= bottomTime)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * pps) - NoteFieldSettings.Y;
+                var y = (int)Math.Round(beat.Time.Value * pps);
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);

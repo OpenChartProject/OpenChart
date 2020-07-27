@@ -24,8 +24,8 @@ namespace OpenChart.UI.NoteField.OpenGL
             canvas.Drawn += onDraw;
             canvas.ScrollEvent += (o, e) =>
             {
-                NoteFieldSettings.X += (int)Math.Round(e.Event.DeltaX * 50);
-                NoteFieldSettings.Y += (int)Math.Round(e.Event.DeltaY * 50);
+                NoteFieldSettings.X -= (int)Math.Round(e.Event.DeltaX * 50);
+                NoteFieldSettings.Y -= (int)Math.Round(e.Event.DeltaY * 50);
                 canvas.QueueDraw();
             };
         }
@@ -33,11 +33,14 @@ namespace OpenChart.UI.NoteField.OpenGL
         private void onDraw(object o, Gtk.DrawnArgs e)
         {
             var ctx = e.Cr;
+            var viewRect = ctx.ClipExtents();
 
             // Clear the drawing area.
             ctx.SetSourceRGB(0.07, 0.07, 0.07);
-            ctx.Rectangle(ctx.ClipExtents());
+            ctx.Rectangle(viewRect);
             ctx.Fill();
+
+            ctx.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
 
             beatLines.Draw(ctx);
         }

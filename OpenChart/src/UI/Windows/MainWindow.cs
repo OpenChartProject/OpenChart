@@ -55,6 +55,8 @@ namespace OpenChart.UI.Windows
                 NoteFieldObjectAlignment.Center
             );
 
+            noteFieldSettings.Y = 100;
+
             var beatLineSettings = new BeatLineSettings
             {
                 BeatLineColor = new Color(0.5, 0.5, 0.5),
