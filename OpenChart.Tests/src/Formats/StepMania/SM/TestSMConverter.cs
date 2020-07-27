@@ -2,23 +2,33 @@ using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM;
 using OpenChart.Formats.StepMania.SM.Data;
 using Enums = OpenChart.Formats.StepMania.SM.Enums;
+using Exceptions = OpenChart.Formats.StepMania.SM.Exceptions;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
 {
     public class TestSMConverter
     {
         SMConverter converter;
+        StepFileData sfd;
 
         [SetUp]
         public void SetUp()
         {
             converter = new SMConverter();
+            sfd = new StepFileData();
+            sfd.PlayData.BPMs.Add(new BPM(0, 120));
+        }
+
+        [Test]
+        public void Test_ToNative_MissingBPMData()
+        {
+            sfd.PlayData.BPMs.Clear();
+            Assert.Throws<Exceptions.NoBPMException>(() => converter.ToNative(sfd));
         }
 
         [Test]
         public void Test_ToNative_ProjectMetadata()
         {
-            var sfd = new StepFileData();
             sfd.SongData.Title = "title";
             sfd.SongData.Artist = "artist";
             sfd.SongData.Music = "audio.ogg";
@@ -33,7 +43,6 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [Test]
         public void Test_ToNative_NoCharts()
         {
-            var sfd = new StepFileData();
             var p = converter.ToNative(sfd);
             Assert.IsEmpty(p.Charts);
         }
@@ -41,7 +50,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         [Test]
         public void Test_ToNative_BPMs()
         {
-            var sfd = new StepFileData();
+            sfd.PlayData.BPMs.Clear();
             sfd.PlayData.BPMs.Add(new BPM(0, 100));
             sfd.PlayData.BPMs.Add(new BPM(1, 123.45));
             sfd.PlayData.BPMs.Add(new BPM(2.5, 300));
@@ -63,11 +72,14 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
-        public void Test_ToNative_Chart()
+        public void Test_ToNative_MultipleCharts()
         {
-            var chart = new Chart();
-            chart.ChartType = Enums.ChartType.Get("dance-single");
+            sfd.Charts.Add(new Chart { ChartType = Enums.ChartType.Get("dance-single") });
+            sfd.Charts.Add(new Chart { ChartType = Enums.ChartType.Get("dance-single") });
+            sfd.Charts.Add(new Chart { ChartType = Enums.ChartType.Get("dance-single") });
 
+            var p = converter.ToNative(sfd);
+            Assert.AreEqual(sfd.Charts.Count, p.Charts.Count);
         }
     }
 }

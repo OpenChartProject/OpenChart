@@ -1,5 +1,6 @@
 using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Formats.StepMania.SM.Enums;
+using OpenChart.Formats.StepMania.SM.Exceptions;
 using OpenChart.Projects;
 using Serilog;
 
@@ -17,6 +18,9 @@ namespace OpenChart.Formats.StepMania.SM
 
         public Project ToNative(StepFileData sfd)
         {
+            if (sfd.PlayData.BPMs.Count == 0)
+                throw new NoBPMException();
+
             var p = new Project();
             p.SongMetadata = new Songs.SongMetadata();
 
