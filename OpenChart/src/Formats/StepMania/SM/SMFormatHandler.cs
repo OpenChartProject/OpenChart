@@ -5,7 +5,7 @@ using System.Text;
 
 namespace OpenChart.Formats.StepMania.SM
 {
-    public class OpenChartFormatHandler : IFormatHandler
+    public class SMFormatHandler : IFormatHandler
     {
         static IProjectConverter<StepFileData> converter = new SMConverter();
         static IFormatSerializer<StepFileData> serializer = new SMSerializer();
