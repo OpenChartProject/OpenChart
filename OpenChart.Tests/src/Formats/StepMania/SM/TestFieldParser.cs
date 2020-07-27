@@ -91,7 +91,7 @@ namespace OpenChart.Tests.Formats.StepMania.SM
 
             FieldParser.ParseChartHeaders("dance-single:author:easy:5:", ref chart);
 
-            Assert.AreEqual("dance-single", chart.ChartType);
+            Assert.AreEqual("dance-single", chart.ChartType.Name);
             Assert.AreEqual("author", chart.Author);
             Assert.AreEqual(ChartDifficulty.Easy, chart.Difficulty);
             Assert.AreEqual(5, chart.DifficultyRating);

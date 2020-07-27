@@ -191,7 +191,11 @@ namespace OpenChart.Formats.StepMania.SM
             // Trim any excess whitespace.
             parts = parts.Select(p => p.Trim()).ToArray();
 
-            chart.ChartType = parts[0];
+            chart.ChartType = ParseChartType(parts[0]);
+
+            if (chart.ChartType == null)
+                throw new FieldFormatException($"Unrecognized chart type '{parts[0]}'.");
+
             chart.Author = parts[1];
             chart.Difficulty = ParseChartDifficulty(parts[2]);
 
@@ -207,12 +211,6 @@ namespace OpenChart.Formats.StepMania.SM
             }
 
             chart.GrooveRadarValues = parts[4];
-
-            var keyCount = chart.GetKeyCount();
-
-            // We need to know the key count to parse the note data.
-            if (keyCount == -1)
-                throw new FieldFormatException($"Unrecognized chart type '{chart.ChartType}'.");
         }
 
         /// <summary>
@@ -247,6 +245,11 @@ namespace OpenChart.Formats.StepMania.SM
                     Log.Warning($"Unrecognized chart type '{data}'. Defaulting to 'Edit'.");
                     return ChartDifficulty.Edit;
             }
+        }
+
+        public static Data.ChartType ParseChartType(string data)
+        {
+            return Enums.ChartType.Get(data.ToLower());
         }
 
         /// <summary>

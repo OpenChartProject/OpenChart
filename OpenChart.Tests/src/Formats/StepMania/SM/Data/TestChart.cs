@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM.Data;
+using Enums = OpenChart.Formats.StepMania.SM.Enums;
 
 namespace OpenChart.Tests.Formats.StepMania.SM.Data
 {
@@ -11,7 +12,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM.Data
         [TestCase("foo", -1)]
         public void Test_GetKeyCount(string chartType, int expected)
         {
-            var chart = new Chart { ChartType = chartType };
+            var chart = new Chart();
+            chart.ChartType = Enums.ChartType.Get(chartType);
             Assert.AreEqual(expected, chart.GetKeyCount());
         }
     }

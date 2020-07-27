@@ -9,9 +9,9 @@ namespace OpenChart.Formats.StepMania.SM.Data
     public class Chart
     {
         /// <summary>
-        /// A string describing what type of chart this is, e.g. 'dance-single'.
+        /// The type of chart this is. This determines the keycount of the chart.
         /// </summary>
-        public string ChartType { get; set; }
+        public ChartType ChartType { get; set; }
 
         /// <summary>
         /// The author field.
@@ -51,20 +51,10 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// </summary>
         public int GetKeyCount()
         {
-            switch (ChartType.ToLower())
-            {
-                case "dance-single":
-                    return 4;
+            if (ChartType != null)
+                return ChartType.KeyCount;
 
-                case "dance-solo":
-                    return 6;
-
-                case "dance-double":
-                    return 8;
-
-                default:
-                    return -1;
-            }
+            return -1;
         }
     }
 }

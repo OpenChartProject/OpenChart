@@ -18,6 +18,7 @@ namespace OpenChart.Formats.StepMania.SM
         public Project ToNative(StepFileData sfd)
         {
             var p = new Project();
+            p.SongMetadata = new Songs.SongMetadata();
 
             // Convert every chart in the step file.
             for (var i = 0; i < sfd.Charts.Count; i++)
