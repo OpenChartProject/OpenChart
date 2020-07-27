@@ -37,21 +37,6 @@ namespace OpenChart.UI.NoteField
         public int KeyWidth { get; private set; }
 
         /// <summary>
-        /// The height of the note field, in pixels. This is the total height of the chart plus
-        /// the extra end measures.
-        /// </summary>
-        public int NoteFieldHeight
-        {
-            get
-            {
-                var measure = Math.Ceiling(Chart.GetBeatLength().Value / 4) + ExtraMeasures;
-                var beat = measure * 4;
-
-                return BeatToPosition(beat);
-            }
-        }
-
-        /// <summary>
         /// The width, in pixels, of the entire note field.
         /// </summary>
         public int NoteFieldWidth => Chart.KeyCount.Value * KeyWidth;
@@ -67,10 +52,15 @@ namespace OpenChart.UI.NoteField
         public NoteFieldObjectFactory ObjectFactory { get; private set; }
 
         /// <summary>
-        /// The number of pixels that represent a full second. This is used to calculate where to
-        /// draw things like beat lines and notes.
+        /// The number of pixels that represents one second of time in the chart. This value is
+        /// affected by <see cref="Zoom" />.
         /// </summary>
-        public int PixelsPerSecond { get; private set; }
+        public int PixelsPerSecond { get; set; }
+        public int ScaledPixelsPerSecond => (int)Math.Round(PixelsPerSecond * Zoom);
+
+        public int X { get; set; }
+        public int Y { get; set; }
+        public float Zoom { get; set; }
 
         /// <summary>
         /// Creates a new NoteFieldSettings instance.
@@ -90,8 +80,9 @@ namespace OpenChart.UI.NoteField
             Alignment = alignment;
             Chart = chart;
             NoteSkin = noteSkin;
-            PixelsPerSecond = pixelsPerSecond;
             KeyWidth = keyWidth;
+            PixelsPerSecond = pixelsPerSecond;
+            Zoom = 1.0f;
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
@@ -112,7 +103,7 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public int TimeToPosition(Time time)
         {
-            return (int)Math.Round(time.Value * PixelsPerSecond);
+            return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
         }
     }
 }
