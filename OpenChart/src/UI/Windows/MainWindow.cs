@@ -63,12 +63,7 @@ namespace OpenChart.UI.Windows
                 MeasureLineThickness = 2
             };
 
-            var noteField = new NoteField.NoteField(noteFieldSettings);
-
-            noteField.EnableBeatLines(beatLineSettings);
-            noteField.EnableKeys();
-
-            var view = new NoteFieldView(noteField);
+            var noteField = new NoteField.OpenGL.NoteField(noteFieldSettings, beatLineSettings);
 
             app.GetEvents().ChartAdded += (o, e) =>
             {
@@ -77,7 +72,7 @@ namespace OpenChart.UI.Windows
 
             container = new VBox();
             container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);
-            container.Add(view.GetWidget());
+            container.PackStart(noteField.GetWidget(), true, true, 0);
 
             Add(container);
 
