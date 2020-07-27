@@ -36,5 +36,13 @@ namespace OpenChart.Charting.Objects
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
                 throw new ObjectOverlapException();
         }
+
+        /// <summary>
+        /// Sets the length of the object.
+        /// </summary>
+        public void SetLength(BeatDuration length)
+        {
+            Length = length;
+        }
     }
 }
