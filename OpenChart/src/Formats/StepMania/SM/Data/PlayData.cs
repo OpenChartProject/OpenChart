@@ -24,5 +24,11 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Field: #STOPS
         /// </summary>
         public List<Stop> Stops { get; set; }
+
+        public PlayData()
+        {
+            BPMs = new List<BPM>();
+            Stops = new List<Stop>();
+        }
     }
 }

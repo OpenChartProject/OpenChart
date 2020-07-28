@@ -27,7 +27,7 @@ function fnApplyVersion() {
         if [[ ! -e "$f.template" ]]; then
             echo "WARNING: Template file is missing at: $f.template"
         else
-            envsubst < $f.template > $f
+            envsubst <$f.template >$f
             echo "Updated $f.template  -->  $f"
         fi
     done
@@ -57,7 +57,7 @@ function fnBundle() {
         cp -R $INSTALLER_DIR/$PLATFORM/* $BUNDLE_DIR
         cp -R $PUBLISH_DIR/$PLATFORM $BUNDLE_DIR/$PLATFORM
 
-        local setup_path=`pwd`/$BUNDLE_DIR/setup.isl
+        local setup_path=$(pwd)/$BUNDLE_DIR/setup.isl
 
         # Run Inno setup.
         iscc "$setup_path"
@@ -88,8 +88,8 @@ function fnCopyAssets() {
         find_path=/bin/$find_path
     fi
 
-    $find_path $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d \
-        | xargs rm -r
+    $find_path $1 -wholename "$1/**/$ORIGINAL_ASSETS_DIR" -type d |
+        xargs rm -r
 }
 
 function fnCopyLibs() {
@@ -158,7 +158,7 @@ function fnTest() {
 
     rm -rf $path/logs
 
-    OPENCHART_DIR=`pwd`/$path dotnet test
+    OPENCHART_DIR="$(pwd)/$path" TESTDATA_DIR="$TESTDATA_DIR" dotnet test
 }
 
 function fnVersion() {
@@ -167,32 +167,32 @@ function fnVersion() {
     * Arg 1: (optional) Can be <major|minor|patch>
     '
     case "$1" in
-        "")
+    "")
         echo $VERSION
         exit
         ;;
 
-        apply)
+    apply)
         fnApplyVersion
         exit
         ;;
 
-        major)
+    major)
         VERSION_MAJOR=$((VERSION_MAJOR + 1))
         VERSION_MINOR=0
         VERSION_PATCH=0
         ;;
 
-        minor)
+    minor)
         VERSION_MINOR=$((VERSION_MINOR + 1))
         VERSION_PATCH=0
         ;;
 
-        patch)
+    patch)
         VERSION_PATCH=$((VERSION_PATCH + 1))
         ;;
 
-        *)
+    *)
         echo "Usage: $0 version [command]"
         echo
         echo "COMMANDS"
@@ -209,7 +209,7 @@ function fnVersion() {
 
     # Update the version.
     export VERSION=$VERSION_MAJOR.$VERSION_MINOR.$VERSION_PATCH
-    echo $VERSION > VERSION
+    echo $VERSION >VERSION
     echo "Incremented version to $VERSION"
 
     fnApplyVersion
@@ -285,14 +285,15 @@ PROJECT_DIR=OpenChart
 PROJECT_FILE=$PROJECT_DIR/OpenChart.csproj
 
 TEST_DIR=OpenChart.Tests
+TESTDATA_DIR=$(pwd)/$TEST_DIR/testdata
 
 ASSETS_DIR=$PROJECT_DIR/assets
 INSTALLER_DIR=$PROJECT_DIR/installer
 LIB_DIR=$PROJECT_DIR/lib
 MISC_DIR=$PROJECT_DIR/misc
 
-VERSION=`cat VERSION`
-VERSION_ARRAY=(`echo $VERSION | tr '.' ' '`)
+VERSION=$(cat VERSION)
+VERSION_ARRAY=($(echo $VERSION | tr '.' ' '))
 VERSION_MAJOR=${VERSION_ARRAY[0]}
 VERSION_MINOR=${VERSION_ARRAY[1]}
 VERSION_PATCH=${VERSION_ARRAY[2]}
@@ -323,44 +324,44 @@ if ! isSupportedOS; then
 fi
 
 case "$1" in
-    "")
+"")
     fnBuild $OUTPUT_DIR
     fnRun
     ;;
 
-    build)
+build)
     fnBuild $OUTPUT_DIR
     ;;
 
-    bundle)
+bundle)
     fnBundle "$PUBLISH_DIR/$PLATFORM" "$INSTALLER_DIR/$PLATFORM"
     ;;
 
-    clean)
+clean)
     fnClean
     ;;
 
-    publish)
+publish)
     fnPublish
     ;;
 
-    run)
+run)
     fnRun
     ;;
 
-    test)
+test)
     fnTest
     ;;
 
-    version)
+version)
     fnVersion $2
     ;;
 
-    help | "-h" | "--help")
+help | "-h" | "--help")
     fnUsage
     ;;
 
-    *)
+*)
     echo "ERROR: Unrecognized command: $1"
     echo
     fnUsage

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace OpenChart.Formats.StepMania.SM.Data
 {
     /// <summary>
@@ -5,6 +7,11 @@ namespace OpenChart.Formats.StepMania.SM.Data
     /// </summary>
     public class StepFileData
     {
+        /// <summary>
+        /// A list of charts for the step file.
+        /// </summary>
+        public List<Chart> Charts { get; private set; }
+
         /// <summary>
         /// Display data for the step file.
         /// </summary>
@@ -18,12 +25,20 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// <summary>
         /// Play data for the step file.
         /// </summary>
-        /// <value></value>
         public PlayData PlayData { get; set; }
 
         /// <summary>
         /// The song data.
         /// </summary>
         public SongData SongData { get; set; }
+
+        public StepFileData()
+        {
+            Charts = new List<Chart>();
+            DisplayData = new DisplayData();
+            MetaData = new StepFileMetaData();
+            PlayData = new PlayData();
+            SongData = new SongData();
+        }
     }
 }

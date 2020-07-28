@@ -46,9 +46,7 @@ namespace OpenChart.Projects
             get => _name;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Project name cannot be blank.");
-                else if (value == Name)
+                if (value == Name)
                     return;
 
                 _name = value;
