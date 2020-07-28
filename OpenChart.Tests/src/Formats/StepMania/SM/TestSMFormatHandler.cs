@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Formats.StepMania.SM;
+using Objects = OpenChart.Charting.Objects;
 using System.IO;
 
 namespace OpenChart.Tests.Formats.StepMania.SM
@@ -70,16 +71,39 @@ namespace OpenChart.Tests.Formats.StepMania.SM
             var c = p.Charts[0];
 
             // First column
-            Assert.AreEqual(3, c.Objects[0].Count);
+            var c0 = c.Objects[0].ToArray();
+
+            Assert.AreEqual(3, c0.Length);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c0[0]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c0[1]);
+            Assert.IsInstanceOf(typeof(Objects.HoldNote), c0[2]);
+            Assert.AreEqual(2, ((Objects.HoldNote)c0[2]).EndBeat.Value);
 
             // Second column
-            Assert.AreEqual(3, c.Objects[1].Count);
+            var c1 = c.Objects[1].ToArray();
+
+            Assert.AreEqual(3, c1.Length);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c1[0]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c1[1]);
+            Assert.IsInstanceOf(typeof(Objects.HoldNote), c1[2]);
+            Assert.AreEqual(2, ((Objects.HoldNote)c1[2]).EndBeat.Value);
 
             // Third column
-            Assert.AreEqual(3, c.Objects[2].Count);
+            var c2 = c.Objects[2].ToArray();
+
+            Assert.AreEqual(4, c2.Length);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c2[0]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c2[1]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c2[2]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c2[3]);
 
             // Fourth column
-            Assert.AreEqual(3, c.Objects[3].Count);
+            var c3 = c.Objects[3].ToArray();
+
+            Assert.AreEqual(3, c3.Length);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c3[0]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c3[1]);
+            Assert.IsInstanceOf(typeof(Objects.TapNote), c3[2]);
         }
     }
 }
