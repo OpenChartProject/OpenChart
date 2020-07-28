@@ -36,6 +36,8 @@ namespace OpenChart.Tests.Formats.StepMania.SM
 
             Assert.AreEqual("Jessie", c.Author);
             Assert.AreEqual("Sample Title", c.ChartName);
+
+            Assert.AreEqual(4, c.KeyCount.Value);
         }
 
         [Test]

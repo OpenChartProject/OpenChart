@@ -125,6 +125,146 @@ namespace OpenChart.Tests.Formats.StepMania.SM
         }
 
         [Test]
+        public void Test_ParseNoteData_SubDivisions()
+        {
+            // Taken from testdata/sample.sm
+            var data = @"
+            1111
+            1000
+            0100
+            0010
+            2411
+            0000
+            0011
+            0000
+            33MM
+            0000
+            0000
+            0000
+            0000
+            0000
+            0000
+            0000";
+
+            var measures = FieldParser.ParseNoteData(data, 4);
+            Assert.AreEqual(1, measures.Count);
+            Assert.AreEqual(16, measures[0].Subdivisions);
+
+            // Row 0
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Tap,
+                    NoteType.Tap,
+                    NoteType.Tap,
+                    NoteType.Tap,
+                },
+                measures[0].BeatRows[0].Notes
+            );
+
+            // Row 1
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Tap,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                },
+                measures[0].BeatRows[1].Notes
+            );
+
+            // Row 2
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Empty,
+                    NoteType.Tap,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                },
+                measures[0].BeatRows[2].Notes
+            );
+
+            // Row 3
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Tap,
+                    NoteType.Empty,
+                },
+                measures[0].BeatRows[3].Notes
+            );
+
+            // Row 4
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.HoldHead,
+                    NoteType.RollHead,
+                    NoteType.Tap,
+                    NoteType.Tap,
+                },
+                measures[0].BeatRows[4].Notes
+            );
+
+            // Row 5
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                },
+                measures[0].BeatRows[5].Notes
+            );
+
+            // Row 6
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Tap,
+                    NoteType.Tap,
+                },
+                measures[0].BeatRows[6].Notes
+            );
+
+            // Row 7
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                    NoteType.Empty,
+                },
+                measures[0].BeatRows[7].Notes
+            );
+
+            // Row 8
+            Assert.AreEqual(
+                new NoteType[]{
+                    NoteType.HoldRollTail,
+                    NoteType.HoldRollTail,
+                    NoteType.Mine,
+                    NoteType.Mine,
+                },
+                measures[0].BeatRows[8].Notes
+            );
+
+            // Rows 9 - 15
+            for (var i = 9; i < 16; i++)
+            {
+                Assert.AreEqual(
+                    new NoteType[]{
+                        NoteType.Empty,
+                        NoteType.Empty,
+                        NoteType.Empty,
+                        NoteType.Empty,
+                    },
+                    measures[0].BeatRows[i].Notes
+                );
+            }
+        }
+
+        [Test]
         public void Test_ParseBeatRow()
         {
             var row = FieldParser.ParseBeatRow("0000", 4);
