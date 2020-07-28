@@ -64,7 +64,7 @@ namespace OpenChart.Formats.StepMania.SM
                 {
                     var row = measure.BeatRows[i];
                     var beat = new Charting.Properties.Beat(
-                        (measure.Number * 4) + (i / (double)measure.Subdivisions)
+                        4 * (measure.Number + (i / (double)measure.Subdivisions))
                     );
 
                     for (var key = 0; key < row.KeyCount; key++)

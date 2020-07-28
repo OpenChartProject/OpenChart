@@ -44,7 +44,9 @@ namespace OpenChart.Formats.StepMania.SM
             }
             else if (parts.Length == 1)
             {
-                if (parts[0] == "*")
+                if (string.IsNullOrEmpty(parts[0]))
+                    display = null;
+                else if (parts[0] == "*")
                     display = DisplayBPM.NewRandomDisplay();
                 else
                 {
@@ -153,6 +155,7 @@ namespace OpenChart.Formats.StepMania.SM
             stepFileData.SongData.Music = fields.GetString("MUSIC");
             stepFileData.SongData.SampleLength = fields.GetDouble("SAMPLELENGTH");
             stepFileData.SongData.SampleStart = fields.GetDouble("SAMPLESTART");
+            stepFileData.SongData.Artist = fields.GetString("ARTIST");
             stepFileData.SongData.Subtitle = fields.GetString("SUBTITLE");
             stepFileData.SongData.Title = fields.GetString("TITLE");
             stepFileData.SongData.TransliteratedArtist = fields.GetString("ARTISTTRANSLIT");
