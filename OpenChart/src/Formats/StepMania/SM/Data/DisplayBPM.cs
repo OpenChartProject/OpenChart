@@ -1,21 +1,21 @@
-using OpenChart.Formats.StepMania.SM.Enums;
+﻿using OpenChart.Formats.StepMania.SM.Enums;
 
 namespace OpenChart.Formats.StepMania.SM.Data
 {
     /// <summary>
     /// The display for the BPM.
     /// </summary>
-    public class BPMDisplay
+    public class DisplayBPM
     {
         /// <summary>
         /// The min value of the display BPM.
         /// </summary>
-        public int Min { get; set; }
+        public double Min { get; set; }
 
         /// <summary>
         /// The max value of the display BPM.
         /// </summary>
-        public int Max { get; set; }
+        public double Max { get; set; }
 
         /// <summary>
         /// The display type.
@@ -26,9 +26,9 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Creates an instance for a fixed display.
         /// </summary>
         /// <param name="value">The BPM to display.</param>
-        public static BPMDisplay NewFixedDisplay(int value)
+        public static DisplayBPM NewFixedDisplay(double value)
         {
-            return new BPMDisplay()
+            return new DisplayBPM()
             {
                 Min = value,
                 Max = value,
@@ -39,9 +39,9 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// <summary>
         /// Creates an instance for a random display.
         /// </summary>
-        public static BPMDisplay NewRandomDisplay()
+        public static DisplayBPM NewRandomDisplay()
         {
-            return new BPMDisplay()
+            return new DisplayBPM()
             {
                 Type = DisplayBPMType.Random
             };
@@ -52,9 +52,9 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// </summary>
         /// <param name="min">The minimum BPM.</param>
         /// <param name="max">The maximum BPM.</param>
-        public static BPMDisplay NewRangeDisplay(int min, int max)
+        public static DisplayBPM NewRangeDisplay(double min, double max)
         {
-            return new BPMDisplay()
+            return new DisplayBPM()
             {
                 Min = min,
                 Max = max,

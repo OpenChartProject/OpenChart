@@ -21,7 +21,7 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// The BPM value to display.
         /// Field: #DISPLAYBPM
         /// </summary>
-        public BPMDisplay BPMDisplay { get; set; }
+        public DisplayBPM DisplayBPM { get; set; }
 
         /// <summary>
         /// The path to the CD title image.
@@ -46,5 +46,10 @@ namespace OpenChart.Formats.StepMania.SM.Data
         /// Field: #BGCHANGES
         /// </summary>
         public string ForegroundChanges { get; set; }
+
+        public DisplayData()
+        {
+            DisplayBPM = new DisplayBPM();
+        }
     }
 }

@@ -1,5 +1,4 @@
 using OpenChart.Formats;
-using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
 using OpenChart.Projects;
 using OpenChart.UI.Actions;
@@ -109,7 +108,8 @@ namespace OpenChart
         public void Init()
         {
             Log.Debug("Setting up file formats.");
-            Formats.AddFormat(new OpenChartFormatHandler());
+            Formats.AddFormat(new Formats.OpenChart.Version0_1.OpenChartFormatHandler());
+            Formats.AddFormat(new Formats.StepMania.SM.SMFormatHandler());
 
             Log.Information("Finding noteskins...");
             NoteSkins.LoadAll(NoteSkinFolder);

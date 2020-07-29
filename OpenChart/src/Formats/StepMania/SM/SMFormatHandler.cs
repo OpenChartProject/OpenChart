@@ -1,32 +1,27 @@
-using OpenChart.Formats.OpenChart.Version0_1.Data;
+using OpenChart.Formats.StepMania.SM.Data;
 using OpenChart.Projects;
 using System.IO;
 using System.Text;
 
-namespace OpenChart.Formats.OpenChart.Version0_1
+namespace OpenChart.Formats.StepMania.SM
 {
-    public class OpenChartFormatHandler : IFormatHandler
+    public class SMFormatHandler : IFormatHandler
     {
-        static IProjectConverter<ProjectData> converter = new OpenChartConverter();
-        static IFormatSerializer<ProjectData> serializer = new OpenChartSerializer();
+        static IProjectConverter<StepFileData> converter = new SMConverter();
+        static IFormatSerializer<StepFileData> serializer = new SMSerializer();
 
         /// <summary>
         /// The name of the format.
         /// </summary>
-        public string FormatName => "OpenChart";
+        public string FormatName => "StepMania";
 
         /// <summary>
         /// The extension used by the format.
         /// </summary>
-        public string FileExtension => ".oc";
+        public string FileExtension => ".sm";
 
         /// <summary>
-        /// The file format version this handler supports.
-        /// </summary>
-        public static string Version => "0.1";
-
-        /// <summary>
-        /// Reads data from an OpenChart file and returns a Project object.
+        /// Reads data from a stepmania file and returns a Project object.
         /// </summary>
         /// <param name="reader">The stream that contains the file data.</param>
         public Project Read(StreamReader reader)
@@ -38,7 +33,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         }
 
         /// <summary>
-        /// Writes the project object to an OpenChart file.
+        /// Writes the project object to an .sm file.
         /// </summary>
         /// <param name="writer">The stream to write to.</param>
         /// <param name="project">The project to write.</param>
