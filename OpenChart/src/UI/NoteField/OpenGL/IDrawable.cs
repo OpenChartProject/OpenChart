@@ -2,6 +2,6 @@ namespace OpenChart.UI.NoteField.OpenGL
 {
     public interface IDrawable
     {
-        void Draw(Cairo.Context ctx);
+        void Draw(DrawingContext ctx);
     }
 }

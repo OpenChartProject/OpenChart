@@ -22,29 +22,18 @@ namespace OpenChart.UI.NoteField.OpenGL
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(Cairo.Context ctx)
+        public void Draw(DrawingContext ctx)
         {
             var beatLines = new List<int>();
             var measureLines = new List<int>();
 
-            var clip = ctx.ClipExtents();
-            var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
-            var topTime = clip.Y / pps;
-            var bottomTime = (clip.Height + clip.Y) / pps;
-
-            if (topTime < 0)
-                topTime = 0;
-
-            if (bottomTime < 0)
-                bottomTime = 0;
-
             // Iterate through the beats in the chart and record the y positions of each line.
-            foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(topTime))
+            foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(ctx.Top.Time))
             {
-                if (beat.Time.Value >= bottomTime)
+                if (beat.Time.Value >= ctx.Bottom.Time.Value)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * pps);
+                var y = (int)Math.Round(beat.Time.Value * NoteFieldSettings.ScaledPixelsPerSecond);
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);
@@ -54,7 +43,7 @@ namespace OpenChart.UI.NoteField.OpenGL
 
             // Draw the beat lines that occur at the start of a measure.
             drawBeatLines(
-                ctx,
+                ctx.Cairo,
                 NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.MeasureLineColor,
                 BeatLineSettings.MeasureLineThickness,
@@ -63,7 +52,7 @@ namespace OpenChart.UI.NoteField.OpenGL
 
             // Draw all of the other beat lines.
             drawBeatLines(
-                ctx,
+                ctx.Cairo,
                 NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.BeatLineColor,
                 BeatLineSettings.BeatLineThickness,
