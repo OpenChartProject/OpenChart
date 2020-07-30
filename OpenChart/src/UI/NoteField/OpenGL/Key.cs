@@ -1,5 +1,7 @@
 using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
+using Serilog;
+using System;
 
 namespace OpenChart.UI.NoteField.OpenGL
 {
@@ -17,40 +19,42 @@ namespace OpenChart.UI.NoteField.OpenGL
 
         public void Draw(DrawingContext ctx)
         {
+            // This controls how much of a vertical margin we are giving ourselves to draw beyond
+            // the screen. This fixes an issue where an object close to the edge of the screen may
+            // not be drawn if say the object's origin is off screen but the object itself should
+            // still be visible.
+            var margin = 100;
             var iter = NoteFieldSettings.Chart.Objects[Index.Value].GetEnumerator();
 
-            while (iter.Current != null)
+            while (iter.MoveNext())
             {
                 var cur = iter.Current;
 
-                if (cur.Beat.Value < ctx.Top.Beat.Value)
+                if ((cur.Time.Value + margin) < ctx.Top.Time.Value)
                     continue;
-                else if (cur.Beat.Value > ctx.Bottom.Beat.Value)
+                else if ((cur.Time.Value - margin) > ctx.Bottom.Time.Value)
                     break;
 
                 drawObject(ctx, cur);
-
-                iter.MoveNext();
             }
         }
 
         private void drawObject(DrawingContext ctx, BaseObject obj)
         {
-            var y = obj.Time.Value * NoteFieldSettings.PixelsPerSecond;
+            var y = NoteFieldSettings.TimeToPosition(obj.Time);
 
             if (obj is TapNote)
             {
                 var pixbuf = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote.Pixbuf;
-                Gdk.CairoHelper.SetSourcePixbuf(ctx.Cairo, pixbuf, 0, 0);
-                ctx.Cairo.Rectangle(
-                    new Cairo.Rectangle(
-                        ctx.Cairo.ClipExtents().X,
-                        y,
-                        pixbuf.Width,
-                        pixbuf.Height
-                    )
+                var surface = Gdk.CairoHelper.SurfaceCreateFromPixbuf(pixbuf, 1, null);
+
+                ctx.Cairo.SetSourceSurface(
+                    surface,
+                    0,
+                    (int)Math.Round(y - NoteFieldSettings.Align(pixbuf.Height))
                 );
-                ctx.Cairo.Fill();
+
+                ctx.Cairo.Paint();
             }
         }
     }

@@ -52,18 +52,21 @@ namespace OpenChart.UI.NoteField.OpenGL
             var drawContext = newDrawingContext(ctx);
             beatLines.Draw(drawContext);
 
+            ctx.Save();
+
             for (var i = 0; i < keys.Length; i++)
             {
-                ctx.Translate(NoteFieldSettings.KeyWidth, 0);
                 keys[i].Draw(drawContext);
+                ctx.Translate(NoteFieldSettings.KeyWidth, 0);
             }
+
+            ctx.Restore();
         }
 
         private void clear(Cairo.Context ctx)
         {
             ctx.SetSourceRGB(0.07, 0.07, 0.07);
-            ctx.Rectangle(ctx.ClipExtents());
-            ctx.Fill();
+            ctx.Paint();
         }
 
         private DrawingContext newDrawingContext(Cairo.Context ctx)

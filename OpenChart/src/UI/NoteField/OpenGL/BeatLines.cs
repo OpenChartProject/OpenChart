@@ -33,7 +33,7 @@ namespace OpenChart.UI.NoteField.OpenGL
                 if (beat.Time.Value >= ctx.Bottom.Time.Value)
                     break;
 
-                var y = (int)Math.Round(beat.Time.Value * NoteFieldSettings.ScaledPixelsPerSecond);
+                var y = NoteFieldSettings.TimeToPosition(beat.Time);
 
                 if (beat.Beat.IsStartOfMeasure())
                     measureLines.Add(y);

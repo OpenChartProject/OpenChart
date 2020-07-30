@@ -91,6 +91,26 @@ namespace OpenChart.UI.NoteField
         }
 
         /// <summary>
+        /// Given a height in pixels, return how many pixels it needs to be offset by to be
+        /// properly aligned.
+        /// </summary>
+        /// <param name="y">The height, in pixels.</param>
+        public double Align(double height)
+        {
+            switch (Alignment)
+            {
+                case NoteFieldObjectAlignment.Bottom:
+                    return 0;
+                case NoteFieldObjectAlignment.Center:
+                    return height / 2;
+                case NoteFieldObjectAlignment.Top:
+                    return height;
+            }
+
+            return 0;
+        }
+
+        /// <summary>
         /// Returns the position of the given beat.
         /// </summary>
         public int BeatToPosition(Beat beat)
