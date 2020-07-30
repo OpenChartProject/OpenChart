@@ -43,19 +43,22 @@ namespace OpenChart.UI.NoteField.OpenGL
         {
             var y = NoteFieldSettings.TimeToPosition(obj.Time);
 
-            if (obj is TapNote)
-            {
-                var image = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
-                var pixbuf = image.Pixbuf;
+            if (obj is TapNote tapNote)
+                drawTapNote(ctx, tapNote, y);
+        }
 
-                ctx.Cairo.SetSourceSurface(
-                    image.Surface,
-                    0,
-                    (int)Math.Round(y - NoteFieldSettings.Align(pixbuf.Height))
-                );
+        private void drawTapNote(DrawingContext ctx, TapNote obj, int y)
+        {
+            var image = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
+            var pixbuf = image.Pixbuf;
 
-                ctx.Cairo.Paint();
-            }
+            ctx.Cairo.SetSourceSurface(
+                image.Surface,
+                0,
+                (int)Math.Round(y - NoteFieldSettings.Align(pixbuf.Height))
+            );
+
+            ctx.Cairo.Paint();
         }
     }
 }
