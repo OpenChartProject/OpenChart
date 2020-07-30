@@ -20,10 +20,34 @@ namespace OpenChart.UI.Assets
         /// </summary>
         public readonly string Path;
 
+        Pixbuf _pixbuf;
         /// <summary>
         /// The pixel buffer used by Gdk.
         /// </summary>
-        public Pixbuf Pixbuf { get; private set; }
+        public Pixbuf Pixbuf
+        {
+            get => _pixbuf;
+            private set
+            {
+                _surface = null;
+                _pixbuf = value;
+            }
+        }
+
+        Cairo.Surface _surface;
+        /// <summary>
+        /// A Cairo surface for the image. This is recreated if the image is resized.
+        /// </summary>
+        public Cairo.Surface Surface
+        {
+            get
+            {
+                if (_surface == null)
+                    _surface = Gdk.CairoHelper.SurfaceCreateFromPixbuf(Pixbuf, 1, null);
+
+                return _surface;
+            }
+        }
 
         /// <summary>
         /// Creates a new ImageAsset instance.

@@ -45,11 +45,11 @@ namespace OpenChart.UI.NoteField.OpenGL
 
             if (obj is TapNote)
             {
-                var pixbuf = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote.Pixbuf;
-                var surface = Gdk.CairoHelper.SurfaceCreateFromPixbuf(pixbuf, 1, null);
+                var image = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
+                var pixbuf = image.Pixbuf;
 
                 ctx.Cairo.SetSourceSurface(
-                    surface,
+                    image.Surface,
                     0,
                     (int)Math.Round(y - NoteFieldSettings.Align(pixbuf.Height))
                 );
