@@ -1,8 +1,6 @@
-using Serilog;
-using System;
 using System.Collections.Generic;
 
-namespace OpenChart.UI.NoteField.OpenGL
+namespace OpenChart.UI.NoteField
 {
     public class BeatLines : IDrawable
     {

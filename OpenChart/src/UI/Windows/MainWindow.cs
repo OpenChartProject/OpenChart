@@ -65,7 +65,7 @@ namespace OpenChart.UI.Windows
                 MeasureLineThickness = 2
             };
 
-            var noteField = new NoteField.OpenGL.NoteField(noteFieldSettings, beatLineSettings);
+            var noteField = new NoteField.NoteField(noteFieldSettings, beatLineSettings);
 
             app.GetEvents().ChartAdded += (o, e) =>
             {

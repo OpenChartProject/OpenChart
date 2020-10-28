@@ -1,4 +1,4 @@
-namespace OpenChart.UI.NoteField.OpenGL
+namespace OpenChart.UI.NoteField
 {
     public class NoteFieldScroll
     {
