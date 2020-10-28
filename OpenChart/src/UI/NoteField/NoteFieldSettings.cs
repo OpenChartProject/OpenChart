@@ -1,7 +1,6 @@
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
-using OpenChart.UI.NoteField.Objects;
 using System;
 
 namespace OpenChart.UI.NoteField
@@ -15,6 +14,13 @@ namespace OpenChart.UI.NoteField
         /// The alignment for note field objects.
         /// </summary>
         public NoteFieldObjectAlignment Alignment { get; private set; }
+
+        /// <summary>
+        /// The amount to offset chart objects by. This is affected by the Alignment. To use this,
+        /// multiply the base line by the object's height, then reposition the object using that
+        /// value as an offset.
+        /// </summary>
+        public double BaseLine => getBaseLine();
 
         /// <summary>
         /// The chart the note field is displaying.
@@ -37,21 +43,6 @@ namespace OpenChart.UI.NoteField
         public int KeyWidth { get; private set; }
 
         /// <summary>
-        /// The height of the note field, in pixels. This is the total height of the chart plus
-        /// the extra end measures.
-        /// </summary>
-        public int NoteFieldHeight
-        {
-            get
-            {
-                var measure = Math.Ceiling(Chart.GetBeatLength().Value / 4) + ExtraMeasures;
-                var beat = measure * 4;
-
-                return BeatToPosition(beat);
-            }
-        }
-
-        /// <summary>
         /// The width, in pixels, of the entire note field.
         /// </summary>
         public int NoteFieldWidth => Chart.KeyCount.Value * KeyWidth;
@@ -62,15 +53,15 @@ namespace OpenChart.UI.NoteField
         public KeyModeSkin NoteSkin { get; private set; }
 
         /// <summary>
-        /// The object factory for creating new note field objects.
+        /// The number of pixels that represents one second of time in the chart. This value is
+        /// affected by <see cref="Zoom" />.
         /// </summary>
-        public NoteFieldObjectFactory ObjectFactory { get; private set; }
+        public int PixelsPerSecond { get; set; }
+        public int ScaledPixelsPerSecond => (int)Math.Round(PixelsPerSecond * Zoom);
 
-        /// <summary>
-        /// The number of pixels that represent a full second. This is used to calculate where to
-        /// draw things like beat lines and notes.
-        /// </summary>
-        public int PixelsPerSecond { get; private set; }
+        public int X { get; set; }
+        public int Y { get; set; }
+        public float Zoom { get; set; }
 
         /// <summary>
         /// Creates a new NoteFieldSettings instance.
@@ -90,13 +81,13 @@ namespace OpenChart.UI.NoteField
             Alignment = alignment;
             Chart = chart;
             NoteSkin = noteSkin;
-            PixelsPerSecond = pixelsPerSecond;
             KeyWidth = keyWidth;
+            PixelsPerSecond = pixelsPerSecond;
+            Zoom = 1.0f;
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
             ChartEventBus = new ChartEventBus(Chart);
-            ObjectFactory = new NoteFieldObjectFactory(this);
         }
 
         /// <summary>
@@ -112,7 +103,22 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public int TimeToPosition(Time time)
         {
-            return (int)Math.Round(time.Value * PixelsPerSecond);
+            return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
+        }
+
+        private double getBaseLine()
+        {
+            switch (Alignment)
+            {
+                case NoteFieldObjectAlignment.Bottom:
+                    return 0;
+                case NoteFieldObjectAlignment.Center:
+                    return 0.5;
+                case NoteFieldObjectAlignment.Top:
+                    return 1.0;
+            }
+
+            return 0;
         }
     }
 }

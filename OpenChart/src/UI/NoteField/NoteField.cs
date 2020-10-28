@@ -1,72 +1,106 @@
-using OpenChart.UI.Widgets;
+using OpenChart.Charting.Properties;
+using System;
 
 namespace OpenChart.UI.NoteField
 {
-    /// <summary>
-    /// The complete representation of a note field. This class includes all of the necessary
-    /// components for a note field.
-    /// </summary>
     public class NoteField : IWidget
     {
-        /// <summary>
-        /// An enum of the note field components, in the order that they should be layered.
-        /// </summary>
-        enum Components
-        {
-            BeatLines = 0,
-            Keys,
-        }
-
-        /// <summary>
-        /// The beat lines for the note field.
-        /// </summary>
-        public BeatLines BeatLines { get; private set; }
-
-        /// <summary>
-        /// The keys that display the chart objects.
-        /// </summary>
-        public KeyContainer Keys { get; private set; }
-
         /// <summary>
         /// The settings for the note field.
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
-        SortedContainer<Components> container;
+        // The amount of pixels to move the notefield when the user scrolls with their mouse.
+        const int scrollSpeed = 50;
 
-        /// <summary>
-        /// Returns the widget for the note field. This widget is the full size of the note field,
-        /// and should be wrapped in a container which can scroll.
-        /// </summary>
-        public Gtk.Widget GetWidget() => container;
+        // How far the notefield can be scrolled before it will stop scrolling. This stops the user
+        // from scrolling past the beginning of the chart.
+        const int scrollStop = 100;
 
-        /// <summary>
-        /// Creates a new NoteField instance.
-        /// </summary>
-        /// <param name="noteFieldSettings">The settings for the note field.</param>
-        public NoteField(NoteFieldSettings noteFieldSettings)
+        BeatLines beatLines;
+        Gtk.Layout canvas;
+        Key[] keys;
+
+        public Gtk.Widget GetWidget() => canvas;
+
+        public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
             NoteFieldSettings = noteFieldSettings;
-            container = new SortedContainer<Components>();
+
+            beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
+            canvas = new Gtk.Layout(null, null);
+            canvas.Drawn += onDraw;
+            canvas.ScrollEvent += onScroll;
+
+            keys = new Key[NoteFieldSettings.Chart.KeyCount.Value];
+
+            for (var i = 0; i < keys.Length; i++)
+            {
+                keys[i] = new Key(NoteFieldSettings, i);
+            }
         }
 
-        /// <summary>
-        /// Shows the beat lines on the note field.
-        /// </summary>
-        /// <param name="beatLineSettings">The settings for the beat lines.</param>
-        public void EnableBeatLines(BeatLineSettings beatLineSettings)
+        private void clear(Cairo.Context ctx)
         {
-            BeatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
-            container.Add(Components.BeatLines, BeatLines.GetWidget());
+            ctx.SetSourceRGB(0.07, 0.07, 0.07);
+            ctx.Paint();
         }
 
-        /// <summary>
-        /// Shows the keys (chart objects) on the note field.
-        /// </summary>
-        public void EnableKeys()
+        private void onDraw(object o, Gtk.DrawnArgs e)
         {
-            Keys = new KeyContainer(NoteFieldSettings);
-            container.Add(Components.Keys, Keys.GetWidget());
+            var ctx = e.Cr;
+            var viewRect = ctx.ClipExtents();
+
+            clear(ctx);
+
+            // Center the notefield on the X-axis and scroll it on the Y-axis.
+            ctx.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+
+            var drawContext = newDrawingContext(ctx);
+            beatLines.Draw(drawContext);
+
+            ctx.Save();
+
+            for (var i = 0; i < keys.Length; i++)
+            {
+                keys[i].Draw(drawContext);
+                ctx.Translate(NoteFieldSettings.KeyWidth, 0);
+            }
+
+            ctx.Restore();
+        }
+
+        private void onScroll(object o, Gtk.ScrollEventArgs e)
+        {
+            var newY = NoteFieldSettings.Y - (int)Math.Round(e.Event.DeltaY * scrollSpeed);
+
+            if (newY > scrollStop)
+                newY = scrollStop;
+
+            if (newY != NoteFieldSettings.Y)
+            {
+                NoteFieldSettings.Y = newY;
+                canvas.QueueDraw();
+            }
+        }
+
+        private DrawingContext newDrawingContext(Cairo.Context ctx)
+        {
+            var viewRect = ctx.ClipExtents();
+            var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
+            var topTime = viewRect.Y / pps;
+            var bottomTime = (viewRect.Height + viewRect.Y) / pps;
+
+            if (topTime < 0)
+                topTime = 0;
+
+            if (bottomTime < 0)
+                bottomTime = 0;
+
+            var top = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(topTime), topTime);
+            var bottom = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(bottomTime), bottomTime);
+
+            return new DrawingContext(ctx, top, bottom);
         }
     }
 }

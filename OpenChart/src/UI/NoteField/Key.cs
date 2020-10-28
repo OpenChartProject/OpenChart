@@ -1,90 +1,82 @@
 using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
-using OpenChart.UI.NoteField.Objects;
-using OpenChart.UI.Widgets;
+using System;
 
 namespace OpenChart.UI.NoteField
 {
-    /// <summary>
-    /// Note field widget class that represents a single key on the note field. The widget is
-    /// a simple fixed container that renders the objects for a particular key in the chart.
-    /// </summary>
-    public class Key : IWidget
+    public class Key : IDrawable
     {
-        /// <summary>
-        /// The settings for the note field.
-        /// </summary>
+        public KeyIndex Index { get; private set; }
+
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
-        /// <summary>
-        /// The key index in the chart that this widget represents.
-        /// </summary>
-        public KeyIndex KeyIndex { get; private set; }
-
-        SortedContainer<Beat> container;
-
-        /// <summary>
-        /// Returns the widget for the key.
-        /// </summary>
-        public Gtk.Widget GetWidget() => container;
-
-        /// <summary>
-        /// Creates a new Key instance.
-        /// </summary>
         public Key(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
+            Index = index;
             NoteFieldSettings = noteFieldSettings;
-            KeyIndex = index;
-            container = new SortedContainer<Beat>();
         }
 
-        /// <summary>
-        /// Adds a note field object to the key.
-        /// </summary>
-        public void AddObject(BaseObject chartObject)
+        public void Draw(DrawingContext ctx)
         {
-            var noteFieldObject = NoteFieldSettings.ObjectFactory.Create(chartObject);
+            // This controls how much of a vertical margin we are giving ourselves to draw beyond
+            // the screen. This fixes an issue where an object close to the edge of the screen may
+            // not be drawn correctly.
+            var margin = 100;
+            var iter = NoteFieldSettings.Chart.Objects[Index.Value].GetEnumerator();
 
-            noteFieldObject.GetWidget().SizeAllocated += delegate
+            while (iter.MoveNext())
             {
-                UpdateObjectPosition(noteFieldObject);
-            };
+                var cur = iter.Current;
 
-            container.Add(noteFieldObject.GetChartObject().Beat, noteFieldObject.GetWidget());
+                if ((cur.Time.Value + margin) < ctx.Top.Time.Value)
+                    continue;
+                else if ((cur.Time.Value - margin) > ctx.Bottom.Time.Value)
+                    break;
+
+                drawObject(ctx, cur);
+            }
         }
 
-        /// <summary>
-        /// Gets the pixel offset of the object given the current alignment settings.
-        /// </summary>
-        public int GetObjectOffset(INoteFieldObject obj)
+        private void drawObject(DrawingContext ctx, BaseObject obj)
         {
-            if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Top)
-                return 0;
-            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Center)
-                return obj.GetHeight() / 2;
-            else if (NoteFieldSettings.Alignment == NoteFieldObjectAlignment.Bottom)
-                return obj.GetHeight();
+            var y = NoteFieldSettings.TimeToPosition(obj.Time);
 
-            return 0;
+            if (obj is TapNote tapNote)
+                drawTapNote(ctx, tapNote, y);
+            else if (obj is HoldNote holdNote)
+                drawHold(ctx, holdNote, y);
         }
 
-        /// <summary>
-        /// Removes a note field object.
-        /// </summary>
-        public void RemoveObject(BaseObject obj)
+        private void drawTapNote(DrawingContext ctx, TapNote obj, int y)
         {
-            container.Remove(obj.Beat);
+            var img = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
+
+            // Reposition the note based on the notefield baseline.
+            var offsetY = y - (int)(NoteFieldSettings.BaseLine * img.Pixbuf.Height);
+
+            ctx.Cairo.SetSourceSurface(img.Surface, 0, offsetY);
+            ctx.Cairo.Paint();
         }
 
-        /// <summary>
-        /// Updates the object's position.
-        /// </summary>
-        public void UpdateObjectPosition(INoteFieldObject noteFieldObject)
+        private void drawHold(DrawingContext ctx, HoldNote obj, int y)
         {
-            var y = NoteFieldSettings.BeatToPosition(noteFieldObject.GetChartObject().Beat);
-            y -= GetObjectOffset(noteFieldObject);
+            var bodyImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNoteBody;
+            var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
 
-            container.Move(noteFieldObject.GetWidget(), 0, y);
+            // Reposition the note based on the notefield baseline.
+            var headY = y - (int)(NoteFieldSettings.BaseLine * headImg.Pixbuf.Height);
+
+            // The body is drawn starting at the center of the head, so we need to offset it by half the height.
+            var bodyY = headY + (int)(headImg.Pixbuf.Height / 2.0);
+
+            // Draw the body.
+            ctx.Cairo.SetSource(bodyImg.Pattern);
+            ctx.Cairo.Rectangle(0, bodyY, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - bodyY);
+            ctx.Cairo.Fill();
+
+            // Draw the hold note head.
+            ctx.Cairo.SetSourceSurface(headImg.Surface, 0, headY);
+            ctx.Cairo.Paint();
         }
     }
 }
