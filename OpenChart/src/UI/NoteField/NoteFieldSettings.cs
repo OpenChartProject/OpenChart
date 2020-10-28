@@ -16,6 +16,11 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public NoteFieldObjectAlignment Alignment { get; private set; }
 
+        /// <summary>
+        /// The amount to offset chart objects by. This is affected by the Alignment. To use this,
+        /// multiply the base line by the object's height, then reposition the object using that
+        /// value as an offset.
+        /// </summary>
         public double BaseLine => getBaseLine();
 
         /// <summary>
