@@ -43,19 +43,39 @@ namespace OpenChart.UI.NoteField
 
             if (obj is TapNote tapNote)
                 drawTapNote(ctx, tapNote, y);
+            else if (obj is HoldNote holdNote)
+                drawHold(ctx, holdNote, y);
         }
 
         private void drawTapNote(DrawingContext ctx, TapNote obj, int y)
         {
-            var image = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
-            var pixbuf = image.Pixbuf;
+            var img = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
 
             ctx.Cairo.SetSourceSurface(
-                image.Surface,
+                img.Surface,
                 0,
-                (int)Math.Round(y - NoteFieldSettings.Align(pixbuf.Height))
+                (int)Math.Round(y - NoteFieldSettings.Align(img.Pixbuf.Height))
             );
 
+            ctx.Cairo.Paint();
+        }
+
+        private void drawHold(DrawingContext ctx, HoldNote obj, int y)
+        {
+            var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
+            var yOffset = (int)Math.Round(y - NoteFieldSettings.Align(headImg.Pixbuf.Height));
+
+            var bodyImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNoteBody;
+            var bodyPattern = new Cairo.SurfacePattern(bodyImg.Surface);
+            bodyPattern.Extend = Cairo.Extend.Repeat;
+
+            // Draw the body.
+            ctx.Cairo.SetSource(bodyPattern);
+            ctx.Cairo.Rectangle(0, y, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - y);
+            ctx.Cairo.Fill();
+
+            // Draw the hold note head.
+            ctx.Cairo.SetSourceSurface(headImg.Surface, 0, yOffset);
             ctx.Cairo.Paint();
         }
     }
