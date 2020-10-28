@@ -26,6 +26,6 @@ namespace OpenChart.NoteSkins
         /// The hold note body image. The hold note body represents how long a hold note must
         /// be held. The image is tiled and not stretched.
         /// </summary>
-        public ImageAsset HoldNoteBody;
+        public ImagePattern HoldNoteBody;
     }
 }

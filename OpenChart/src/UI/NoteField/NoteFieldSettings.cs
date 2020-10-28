@@ -1,7 +1,6 @@
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
-using OpenChart.UI.NoteField.Objects;
 using System;
 
 namespace OpenChart.UI.NoteField
@@ -54,11 +53,6 @@ namespace OpenChart.UI.NoteField
         public KeyModeSkin NoteSkin { get; private set; }
 
         /// <summary>
-        /// The object factory for creating new note field objects.
-        /// </summary>
-        public NoteFieldObjectFactory ObjectFactory { get; private set; }
-
-        /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
         /// affected by <see cref="Zoom" />.
         /// </summary>
@@ -94,7 +88,6 @@ namespace OpenChart.UI.NoteField
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
             ChartEventBus = new ChartEventBus(Chart);
-            ObjectFactory = new NoteFieldObjectFactory(this);
         }
 
         /// <summary>

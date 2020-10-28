@@ -61,7 +61,6 @@ namespace OpenChart.UI.NoteField
         private void drawHold(DrawingContext ctx, HoldNote obj, int y)
         {
             var bodyImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNoteBody;
-            var bodyPattern = new Cairo.SurfacePattern(bodyImg.Surface) { Extend = Cairo.Extend.Repeat };
             var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
 
             // Reposition the note based on the notefield baseline.
@@ -71,7 +70,7 @@ namespace OpenChart.UI.NoteField
             var bodyY = headY + (int)(headImg.Pixbuf.Height / 2.0);
 
             // Draw the body.
-            ctx.Cairo.SetSource(bodyPattern);
+            ctx.Cairo.SetSource(bodyImg.Pattern);
             ctx.Cairo.Rectangle(0, bodyY, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - bodyY);
             ctx.Cairo.Fill();
 

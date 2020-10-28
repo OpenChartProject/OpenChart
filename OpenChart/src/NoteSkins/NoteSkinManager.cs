@@ -107,7 +107,7 @@ namespace OpenChart.NoteSkins
                 // key.Receptor = new ImageAsset(Path.Join(path, $"receptor_{i}.png"));
                 key.TapNote = new ImageAsset(Path.Join(path, $"tap_{i}.png"));
                 key.HoldNote = new ImageAsset(Path.Join(path, $"hold_{i}.png"));
-                key.HoldNoteBody = new ImageAsset(Path.Join(path, $"hold_body_{i}.png"));
+                key.HoldNoteBody = new ImagePattern(new ImageAsset(Path.Join(path, $"hold_body_{i}.png")));
 
                 kms.Set(i - 1, key);
             }

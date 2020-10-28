@@ -4,7 +4,6 @@ namespace OpenChart.UI.Assets
 {
     /// <summary>
     /// Represents an image pattern. This is useful for when you need to tile an image.
-    /// TODO: Remove
     /// </summary>
     public class ImagePattern
     {

@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using OpenChart.UI.Assets;
 using System;
 
 namespace OpenChart.NoteSkins
@@ -35,9 +36,15 @@ namespace OpenChart.NoteSkins
             foreach (var key in Keys)
             {
                 key.HoldNote?.ScaleToWidth(width);
-                key.HoldNoteBody?.ScaleToWidth(width);
                 key.Receptor?.ScaleToWidth(width);
                 key.TapNote?.ScaleToWidth(width);
+
+                // For the hold note body we need to create a new pattern instance as well.
+                if (key.HoldNoteBody != null)
+                {
+                    key.HoldNoteBody.ImageAsset.ScaleToWidth(width);
+                    key.HoldNoteBody = new ImagePattern(key.HoldNoteBody.ImageAsset, key.HoldNoteBody.Pattern.Extend);
+                }
             }
         }
 

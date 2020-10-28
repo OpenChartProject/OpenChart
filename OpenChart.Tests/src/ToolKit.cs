@@ -60,7 +60,7 @@ namespace OpenChart.Tests
             {
                 skin.Keys[i] = new NoteSkinKey
                 {
-                    HoldNoteBody = BlankImageAsset,
+                    HoldNoteBody = new ImagePattern(BlankImageAsset),
                     HoldNote = BlankImageAsset,
                     Receptor = BlankImageAsset,
                     TapNote = BlankImageAsset,
