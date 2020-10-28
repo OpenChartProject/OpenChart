@@ -20,8 +20,7 @@ namespace OpenChart.UI.NoteField
         {
             // This controls how much of a vertical margin we are giving ourselves to draw beyond
             // the screen. This fixes an issue where an object close to the edge of the screen may
-            // not be drawn if say the object's origin is off screen but the object itself should
-            // still be visible.
+            // not be drawn correctly.
             var margin = 100;
             var iter = NoteFieldSettings.Chart.Objects[Index.Value].GetEnumerator();
 

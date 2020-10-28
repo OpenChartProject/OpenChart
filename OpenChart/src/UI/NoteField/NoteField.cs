@@ -10,6 +10,13 @@ namespace OpenChart.UI.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
+        // The amount of pixels to move the notefield when the user scrolls with their mouse.
+        const int scrollSpeed = 50;
+
+        // How far the notefield can be scrolled before it will stop scrolling. This stops the user
+        // from scrolling past the beginning of the chart.
+        const int scrollStop = 100;
+
         BeatLines beatLines;
         Gtk.Layout canvas;
         Key[] keys;
@@ -23,12 +30,7 @@ namespace OpenChart.UI.NoteField
             beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
             canvas = new Gtk.Layout(null, null);
             canvas.Drawn += onDraw;
-            canvas.ScrollEvent += (o, e) =>
-            {
-                NoteFieldSettings.X -= (int)Math.Round(e.Event.DeltaX * 50);
-                NoteFieldSettings.Y -= (int)Math.Round(e.Event.DeltaY * 50);
-                canvas.QueueDraw();
-            };
+            canvas.ScrollEvent += onScroll;
 
             keys = new Key[NoteFieldSettings.Chart.KeyCount.Value];
 
@@ -36,6 +38,12 @@ namespace OpenChart.UI.NoteField
             {
                 keys[i] = new Key(NoteFieldSettings, i);
             }
+        }
+
+        private void clear(Cairo.Context ctx)
+        {
+            ctx.SetSourceRGB(0.07, 0.07, 0.07);
+            ctx.Paint();
         }
 
         private void onDraw(object o, Gtk.DrawnArgs e)
@@ -62,10 +70,18 @@ namespace OpenChart.UI.NoteField
             ctx.Restore();
         }
 
-        private void clear(Cairo.Context ctx)
+        private void onScroll(object o, Gtk.ScrollEventArgs e)
         {
-            ctx.SetSourceRGB(0.07, 0.07, 0.07);
-            ctx.Paint();
+            var newY = NoteFieldSettings.Y - (int)Math.Round(e.Event.DeltaY * scrollSpeed);
+
+            if (newY > scrollStop)
+                newY = scrollStop;
+
+            if (newY != NoteFieldSettings.Y)
+            {
+                NoteFieldSettings.Y = newY;
+                canvas.QueueDraw();
+            }
         }
 
         private DrawingContext newDrawingContext(Cairo.Context ctx)
