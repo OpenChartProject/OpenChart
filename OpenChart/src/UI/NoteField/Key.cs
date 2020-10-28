@@ -52,7 +52,7 @@ namespace OpenChart.UI.NoteField
             var img = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
 
             // Reposition the note based on the notefield baseline.
-            var offsetY = (int)(y - NoteFieldSettings.Align(img.Pixbuf.Height));
+            var offsetY = y - (int)(NoteFieldSettings.BaseLine * img.Pixbuf.Height);
 
             ctx.Cairo.SetSourceSurface(img.Surface, 0, offsetY);
             ctx.Cairo.Paint();
@@ -65,10 +65,10 @@ namespace OpenChart.UI.NoteField
             var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
 
             // Reposition the note based on the notefield baseline.
-            var headY = (int)(y - NoteFieldSettings.Align(headImg.Pixbuf.Height));
+            var headY = y - (int)(NoteFieldSettings.BaseLine * headImg.Pixbuf.Height);
 
             // The body is drawn starting at the center of the head, so we need to offset it by half the height.
-            var bodyY = (int)Math.Round(headY + (headImg.Pixbuf.Height / 2.0));
+            var bodyY = headY + (int)(headImg.Pixbuf.Height / 2.0);
 
             // Draw the body.
             ctx.Cairo.SetSource(bodyPattern);
