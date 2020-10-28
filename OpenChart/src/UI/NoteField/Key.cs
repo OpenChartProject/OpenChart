@@ -51,31 +51,32 @@ namespace OpenChart.UI.NoteField
         {
             var img = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
 
-            ctx.Cairo.SetSourceSurface(
-                img.Surface,
-                0,
-                (int)Math.Round(y - NoteFieldSettings.Align(img.Pixbuf.Height))
-            );
+            // Reposition the note based on the notefield baseline.
+            var offsetY = (int)(y - NoteFieldSettings.Align(img.Pixbuf.Height));
 
+            ctx.Cairo.SetSourceSurface(img.Surface, 0, offsetY);
             ctx.Cairo.Paint();
         }
 
         private void drawHold(DrawingContext ctx, HoldNote obj, int y)
         {
-            var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
-            var yOffset = (int)Math.Round(y - NoteFieldSettings.Align(headImg.Pixbuf.Height));
-
             var bodyImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNoteBody;
-            var bodyPattern = new Cairo.SurfacePattern(bodyImg.Surface);
-            bodyPattern.Extend = Cairo.Extend.Repeat;
+            var bodyPattern = new Cairo.SurfacePattern(bodyImg.Surface) { Extend = Cairo.Extend.Repeat };
+            var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
+
+            // Reposition the note based on the notefield baseline.
+            var headY = (int)(y - NoteFieldSettings.Align(headImg.Pixbuf.Height));
+
+            // The body is drawn starting at the center of the head, so we need to offset it by half the height.
+            var bodyY = (int)Math.Round(headY + (headImg.Pixbuf.Height / 2.0));
 
             // Draw the body.
             ctx.Cairo.SetSource(bodyPattern);
-            ctx.Cairo.Rectangle(0, y, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - y);
+            ctx.Cairo.Rectangle(0, bodyY, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - bodyY);
             ctx.Cairo.Fill();
 
             // Draw the hold note head.
-            ctx.Cairo.SetSourceSurface(headImg.Surface, 0, yOffset);
+            ctx.Cairo.SetSourceSurface(headImg.Surface, 0, headY);
             ctx.Cairo.Paint();
         }
     }
