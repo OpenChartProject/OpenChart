@@ -1,4 +1,5 @@
 using Serilog;
+using System.IO;
 
 namespace OpenChart.UI.Actions
 {
@@ -62,6 +63,22 @@ namespace OpenChart.UI.Actions
             {
                 var fileName = dialog.Filename;
                 Log.Information($"Saving OpenChart project to: {fileName}");
+
+                var fmt = app.GetData().Formats.GetFormatHandler(".oc");
+
+                if (fmt == null)
+                {
+                    Log.Error("Unable to save OC project, formatter not found.");
+                    return;
+                }
+
+                using (var file = File.OpenWrite(fileName))
+                {
+                    using (var writer = new StreamWriter(file))
+                    {
+                        fmt.Write(writer, app.GetData().CurrentProject);
+                    }
+                }
             }
 
             dialog.Dispose();
