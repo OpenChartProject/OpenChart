@@ -61,42 +61,17 @@ namespace OpenChart.UI.Actions
 
             var resp = dialog.Run();
 
+            // Write the file if the user chose accept.
             if (resp == (int)Gtk.ResponseType.Accept)
-                writeToFile(dialog.Filename, app.GetData().CurrentProject);
+            {
+                SaveAction.WriteFile(
+                    app.GetData().Formats.GetFormatHandler(".oc"),
+                    dialog.Filename,
+                    app.GetData().CurrentProject
+                );
+            }
 
             dialog.Dispose();
-        }
-
-        private bool writeToFile(string filePath, Project project)
-        {
-            var fmt = app.GetData().Formats.GetFormatHandler(".oc");
-
-            if (fmt == null)
-            {
-                Log.Error("Unable to save OC project, formatter not found.");
-                return false;
-            }
-
-            try
-            {
-                using (var file = File.OpenWrite(filePath))
-                {
-                    using (var writer = new StreamWriter(file))
-                    {
-                        fmt.Write(writer, app.GetData().CurrentProject);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Log.Error("Unable to save OC project.", e);
-                return false;
-            }
-
-            Log.Information($"Saved project to: {filePath}");
-            project.Path = filePath;
-
-            return true;
         }
     }
 }
