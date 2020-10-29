@@ -1,4 +1,6 @@
+using OpenChart.Projects;
 using Serilog;
+using System;
 using System.IO;
 
 namespace OpenChart.UI.Actions
@@ -60,19 +62,24 @@ namespace OpenChart.UI.Actions
             var resp = dialog.Run();
 
             if (resp == (int)Gtk.ResponseType.Accept)
+                writeToFile(dialog.Filename, app.GetData().CurrentProject);
+
+            dialog.Dispose();
+        }
+
+        private bool writeToFile(string filePath, Project project)
+        {
+            var fmt = app.GetData().Formats.GetFormatHandler(".oc");
+
+            if (fmt == null)
             {
-                var fileName = dialog.Filename;
-                Log.Information($"Saving OpenChart project to: {fileName}");
+                Log.Error("Unable to save OC project, formatter not found.");
+                return false;
+            }
 
-                var fmt = app.GetData().Formats.GetFormatHandler(".oc");
-
-                if (fmt == null)
-                {
-                    Log.Error("Unable to save OC project, formatter not found.");
-                    return;
-                }
-
-                using (var file = File.OpenWrite(fileName))
+            try
+            {
+                using (var file = File.OpenWrite(filePath))
                 {
                     using (var writer = new StreamWriter(file))
                     {
@@ -80,8 +87,16 @@ namespace OpenChart.UI.Actions
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Log.Error("Unable to save OC project.", e);
+                return false;
+            }
 
-            dialog.Dispose();
+            Log.Information($"Saved project to: {filePath}");
+            project.Path = filePath;
+
+            return true;
         }
     }
 }

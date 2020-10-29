@@ -36,6 +36,11 @@ namespace OpenChart.Projects
         }
 
         /// <summary>
+        /// The path the project is saved at, or null if the project hasn't been saved.
+        /// </summary>
+        public string Path { get; set; }
+
+        /// <summary>
         /// An event fired when the project's name changes.
         /// </summary>
         public event EventHandler Renamed;
@@ -56,6 +61,7 @@ namespace OpenChart.Projects
         /// <param name="name">The name of the project.</param>
         public Project(string name)
         {
+            Path = null;
             Charts = new List<Chart>();
             Name = name;
             SongMetadata = null;
