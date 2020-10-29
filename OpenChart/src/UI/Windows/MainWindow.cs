@@ -1,6 +1,6 @@
 using Gtk;
 using ChartObjects = OpenChart.Charting.Objects;
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 using OpenChart.UI.NoteField;
 
 namespace OpenChart.UI.Windows
@@ -70,7 +70,10 @@ namespace OpenChart.UI.Windows
 
             var view = new NoteFieldView(noteField);
 
-
+            app.GetEvents().ChartAdded += (o, e) =>
+            {
+                // TODO: Create a new tab to show the chart.
+            };
 
             container = new VBox();
             container.PackStart(new Widgets.MenuBar(new MenuModel().GetModel()), false, false, 0);

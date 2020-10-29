@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Projects;
-using OpenChart.UI.Actions;
+using OpenChart.UI.MenuActions;
 
 namespace OpenChart.Tests.Actions
 {

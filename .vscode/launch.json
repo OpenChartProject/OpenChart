@@ -12,7 +12,8 @@
             "console": "integratedTerminal",
             "stopAtEntry": false,
             "env": {
-                "OPENCHART_DIR": "${workspaceFolder}/bin/"
+                "OPENCHART_DIR": "${workspaceFolder}/bin/",
+                "TESTDATA_DIR": "${workspaceFolder}/OpenChart.Tests/testdata"
             }
         },
         {

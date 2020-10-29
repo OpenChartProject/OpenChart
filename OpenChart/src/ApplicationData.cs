@@ -1,7 +1,7 @@
 using OpenChart.Formats;
-using OpenChart.Formats.OpenChart.Version0_1;
 using OpenChart.NoteSkins;
 using OpenChart.Projects;
+using OpenChart.UI.Actions;
 using Serilog;
 using System;
 
@@ -27,6 +27,11 @@ namespace OpenChart
     /// </summary>
     public class ApplicationData
     {
+        /// <summary>
+        /// A factory for producing IAction instances.
+        /// </summary>
+        public ActionFactory ActionFactory { get; private set; }
+
         /// <summary>
         /// The absolute path to the folder where the OpenChart executable is.
         /// </summary>
@@ -80,6 +85,7 @@ namespace OpenChart
         public ApplicationData(string appFolder)
         {
             AppFolder = appFolder;
+            ActionFactory = new ActionFactory(this);
             Formats = new FormatManager();
             NoteSkins = new NoteSkinManager();
         }
@@ -102,7 +108,8 @@ namespace OpenChart
         public void Init()
         {
             Log.Debug("Setting up file formats.");
-            Formats.AddFormat(new OpenChartFormatHandler());
+            Formats.AddFormat(new Formats.OpenChart.Version0_1.OpenChartFormatHandler());
+            Formats.AddFormat(new Formats.StepMania.SM.SMFormatHandler());
 
             Log.Information("Finding noteskins...");
             NoteSkins.LoadAll(NoteSkinFolder);

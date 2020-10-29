@@ -2,12 +2,12 @@ using Gtk;
 using OpenChart.Projects;
 using Serilog;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the application to create a new project.
     /// </summary>
-    public class NewProjectAction : Actions.IAction
+    public class NewProjectAction : IMenuAction
     {
         IApplication app;
 
@@ -34,6 +34,8 @@ namespace OpenChart.UI.Actions
 
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
+            Log.Debug($"{this.GetType().Name} triggered.");
+
             if (app.GetData().CurrentProject != null)
             {
                 // TODO: Check if the project has been modified and prompt the user to save.
@@ -50,7 +52,8 @@ namespace OpenChart.UI.Actions
             }
             else
             {
-                app.GetData().CurrentProject = new Project();
+                var project = new Project();
+                app.GetData().CurrentProject = project;
                 Log.Information("Created a new project instance.");
             }
         }

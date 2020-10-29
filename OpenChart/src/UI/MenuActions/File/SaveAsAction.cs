@@ -3,12 +3,12 @@ using Serilog;
 using System;
 using System.IO;
 
-namespace OpenChart.UI.Actions
+namespace OpenChart.UI.MenuActions
 {
     /// <summary>
     /// An action that triggers the application to save the current project.
     /// </summary>
-    public class SaveAsAction : Actions.IAction
+    public class SaveAsAction : IMenuAction
     {
         IApplication app;
 
