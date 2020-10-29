@@ -46,7 +46,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         {
             var data = serializer.Serialize(converter.FromNative(project));
 
-            writer.Write(data);
+            writer.Write(Encoding.UTF8.GetString(data));
             writer.Flush();
         }
     }

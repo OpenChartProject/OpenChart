@@ -1,4 +1,7 @@
+using OpenChart.Projects;
 using Serilog;
+using System;
+using System.IO;
 
 namespace OpenChart.UI.MenuActions
 {
@@ -39,6 +42,36 @@ namespace OpenChart.UI.MenuActions
         protected void OnActivated(object o, GLib.ActivatedArgs args)
         {
             Log.Debug($"{this.GetType().Name} triggered.");
+
+            var projectName = app.GetData().CurrentProject.Name;
+
+            var dialog = new Gtk.FileChooserDialog(
+                $"Save {projectName}",
+                app.GetMainWindow(),
+                Gtk.FileChooserAction.Save,
+                "_Cancel",
+                Gtk.ResponseType.Cancel,
+                "_Save",
+                Gtk.ResponseType.Accept,
+                null
+            );
+
+            dialog.DoOverwriteConfirmation = true;
+            dialog.CurrentName = projectName + ".oc";
+
+            var resp = dialog.Run();
+
+            // Write the file if the user chose accept.
+            if (resp == (int)Gtk.ResponseType.Accept)
+            {
+                SaveAction.WriteFile(
+                    app.GetData().Formats.GetFormatHandler(".oc"),
+                    dialog.Filename,
+                    app.GetData().CurrentProject
+                );
+            }
+
+            dialog.Dispose();
         }
     }
 }
