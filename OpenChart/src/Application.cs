@@ -70,8 +70,7 @@ namespace OpenChart
         /// Initializes the application. This sets up the components of the app, such as logging,
         /// loading the audio library, loading noteskins, etc.
         /// </summary>
-        /// <param name="skipAudio">Skips the audio initialization if set to true.</param>
-        public bool InitApplication(bool skipAudio = false)
+        public bool InitApplication()
         {
             var path = SetApplicationPath();
             InitLogging();
@@ -80,9 +79,7 @@ namespace OpenChart
             Log.Information("Initializing...");
             Log.Debug($"Set current directory to {path}");
 
-            if (skipAudio)
-                Log.Information("skipAudio = true, not loading libbass.");
-            else if (!InitAudio())
+            if (!InitAudio())
                 return false;
 
             applicationData = new ApplicationData(path);
