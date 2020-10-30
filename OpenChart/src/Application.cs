@@ -1,4 +1,3 @@
-using ManagedBass;
 using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
 using Serilog;
@@ -79,9 +78,6 @@ namespace OpenChart
             Log.Information("Initializing...");
             Log.Debug($"Set current directory to {path}");
 
-            if (!InitAudio())
-                return false;
-
             applicationData = new ApplicationData(path);
             applicationData.Init();
 
@@ -92,38 +88,6 @@ namespace OpenChart
             InitActions();
 
             Log.Information("Ready.");
-
-            return true;
-        }
-
-        /// <summary>
-        /// Initializes the libbass library.
-        /// </summary>
-        public bool InitAudio()
-        {
-            try
-            {
-                // Initialize libbass
-                if (!Bass.Init())
-                {
-                    if (Bass.LastError != Errors.Already)
-                    {
-                        var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
-
-                        Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
-                        return false;
-                    }
-                    else
-                        Log.Information("Tried to initialize libbass but it was already loaded, ignoring...");
-                }
-                else
-                    Log.Information("libbass init OK.");
-            }
-            catch (DllNotFoundException e)
-            {
-                Log.Fatal(e, "Failed to initialize libbass (DLL not found).");
-                return false;
-            }
 
             return true;
         }
