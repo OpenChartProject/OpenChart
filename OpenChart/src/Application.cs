@@ -9,7 +9,7 @@ namespace OpenChart
 {
     /// <summary>
     /// The main application class. This class is responsible for initializing and bootstrapping
-    /// the app by loading in any necessary resources. It should not contain domain logic.
+    /// the app by loading in any necessary resources.
     /// </summary>
     public class Application : Gtk.Application, IApplication
     {

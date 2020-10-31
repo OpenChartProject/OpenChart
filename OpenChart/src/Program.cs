@@ -17,10 +17,10 @@ namespace OpenChart
                 Environment.Exit(1);
             }
 
-            var gtkApp = new Application();
+            var app = new Application();
 
-            gtkApp.Register(GLib.Cancellable.Current);
-            gtkApp.Activate();
+            app.Register(GLib.Cancellable.Current);
+            app.Activate();
 
             try
             {
@@ -32,7 +32,7 @@ namespace OpenChart
                 Environment.Exit(1);
             }
 
-            gtkApp.Cleanup();
+            app.Cleanup();
         }
     }
 }
