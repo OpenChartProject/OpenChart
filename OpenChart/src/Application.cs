@@ -11,7 +11,7 @@ namespace OpenChart
     /// The main application class. This class is responsible for initializing and bootstrapping
     /// the app by loading in any necessary resources.
     /// </summary>
-    public class Application : Gtk.Application, IApplication
+    public class Application : IApplication
     {
         public const string AppId = "io.openchart";
 
@@ -26,53 +26,46 @@ namespace OpenChart
         ApplicationEventBus eventBus;
         public ApplicationEventBus GetEvents() => eventBus;
 
-        public Gtk.Application GetGtk() => this;
+        public Gtk.Application GetGtk() => null;
 
-        Gtk.Window mainWindow;
-        public Gtk.Window GetMainWindow() => mainWindow;
+        SDLWindow mainWindow;
+        public Gtk.Window GetMainWindow() => null;
 
         /// <summary>
         /// The relative path where logs are written to.
         /// </summary>
         public string LogFile { get; private set; }
 
-        public Application() : base(AppId, GLib.ApplicationFlags.None)
+        public Application()
         {
             ActionDict = new Dictionary<string, IMenuAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
         }
 
         /// <summary>
-        /// This method is called after Gtk.Application.Quit() is called. It's the last thing
-        /// that runs before the program ends.
+        /// Final cleanup before the program exits.
         /// </summary>
         public void Cleanup()
         {
             Log.Information("Shutting down...");
         }
 
-        /// <summary>
-        /// Initializes the actions for the application.
-        /// </summary>
-        public void InitActions()
+        public void Run()
         {
-            // File actions
-            addMenuAction(new NewProjectAction(this));
-            addMenuAction(new NewChartAction(this));
-            addMenuAction(new CloseProjectAction(this));
-            addMenuAction(new SaveAction(this));
-            addMenuAction(new SaveAsAction(this));
-            addMenuAction(new QuitAction(this));
+            if (!init())
+            {
+                Log.Fatal("Failed to initialize app, quitting...");
+                Environment.Exit(1);
+            }
+
+            Log.Information("Displaying main window.");
+            mainWindow = new SDLWindow();
         }
 
-        /// <summary>
-        /// Initializes the application. This sets up the components of the app, such as logging,
-        /// loading the audio library, loading noteskins, etc.
-        /// </summary>
-        public bool InitApplication()
+        bool init()
         {
-            var path = SetApplicationPath();
-            InitLogging();
+            var path = setCurrentDirectory();
+            initLogging();
 
             Log.Information("------------------------");
             Log.Information("Initializing...");
@@ -85,17 +78,25 @@ namespace OpenChart
 
             // Actions should be initialized last since they may require other parts of the application
             // during setup.
-            InitActions();
+            initActions();
 
             Log.Information("Ready.");
 
             return true;
         }
 
-        /// <summary>
-        /// Initializes logging. <seealso cref="Application.LogFile" />
-        /// </summary>
-        public void InitLogging()
+        void initActions()
+        {
+            // File actions
+            addMenuAction(new NewProjectAction(this));
+            addMenuAction(new NewChartAction(this));
+            addMenuAction(new CloseProjectAction(this));
+            addMenuAction(new SaveAction(this));
+            addMenuAction(new SaveAsAction(this));
+            addMenuAction(new QuitAction(this));
+        }
+
+        void initLogging()
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.With(new ShortLevelEnricher())
@@ -110,11 +111,7 @@ namespace OpenChart
                 .CreateLogger();
         }
 
-        /// <summary>
-        /// Sets the current working directory to the path where the executable is. This ensures
-        /// that relative paths work correctly.
-        /// </summary>
-        public string SetApplicationPath()
+        string setCurrentDirectory()
         {
             var path = Environment.GetEnvironmentVariable("OPENCHART_DIR");
 
@@ -131,40 +128,12 @@ namespace OpenChart
             return path;
         }
 
-        /// <summary>
-        /// Called when the application is ready to be used.
-        /// </summary>
-        protected override void OnActivated()
-        {
-            Log.Information("Displaying main window.");
-
-            mainWindow = new MainWindow(this);
-
-            AddWindow(mainWindow);
-            mainWindow.ShowAll();
-        }
-
-        /// <summary>
-        /// Called when the application instance is first created. The application quits if there
-        /// is an error during setup.
-        /// </summary>
-        protected override void OnStartup()
-        {
-            base.OnStartup();
-
-            if (!InitApplication())
-            {
-                Log.Fatal("Failed to initialize, quitting...");
-                Environment.Exit(1);
-            }
-        }
-
         private void addMenuAction(IMenuAction action)
         {
             // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
             // type of argument, resulting in a segfault.
-            ActionDict.Add(action.GetName(), action);
-            AddAction(action.Action);
+            // ActionDict.Add(action.GetName(), action);
+            // AddAction(action.Action);
         }
     }
 }

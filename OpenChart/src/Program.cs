@@ -13,22 +13,19 @@ namespace OpenChart
         {
             if (SDL.SDL_Init(SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_VIDEO) != 0)
             {
-                Log.Fatal("Failed to initialize SDL:", SDL.SDL_GetError());
+                Log.Fatal("Failed to initialize SDL: %s", SDL.SDL_GetError());
                 Environment.Exit(1);
             }
 
             var app = new Application();
 
-            app.Register(GLib.Cancellable.Current);
-            app.Activate();
-
             try
             {
-                Gtk.Application.Run();
+                app.Run();
             }
             catch (Exception e)
             {
-                Log.Fatal(e, "Uncaught exception.");
+                Log.Fatal("Uncaught exception.", e);
                 Environment.Exit(1);
             }
 
