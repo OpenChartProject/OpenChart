@@ -1,5 +1,6 @@
 using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
+using SDL2;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -60,6 +61,23 @@ namespace OpenChart
 
             Log.Information("Displaying main window.");
             mainWindow = new SDLWindow();
+
+            var quit = false;
+
+            // Main event loop.
+            while (!quit)
+            {
+                SDL.SDL_Event e;
+                SDL.SDL_PollEvent(out e);
+
+                switch (e.type)
+                {
+                    case SDL.SDL_EventType.SDL_QUIT:
+                        // TODO: Check if there are unsaved changes.
+                        quit = true;
+                        break;
+                }
+            }
         }
 
         bool init()
