@@ -30,6 +30,7 @@ namespace OpenChart
             }
 
             app.Cleanup();
+            SDL.SDL_Quit();
         }
     }
 }
