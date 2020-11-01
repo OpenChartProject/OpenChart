@@ -96,7 +96,7 @@ namespace OpenChart
 
             // Actions should be initialized last since they may require other parts of the application
             // during setup.
-            initActions();
+            // initActions();
 
             Log.Information("Ready.");
 
