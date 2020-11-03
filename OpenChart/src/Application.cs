@@ -1,6 +1,6 @@
 using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
-using SDL2;
+using static SDL2.SDL;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -67,12 +67,12 @@ namespace OpenChart
             // Main event loop.
             while (!quit)
             {
-                SDL.SDL_Event e;
-                SDL.SDL_PollEvent(out e);
+                SDL_Event e;
+                SDL_PollEvent(out e);
 
                 switch (e.type)
                 {
-                    case SDL.SDL_EventType.SDL_QUIT:
+                    case SDL_EventType.SDL_QUIT:
                         // TODO: Check if there are unsaved changes.
                         quit = true;
                         break;
