@@ -3,7 +3,7 @@ using System;
 
 namespace OpenChart.UI.NoteField
 {
-    public class NoteField : IWidget
+    public class NoteField
     {
         /// <summary>
         /// The settings for the note field.
@@ -18,10 +18,7 @@ namespace OpenChart.UI.NoteField
         const int scrollStop = 100;
 
         BeatLines beatLines;
-        Gtk.Layout canvas;
         Key[] keys;
-
-        public Gtk.Widget GetWidget() => canvas;
 
         public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {

@@ -12,10 +12,8 @@ namespace OpenChart
     /// The main application class. This class is responsible for initializing and bootstrapping
     /// the app by loading in any necessary resources.
     /// </summary>
-    public class Application : IApplication
+    public class Application
     {
-        public const string AppId = "io.openchart";
-
         /// <summary>
         /// A dictionary of action names --> actions.
         /// </summary>
@@ -27,10 +25,7 @@ namespace OpenChart
         ApplicationEventBus eventBus;
         public ApplicationEventBus GetEvents() => eventBus;
 
-        public Gtk.Application GetGtk() => null;
-
-        SDLWindow mainWindow;
-        public Gtk.Window GetMainWindow() => null;
+        public SDLWindow MainWindow { get; private set; }
 
         /// <summary>
         /// The relative path where logs are written to.
@@ -60,7 +55,7 @@ namespace OpenChart
             }
 
             Log.Information("Displaying main window.");
-            mainWindow = new SDLWindow();
+            MainWindow = new SDLWindow();
 
             var quit = false;
 
@@ -77,6 +72,8 @@ namespace OpenChart
                         quit = true;
                         break;
                 }
+
+                MainWindow.Paint();
             }
         }
 
@@ -94,24 +91,9 @@ namespace OpenChart
 
             eventBus = new ApplicationEventBus(applicationData);
 
-            // Actions should be initialized last since they may require other parts of the application
-            // during setup.
-            // initActions();
-
             Log.Information("Ready.");
 
             return true;
-        }
-
-        void initActions()
-        {
-            // File actions
-            addMenuAction(new NewProjectAction(this));
-            addMenuAction(new NewChartAction(this));
-            addMenuAction(new CloseProjectAction(this));
-            addMenuAction(new SaveAction(this));
-            addMenuAction(new SaveAsAction(this));
-            addMenuAction(new QuitAction(this));
         }
 
         void initLogging()
@@ -144,14 +126,6 @@ namespace OpenChart
             Directory.SetCurrentDirectory(path);
 
             return path;
-        }
-
-        private void addMenuAction(IMenuAction action)
-        {
-            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
-            // type of argument, resulting in a segfault.
-            // ActionDict.Add(action.GetName(), action);
-            // AddAction(action.Action);
         }
     }
 }

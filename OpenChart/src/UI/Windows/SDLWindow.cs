@@ -9,7 +9,12 @@ namespace OpenChart.UI.Windows
         /// <summary>
         /// A pointer to the SDL window.
         /// </summary>
-        public readonly IntPtr WindowHandle;
+        public readonly IntPtr Handle;
+
+        /// <summary>
+        /// The window surface.
+        /// </summary>
+        public readonly Surface Surface;
 
         const string baseTitle = "OpenChart";
 
@@ -20,7 +25,7 @@ namespace OpenChart.UI.Windows
 
         public SDLWindow()
         {
-            WindowHandle = SDL.SDL_CreateWindow(
+            Handle = SDL.SDL_CreateWindow(
                 baseTitle,
                 SDL.SDL_WINDOWPOS_CENTERED,
                 SDL.SDL_WINDOWPOS_CENTERED,
@@ -29,14 +34,21 @@ namespace OpenChart.UI.Windows
                 SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN | SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE
             );
 
-            if (WindowHandle == null)
+            if (Handle == null)
             {
                 var msg = string.Format("Failed to create window: %s", SDL.SDL_GetError());
                 Log.Fatal(msg);
                 throw new Exception(msg);
             }
 
-            SDL.SDL_SetWindowMinimumSize(WindowHandle, minWidth, minHeight);
+            SDL.SDL_SetWindowMinimumSize(Handle, minWidth, minHeight);
+
+            Surface = new Surface(SDL.SDL_GetWindowSurface(Handle));
+        }
+
+        public void Paint()
+        {
+            SDL.SDL_UpdateWindowSurface(Handle);
         }
     }
 }
