@@ -1,4 +1,5 @@
 using SDL2;
+using Serilog;
 using System;
 
 namespace OpenChart.UI
@@ -49,7 +50,11 @@ namespace OpenChart.UI
             var dst = SDL.SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
             if (dst == null)
-                throw new NullReferenceException($"SDL_CreateRGBSurface returned null: {SDL.SDL_GetError()}");
+            {
+                var msg = String.Format("Failed to create new SDL surface: %s", SDL.SDL_GetError());
+                Log.Error(msg);
+                throw new NullReferenceException(msg);
+            }
 
             var dstRect = new SDL.SDL_Rect
             {
