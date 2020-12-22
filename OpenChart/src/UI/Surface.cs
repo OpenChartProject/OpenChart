@@ -42,6 +42,10 @@ namespace OpenChart.UI
             Dispose(false);
         }
 
+        /// <summary>
+        /// Cleans up the surface. If the surface was created with freeOnDispose = true then the
+        /// SDL_Surface is also freed.
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
