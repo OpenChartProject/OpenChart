@@ -46,6 +46,9 @@ namespace OpenChart.UI.Windows
             Surface = new Surface(SDL.SDL_GetWindowSurface(Handle));
         }
 
+        /// <summary>
+        /// Paint swaps the buffer for the window surface.
+        /// </summary>
         public void Paint()
         {
             SDL.SDL_UpdateWindowSurface(Handle);
