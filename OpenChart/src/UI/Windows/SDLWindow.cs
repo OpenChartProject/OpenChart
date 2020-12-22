@@ -35,7 +35,7 @@ namespace OpenChart.UI.Windows
                 SDL_WindowFlags.SDL_WINDOW_SHOWN | SDL_WindowFlags.SDL_WINDOW_RESIZABLE
             );
 
-            if (Handle == null)
+            if (Handle == IntPtr.Zero)
             {
                 var msg = string.Format("Failed to create window: {0}", SDL_GetError());
                 Log.Fatal(msg);

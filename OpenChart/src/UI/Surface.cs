@@ -104,7 +104,7 @@ namespace OpenChart.UI
 
             var dst = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
-            if (dst == null)
+            if (dst == IntPtr.Zero)
             {
                 var msg = String.Format("Failed to create new SDL surface: {0}", SDL_GetError());
                 Log.Error(msg);
