@@ -35,6 +35,12 @@ namespace OpenChart
         {
             LogFile = Path.Combine("logs", "OpenChart.log");
             initLogging();
+
+            if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0)
+            {
+                Log.Fatal("Failed to initialize SDL: {0}", SDL_GetError());
+                Environment.Exit(1);
+            }
         }
 
         /// <summary>
