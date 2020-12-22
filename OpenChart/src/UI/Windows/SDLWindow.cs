@@ -46,34 +46,20 @@ namespace OpenChart.UI.Windows
         }
 
         /// <summary>
-        /// Paint swaps the buffer for the window surface.
+        /// Swaps the buffer for the surface, displaying whatever was drawn on the surface.
         /// </summary>
-        public void Paint()
+        public void SwapBuffer()
         {
             SDL.SDL_UpdateWindowSurface(Handle);
         }
 
         /// <summary>
-        /// Checks the window to see if the surface has been invalidated. If it has, the surface
-        /// is disposed and a new one is created.
+        /// Disposes the current surface and creates a new one.
         /// </summary>
-        /// <returns>true if a new surface is created</returns>
-        public bool RefreshSurface()
+        public void RefreshSurface()
         {
-            var windowSurface = SDL.SDL_GetWindowSurface(Handle);
-
-            if (Surface != null)
-            {
-                // The window surface hasn't changed and is still valid.
-                if (windowSurface == Surface.Data)
-                    return false;
-
-                Surface.Dispose();
-            }
-
-            Surface = new Surface(windowSurface, freeOnDispose: false);
-
-            return true;
+            Surface?.Dispose();
+            Surface = new Surface(SDL.SDL_GetWindowSurface(Handle), freeOnDispose: false);
         }
     }
 }

@@ -55,6 +55,7 @@ namespace OpenChart
             Log.Information("Displaying main window.");
             MainWindow = new SDLWindow();
 
+            var refresh = true;
             var quit = false;
 
             // Main event loop.
@@ -69,18 +70,26 @@ namespace OpenChart
                         // TODO: Check if there are unsaved changes.
                         quit = true;
                         break;
+                    case SDL_EventType.SDL_WINDOWEVENT:
+                        // When the window is resized we need to recreate the drawing context.
+                        if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
+                            refresh = true;
+                        break;
                 }
 
-                if (MainWindow.RefreshSurface())
+                // Refresh the window surface and create a new drawing context if needed.
+                if (refresh)
                 {
+                    MainWindow.RefreshSurface();
                     DrawingContext?.Dispose();
                     DrawingContext = new Cairo.Context(MainWindow.Surface.CairoSurface);
+                    refresh = false;
                 }
 
                 DrawingContext.SetSourceRGB(0.2, 0.4, 0.6);
                 DrawingContext.Paint();
 
-                MainWindow.Paint();
+                MainWindow.SwapBuffer();
             }
         }
 
