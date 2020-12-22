@@ -23,12 +23,7 @@ namespace OpenChart.UI.NoteField
         public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
             NoteFieldSettings = noteFieldSettings;
-
             beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
-            canvas = new Gtk.Layout(null, null);
-            canvas.Drawn += onDraw;
-            canvas.ScrollEvent += onScroll;
-
             keys = new Key[NoteFieldSettings.Chart.KeyCount.Value];
 
             for (var i = 0; i < keys.Length; i++)
@@ -43,43 +38,43 @@ namespace OpenChart.UI.NoteField
             ctx.Paint();
         }
 
-        private void onDraw(object o, Gtk.DrawnArgs e)
-        {
-            var ctx = e.Cr;
-            var viewRect = ctx.ClipExtents();
+        // private void onDraw(object o, Gtk.DrawnArgs e)
+        // {
+        //     var ctx = e.Cr;
+        //     var viewRect = ctx.ClipExtents();
 
-            clear(ctx);
+        //     clear(ctx);
 
-            // Center the notefield on the X-axis and scroll it on the Y-axis.
-            ctx.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+        //     // Center the notefield on the X-axis and scroll it on the Y-axis.
+        //     ctx.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
 
-            var drawContext = newDrawingContext(ctx);
-            beatLines.Draw(drawContext);
+        //     var drawContext = newDrawingContext(ctx);
+        //     beatLines.Draw(drawContext);
 
-            ctx.Save();
+        //     ctx.Save();
 
-            for (var i = 0; i < keys.Length; i++)
-            {
-                keys[i].Draw(drawContext);
-                ctx.Translate(NoteFieldSettings.KeyWidth, 0);
-            }
+        //     for (var i = 0; i < keys.Length; i++)
+        //     {
+        //         keys[i].Draw(drawContext);
+        //         ctx.Translate(NoteFieldSettings.KeyWidth, 0);
+        //     }
 
-            ctx.Restore();
-        }
+        //     ctx.Restore();
+        // }
 
-        private void onScroll(object o, Gtk.ScrollEventArgs e)
-        {
-            var newY = NoteFieldSettings.Y - (int)Math.Round(e.Event.DeltaY * scrollSpeed);
+        // private void onScroll(object o, Gtk.ScrollEventArgs e)
+        // {
+        //     var newY = NoteFieldSettings.Y - (int)Math.Round(e.Event.DeltaY * scrollSpeed);
 
-            if (newY > scrollStop)
-                newY = scrollStop;
+        //     if (newY > scrollStop)
+        //         newY = scrollStop;
 
-            if (newY != NoteFieldSettings.Y)
-            {
-                NoteFieldSettings.Y = newY;
-                canvas.QueueDraw();
-            }
-        }
+        //     if (newY != NoteFieldSettings.Y)
+        //     {
+        //         NoteFieldSettings.Y = newY;
+        //         canvas.QueueDraw();
+        //     }
+        // }
 
         private DrawingContext newDrawingContext(Cairo.Context ctx)
         {
