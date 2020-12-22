@@ -49,6 +49,7 @@ namespace OpenChart
         public void Cleanup()
         {
             Log.Information("Shutting down...");
+            SDL_Quit();
         }
 
         public void Run()

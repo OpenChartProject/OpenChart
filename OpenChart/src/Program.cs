@@ -1,4 +1,3 @@
-using SDL2;
 using Serilog;
 using System;
 
@@ -24,7 +23,6 @@ namespace OpenChart
             }
 
             app.Cleanup();
-            SDL.SDL_Quit();
         }
     }
 }
