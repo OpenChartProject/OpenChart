@@ -19,7 +19,7 @@ jobs:
           dotnet-version: 3.1.101
 
       - name: Install SDL
-        run: apt install -y libsdl2-dev libsdl2-image-dev
+        run: sudo apt install -y libsdl2-dev libsdl2-image-dev
 
       - name: Run tests
         run: xvfb-run ./tasks.sh test
