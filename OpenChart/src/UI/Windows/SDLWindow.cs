@@ -57,7 +57,8 @@ namespace OpenChart.UI.Windows
         /// Checks the window to see if the surface has been invalidated. If it has, the surface
         /// is disposed and a new one is created.
         /// </summary>
-        public void RefreshSurface()
+        /// <returns>true if a new surface is created</returns>
+        public bool RefreshSurface()
         {
             var windowSurface = SDL.SDL_GetWindowSurface(Handle);
 
@@ -65,12 +66,14 @@ namespace OpenChart.UI.Windows
             {
                 // The window surface hasn't changed and is still valid.
                 if (windowSurface == Surface.Data)
-                    return;
+                    return false;
 
                 Surface.Dispose();
             }
 
             Surface = new Surface(windowSurface, freeOnDispose: false);
+
+            return true;
         }
     }
 }

@@ -1,10 +1,10 @@
 namespace OpenChart.UI
 {
     /// <summary>
-    /// An interface for an object which can be drawn onto a surface.
+    /// An interface for an object which can draw.
     /// </summary>
     public interface IDrawable
     {
-        void Draw(Surface surface);
+        void Draw(Cairo.Context ctx);
     }
 }

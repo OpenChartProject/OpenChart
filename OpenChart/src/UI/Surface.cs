@@ -57,9 +57,7 @@ namespace OpenChart.UI
                 return;
 
             if (disposing)
-            {
                 CairoSurface.Dispose();
-            }
 
             if (freeOnDispose)
                 SDL.SDL_FreeSurface(Data);

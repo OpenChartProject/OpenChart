@@ -1,9 +1,7 @@
-using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace OpenChart
@@ -15,9 +13,10 @@ namespace OpenChart
     public class Application
     {
         /// <summary>
-        /// A dictionary of action names --> actions.
+        /// The context used for drawing with Cairo. This context should NOT be cached as it will
+        /// be destroyed if the window surface changes, e.g. when the user resizes the window.
         /// </summary>
-        public Dictionary<string, IMenuAction> ActionDict { get; private set; }
+        public Cairo.Context DrawingContext { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -34,7 +33,6 @@ namespace OpenChart
 
         public Application()
         {
-            ActionDict = new Dictionary<string, IMenuAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
         }
 
@@ -71,6 +69,12 @@ namespace OpenChart
                         // TODO: Check if there are unsaved changes.
                         quit = true;
                         break;
+                }
+
+                if (MainWindow.RefreshSurface())
+                {
+                    DrawingContext?.Dispose();
+                    DrawingContext = new Cairo.Context(MainWindow.Surface.CairoSurface);
                 }
 
                 MainWindow.Paint();

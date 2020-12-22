@@ -50,9 +50,7 @@ namespace OpenChart.UI
                 return;
 
             if (disposing)
-            {
                 Pattern.Dispose();
-            }
 
             Pattern = null;
             disposed = true;
