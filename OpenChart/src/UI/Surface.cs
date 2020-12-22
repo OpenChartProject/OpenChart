@@ -23,6 +23,9 @@ namespace OpenChart.UI
         /// </summary>
         public Cairo.ImageSurface CairoSurface { get; private set; }
 
+        public int Width => CairoSurface.Width;
+        public int Height => CairoSurface.Height;
+
         /// <summary>
         /// Creates a new Surface instance.
         /// </summary>
@@ -135,7 +138,7 @@ namespace OpenChart.UI
                 throw new ArgumentOutOfRangeException(msg);
             }
 
-            var aspectRatio = (float)CairoSurface.Width / CairoSurface.Height;
+            var aspectRatio = (float)Width / Height;
 
             if (scaleType == SurfaceScaleType.Height)
                 return Resize((int)Math.Round(value * aspectRatio), value);
