@@ -34,6 +34,7 @@ namespace OpenChart
         public Application()
         {
             LogFile = Path.Combine("logs", "OpenChart.log");
+            initLogging();
         }
 
         /// <summary>
@@ -96,7 +97,6 @@ namespace OpenChart
         bool init()
         {
             var path = setCurrentDirectory();
-            initLogging();
 
             Log.Information("------------------------");
             Log.Information("Initializing...");

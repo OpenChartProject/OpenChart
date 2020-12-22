@@ -13,7 +13,7 @@ namespace OpenChart
         {
             if (SDL.SDL_Init(SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_VIDEO) != 0)
             {
-                Log.Fatal("Failed to initialize SDL: %s", SDL.SDL_GetError());
+                Log.Fatal("Failed to initialize SDL: {0}", SDL.SDL_GetError());
                 Environment.Exit(1);
             }
 
@@ -25,7 +25,7 @@ namespace OpenChart
             }
             catch (Exception e)
             {
-                Log.Fatal("Uncaught exception.", e);
+                Log.Fatal("Uncaught exception: {0}", e);
                 Environment.Exit(1);
             }
 

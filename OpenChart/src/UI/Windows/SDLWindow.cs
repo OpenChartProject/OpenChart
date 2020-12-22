@@ -37,7 +37,7 @@ namespace OpenChart.UI.Windows
 
             if (Handle == null)
             {
-                var msg = string.Format("Failed to create window: %s", SDL.SDL_GetError());
+                var msg = string.Format("Failed to create window: {0}", SDL.SDL_GetError());
                 Log.Fatal(msg);
                 throw new Exception(msg);
             }

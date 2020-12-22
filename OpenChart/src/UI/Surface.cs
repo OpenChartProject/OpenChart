@@ -80,7 +80,7 @@ namespace OpenChart.UI
 
             if (data == IntPtr.Zero)
             {
-                var msg = String.Format("Failed to load image: %s", SDL_image.IMG_GetError());
+                var msg = String.Format("Failed to load image: {0}", SDL_image.IMG_GetError());
                 Log.Warning(msg);
                 return null;
             }
@@ -96,7 +96,7 @@ namespace OpenChart.UI
         {
             if (width <= 0 || height <= 0)
             {
-                var msg = String.Format("Resize dimensions must be positive (%d, %d)", width, height);
+                var msg = String.Format("Resize dimensions must be positive ({0}, {1})", width, height);
                 Log.Error(msg);
                 throw new ArgumentOutOfRangeException(msg);
             }
@@ -105,7 +105,7 @@ namespace OpenChart.UI
 
             if (dst == null)
             {
-                var msg = String.Format("Failed to create new SDL surface: %s", SDL.SDL_GetError());
+                var msg = String.Format("Failed to create new SDL surface: {0}", SDL.SDL_GetError());
                 Log.Error(msg);
                 throw new NullReferenceException(msg);
             }
@@ -133,7 +133,7 @@ namespace OpenChart.UI
         {
             if (value <= 0)
             {
-                var msg = String.Format("ScaleTo value must be a positive number (%d)", value);
+                var msg = String.Format("ScaleTo value must be a positive number ({0})", value);
                 Log.Error(msg);
                 throw new ArgumentOutOfRangeException(msg);
             }
