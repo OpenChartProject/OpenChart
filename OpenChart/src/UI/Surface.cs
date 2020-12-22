@@ -9,6 +9,9 @@ namespace OpenChart.UI
     /// </summary>
     public class Surface : IDisposable
     {
+        bool disposed = false;
+        bool freeOnDispose;
+
         /// <summary>
         /// A pointer to the underlying SDL_Surface* object.
         /// </summary>
@@ -24,21 +27,42 @@ namespace OpenChart.UI
         /// Creates a new Surface instance.
         /// </summary>
         /// <param name="data">A pointer to an SDL_Surface*.</param>
-        public Surface(IntPtr data)
+        public Surface(IntPtr data, bool freeOnDispose = true)
         {
             if (data == IntPtr.Zero)
                 throw new ArgumentNullException("Surface data cannot be null.");
 
             Data = data;
             CairoSurface = createCairoSurface();
+            this.freeOnDispose = freeOnDispose;
+        }
+
+        ~Surface()
+        {
+            Dispose(false);
         }
 
         public void Dispose()
         {
-            SDL.SDL_FreeSurface(Data);
-            CairoSurface.Dispose();
-            CairoSurface = null;
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposed)
+                return;
+
+            if (disposing)
+            {
+                CairoSurface.Dispose();
+            }
+
+            if (freeOnDispose)
+                SDL.SDL_FreeSurface(Data);
+
             Data = IntPtr.Zero;
+            CairoSurface = null;
+            disposed = true;
         }
 
         /// <summary>
