@@ -41,20 +41,17 @@ namespace OpenChart.UI.NoteField
         {
             var viewRect = ctx.Cairo.ClipExtents();
 
-            ctx.Cairo.SetSourceRGB(0.07, 0.07, 0.07);
-            ctx.Cairo.Paint();
+            // ctx.Cairo.SetSourceRGB(0.07, 0.07, 0.07);
+            // ctx.Cairo.Paint();
 
             // Center the notefield on the X-axis and scroll it on the Y-axis.
             ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
-
-            var drawContext = newDrawingContext(ctx.Cairo);
-            beatLines.Draw(drawContext);
-
+            beatLines.Draw(ctx);
             ctx.Cairo.Save();
 
             for (var i = 0; i < keys.Length; i++)
             {
-                keys[i].Draw(drawContext);
+                keys[i].Draw(ctx);
                 ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
             }
 

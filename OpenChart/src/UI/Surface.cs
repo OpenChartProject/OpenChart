@@ -102,6 +102,7 @@ namespace OpenChart.UI
                 throw new ArgumentOutOfRangeException(msg);
             }
 
+            // Create the new surface to be returned.
             var dst = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
             if (dst == IntPtr.Zero)
@@ -111,17 +112,23 @@ namespace OpenChart.UI
                 throw new NullReferenceException(msg);
             }
 
-            var dstRect = new SDL_Rect
-            {
-                x = 0,
-                y = 0,
-                w = width,
-                h = height
-            };
+            var surface = new Surface(dst);
+            var ctx = new Cairo.Context(surface.CairoSurface);
 
-            SDL_BlitScaled(Data, IntPtr.Zero, dst, ref dstRect);
+            // Create a pattern from the src surface so that we can change the scaling filter.
+            // Without this, resizing uses nearest neighbor, and the result is very jagged.
+            var src = new Cairo.SurfacePattern(this.CairoSurface);
+            src.Filter = Cairo.Filter.Best;
 
-            return new Surface(dst);
+            // Calculate the scale between the original and the resized dimensions.
+            ctx.Scale((double)width / CairoSurface.Width, (double)height / CairoSurface.Height);
+            ctx.SetSource(src);
+            ctx.Paint();
+
+            src.Dispose();
+            ctx.Dispose();
+
+            return surface;
         }
 
         /// <summary>
