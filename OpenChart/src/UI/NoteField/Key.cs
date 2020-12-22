@@ -1,10 +1,9 @@
 using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
-using System;
 
 namespace OpenChart.UI.NoteField
 {
-    public class Key : IDrawable
+    public class Key
     {
         public KeyIndex Index { get; private set; }
 

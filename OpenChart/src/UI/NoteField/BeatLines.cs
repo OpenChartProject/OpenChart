@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.NoteField
 {
-    public class BeatLines : IDrawable
+    public class BeatLines
     {
         /// <summary>
         /// The settings for how the beat lines are displayed.

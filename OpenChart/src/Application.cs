@@ -16,7 +16,7 @@ namespace OpenChart
         /// The context used for drawing with Cairo. This context should NOT be cached as it will
         /// be destroyed if the window surface changes, e.g. when the user resizes the window.
         /// </summary>
-        public Cairo.Context DrawingContext { get; private set; }
+        public Cairo.Context CairoCtx { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -89,13 +89,13 @@ namespace OpenChart
                 if (refresh)
                 {
                     MainWindow.RefreshSurface();
-                    DrawingContext?.Dispose();
-                    DrawingContext = new Cairo.Context(MainWindow.Surface.CairoSurface);
+                    CairoCtx?.Dispose();
+                    CairoCtx = new Cairo.Context(MainWindow.Surface.CairoSurface);
                     refresh = false;
                 }
 
-                DrawingContext.SetSourceRGB(0.2, 0.4, 0.6);
-                DrawingContext.Paint();
+                CairoCtx.SetSourceRGB(0.2, 0.4, 0.6);
+                CairoCtx.Paint();
 
                 MainWindow.SwapBuffer();
             }
