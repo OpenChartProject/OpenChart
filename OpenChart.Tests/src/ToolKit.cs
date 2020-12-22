@@ -1,6 +1,7 @@
 using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
-using OpenChart.UI.Assets;
+using OpenChart.UI;
+using SDL2;
 using System;
 using System.IO;
 
@@ -12,11 +13,6 @@ namespace OpenChart.Tests
         /// Singleton toolkit instance.
         /// </summary>
         static ToolKit instance;
-
-        /// <summary>
-        /// A 1x1 transparent PNG, encoded with base64.
-        /// </summary>
-        const string encodedBlankImage = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=";
 
         /// <summary>
         /// The path to the dir containing test data.
@@ -34,15 +30,7 @@ namespace OpenChart.Tests
             }
         }
 
-        /// <summary>
-        /// The raw data for a 1x1 transparent PNG.
-        /// </summary>
-        public byte[] BlankImageData = Convert.FromBase64String(encodedBlankImage);
-
-        /// <summary>
-        /// A new ImageAsset instance which displays a 1x1 transparent image.
-        /// </summary>
-        public ImageAsset BlankImageAsset => new ImageAsset(BlankImageData);
+        public Surface TestImage;
 
         /// <summary>
         /// A noteskin that uses blank images, suitable for testing.
@@ -51,6 +39,7 @@ namespace OpenChart.Tests
 
         private ToolKit()
         {
+            TestImage = new Surface(SDL_image.IMG_Load(Path.Combine(TestDataDir, "blank.png")));
             NoteSkin = new NoteSkin("test-skin");
             NoteSkin.AddKeyModeSkin(NewTestSkin(4));
         }
@@ -75,12 +64,12 @@ namespace OpenChart.Tests
 
             for (var i = 0; i < keyCount.Value; i++)
             {
-                skin.Keys[i] = new NoteSkinKey
+                skin.ScaledKeys[i] = new NoteSkinKey
                 {
-                    HoldNoteBody = new ImagePattern(BlankImageAsset),
-                    HoldNote = BlankImageAsset,
-                    Receptor = BlankImageAsset,
-                    TapNote = BlankImageAsset,
+                    HoldNoteBody = new SurfacePattern(TestImage),
+                    HoldNote = TestImage,
+                    Receptor = TestImage,
+                    TapNote = TestImage,
                 };
             }
 
