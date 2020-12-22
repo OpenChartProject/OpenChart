@@ -9,12 +9,13 @@ namespace OpenChart.UI.Windows
         /// <summary>
         /// A pointer to the SDL window.
         /// </summary>
-        public readonly IntPtr Handle;
+        public IntPtr Handle { get; private set; }
 
         /// <summary>
-        /// The window surface.
+        /// The window surface. This surface is invalidated when the window is resized, so anything
+        /// that uses this surface should not cache it.
         /// </summary>
-        public readonly Surface Surface;
+        public Surface Surface { get; private set; }
 
         const string baseTitle = "OpenChart";
 
@@ -42,8 +43,6 @@ namespace OpenChart.UI.Windows
             }
 
             SDL.SDL_SetWindowMinimumSize(Handle, minWidth, minHeight);
-
-            Surface = new Surface(SDL.SDL_GetWindowSurface(Handle));
         }
 
         /// <summary>
@@ -52,6 +51,26 @@ namespace OpenChart.UI.Windows
         public void Paint()
         {
             SDL.SDL_UpdateWindowSurface(Handle);
+        }
+
+        /// <summary>
+        /// Checks the window to see if the surface has been invalidated. If it has, the surface
+        /// is disposed and a new one is created.
+        /// </summary>
+        public void RefreshSurface()
+        {
+            var windowSurface = SDL.SDL_GetWindowSurface(Handle);
+
+            if (Surface != null)
+            {
+                // The window surface hasn't changed and is still valid.
+                if (windowSurface == Surface.Data)
+                    return;
+
+                Surface.Dispose();
+            }
+
+            Surface = new Surface(windowSurface, freeOnDispose: false);
         }
     }
 }
