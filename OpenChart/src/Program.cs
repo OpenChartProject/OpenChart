@@ -1,3 +1,4 @@
+using SDL2;
 using Serilog;
 using System;
 
@@ -10,37 +11,26 @@ namespace OpenChart
     {
         public static void Main()
         {
-            try
+            if (SDL.SDL_Init(SDL.SDL_INIT_AUDIO | SDL.SDL_INIT_VIDEO) != 0)
             {
-                Gtk.Application.Init();
-            }
-            catch (TypeInitializationException e)
-            {
-                var msg = "Failed to initialize Gtk";
-
-                if (e.InnerException is DllNotFoundException)
-                    msg += " (DLL not found)";
-
-                Log.Fatal(e, msg);
+                Log.Fatal("Failed to initialize SDL: {0}", SDL.SDL_GetError());
                 Environment.Exit(1);
             }
 
-            var gtkApp = new Application();
-
-            gtkApp.Register(GLib.Cancellable.Current);
-            gtkApp.Activate();
+            var app = new Application();
 
             try
             {
-                Gtk.Application.Run();
+                app.Run();
             }
             catch (Exception e)
             {
-                Log.Fatal(e, "Uncaught exception.");
+                Log.Fatal("Uncaught exception: {0}", e);
                 Environment.Exit(1);
             }
 
-            gtkApp.Cleanup();
+            app.Cleanup();
+            SDL.SDL_Quit();
         }
     }
 }

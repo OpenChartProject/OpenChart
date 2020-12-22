@@ -1,25 +1,22 @@
-using ManagedBass;
-using OpenChart.UI.MenuActions;
 using OpenChart.UI.Windows;
+using static SDL2.SDL;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace OpenChart
 {
     /// <summary>
     /// The main application class. This class is responsible for initializing and bootstrapping
-    /// the app by loading in any necessary resources. It should not contain domain logic.
+    /// the app by loading in any necessary resources.
     /// </summary>
-    public class Application : Gtk.Application, IApplication
+    public class Application
     {
-        public const string AppId = "io.openchart";
-
         /// <summary>
-        /// A dictionary of action names --> actions.
+        /// The context used for drawing with Cairo. This context should NOT be cached as it will
+        /// be destroyed if the window surface changes, e.g. when the user resizes the window.
         /// </summary>
-        public Dictionary<string, IMenuAction> ActionDict { get; private set; }
+        public Cairo.Context DrawingContext { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -27,114 +24,95 @@ namespace OpenChart
         ApplicationEventBus eventBus;
         public ApplicationEventBus GetEvents() => eventBus;
 
-        public Gtk.Application GetGtk() => this;
-
-        Gtk.Window mainWindow;
-        public Gtk.Window GetMainWindow() => mainWindow;
+        public SDLWindow MainWindow { get; private set; }
 
         /// <summary>
         /// The relative path where logs are written to.
         /// </summary>
         public string LogFile { get; private set; }
 
-        public Application() : base(AppId, GLib.ApplicationFlags.None)
+        public Application()
         {
-            ActionDict = new Dictionary<string, IMenuAction>();
             LogFile = Path.Combine("logs", "OpenChart.log");
+            initLogging();
         }
 
         /// <summary>
-        /// This method is called after Gtk.Application.Quit() is called. It's the last thing
-        /// that runs before the program ends.
+        /// Final cleanup before the program exits.
         /// </summary>
         public void Cleanup()
         {
             Log.Information("Shutting down...");
         }
 
-        /// <summary>
-        /// Initializes the actions for the application.
-        /// </summary>
-        public void InitActions()
+        public void Run()
         {
-            // File actions
-            addMenuAction(new NewProjectAction(this));
-            addMenuAction(new NewChartAction(this));
-            addMenuAction(new CloseProjectAction(this));
-            addMenuAction(new SaveAction(this));
-            addMenuAction(new SaveAsAction(this));
-            addMenuAction(new QuitAction(this));
+            if (!init())
+            {
+                Log.Fatal("Failed to initialize app, quitting...");
+                Environment.Exit(1);
+            }
+
+            Log.Information("Displaying main window.");
+            MainWindow = new SDLWindow();
+
+            var refresh = true;
+            var quit = false;
+
+            // Main event loop.
+            while (!quit)
+            {
+                SDL_Event e;
+                SDL_PollEvent(out e);
+
+                switch (e.type)
+                {
+                    case SDL_EventType.SDL_QUIT:
+                        // TODO: Check if there are unsaved changes.
+                        quit = true;
+                        break;
+                    case SDL_EventType.SDL_WINDOWEVENT:
+                        // When the window is resized we need to recreate the drawing context.
+                        if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
+                            refresh = true;
+                        break;
+                }
+
+                // Refresh the window surface and create a new drawing context if needed.
+                if (refresh)
+                {
+                    MainWindow.RefreshSurface();
+                    DrawingContext?.Dispose();
+                    DrawingContext = new Cairo.Context(MainWindow.Surface.CairoSurface);
+                    refresh = false;
+                }
+
+                DrawingContext.SetSourceRGB(0.2, 0.4, 0.6);
+                DrawingContext.Paint();
+
+                MainWindow.SwapBuffer();
+            }
         }
 
-        /// <summary>
-        /// Initializes the application. This sets up the components of the app, such as logging,
-        /// loading the audio library, loading noteskins, etc.
-        /// </summary>
-        /// <param name="skipAudio">Skips the audio initialization if set to true.</param>
-        public bool InitApplication(bool skipAudio = false)
+        bool init()
         {
-            var path = SetApplicationPath();
-            InitLogging();
+            var path = setCurrentDirectory();
 
             Log.Information("------------------------");
             Log.Information("Initializing...");
             Log.Debug($"Set current directory to {path}");
-
-            if (skipAudio)
-                Log.Information("skipAudio = true, not loading libbass.");
-            else if (!InitAudio())
-                return false;
 
             applicationData = new ApplicationData(path);
             applicationData.Init();
 
             eventBus = new ApplicationEventBus(applicationData);
 
-            // Actions should be initialized last since they may require other parts of the application
-            // during setup.
-            InitActions();
-
             Log.Information("Ready.");
 
             return true;
         }
 
-        /// <summary>
-        /// Initializes the libbass library.
-        /// </summary>
-        public bool InitAudio()
-        {
-            try
-            {
-                // Initialize libbass
-                if (!Bass.Init())
-                {
-                    if (Bass.LastError != Errors.Already)
-                    {
-                        var error = Enum.GetName(typeof(ManagedBass.Errors), Bass.LastError);
-
-                        Log.Fatal($"Failed to initialize libbass. ({error}, code = {Bass.LastError})");
-                        return false;
-                    }
-                    else
-                        Log.Information("Tried to initialize libbass but it was already loaded, ignoring...");
-                }
-                else
-                    Log.Information("libbass init OK.");
-            }
-            catch (DllNotFoundException e)
-            {
-                Log.Fatal(e, "Failed to initialize libbass (DLL not found).");
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Initializes logging. <seealso cref="Application.LogFile" />
-        /// </summary>
-        public void InitLogging()
+        void initLogging()
         {
             Log.Logger = new LoggerConfiguration()
                 .Enrich.With(new ShortLevelEnricher())
@@ -149,11 +127,7 @@ namespace OpenChart
                 .CreateLogger();
         }
 
-        /// <summary>
-        /// Sets the current working directory to the path where the executable is. This ensures
-        /// that relative paths work correctly.
-        /// </summary>
-        public string SetApplicationPath()
+        string setCurrentDirectory()
         {
             var path = Environment.GetEnvironmentVariable("OPENCHART_DIR");
 
@@ -168,42 +142,6 @@ namespace OpenChart
             Directory.SetCurrentDirectory(path);
 
             return path;
-        }
-
-        /// <summary>
-        /// Called when the application is ready to be used.
-        /// </summary>
-        protected override void OnActivated()
-        {
-            Log.Information("Displaying main window.");
-
-            mainWindow = new MainWindow(this);
-
-            AddWindow(mainWindow);
-            mainWindow.ShowAll();
-        }
-
-        /// <summary>
-        /// Called when the application instance is first created. The application quits if there
-        /// is an error during setup.
-        /// </summary>
-        protected override void OnStartup()
-        {
-            base.OnStartup();
-
-            if (!InitApplication())
-            {
-                Log.Fatal("Failed to initialize, quitting...");
-                Environment.Exit(1);
-            }
-        }
-
-        private void addMenuAction(IMenuAction action)
-        {
-            // FIXME: Can't add accelerators/hotkeys since the Gtk wrapper takes the wrong
-            // type of argument, resulting in a segfault.
-            ActionDict.Add(action.GetName(), action);
-            AddAction(action.Action);
         }
     }
 }

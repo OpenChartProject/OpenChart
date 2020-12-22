@@ -49,25 +49,25 @@ namespace OpenChart.UI.NoteField
 
         private void drawTapNote(DrawingContext ctx, TapNote obj, int y)
         {
-            var img = NoteFieldSettings.NoteSkin.Keys[Index.Value].TapNote;
+            var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].TapNote;
 
             // Reposition the note based on the notefield baseline.
-            var offsetY = y - (int)(NoteFieldSettings.BaseLine * img.Pixbuf.Height);
+            var offsetY = y - (int)(NoteFieldSettings.BaseLine * img.Width);
 
-            ctx.Cairo.SetSourceSurface(img.Surface, 0, offsetY);
+            ctx.Cairo.SetSourceSurface(img.CairoSurface, 0, offsetY);
             ctx.Cairo.Paint();
         }
 
         private void drawHold(DrawingContext ctx, HoldNote obj, int y)
         {
-            var bodyImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNoteBody;
-            var headImg = NoteFieldSettings.NoteSkin.Keys[Index.Value].HoldNote;
+            var bodyImg = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].HoldNoteBody;
+            var headImg = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].HoldNote;
 
             // Reposition the note based on the notefield baseline.
-            var headY = y - (int)(NoteFieldSettings.BaseLine * headImg.Pixbuf.Height);
+            var headY = y - (int)(NoteFieldSettings.BaseLine * headImg.Height);
 
             // The body is drawn starting at the center of the head, so we need to offset it by half the height.
-            var bodyY = headY + (int)(headImg.Pixbuf.Height / 2.0);
+            var bodyY = headY + (int)(headImg.Height / 2.0);
 
             // Draw the body.
             ctx.Cairo.SetSource(bodyImg.Pattern);
@@ -75,7 +75,7 @@ namespace OpenChart.UI.NoteField
             ctx.Cairo.Fill();
 
             // Draw the hold note head.
-            ctx.Cairo.SetSourceSurface(headImg.Surface, 0, headY);
+            ctx.Cairo.SetSourceSurface(headImg.CairoSurface, 0, headY);
             ctx.Cairo.Paint();
         }
     }
