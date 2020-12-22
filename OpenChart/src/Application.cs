@@ -1,3 +1,5 @@
+using OpenChart.Charting.Objects;
+using OpenChart.UI.NoteField;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
 using Serilog;
@@ -66,6 +68,48 @@ namespace OpenChart
             var refresh = true;
             var quit = false;
 
+
+
+
+            var chart = new Charting.Chart(4);
+            chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
+
+            chart.Objects[0].Add(new TapNote(0, 0));
+            chart.Objects[1].Add(new TapNote(1, 0));
+            chart.Objects[2].Add(new TapNote(2, 0));
+            chart.Objects[3].Add(new TapNote(3, 0));
+
+            chart.Objects[0].Add(new TapNote(0, 1));
+            chart.Objects[1].Add(new TapNote(1, 1.25));
+            chart.Objects[2].Add(new TapNote(2, 1.5));
+            chart.Objects[3].Add(new TapNote(3, 1.75));
+
+            chart.Objects[0].Add(new HoldNote(0, 2, 2.4));
+
+            var noteSkin = applicationData.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
+
+            var noteFieldSettings = new NoteFieldSettings(
+                chart,
+                noteSkin,
+                200,
+                96,
+                NoteFieldObjectAlignment.Center
+            );
+
+            noteFieldSettings.Y = 100;
+
+            var beatLineSettings = new BeatLineSettings
+            {
+                BeatLineColor = new Cairo.Color(0.5, 0.5, 0.5),
+                BeatLineThickness = 1,
+                MeasureLineColor = new Cairo.Color(1, 1, 1),
+                MeasureLineThickness = 2
+            };
+
+            var noteField = new NoteField(noteFieldSettings, beatLineSettings);
+
+
+
             // Main event loop.
             while (!quit)
             {
@@ -94,8 +138,7 @@ namespace OpenChart
                     refresh = false;
                 }
 
-                CairoCtx.SetSourceRGB(0.2, 0.4, 0.6);
-                CairoCtx.Paint();
+                noteField.Draw(CairoCtx);
 
                 MainWindow.SwapBuffer();
             }
