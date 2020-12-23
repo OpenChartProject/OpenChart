@@ -128,8 +128,6 @@ function fnPublish() {
 
     echo "-> Publishing OpenChart to $out_dir/"
 
-    export SkipGtkInstall=True
-
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
     fnCopyAssets $out_dir

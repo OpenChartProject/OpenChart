@@ -22,7 +22,7 @@ We plan to add support for the following games:
 
 # Building OpenChart 🔨
 
-OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [Gtk 3.24](https://www.gtk.org/).
+OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [SDL 2.0](https://www.libsdl.org/).
 
 The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
 
@@ -35,26 +35,13 @@ Run `./tasks.sh --help` for usage info.
 ## Windows
 In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
 
-The official Windows builds come bundled with Gtk already. They are not included for development. If you want to build on Windows, do the following:
-
-- [Download Gtk 3.24](https://github.com/GtkSharp/Dependencies/raw/master/gtk-3.24.zip)
-- Extract the zip somewhere (e.g. `C:\Gtk-3.24`)
-- Add the extracted folder to your PATH
-
 ## Linux
-Linux users will need to install Gtk before the app can be run.
+Linux users will need to install SDL before the app can be run.
 
 **Ubuntu/Debian**
 
 ```bash
-sudo apt install libgtk-3-0
-```
-
-## MacOS
-Mac users will need to install Gtk before the app can be run.
-
-```bash
-brew install gtk+3
+sudo apt install libsdl2-dev libsdl2-image-dev
 ```
 
 # License
