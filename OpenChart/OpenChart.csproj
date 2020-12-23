@@ -26,6 +26,6 @@
     <PackageReference Include="CairoSharp" Version="3.22.25.128"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SDL2\SDL2-CS.Core.csproj"/>
+    <ProjectReference Include="..\SDL2-CS\SDL2-CS.Core.csproj"/>
   </ItemGroup>
 </Project>
