@@ -1,4 +1,5 @@
 using OpenChart.Charting.Properties;
+using Serilog;
 
 namespace OpenChart.UI.NoteField
 {
@@ -15,6 +16,8 @@ namespace OpenChart.UI.NoteField
         // How far the notefield can be scrolled before it will stop scrolling. This stops the user
         // from scrolling past the beginning of the chart.
         const int scrollStop = 100;
+
+        Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
         Key[] keys;
@@ -41,8 +44,8 @@ namespace OpenChart.UI.NoteField
         {
             var viewRect = ctx.Cairo.ClipExtents();
 
-            // ctx.Cairo.SetSourceRGB(0.07, 0.07, 0.07);
-            // ctx.Cairo.Paint();
+            ctx.Cairo.SetSourceColor(bgColor);
+            ctx.Cairo.Paint();
 
             // Center the notefield on the X-axis and scroll it on the Y-axis.
             ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);

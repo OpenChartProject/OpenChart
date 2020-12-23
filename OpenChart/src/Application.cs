@@ -110,23 +110,26 @@ namespace OpenChart
 
 
 
-            // Main event loop.
+            // Main application loop.
             while (!quit)
             {
                 SDL_Event e;
-                SDL_PollEvent(out e);
 
-                switch (e.type)
+                // Handle pending events.
+                while (SDL_PollEvent(out e) == 1)
                 {
-                    case SDL_EventType.SDL_QUIT:
-                        // TODO: Check if there are unsaved changes.
-                        quit = true;
-                        break;
-                    case SDL_EventType.SDL_WINDOWEVENT:
-                        // When the window is resized we need to recreate the drawing context.
-                        if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
-                            refresh = true;
-                        break;
+                    switch (e.type)
+                    {
+                        case SDL_EventType.SDL_QUIT:
+                            // TODO: Check if there are unsaved changes.
+                            quit = true;
+                            break;
+                        case SDL_EventType.SDL_WINDOWEVENT:
+                            // When the window is resized we need to recreate the drawing context.
+                            if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
+                                refresh = true;
+                            break;
+                    }
                 }
 
                 // Refresh the window surface and create a new drawing context if needed.
@@ -138,8 +141,15 @@ namespace OpenChart
                     refresh = false;
                 }
 
+                CairoCtx.Save();
+
+                // Clear the window.
+                CairoCtx.SetSourceRGB(0, 0, 0);
+                CairoCtx.Paint();
+
                 noteField.Draw(CairoCtx);
 
+                CairoCtx.Restore();
                 MainWindow.SwapBuffer();
             }
         }
