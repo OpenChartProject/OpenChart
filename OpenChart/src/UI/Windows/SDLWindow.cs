@@ -1,4 +1,4 @@
-using SDL2;
+using static SDL2.SDL;
 using Serilog;
 using System;
 
@@ -26,23 +26,23 @@ namespace OpenChart.UI.Windows
 
         public SDLWindow()
         {
-            Handle = SDL.SDL_CreateWindow(
+            Handle = SDL_CreateWindow(
                 baseTitle,
-                SDL.SDL_WINDOWPOS_CENTERED,
-                SDL.SDL_WINDOWPOS_CENTERED,
+                SDL_WINDOWPOS_CENTERED,
+                SDL_WINDOWPOS_CENTERED,
                 initialWidth,
                 initialHeight,
-                SDL.SDL_WindowFlags.SDL_WINDOW_SHOWN | SDL.SDL_WindowFlags.SDL_WINDOW_RESIZABLE
+                SDL_WindowFlags.SDL_WINDOW_SHOWN | SDL_WindowFlags.SDL_WINDOW_RESIZABLE
             );
 
-            if (Handle == null)
+            if (Handle == IntPtr.Zero)
             {
-                var msg = string.Format("Failed to create window: {0}", SDL.SDL_GetError());
+                var msg = string.Format("Failed to create window: {0}", SDL_GetError());
                 Log.Fatal(msg);
                 throw new Exception(msg);
             }
 
-            SDL.SDL_SetWindowMinimumSize(Handle, minWidth, minHeight);
+            SDL_SetWindowMinimumSize(Handle, minWidth, minHeight);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace OpenChart.UI.Windows
         /// </summary>
         public void SwapBuffer()
         {
-            SDL.SDL_UpdateWindowSurface(Handle);
+            SDL_UpdateWindowSurface(Handle);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace OpenChart.UI.Windows
         public void RefreshSurface()
         {
             Surface?.Dispose();
-            Surface = new Surface(SDL.SDL_GetWindowSurface(Handle), freeOnDispose: false);
+            Surface = new Surface(SDL_GetWindowSurface(Handle), freeOnDispose: false);
         }
     }
 }

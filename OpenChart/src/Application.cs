@@ -1,3 +1,5 @@
+using OpenChart.Charting.Objects;
+using OpenChart.UI.NoteField;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
 using Serilog;
@@ -16,7 +18,7 @@ namespace OpenChart
         /// The context used for drawing with Cairo. This context should NOT be cached as it will
         /// be destroyed if the window surface changes, e.g. when the user resizes the window.
         /// </summary>
-        public Cairo.Context DrawingContext { get; private set; }
+        public Cairo.Context CairoCtx { get; private set; }
 
         ApplicationData applicationData;
         public ApplicationData GetData() => applicationData;
@@ -35,6 +37,12 @@ namespace OpenChart
         {
             LogFile = Path.Combine("logs", "OpenChart.log");
             initLogging();
+
+            if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO) != 0)
+            {
+                Log.Fatal("Failed to initialize SDL: {0}", SDL_GetError());
+                Environment.Exit(1);
+            }
         }
 
         /// <summary>
@@ -43,6 +51,7 @@ namespace OpenChart
         public void Cleanup()
         {
             Log.Information("Shutting down...");
+            SDL_Quit();
         }
 
         public void Run()
@@ -59,37 +68,88 @@ namespace OpenChart
             var refresh = true;
             var quit = false;
 
-            // Main event loop.
+
+
+
+            var chart = new Charting.Chart(4);
+            chart.BPMList.BPMs.Add(new Charting.Properties.BPM());
+
+            chart.Objects[0].Add(new TapNote(0, 0));
+            chart.Objects[1].Add(new TapNote(1, 0));
+            chart.Objects[2].Add(new TapNote(2, 0));
+            chart.Objects[3].Add(new TapNote(3, 0));
+
+            chart.Objects[0].Add(new TapNote(0, 1));
+            chart.Objects[1].Add(new TapNote(1, 1.25));
+            chart.Objects[2].Add(new TapNote(2, 1.5));
+            chart.Objects[3].Add(new TapNote(3, 1.75));
+
+            chart.Objects[0].Add(new HoldNote(0, 2, 2.4));
+
+            var noteSkin = applicationData.NoteSkins.GetNoteSkin("default_arrow").GetKeyModeSkin(chart.KeyCount);
+
+            var noteFieldSettings = new NoteFieldSettings(
+                chart,
+                noteSkin,
+                200,
+                96,
+                NoteFieldObjectAlignment.Center
+            );
+
+            noteFieldSettings.Y = 100;
+
+            var beatLineSettings = new BeatLineSettings
+            {
+                BeatLineColor = new Cairo.Color(0.5, 0.5, 0.5),
+                BeatLineThickness = 1,
+                MeasureLineColor = new Cairo.Color(1, 1, 1),
+                MeasureLineThickness = 2
+            };
+
+            var noteField = new NoteField(noteFieldSettings, beatLineSettings);
+
+
+
+            // Main application loop.
             while (!quit)
             {
                 SDL_Event e;
-                SDL_PollEvent(out e);
 
-                switch (e.type)
+                // Handle pending events.
+                while (SDL_PollEvent(out e) == 1)
                 {
-                    case SDL_EventType.SDL_QUIT:
-                        // TODO: Check if there are unsaved changes.
-                        quit = true;
-                        break;
-                    case SDL_EventType.SDL_WINDOWEVENT:
-                        // When the window is resized we need to recreate the drawing context.
-                        if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
-                            refresh = true;
-                        break;
+                    switch (e.type)
+                    {
+                        case SDL_EventType.SDL_QUIT:
+                            // TODO: Check if there are unsaved changes.
+                            quit = true;
+                            break;
+                        case SDL_EventType.SDL_WINDOWEVENT:
+                            // When the window is resized we need to recreate the drawing context.
+                            if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
+                                refresh = true;
+                            break;
+                    }
                 }
 
                 // Refresh the window surface and create a new drawing context if needed.
                 if (refresh)
                 {
                     MainWindow.RefreshSurface();
-                    DrawingContext?.Dispose();
-                    DrawingContext = new Cairo.Context(MainWindow.Surface.CairoSurface);
+                    CairoCtx?.Dispose();
+                    CairoCtx = new Cairo.Context(MainWindow.Surface.CairoSurface);
                     refresh = false;
                 }
 
-                DrawingContext.SetSourceRGB(0.2, 0.4, 0.6);
-                DrawingContext.Paint();
+                CairoCtx.Save();
 
+                // Clear the window.
+                CairoCtx.SetSourceRGB(0, 0, 0);
+                CairoCtx.Paint();
+
+                noteField.Draw(CairoCtx);
+
+                CairoCtx.Restore();
                 MainWindow.SwapBuffer();
             }
         }

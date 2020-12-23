@@ -1,7 +1,7 @@
 using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
 using OpenChart.UI;
-using SDL2;
+using static SDL2.SDL_image;
 using System;
 using System.IO;
 
@@ -39,7 +39,7 @@ namespace OpenChart.Tests
 
         private ToolKit()
         {
-            TestImage = new Surface(SDL_image.IMG_Load(Path.Combine(TestDataDir, "blank.png")));
+            TestImage = new Surface(IMG_Load(Path.Combine(TestDataDir, "blank.png")));
             NoteSkin = new NoteSkin("test-skin");
             NoteSkin.AddKeyModeSkin(NewTestSkin(4));
         }

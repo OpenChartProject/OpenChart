@@ -1,9 +1,9 @@
 using OpenChart.Charting.Properties;
-using System;
+using Serilog;
 
 namespace OpenChart.UI.NoteField
 {
-    public class NoteField
+    public class NoteField : IDrawable
     {
         /// <summary>
         /// The settings for the note field.
@@ -16,6 +16,8 @@ namespace OpenChart.UI.NoteField
         // How far the notefield can be scrolled before it will stop scrolling. This stops the user
         // from scrolling past the beginning of the chart.
         const int scrollStop = 100;
+
+        Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
         Key[] keys;
@@ -32,35 +34,32 @@ namespace OpenChart.UI.NoteField
             }
         }
 
-        private void clear(Cairo.Context ctx)
+        public void Draw(Cairo.Context _ctx)
         {
-            ctx.SetSourceRGB(0.07, 0.07, 0.07);
-            ctx.Paint();
+            var ctx = newDrawingContext(_ctx);
+            doDraw(ctx);
         }
 
-        // private void onDraw(object o, Gtk.DrawnArgs e)
-        // {
-        //     var ctx = e.Cr;
-        //     var viewRect = ctx.ClipExtents();
+        private void doDraw(DrawingContext ctx)
+        {
+            var viewRect = ctx.Cairo.ClipExtents();
 
-        //     clear(ctx);
+            ctx.Cairo.SetSourceColor(bgColor);
+            ctx.Cairo.Paint();
 
-        //     // Center the notefield on the X-axis and scroll it on the Y-axis.
-        //     ctx.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            // Center the notefield on the X-axis and scroll it on the Y-axis.
+            ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            beatLines.Draw(ctx);
+            ctx.Cairo.Save();
 
-        //     var drawContext = newDrawingContext(ctx);
-        //     beatLines.Draw(drawContext);
+            for (var i = 0; i < keys.Length; i++)
+            {
+                keys[i].Draw(ctx);
+                ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
+            }
 
-        //     ctx.Save();
-
-        //     for (var i = 0; i < keys.Length; i++)
-        //     {
-        //         keys[i].Draw(drawContext);
-        //         ctx.Translate(NoteFieldSettings.KeyWidth, 0);
-        //     }
-
-        //     ctx.Restore();
-        // }
+            ctx.Cairo.Restore();
+        }
 
         // private void onScroll(object o, Gtk.ScrollEventArgs e)
         // {

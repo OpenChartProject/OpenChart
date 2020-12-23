@@ -1,4 +1,5 @@
-using SDL2;
+using static SDL2.SDL;
+using static SDL2.SDL_image;
 using Serilog;
 using System;
 
@@ -63,7 +64,7 @@ namespace OpenChart.UI
                 CairoSurface.Dispose();
 
             if (freeOnDispose)
-                SDL.SDL_FreeSurface(Data);
+                SDL_FreeSurface(Data);
 
             Data = IntPtr.Zero;
             CairoSurface = null;
@@ -76,11 +77,11 @@ namespace OpenChart.UI
         /// <param name="path">The path to an image</param>
         public static Surface LoadFromFile(string path)
         {
-            var data = SDL_image.IMG_Load(path);
+            var data = IMG_Load(path);
 
             if (data == IntPtr.Zero)
             {
-                var msg = String.Format("Failed to load image: {0}", SDL_image.IMG_GetError());
+                var msg = String.Format("Failed to load image: {0}", IMG_GetError());
                 Log.Warning(msg);
                 return null;
             }
@@ -101,26 +102,33 @@ namespace OpenChart.UI
                 throw new ArgumentOutOfRangeException(msg);
             }
 
-            var dst = SDL.SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+            // Create the new surface to be returned.
+            var dst = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
 
-            if (dst == null)
+            if (dst == IntPtr.Zero)
             {
-                var msg = String.Format("Failed to create new SDL surface: {0}", SDL.SDL_GetError());
+                var msg = String.Format("Failed to create new SDL surface: {0}", SDL_GetError());
                 Log.Error(msg);
                 throw new NullReferenceException(msg);
             }
 
-            var dstRect = new SDL.SDL_Rect
-            {
-                x = 0,
-                y = 0,
-                w = width,
-                h = height
-            };
+            var surface = new Surface(dst);
+            var ctx = new Cairo.Context(surface.CairoSurface);
 
-            SDL.SDL_BlitScaled(Data, IntPtr.Zero, dst, ref dstRect);
+            // Create a pattern from the src surface so that we can change the scaling filter.
+            // Without this, resizing uses nearest neighbor, and the result is very jagged.
+            var src = new Cairo.SurfacePattern(this.CairoSurface);
+            src.Filter = Cairo.Filter.Best;
 
-            return new Surface(dst);
+            // Calculate the scale between the original and the resized dimensions.
+            ctx.Scale((double)width / CairoSurface.Width, (double)height / CairoSurface.Height);
+            ctx.SetSource(src);
+            ctx.Paint();
+
+            src.Dispose();
+            ctx.Dispose();
+
+            return surface;
         }
 
         /// <summary>
@@ -150,7 +158,7 @@ namespace OpenChart.UI
 
         protected unsafe Cairo.ImageSurface createCairoSurface()
         {
-            var surface = (SDL.SDL_Surface*)Data;
+            var surface = (SDL_Surface*)Data;
 
             return new Cairo.ImageSurface(
                 surface->pixels, Cairo.Format.ARGB32, surface->w, surface->h, surface->pitch
