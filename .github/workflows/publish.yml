@@ -11,7 +11,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout OpenChart
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -32,7 +36,11 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout OpenChart
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -58,7 +66,11 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout OpenChart
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -84,7 +96,11 @@ jobs:
     needs: build
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout OpenChart
+        uses: actions/checkout@v2
+        with:
+          submodules: 'recursive'
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
