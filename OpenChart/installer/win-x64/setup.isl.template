@@ -9,8 +9,6 @@
 #define AppPublisher "OpenChartProject"
 #define AppURL "https://openchart.io"
 #define AppExeName "OpenChart.exe"
-#define GtkDownloadURL "https://github.com/tschoonj/GTK-for-Windows-Runtime-Environment-Installer/releases/download/2020-05-19/gtk3-runtime-3.24.18-2020-05-19-ts-win64.exe"
-#define GtkDownloadDest "{tmp}\gtk-3.24.18.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
@@ -55,47 +53,3 @@ Name: "{autodesktop}\{#AppName}"; Filename: "{app}\{#AppExeName}"; IconFilename:
 
 [Run]
 Filename: "{app}\{#AppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(AppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-
-[Code]
-
-var
-  InstallGtk: Boolean;
-  InstallGtkPage: TOutputMsgMemoWizardPage;
-
-const
-  NewLine = #13#10;
-
-procedure InitializeWizard();
-begin
-  InstallGtk := False;
-
-  if (not RegKeyExists(HKLM32, 'SOFTWARE\GTK\3.0')) and (not RegKeyExists(HKLM64, 'SOFTWARE\GTK\3.0')) then
-  begin
-    idpAddFile('{#GtkDownloadURL}', ExpandConstant('{#GtkDownloadDest}'));
-    idpDownloadAfter(wpReady);
-    InstallGtk := True;
-    InstallGtkPage := CreateOutputMsgMemoPage(wpInstalling, 'Installing Dependencies...', '', 'Some additional dependencies need to be installed.', '');
-  end;
-end;
-
-procedure CurPageChanged(CurPageID: Integer);
-var
-  ResultCode: Integer;
-  Text: String;
-begin
-  if InstallGtk and (CurPageID = InstallGtkPage.ID) then
-  begin
-    Text := 'Installing Gtk. Please be patient, as this can take a minute...';
-    InstallGtkPage.RichEditViewer.RTFText := Text;
-
-    if Exec(ExpandConstant('{#GtkDownloadDest}'), '/S', '', SW_HIDE, ewWaitUntilTerminated, ResultCode) then
-    begin
-      Text := Text + NewLine + 'Gtk was installed successfully.';
-      InstallGtkPage.RichEditViewer.RTFText := Text;
-    end
-    else begin
-      Text := Text + NewLine + 'An error occurred while installing Gtk (code = ' + IntToStr(ResultCode) + ')';
-      InstallGtkPage.RichEditViewer.RTFText := Text;
-    end;
-  end;
-end;

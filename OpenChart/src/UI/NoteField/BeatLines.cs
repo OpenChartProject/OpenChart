@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI.NoteField
 {
-    public class BeatLines : IDrawable
+    public class BeatLines
     {
         /// <summary>
         /// The settings for how the beat lines are displayed.
@@ -61,9 +61,9 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// Draws horizontal beat lines at the given positions.
         /// </summary>
-        private void drawBeatLines(Cairo.Context cr, int width, Color color, int thickness, List<int> positions)
+        private void drawBeatLines(Cairo.Context cr, int width, Cairo.Color color, int thickness, List<int> positions)
         {
-            cr.SetSourceColor(color.AsCairoColor());
+            cr.SetSourceColor(color);
             cr.LineWidth = thickness;
 
             // Fix the line not being the right thickness if the thickness is an odd number.

@@ -8,7 +8,7 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// The color of a beat line.
         /// </summary>
-        public Color BeatLineColor { get; set; }
+        public Cairo.Color BeatLineColor { get; set; }
 
         /// <summary>
         /// The thickness (in pixels) of a beat line.
@@ -18,7 +18,7 @@ namespace OpenChart.UI.NoteField
         /// <summary>
         /// The color for the start of a measure.
         /// </summary>
-        public Color MeasureLineColor { get; set; }
+        public Cairo.Color MeasureLineColor { get; set; }
 
         /// <summary>
         /// The thickness (in pixels) for the start of a measure.

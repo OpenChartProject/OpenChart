@@ -98,7 +98,12 @@ function fnCopyLibs() {
     * Arg 1: The copy destination path.
     '
     echo "-> Copying libs to $1/"
-    cp -r $LIB_DIR/$PLATFORM/* $1
+
+    local path=$LIB_DIR/$PLATFORM
+
+    if [[ -e "$path" && $(ls -A "$path") ]]; then
+        cp -r $path/* $1
+    fi
 }
 
 function fnCopyMisc() {
@@ -106,9 +111,12 @@ function fnCopyMisc() {
     Copies all other files to the output directory.
     * Arg 1: The copy destination path.
     '
-    if [[ -e "$MISC_DIR/$PLATFORM/" ]]; then
-        echo "-> Copying runtime assets to $1/"
-        cp -r -p $MISC_DIR/$PLATFORM/* $1
+    echo "-> Copying runtime assets to $1/"
+
+    local path=$MISC_DIR/$PLATFORM
+
+    if [[ -e "$path" && $(ls -A "$path") ]]; then
+        cp -r $path/* $1
     fi
 }
 
@@ -119,8 +127,6 @@ function fnPublish() {
     local out_dir=$PUBLISH_DIR/$PLATFORM
 
     echo "-> Publishing OpenChart to $out_dir/"
-
-    export SkipGtkInstall=True
 
     rm -rf $out_dir
     dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
