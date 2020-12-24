@@ -1,4 +1,5 @@
 using OpenChart.Projects;
+using OpenChart.UI;
 using System;
 
 namespace OpenChart
@@ -28,9 +29,15 @@ namespace OpenChart
         /// </summary>
         public event EventHandler CurrentProjectRenamed;
 
+        /// <summary>
+        /// An event bus for user input.
+        /// </summary>
+        public InputEventBus Input;
+
         public ApplicationEventBus(ApplicationData appData)
         {
             this.ApplicationData = appData;
+            this.Input = new InputEventBus();
 
             appData.ProjectChanged += onCurrentProjectChanged;
         }

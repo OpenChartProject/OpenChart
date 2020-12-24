@@ -21,10 +21,10 @@ namespace OpenChart
         public Cairo.Context CairoCtx { get; private set; }
 
         ApplicationData applicationData;
-        public ApplicationData GetData() => applicationData;
+        public ApplicationData Data => applicationData;
 
         ApplicationEventBus eventBus;
-        public ApplicationEventBus GetEvents() => eventBus;
+        public ApplicationEventBus Events => eventBus;
 
         public SDLWindow MainWindow { get; private set; }
 
@@ -108,8 +108,6 @@ namespace OpenChart
 
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
 
-
-
             // Main application loop.
             while (!quit)
             {
@@ -128,6 +126,12 @@ namespace OpenChart
                             // When the window is resized we need to recreate the drawing context.
                             if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
                                 refresh = true;
+                            break;
+                        case SDL_EventType.SDL_MOUSEWHEEL:
+                        case SDL_EventType.SDL_MOUSEBUTTONDOWN:
+                        case SDL_EventType.SDL_MOUSEBUTTONUP:
+                        case SDL_EventType.SDL_MOUSEMOTION:
+                            eventBus.Input.Dispatch(e);
                             break;
                     }
                 }
