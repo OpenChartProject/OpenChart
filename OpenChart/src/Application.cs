@@ -107,6 +107,7 @@ namespace OpenChart
             };
 
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
+            eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
 
             // Main application loop.
             while (!quit)

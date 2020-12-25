@@ -1,5 +1,6 @@
 using OpenChart.Charting.Properties;
 using Serilog;
+using System;
 
 namespace OpenChart.UI.NoteField
 {
@@ -40,6 +41,19 @@ namespace OpenChart.UI.NoteField
             doDraw(ctx);
         }
 
+        public void Scroll(double delta)
+        {
+            ScrollTo(NoteFieldSettings.Y - (int)Math.Round(delta * scrollSpeed));
+        }
+
+        public void ScrollTo(int y)
+        {
+            if (y > scrollStop)
+                y = scrollStop;
+
+            NoteFieldSettings.Y = y;
+        }
+
         private void doDraw(DrawingContext ctx)
         {
             var viewRect = ctx.Cairo.ClipExtents();
@@ -61,26 +75,13 @@ namespace OpenChart.UI.NoteField
             ctx.Cairo.Restore();
         }
 
-        // private void onScroll(object o, Gtk.ScrollEventArgs e)
-        // {
-        //     var newY = NoteFieldSettings.Y - (int)Math.Round(e.Event.DeltaY * scrollSpeed);
-
-        //     if (newY > scrollStop)
-        //         newY = scrollStop;
-
-        //     if (newY != NoteFieldSettings.Y)
-        //     {
-        //         NoteFieldSettings.Y = newY;
-        //         canvas.QueueDraw();
-        //     }
-        // }
-
         private DrawingContext newDrawingContext(Cairo.Context ctx)
         {
+            var yTop = -NoteFieldSettings.Y;
             var viewRect = ctx.ClipExtents();
             var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
-            var topTime = viewRect.Y / pps;
-            var bottomTime = (viewRect.Height + viewRect.Y) / pps;
+            var topTime = yTop / pps;
+            var bottomTime = (yTop + viewRect.Height) / pps;
 
             if (topTime < 0)
                 topTime = 0;
