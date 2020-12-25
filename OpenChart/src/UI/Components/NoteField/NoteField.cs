@@ -6,6 +6,8 @@ namespace OpenChart.UI.Components.NoteField
 {
     public class NoteField
     {
+        public Container Container { get; private set; }
+
         /// <summary>
         /// The settings for the note field.
         /// </summary>
@@ -39,6 +41,8 @@ namespace OpenChart.UI.Components.NoteField
                 keys[i] = new Key(NoteFieldSettings, i);
                 receptors[i] = new Receptor(noteFieldSettings, i);
             }
+
+            Container.Children.Push(beatLines);
         }
 
         public void Draw(Cairo.Context ctx)
@@ -95,6 +99,8 @@ namespace OpenChart.UI.Components.NoteField
 
             var top = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(topTime), topTime);
             var bottom = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(bottomTime), bottomTime);
+
+            NoteFieldSettings.UpdateBeatTime(top, bottom);
 
             return new DrawingContext(ctx, top, bottom);
         }

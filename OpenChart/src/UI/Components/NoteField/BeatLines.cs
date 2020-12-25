@@ -1,8 +1,9 @@
 using System.Collections.Generic;
+using Cairo;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class BeatLines
+    public class BeatLines : IComponent
     {
         /// <summary>
         /// The settings for how the beat lines are displayed.
@@ -13,6 +14,8 @@ namespace OpenChart.UI.Components.NoteField
         /// The settings for the note field.
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
+
+        public Rectangle Rect { get; private set; }
 
         public BeatLines(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
@@ -78,5 +81,12 @@ namespace OpenChart.UI.Components.NoteField
                 cr.Stroke();
             }
         }
+
+        public void Draw(Context ctx)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ReceiveEvent() { }
     }
 }
