@@ -46,7 +46,7 @@ namespace OpenChart.NoteSkins
 
                 ScaledKeys[i].HoldNote = Keys[i].HoldNote.ScaleTo(width, SurfaceScaleType.Width);
                 ScaledKeys[i].TapNote = Keys[i].TapNote.ScaleTo(width, SurfaceScaleType.Width);
-                // ScaledKeys[i].Receptor = Keys[i].Receptor.ScaleTo(width, SurfaceScaleType.Width);
+                ScaledKeys[i].Receptor = Keys[i].Receptor.ScaleTo(width, SurfaceScaleType.Width);
 
                 var scaledBody = Keys[i].HoldNoteBody.Surface.ScaleTo(width, SurfaceScaleType.Width);
                 ScaledKeys[i].HoldNoteBody = new SurfacePattern(scaledBody);
