@@ -18,7 +18,10 @@ namespace OpenChart.UI.NoteField
         {
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].Receptor;
 
-            ctx.Cairo.SetSource(img.CairoSurface);
+            // Reposition the receptor based on the notefield baseline.
+            var offsetY = (int)(NoteFieldSettings.BaseLine * img.Width);
+
+            ctx.Cairo.SetSourceSurface(img.CairoSurface, 0, -offsetY);
             ctx.Cairo.Paint();
         }
     }
