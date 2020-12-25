@@ -35,10 +35,9 @@ namespace OpenChart.UI.NoteField
             }
         }
 
-        public void Draw(Cairo.Context _ctx)
+        public void Draw(Cairo.Context ctx)
         {
-            var ctx = newDrawingContext(_ctx);
-            doDraw(ctx);
+            doDraw(newDrawingContext(ctx));
         }
 
         public void Scroll(double delta)
@@ -63,16 +62,14 @@ namespace OpenChart.UI.NoteField
 
             // Center the notefield on the X-axis and scroll it on the Y-axis.
             ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+
             beatLines.Draw(ctx);
-            ctx.Cairo.Save();
 
             for (var i = 0; i < keys.Length; i++)
             {
                 keys[i].Draw(ctx);
                 ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
             }
-
-            ctx.Cairo.Restore();
         }
 
         private DrawingContext newDrawingContext(Cairo.Context ctx)
