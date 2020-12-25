@@ -86,6 +86,8 @@ namespace OpenChart.UI
                 return null;
             }
 
+            data = SDL_ConvertSurfaceFormat(data, SDL_PIXELFORMAT_ARGB8888, 0);
+
             return new Surface(data);
         }
 
@@ -103,7 +105,7 @@ namespace OpenChart.UI
             }
 
             // Create the new surface to be returned.
-            var dst = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+            var dst = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, SDL_PIXELFORMAT_ARGB8888);
 
             if (dst == IntPtr.Zero)
             {
