@@ -1,5 +1,5 @@
 using OpenChart.Charting.Objects;
-using OpenChart.UI.NoteField;
+using OpenChart.UI.Components.NoteField;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
 using Serilog;

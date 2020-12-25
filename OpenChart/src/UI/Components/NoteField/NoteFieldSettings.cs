@@ -3,7 +3,7 @@ using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
 using System;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     /// <summary>
     /// Note field settings for modifying how the note field looks.

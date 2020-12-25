@@ -1,7 +1,7 @@
 using OpenChart.Charting.Objects;
 using OpenChart.Charting.Properties;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     public class Key
     {

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     public class BeatLines
     {

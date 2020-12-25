@@ -2,7 +2,7 @@ using OpenChart.Charting.Properties;
 using Serilog;
 using System;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     public class NoteField
     {

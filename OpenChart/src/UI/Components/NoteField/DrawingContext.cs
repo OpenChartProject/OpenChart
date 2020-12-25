@@ -1,6 +1,6 @@
 using OpenChart.Charting.Properties;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     public class DrawingContext
     {
