@@ -22,16 +22,22 @@ namespace OpenChart.UI.NoteField
 
         BeatLines beatLines;
         Key[] keys;
+        Receptor[] receptors;
 
         public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
             NoteFieldSettings = noteFieldSettings;
-            beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
-            keys = new Key[NoteFieldSettings.Chart.KeyCount.Value];
 
-            for (var i = 0; i < keys.Length; i++)
+            var keyCount = NoteFieldSettings.Chart.KeyCount.Value;
+
+            beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
+            keys = new Key[keyCount];
+            receptors = new Receptor[keyCount];
+
+            for (var i = 0; i < keyCount; i++)
             {
                 keys[i] = new Key(NoteFieldSettings, i);
+                receptors[i] = new Receptor(noteFieldSettings, i);
             }
         }
 
@@ -67,6 +73,7 @@ namespace OpenChart.UI.NoteField
 
             for (var i = 0; i < keys.Length; i++)
             {
+                receptors[i].Draw(ctx);
                 keys[i].Draw(ctx);
                 ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
             }
