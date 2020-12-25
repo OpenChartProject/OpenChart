@@ -12,7 +12,7 @@ namespace OpenChart
         /// <summary>
         /// The application data for this event bus.
         /// </summary>
-        public ApplicationData ApplicationData;
+        public ApplicationData ApplicationData { get; private set; }
 
         /// <summary>
         /// An event fired when a chart is added to the project.
@@ -32,7 +32,7 @@ namespace OpenChart
         /// <summary>
         /// An event bus for user input.
         /// </summary>
-        public InputEventBus Input;
+        public InputEventBus Input { get; private set; }
 
         public ApplicationEventBus(ApplicationData appData)
         {
