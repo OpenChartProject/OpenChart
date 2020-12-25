@@ -4,7 +4,7 @@ using System;
 
 namespace OpenChart.UI.NoteField
 {
-    public class NoteField : IDrawable
+    public class NoteField
     {
         /// <summary>
         /// The settings for the note field.
