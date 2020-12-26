@@ -4,10 +4,8 @@ using System;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class NoteField
+    public class NoteField : Container
     {
-        public Container Container { get; private set; }
-
         /// <summary>
         /// The settings for the note field.
         /// </summary>
@@ -28,7 +26,6 @@ namespace OpenChart.UI.Components.NoteField
 
         public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
-            Container = new Container();
             NoteFieldSettings = noteFieldSettings;
 
             var keyCount = NoteFieldSettings.Chart.KeyCount.Value;
@@ -37,15 +34,15 @@ namespace OpenChart.UI.Components.NoteField
             keys = new Key[keyCount];
             receptors = new Receptor[keyCount];
 
-            Container.Children.Push(beatLines);
+            Children.Push(beatLines);
 
             for (var i = 0; i < keyCount; i++)
             {
                 keys[i] = new Key(NoteFieldSettings, i);
                 receptors[i] = new Receptor(noteFieldSettings, i);
 
-                Container.Children.Push(receptors[i]);
-                Container.Children.Push(keys[i]);
+                Children.Push(receptors[i]);
+                Children.Push(keys[i]);
             }
         }
 

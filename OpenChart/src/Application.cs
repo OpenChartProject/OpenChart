@@ -110,7 +110,7 @@ namespace OpenChart
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
             eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
 
-            MainWindow.Container.Children.Push(noteField.Container);
+            MainWindow.Container.Children.Push(noteField);
 
             // Main application loop.
             while (!quit)
