@@ -36,18 +36,16 @@ namespace OpenChart.UI.Components.NoteField
             keys = new Key[keyCount];
             receptors = new Receptor[keyCount];
 
+            Container.Children.Push(beatLines);
+
             for (var i = 0; i < keyCount; i++)
             {
                 keys[i] = new Key(NoteFieldSettings, i);
                 receptors[i] = new Receptor(noteFieldSettings, i);
+
+                Container.Children.Push(receptors[i]);
+                Container.Children.Push(keys[i]);
             }
-
-            Container.Children.Push(beatLines);
-        }
-
-        public void Draw(Cairo.Context ctx)
-        {
-            doDraw(newDrawingContext(ctx));
         }
 
         public void Scroll(double delta)

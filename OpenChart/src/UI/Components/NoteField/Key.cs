@@ -3,8 +3,10 @@ using OpenChart.Charting.Properties;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class Key
+    public class Key : IComponent
     {
+        public Cairo.Rectangle Rect { get; }
+
         public KeyIndex Index { get; private set; }
 
         public NoteFieldSettings NoteFieldSettings { get; private set; }
@@ -15,7 +17,7 @@ namespace OpenChart.UI.Components.NoteField
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(DrawingContext ctx)
+        public void Draw(Cairo.Context ctx)
         {
             // This controls how much of a vertical margin we are giving ourselves to draw beyond
             // the screen. This fixes an issue where an object close to the edge of the screen may
@@ -27,16 +29,16 @@ namespace OpenChart.UI.Components.NoteField
             {
                 var cur = iter.Current;
 
-                if ((cur.Time.Value + margin) < ctx.Top.Time.Value)
+                if ((cur.Time.Value + margin) < NoteFieldSettings.Top.Time.Value)
                     continue;
-                else if ((cur.Time.Value - margin) > ctx.Bottom.Time.Value)
+                else if ((cur.Time.Value - margin) > NoteFieldSettings.Bottom.Time.Value)
                     break;
 
                 drawObject(ctx, cur);
             }
         }
 
-        private void drawObject(DrawingContext ctx, BaseObject obj)
+        private void drawObject(Cairo.Context ctx, BaseObject obj)
         {
             var y = NoteFieldSettings.TimeToPosition(obj.Time);
 
@@ -46,18 +48,18 @@ namespace OpenChart.UI.Components.NoteField
                 drawHold(ctx, holdNote, y);
         }
 
-        private void drawTapNote(DrawingContext ctx, TapNote obj, int y)
+        private void drawTapNote(Cairo.Context ctx, TapNote obj, int y)
         {
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].TapNote;
 
             // Reposition the note based on the notefield baseline.
             var offsetY = y - (int)(NoteFieldSettings.BaseLine * img.Width);
 
-            ctx.Cairo.SetSourceSurface(img.CairoSurface, 0, offsetY);
-            ctx.Cairo.Paint();
+            ctx.SetSourceSurface(img.CairoSurface, 0, offsetY);
+            ctx.Paint();
         }
 
-        private void drawHold(DrawingContext ctx, HoldNote obj, int y)
+        private void drawHold(Cairo.Context ctx, HoldNote obj, int y)
         {
             var bodyImg = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].HoldNoteBody;
             var headImg = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].HoldNote;
@@ -69,13 +71,15 @@ namespace OpenChart.UI.Components.NoteField
             var bodyY = headY + (int)(headImg.Height / 2.0);
 
             // Draw the body.
-            ctx.Cairo.SetSource(bodyImg.Pattern);
-            ctx.Cairo.Rectangle(0, bodyY, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - bodyY);
-            ctx.Cairo.Fill();
+            ctx.SetSource(bodyImg.Pattern);
+            ctx.Rectangle(0, bodyY, NoteFieldSettings.KeyWidth, NoteFieldSettings.BeatToPosition(obj.EndBeat) - bodyY);
+            ctx.Fill();
 
             // Draw the hold note head.
-            ctx.Cairo.SetSourceSurface(headImg.CairoSurface, 0, headY);
-            ctx.Cairo.Paint();
+            ctx.SetSourceSurface(headImg.CairoSurface, 0, headY);
+            ctx.Paint();
         }
+
+        public void ReceiveEvent() { }
     }
 }

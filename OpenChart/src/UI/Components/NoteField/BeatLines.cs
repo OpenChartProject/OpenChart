@@ -23,15 +23,15 @@ namespace OpenChart.UI.Components.NoteField
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(DrawingContext ctx)
+        public void Draw(Context ctx)
         {
             var beatLines = new List<int>();
             var measureLines = new List<int>();
 
             // Iterate through the beats in the chart and record the y positions of each line.
-            foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(ctx.Top.Time))
+            foreach (var beat in NoteFieldSettings.Chart.BPMList.Time.GetBeats(NoteFieldSettings.Top.Time))
             {
-                if (beat.Time.Value >= ctx.Bottom.Time.Value)
+                if (beat.Time.Value >= NoteFieldSettings.Bottom.Time.Value)
                     break;
 
                 var y = NoteFieldSettings.TimeToPosition(beat.Time);
@@ -44,7 +44,7 @@ namespace OpenChart.UI.Components.NoteField
 
             // Draw the beat lines that occur at the start of a measure.
             drawBeatLines(
-                ctx.Cairo,
+                ctx,
                 NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.MeasureLineColor,
                 BeatLineSettings.MeasureLineThickness,
@@ -53,7 +53,7 @@ namespace OpenChart.UI.Components.NoteField
 
             // Draw all of the other beat lines.
             drawBeatLines(
-                ctx.Cairo,
+                ctx,
                 NoteFieldSettings.NoteFieldWidth,
                 BeatLineSettings.BeatLineColor,
                 BeatLineSettings.BeatLineThickness,
@@ -80,11 +80,6 @@ namespace OpenChart.UI.Components.NoteField
                 cr.LineTo(width, offsetY);
                 cr.Stroke();
             }
-        }
-
-        public void Draw(Context ctx)
-        {
-            throw new System.NotImplementedException();
         }
 
         public void ReceiveEvent() { }
