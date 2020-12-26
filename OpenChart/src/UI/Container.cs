@@ -5,11 +5,11 @@ namespace OpenChart.UI
 {
     public class Container : Component
     {
-        public Stack<Component> Children { get; private set; }
+        public List<Component> Children { get; private set; }
 
         public Container()
         {
-            Children = new Stack<Component>();
+            Children = new List<Component>();
         }
 
         public override void Draw(Context ctx)
@@ -28,11 +28,9 @@ namespace OpenChart.UI
             if (Children.Count == 0)
                 return;
 
-            var childList = Children.ToArray();
-
-            for (var i = childList.Length - 1; i > 0; i--)
+            for (var i = Children.Count - 1; i > 0; i--)
             {
-                childList[i].ReceiveEvent();
+                Children[i].ReceiveEvent();
             }
         }
     }

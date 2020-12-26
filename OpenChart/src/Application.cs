@@ -111,7 +111,7 @@ namespace OpenChart
             noteFieldSettings.Top = new Charting.Properties.BeatTime(0, 0);
             noteFieldSettings.Bottom = new Charting.Properties.BeatTime(20, 20);
 
-            MainWindow.Container.Children.Push(noteField);
+            MainWindow.Container.Children.Add(noteField);
 
             // Main application loop.
             while (!quit)

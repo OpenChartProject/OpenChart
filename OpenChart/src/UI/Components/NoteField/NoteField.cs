@@ -30,15 +30,15 @@ namespace OpenChart.UI.Components.NoteField
             keys = new Key[keyCount];
             receptors = new Receptor[keyCount];
 
-            Children.Push(beatLines);
+            Children.Add(beatLines);
 
             for (var i = 0; i < keyCount; i++)
             {
                 keys[i] = new Key(NoteFieldSettings, i);
                 receptors[i] = new Receptor(noteFieldSettings, i);
 
-                Children.Push(receptors[i]);
-                Children.Push(keys[i]);
+                Children.Add(receptors[i]);
+                Children.Add(keys[i]);
             }
         }
 
