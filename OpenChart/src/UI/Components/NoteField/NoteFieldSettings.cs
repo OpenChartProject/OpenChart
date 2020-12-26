@@ -71,7 +71,13 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public int ReceptorY = 150;
 
+        /// <summary>
+        /// The amount of pixels to scroll the notefield by for each click on a scroll wheel.
+        /// </summary>
+        public int ScrollSpeed = 50;
+
         public int ScrollStop => ReceptorY;
+
 
         /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
@@ -126,6 +132,19 @@ namespace OpenChart.UI.Components.NoteField
         public int TimeToPosition(Time time)
         {
             return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
+        }
+
+        public void Scroll(double delta)
+        {
+            ScrollTo(Y - (int)Math.Round(delta * ScrollSpeed));
+        }
+
+        public void ScrollTo(int y)
+        {
+            if (y > ScrollStop)
+                y = ScrollStop;
+
+            Y = y;
         }
 
         private double getBaseLine()

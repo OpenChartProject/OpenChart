@@ -9,7 +9,7 @@ namespace OpenChart.UI
             Rect = new Cairo.Rectangle();
         }
 
-        public abstract void Draw(Cairo.Context ctx);
+        public virtual void Draw(Cairo.Context ctx) { }
         public virtual void ReceiveEvent(InputEvent e) { }
     }
 }

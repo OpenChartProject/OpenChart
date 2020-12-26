@@ -11,9 +11,6 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
-        // The amount of pixels to move the notefield when the user scrolls with their mouse.
-        const int scrollSpeed = 50;
-
         Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
@@ -40,25 +37,14 @@ namespace OpenChart.UI.Components.NoteField
                 Children.Add(receptors[i]);
                 Children.Add(keys[i]);
             }
+
+            Children.Add(new NoteFieldInputHandler(NoteFieldSettings));
         }
 
         public override void Draw(Cairo.Context ctx)
         {
             ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
             base.Draw(ctx);
-        }
-
-        public void Scroll(double delta)
-        {
-            ScrollTo(NoteFieldSettings.Y - (int)Math.Round(delta * scrollSpeed));
-        }
-
-        public void ScrollTo(int y)
-        {
-            if (y > NoteFieldSettings.ScrollStop)
-                y = NoteFieldSettings.ScrollStop;
-
-            NoteFieldSettings.Y = y;
         }
 
         // private void doDraw(DrawingContext ctx)

@@ -1,4 +1,5 @@
 using OpenChart.Charting.Objects;
+using OpenChart.UI;
 using OpenChart.UI.Components.NoteField;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
@@ -106,7 +107,6 @@ namespace OpenChart
             };
 
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
-            eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
 
             noteFieldSettings.Top = new Charting.Properties.BeatTime(0, 0);
             noteFieldSettings.Bottom = new Charting.Properties.BeatTime(20, 20);
@@ -117,6 +117,7 @@ namespace OpenChart
             while (!quit)
             {
                 SDL_Event e;
+                InputEvent inputEvent = null;
 
                 // Handle pending events.
                 while (SDL_PollEvent(out e) == 1)
@@ -136,7 +137,9 @@ namespace OpenChart
                         case SDL_EventType.SDL_MOUSEBUTTONDOWN:
                         case SDL_EventType.SDL_MOUSEBUTTONUP:
                         case SDL_EventType.SDL_MOUSEMOTION:
-                            eventBus.Input.Dispatch(e);
+                        case SDL_EventType.SDL_KEYDOWN:
+                        case SDL_EventType.SDL_KEYUP:
+                            inputEvent = eventBus.InputFactory.CreateEvent(e);
                             break;
                     }
                 }
@@ -149,6 +152,9 @@ namespace OpenChart
                     CairoCtx = new Cairo.Context(MainWindow.Surface.CairoSurface);
                     refresh = false;
                 }
+
+                if (inputEvent != null)
+                    MainWindow.Container.ReceiveEvent(inputEvent);
 
                 MainWindow.Draw(CairoCtx);
             }
