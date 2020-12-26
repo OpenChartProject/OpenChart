@@ -23,14 +23,17 @@ namespace OpenChart.UI
             }
         }
 
-        public override void ReceiveEvent()
+        public override void ReceiveEvent(InputEvent e)
         {
             if (Children.Count == 0)
                 return;
 
             for (var i = Children.Count - 1; i > 0; i--)
             {
-                Children[i].ReceiveEvent();
+                Children[i].ReceiveEvent(e);
+
+                if (e.Consumed)
+                    break;
             }
         }
     }
