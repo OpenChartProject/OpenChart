@@ -3,10 +3,8 @@ using OpenChart.Charting.Properties;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class Key : IComponent
+    public class Key : Component
     {
-        public Cairo.Rectangle Rect { get; }
-
         public KeyIndex Index { get; private set; }
 
         public NoteFieldSettings NoteFieldSettings { get; private set; }
@@ -17,7 +15,7 @@ namespace OpenChart.UI.Components.NoteField
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(Cairo.Context ctx)
+        public override void Draw(Cairo.Context ctx)
         {
             // This controls how much of a vertical margin we are giving ourselves to draw beyond
             // the screen. This fixes an issue where an object close to the edge of the screen may
@@ -79,7 +77,5 @@ namespace OpenChart.UI.Components.NoteField
             ctx.SetSourceSurface(headImg.CairoSurface, 0, headY);
             ctx.Paint();
         }
-
-        public void ReceiveEvent() { }
     }
 }

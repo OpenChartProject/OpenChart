@@ -28,6 +28,7 @@ namespace OpenChart.UI.Components.NoteField
 
         public NoteField(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
+            Container = new Container();
             NoteFieldSettings = noteFieldSettings;
 
             var keyCount = NoteFieldSettings.Chart.KeyCount.Value;
@@ -61,46 +62,46 @@ namespace OpenChart.UI.Components.NoteField
             NoteFieldSettings.Y = y;
         }
 
-        private void doDraw(DrawingContext ctx)
-        {
-            var viewRect = ctx.Cairo.FillExtents();
+        // private void doDraw(DrawingContext ctx)
+        // {
+        //     var viewRect = ctx.Cairo.ClipExtents();
 
-            ctx.Cairo.SetSourceColor(bgColor);
-            ctx.Cairo.Paint();
+        //     ctx.Cairo.SetSourceColor(bgColor);
+        //     ctx.Cairo.Paint();
 
-            // Center the notefield on the X-axis and scroll it on the Y-axis.
-            ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+        //     // Center the notefield on the X-axis and scroll it on the Y-axis.
+        //     ctx.Cairo.Translate((viewRect.Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
 
-            beatLines.Draw(ctx);
+        //     beatLines.Draw(ctx);
 
-            for (var i = 0; i < keys.Length; i++)
-            {
-                receptors[i].Draw(ctx);
-                keys[i].Draw(ctx);
-                ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
-            }
-        }
+        //     for (var i = 0; i < keys.Length; i++)
+        //     {
+        //         receptors[i].Draw(ctx);
+        //         keys[i].Draw(ctx);
+        //         ctx.Cairo.Translate(NoteFieldSettings.KeyWidth, 0);
+        //     }
+        // }
 
-        private DrawingContext newDrawingContext(Cairo.Context ctx)
-        {
-            var yTop = -NoteFieldSettings.Y;
-            var viewRect = ctx.FillExtents();
-            var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
-            var topTime = yTop / pps;
-            var bottomTime = (yTop + viewRect.Height) / pps;
+        // private DrawingContext newDrawingContext(Cairo.Context ctx)
+        // {
+        //     var yTop = -NoteFieldSettings.Y;
+        //     var viewRect = ctx.ClipExtents();
+        //     var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
+        //     var topTime = yTop / pps;
+        //     var bottomTime = (yTop + viewRect.Height) / pps;
 
-            if (topTime < 0)
-                topTime = 0;
+        //     if (topTime < 0)
+        //         topTime = 0;
 
-            if (bottomTime < 0)
-                bottomTime = 0;
+        //     if (bottomTime < 0)
+        //         bottomTime = 0;
 
-            var top = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(topTime), topTime);
-            var bottom = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(bottomTime), bottomTime);
+        //     var top = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(topTime), topTime);
+        //     var bottom = new BeatTime(NoteFieldSettings.Chart.BPMList.Time.TimeToBeat(bottomTime), bottomTime);
 
-            NoteFieldSettings.UpdateBeatTime(top, bottom);
+        //     NoteFieldSettings.UpdateBeatTime(top, bottom);
 
-            return new DrawingContext(ctx, top, bottom);
-        }
+        //     return new DrawingContext(ctx, top, bottom);
+        // }
     }
 }

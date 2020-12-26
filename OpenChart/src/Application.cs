@@ -110,6 +110,8 @@ namespace OpenChart
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
             eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
 
+            MainWindow.Container.Children.Push(noteField.Container);
+
             // Main application loop.
             while (!quit)
             {
@@ -147,16 +149,7 @@ namespace OpenChart
                     refresh = false;
                 }
 
-                CairoCtx.Save();
-
-                // Clear the window.
-                CairoCtx.SetSourceRGB(0, 0, 0);
-                CairoCtx.Paint();
-
-                noteField.Draw(CairoCtx);
-
-                CairoCtx.Restore();
-                MainWindow.SwapBuffer();
+                MainWindow.Draw(CairoCtx);
             }
         }
 

@@ -2,13 +2,11 @@ using OpenChart.Charting.Properties;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class Receptor : IComponent
+    public class Receptor : Component
     {
         public KeyIndex Index { get; private set; }
 
         public NoteFieldSettings NoteFieldSettings { get; private set; }
-
-        public Cairo.Rectangle Rect { get; }
 
         public Receptor(NoteFieldSettings noteFieldSettings, KeyIndex index)
         {
@@ -16,7 +14,7 @@ namespace OpenChart.UI.Components.NoteField
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(Cairo.Context ctx)
+        public override void Draw(Cairo.Context ctx)
         {
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].Receptor;
 
@@ -26,7 +24,5 @@ namespace OpenChart.UI.Components.NoteField
             ctx.SetSourceSurface(img.CairoSurface, 0, -offsetY);
             ctx.Paint();
         }
-
-        public void ReceiveEvent() { }
     }
 }

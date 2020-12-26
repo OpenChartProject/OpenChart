@@ -3,18 +3,16 @@ using System.Collections.Generic;
 
 namespace OpenChart.UI
 {
-    public class Container : IComponent
+    public class Container : Component
     {
-        public Stack<IComponent> Children { get; private set; }
-        public Rectangle Rect { get; private set; }
+        public Stack<Component> Children { get; private set; }
 
         public Container()
         {
-            Children = new Stack<IComponent>();
-            Rect = new Rectangle();
+            Children = new Stack<Component>();
         }
 
-        public void Draw(Context ctx)
+        public override void Draw(Context ctx)
         {
             foreach (var c in Children)
             {
@@ -25,7 +23,7 @@ namespace OpenChart.UI
             }
         }
 
-        public void ReceiveEvent()
+        public override void ReceiveEvent()
         {
             if (Children.Count == 0)
                 return;

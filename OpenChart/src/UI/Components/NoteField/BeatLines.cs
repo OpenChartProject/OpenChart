@@ -3,7 +3,7 @@ using Cairo;
 
 namespace OpenChart.UI.Components.NoteField
 {
-    public class BeatLines : IComponent
+    public class BeatLines : Component
     {
         /// <summary>
         /// The settings for how the beat lines are displayed.
@@ -15,15 +15,13 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
-        public Rectangle Rect { get; private set; }
-
         public BeatLines(NoteFieldSettings noteFieldSettings, BeatLineSettings beatLineSettings)
         {
             BeatLineSettings = beatLineSettings;
             NoteFieldSettings = noteFieldSettings;
         }
 
-        public void Draw(Context ctx)
+        public override void Draw(Context ctx)
         {
             var beatLines = new List<int>();
             var measureLines = new List<int>();
@@ -81,7 +79,5 @@ namespace OpenChart.UI.Components.NoteField
                 cr.Stroke();
             }
         }
-
-        public void ReceiveEvent() { }
     }
 }
