@@ -14,10 +14,6 @@ namespace OpenChart.UI.Components.NoteField
         // The amount of pixels to move the notefield when the user scrolls with their mouse.
         const int scrollSpeed = 50;
 
-        // How far the notefield can be scrolled before it will stop scrolling. This stops the user
-        // from scrolling past the beginning of the chart.
-        const int scrollStop = 100;
-
         Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
@@ -46,6 +42,12 @@ namespace OpenChart.UI.Components.NoteField
             }
         }
 
+        public override void Draw(Cairo.Context ctx)
+        {
+            ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            base.Draw(ctx);
+        }
+
         public void Scroll(double delta)
         {
             ScrollTo(NoteFieldSettings.Y - (int)Math.Round(delta * scrollSpeed));
@@ -53,8 +55,8 @@ namespace OpenChart.UI.Components.NoteField
 
         public void ScrollTo(int y)
         {
-            if (y > scrollStop)
-                y = scrollStop;
+            if (y > NoteFieldSettings.ScrollStop)
+                y = NoteFieldSettings.ScrollStop;
 
             NoteFieldSettings.Y = y;
         }

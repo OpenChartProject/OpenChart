@@ -97,8 +97,6 @@ namespace OpenChart
                 NoteFieldObjectAlignment.Center
             );
 
-            noteFieldSettings.Y = 100;
-
             var beatLineSettings = new BeatLineSettings
             {
                 BeatLineColor = new Cairo.Color(0.5, 0.5, 0.5),
@@ -109,6 +107,9 @@ namespace OpenChart
 
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
             eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
+
+            noteFieldSettings.Top = new Charting.Properties.BeatTime(0, 0);
+            noteFieldSettings.Bottom = new Charting.Properties.BeatTime(20, 20);
 
             MainWindow.Container.Children.Push(noteField);
 

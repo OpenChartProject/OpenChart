@@ -17,6 +17,8 @@ namespace OpenChart.UI.Components.NoteField
 
         public override void Draw(Cairo.Context ctx)
         {
+            ctx.Translate(Index.Value * NoteFieldSettings.KeyWidth, 0);
+
             // This controls how much of a vertical margin we are giving ourselves to draw beyond
             // the screen. This fixes an issue where an object close to the edge of the screen may
             // not be drawn correctly.

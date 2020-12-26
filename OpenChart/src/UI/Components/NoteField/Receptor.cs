@@ -16,6 +16,11 @@ namespace OpenChart.UI.Components.NoteField
 
         public override void Draw(Cairo.Context ctx)
         {
+            ctx.Translate(
+                Index.Value * NoteFieldSettings.KeyWidth,
+                NoteFieldSettings.ReceptorY - NoteFieldSettings.Y
+            );
+
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].Receptor;
 
             // Reposition the receptor based on the notefield baseline.

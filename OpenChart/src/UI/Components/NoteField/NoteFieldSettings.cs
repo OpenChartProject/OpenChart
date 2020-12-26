@@ -57,14 +57,21 @@ namespace OpenChart.UI.Components.NoteField
         /// for the end of the chart. As the user scrolls this value will change based on which
         /// part of the chart is visible.
         /// </summary>
-        public BeatTime Bottom { get; private set; }
+        public BeatTime Bottom { get; set; }
 
         /// <summary>
         /// The beattime at the top of the notefield container. Note that this is not the beattime
         /// for the beginning of the chart. As the user scrolls this value will change based on which
         /// part of the chart is visible.
         /// </summary>
-        public BeatTime Top { get; private set; }
+        public BeatTime Top { get; set; }
+
+        /// <summary>
+        /// The y-pos of the receptors.
+        /// </summary>
+        public int ReceptorY = 150;
+
+        public int ScrollStop => ReceptorY;
 
         /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
@@ -97,6 +104,7 @@ namespace OpenChart.UI.Components.NoteField
             NoteSkin = noteSkin;
             KeyWidth = keyWidth;
             PixelsPerSecond = pixelsPerSecond;
+            Y = ScrollStop;
             Zoom = 1.0f;
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
@@ -118,12 +126,6 @@ namespace OpenChart.UI.Components.NoteField
         public int TimeToPosition(Time time)
         {
             return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
-        }
-
-        public void UpdateBeatTime(BeatTime top, BeatTime bottom)
-        {
-            Top = top;
-            Bottom = bottom;
         }
 
         private double getBaseLine()
