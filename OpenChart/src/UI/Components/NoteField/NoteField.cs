@@ -43,6 +43,8 @@ namespace OpenChart.UI.Components.NoteField
 
         public override void Draw(Cairo.Context ctx)
         {
+            ctx.SetSourceColor(bgColor);
+            ctx.Paint();
             ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
             base.Draw(ctx);
         }
