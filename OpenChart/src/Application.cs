@@ -133,12 +133,12 @@ namespace OpenChart
                             if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
                                 refresh = true;
                             break;
-                        case SDL_EventType.SDL_MOUSEWHEEL:
+                        case SDL_EventType.SDL_KEYDOWN:
+                        case SDL_EventType.SDL_KEYUP:
                         case SDL_EventType.SDL_MOUSEBUTTONDOWN:
                         case SDL_EventType.SDL_MOUSEBUTTONUP:
                         case SDL_EventType.SDL_MOUSEMOTION:
-                        case SDL_EventType.SDL_KEYDOWN:
-                        case SDL_EventType.SDL_KEYUP:
+                        case SDL_EventType.SDL_MOUSEWHEEL:
                             inputEvent = eventBus.InputFactory.CreateEvent(e);
                             break;
                     }

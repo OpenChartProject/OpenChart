@@ -9,6 +9,13 @@ namespace OpenChart.UI
     /// </summary>
     public class InputEventFactory
     {
+        public class KeyEventArgs
+        {
+            public SDL_Keycode Key;
+            public SDL_Keymod KeyMod;
+            public bool Pressed;
+        }
+
         /// <summary>
         /// An enum of different mouse buttons.
         /// </summary>
@@ -57,6 +64,20 @@ namespace OpenChart.UI
         {
             switch (e.type)
             {
+                case SDL_EventType.SDL_KEYDOWN:
+                case SDL_EventType.SDL_KEYUP:
+                    {
+                        var args = new KeyEventArgs
+                        {
+                            Key = e.key.keysym.sym,
+                            KeyMod = e.key.keysym.mod,
+                            Pressed = e.key.state == SDL_PRESSED
+                        };
+
+                        var type = args.Pressed ? InputEventType.KeyDown : InputEventType.KeyUp;
+
+                        return new InputEvent(type, args);
+                    }
                 case SDL_EventType.SDL_MOUSEWHEEL:
                     {
                         var args = new ScrolledEventArgs
