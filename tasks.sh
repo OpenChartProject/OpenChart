@@ -40,7 +40,7 @@ function fnBuild() {
     '
     echo "-> Building OpenChart to $1/"
 
-    msbuild $PROJECT_FILE
+    msbuild -restore -clp:Verbosity=minimal $PROJECT_FILE
 
     if [[ ! -e "$1" ]]; then
 	    mkdir $1
