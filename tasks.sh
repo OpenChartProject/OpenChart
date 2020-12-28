@@ -135,7 +135,7 @@ function fnPublish() {
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
-    dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
+    msbuild OpenChart -p:Configuration=Release
     fnCopyAssets $out_dir
     fnCopyLibs $out_dir
     fnCopyMisc $out_dir
@@ -161,6 +161,14 @@ function fnTest() {
     echo "-> Running test suite"
 
     local path=$TEST_DIR/bin/Debug/net45
+    local nunit_path=`which nunit3-console.exe`
+
+    if [[ -z $nunit_path ]]; then
+        echo "Error: nunit3-console.exe must be in the PATH"
+        exit 1
+    fi
+
+    echo "-> Found nunit3-console.exe: $nunit_path"
 
     mkdir -p $path
 
@@ -170,7 +178,9 @@ function fnTest() {
 
     rm -rf $path/logs
 
-    OPENCHART_DIR="$(pwd)/$path" TESTDATA_DIR="$TESTDATA_DIR" dotnet test
+    echo $nunit_path
+
+    mono $nunit_path OpenChart.Tests/OpenChart.Tests.csproj --noresult
 }
 
 function fnVersion() {
