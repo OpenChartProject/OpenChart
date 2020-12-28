@@ -5,6 +5,7 @@ using static SDL2.SDL;
 using Serilog;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace OpenChart
 {
@@ -194,19 +195,7 @@ namespace OpenChart
 
         string setCurrentDirectory()
         {
-            var path = Environment.GetEnvironmentVariable("OPENCHART_DIR");
-
-            if (string.IsNullOrEmpty(path))
-            {
-                // Get the path to the folder where the executable is.
-                path = Path.GetDirectoryName(
-                    System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName
-                );
-            }
-
-            Directory.SetCurrentDirectory(path);
-
-            return path;
+            return Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
         }
     }
 }
