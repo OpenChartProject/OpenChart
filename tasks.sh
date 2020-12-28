@@ -40,7 +40,13 @@ function fnBuild() {
     '
     echo "-> Building OpenChart to $1/"
 
-    dotnet build -o $1 $PROJECT_FILE
+    msbuild $PROJECT_FILE
+
+    if [[ ! -e "$1" ]]; then
+	    mkdir $1
+    fi
+
+    cp OpenChart/bin/Debug/net45/* $1
     fnCopyAssets $1
     fnCopyLibs $1
     fnCopyMisc $1
@@ -154,7 +160,7 @@ function fnTest() {
     '
     echo "-> Running test suite"
 
-    local path=$TEST_DIR/bin/Debug/netcoreapp3.1
+    local path=$TEST_DIR/bin/Debug/net45
 
     mkdir -p $path
 
