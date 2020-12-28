@@ -3,11 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
+    class ChartTypeField
+    {
+        public string Type { get; set; }
+    }
+
     /// <summary>
     /// JSON converter for reading and writing objects that inherit from IChartObject.
     ///
@@ -26,66 +30,40 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
     /// </summary>
     public class ChartObjectConverter : JsonConverter<IChartObject>
     {
-        public override IChartObject Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override IChartObject ReadJson(JsonReader reader, Type objectType, IChartObject existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType != JsonTokenType.StartObject)
+            if (reader.TokenType != JsonToken.StartObject)
             {
                 throw new ConverterException("Chart object must be a JSON object.");
             }
 
-            // Read the entire JSON object.
-            JsonDocument document = JsonDocument.ParseValue(ref reader);
-            string typeString;
+            var json = reader.ReadAsString();
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
 
-            try
-            {
-                // Try looking up the 'type' field.
-                typeString = document.RootElement.GetProperty("type").GetString();
-            }
-            catch (KeyNotFoundException)
-            {
+            if(!dict.ContainsKey("type"))
                 throw new ConverterException("Chart object must contain a 'type' field.");
-            }
 
-            using (var stream = new MemoryStream())
+            // Deserializes the object based on its type.
+            switch (dict["type"])
             {
-                // The .NET JSON converters don't work on already parsed objects, so unfortunately
-                // we can't just pass the document instance directly to a converter.
-                using (var writer = new Utf8JsonWriter(stream))
-                {
-                    document.WriteTo(writer);
-                }
-
-                var json = Encoding.UTF8.GetString(stream.ToArray());
-
-                // Deserializes the object based on its type.
-                switch (typeString)
-                {
-                    case ChartObjectType.TapNote:
-                        return JsonSerializer.Deserialize<TapNote>(json, options);
-                    case ChartObjectType.HoldNote:
-                        return JsonSerializer.Deserialize<HoldNote>(json, options);
-                    default:
-                        throw new ConverterException($"Unknown chart object type: '{typeString}'");
-                }
+                case ChartObjectType.TapNote:
+                    return JsonConvert.DeserializeObject<TapNote>(json);
+                case ChartObjectType.HoldNote:
+                    return JsonConvert.DeserializeObject<HoldNote>(json);
+                default:
+                    throw new ConverterException($"Unknown chart object type: '{dict["type"]}'");
             }
         }
 
-        public override void Write(Utf8JsonWriter writer, IChartObject value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, IChartObject value, JsonSerializer serializer)
         {
             // Serializes the object based on its type.
             if (value is TapNote)
-            {
-                JsonSerializer.Serialize<TapNote>(writer, (TapNote)value, options);
-            }
+                writer.WriteRaw(JsonConvert.SerializeObject((TapNote)value));
             else if (value is HoldNote)
-            {
-                JsonSerializer.Serialize<HoldNote>(writer, (HoldNote)value, options);
-            }
+                writer.WriteRaw(JsonConvert.SerializeObject((HoldNote)value));
             else
-            {
                 throw new ConverterException("Cannot serialize chart object, type is unknown.");
-            }
         }
     }
 }

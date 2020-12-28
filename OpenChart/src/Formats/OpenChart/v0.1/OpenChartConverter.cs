@@ -18,7 +18,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <summary>
         /// This converter supports exporting multiple charts into a single file.
         /// </summary>
-        public static bool SupportsMultipleExports => true;
+        public bool SupportsMultipleExports => true;
 
         /// <summary>
         /// Converts an OpenChart file into a Project instance.

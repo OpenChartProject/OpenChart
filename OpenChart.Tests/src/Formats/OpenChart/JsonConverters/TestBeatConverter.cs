@@ -2,7 +2,8 @@ using NUnit.Framework;
 using OpenChart.Charting.Properties;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
 using System;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 {
@@ -13,14 +14,22 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             public Beat Beat { get; set; }
         }
 
-        JsonSerializerOptions options;
+        JsonSerializerSettings options;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            options = new JsonSerializerOptions();
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            options = new JsonSerializerSettings();
+
+            options.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
             options.Converters.Add(new BeatConverter());
+            options.Converters.Add(new BeatDurationConverter());
+            options.Converters.Add(new KeyIndexConverter());
+            options.Converters.Add(new KeyCountConverter());
+            options.Converters.Add(new ChartObjectConverter());
         }
 
         [TestCase("\"123\"")]

@@ -11,6 +11,8 @@ namespace OpenChart.Formats.StepMania.SM
     /// </summary>
     public class SMConverter : IProjectConverter<StepFileData>
     {
+        public bool SupportsMultipleExports => false;
+
         public StepFileData FromNative(Project chart)
         {
             throw new System.NotImplementedException();

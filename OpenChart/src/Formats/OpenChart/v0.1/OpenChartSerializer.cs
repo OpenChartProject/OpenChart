@@ -1,7 +1,8 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace OpenChart.Formats.OpenChart.Version0_1
 {
@@ -13,13 +14,16 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <summary>
         /// The options used by the serializer.
         /// </summary>
-        public static JsonSerializerOptions JsonOptions;
+        public static JsonSerializerSettings JsonOptions;
 
         static OpenChartSerializer()
         {
-            JsonOptions = new JsonSerializerOptions();
+            JsonOptions = new JsonSerializerSettings();
 
-            JsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            JsonOptions.ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            };
             JsonOptions.Converters.Add(new BeatConverter());
             JsonOptions.Converters.Add(new BeatDurationConverter());
             JsonOptions.Converters.Add(new KeyIndexConverter());
@@ -33,16 +37,17 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), JsonOptions);
+            var str = Encoding.UTF8.GetString(data);
+            return JsonConvert.DeserializeObject<ProjectData>(str, JsonOptions);
         }
 
         /// <summary>
-        /// Serializes a FileData object into JSON.
+        /// Serializes a ProjectData object into JSON.
         /// </summary>
-        /// <param name="fd">The FileData object.</param>
+        /// <param name="pd">The ProjectData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
-            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, JsonOptions));
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pd, JsonOptions));
         }
     }
 }

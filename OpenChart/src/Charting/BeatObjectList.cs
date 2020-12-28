@@ -219,8 +219,8 @@ namespace OpenChart.Charting
             if (cur == null)
                 cur = objects.First;
 
-            IPlacementValidator prevValidatable = null;
-            var validatable = obj as IPlacementValidator;
+            PlacementValidator prevValidatable = null;
+            var validatable = obj as PlacementValidator;
 
             while (cur != null)
             {
@@ -230,7 +230,7 @@ namespace OpenChart.Charting
                 {
                     if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
                     {
-                        prevValidatable = cur.Previous?.Value as IPlacementValidator;
+                        prevValidatable = cur.Previous?.Value as PlacementValidator;
 
                         prevValidatable?.ValidatePlacement(null, obj);
                         validatable?.ValidatePlacement(cur.Previous?.Value, cur.Value);
@@ -242,7 +242,7 @@ namespace OpenChart.Charting
                 cur = cur.Next;
             }
 
-            prevValidatable = objects.Last?.Value as IPlacementValidator;
+            prevValidatable = objects.Last?.Value as PlacementValidator;
             prevValidatable?.ValidatePlacement(null, obj);
             validatable?.ValidatePlacement(objects.Last?.Value, null);
 

@@ -1,7 +1,6 @@
 using OpenChart.Charting.Properties;
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
@@ -10,14 +9,14 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
     /// </summary>
     public class KeyCountConverter : JsonConverter<KeyCount>
     {
-        public override KeyCount Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override KeyCount ReadJson(JsonReader reader, Type objectType, KeyCount existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return new KeyCount(reader.GetInt32());
+            return new KeyCount((int)reader.ReadAsInt32());
         }
 
-        public override void Write(Utf8JsonWriter writer, KeyCount value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, KeyCount value, JsonSerializer serializer)
         {
-            writer.WriteNumberValue(value.Value);
+            writer.WriteValue(value.Value);
         }
     }
 }
