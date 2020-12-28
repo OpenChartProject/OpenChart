@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
-using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
+using OpenChart.Formats.OpenChart.Version0_1;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -14,30 +14,14 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             public Beat Beat { get; set; }
         }
 
-        JsonSerializerSettings options;
-
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            options = new JsonSerializerSettings();
-
-            options.ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
-            options.Converters.Add(new BeatConverter());
-            options.Converters.Add(new BeatDurationConverter());
-            options.Converters.Add(new KeyIndexConverter());
-            options.Converters.Add(new KeyCountConverter());
-            options.Converters.Add(new ChartObjectConverter());
-        }
+        JsonSerializerSettings settings = new OpenChartSerializer().Settings;
 
         [TestCase("\"123\"")]
         [TestCase("false")]
         public void Test_Read_BadType(string value)
         {
             var input = $"{{ \"beat\": {value} }}";
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize(input, typeof(DummyData), options));
+            Assert.Throws<JsonException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
         }
 
         [TestCase(-1)]
@@ -45,7 +29,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         {
             var input = $"{{ \"beat\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => JsonSerializer.Deserialize(input, typeof(DummyData), options)
+                () => JsonConvert.DeserializeObject<DummyData>(input, settings)
             );
         }
 
@@ -55,7 +39,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Read_ValidValue(double value)
         {
             var input = $"{{ \"beat\": {value} }}";
-            var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
+            var data = (DummyData)JsonConvert.DeserializeObject<DummyData>(input, settings);
             Assert.AreEqual(value, data.Beat.Value);
         }
 
@@ -65,7 +49,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Write(double value)
         {
             var data = new DummyData() { Beat = value };
-            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
+            var json = JsonConvert.SerializeObject(data, typeof(DummyData), settings);
             Assert.AreEqual($"{{\"beat\":{value}}}", json);
         }
     }

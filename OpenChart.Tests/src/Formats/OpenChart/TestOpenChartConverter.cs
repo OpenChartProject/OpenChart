@@ -122,7 +122,7 @@ namespace OpenChart.Tests.Formats.OpenChart
         [Test]
         public void Test_SupportsMultipleExports()
         {
-            Assert.IsTrue(OpenChartConverter.SupportsMultipleExports);
+            Assert.IsTrue(converter.SupportsMultipleExports);
         }
 
         [Test]
