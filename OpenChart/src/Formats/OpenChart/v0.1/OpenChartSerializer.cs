@@ -20,10 +20,7 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         {
             Settings = new JsonSerializerSettings();
 
-            Settings.ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            };
+            Settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             Settings.Converters.Add(new BeatConverter());
             Settings.Converters.Add(new BeatDurationConverter());
             Settings.Converters.Add(new KeyIndexConverter());

@@ -172,6 +172,7 @@ function fnTest() {
 
     mkdir -p $path
 
+    msbuild -restore -clp:Verbosity=minimal OpenChart.Tests
     fnCopyAssets $path
     fnCopyLibs $path
     fnCopyMisc $path
@@ -180,7 +181,7 @@ function fnTest() {
 
     echo $nunit_path
 
-    mono $nunit_path OpenChart.Tests/OpenChart.Tests.csproj --noresult
+    mono $nunit_path OpenChart.Tests/OpenChart.Tests.csproj --noresult $@
 }
 
 function fnVersion() {
@@ -372,7 +373,8 @@ run)
     ;;
 
 test)
-    fnTest
+    shift
+    fnTest $@
     ;;
 
 version)

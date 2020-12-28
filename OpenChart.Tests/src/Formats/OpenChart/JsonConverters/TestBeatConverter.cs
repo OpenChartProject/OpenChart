@@ -43,14 +43,14 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             Assert.AreEqual(value, data.Beat.Value);
         }
 
-        [TestCase(0)]
-        [TestCase(1.5)]
-        [TestCase(123.45)]
-        public void Test_Write(double value)
+        [TestCase(0, "0.0")]
+        [TestCase(1.5, "1.5")]
+        [TestCase(123.45, "123.45")]
+        public void Test_Write(double value, string expected)
         {
             var data = new DummyData() { Beat = value };
             var json = JsonConvert.SerializeObject(data, typeof(DummyData), settings);
-            Assert.AreEqual($"{{\"beat\":{value}}}", json);
+            Assert.AreEqual($"{{\"beat\":{expected}}}", json);
         }
     }
 }
