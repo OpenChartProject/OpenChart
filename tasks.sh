@@ -172,7 +172,7 @@ function fnTest() {
 
     mkdir -p $path
 
-    msbuild -restore -clp:Verbosity=minimal OpenChart.Tests
+    msbuild -clp:Verbosity=minimal OpenChart.Tests
     fnCopyAssets $path
     fnCopyLibs $path
     fnCopyMisc $path

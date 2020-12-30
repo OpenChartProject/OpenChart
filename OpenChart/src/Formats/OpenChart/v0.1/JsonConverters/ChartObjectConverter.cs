@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
@@ -33,26 +34,32 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
         public override IChartObject ReadJson(JsonReader reader, Type objectType, IChartObject existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType != JsonToken.StartObject)
-            {
                 throw new ConverterException("Chart object must be a JSON object.");
-            }
 
-            var json = reader.ReadAsString();
-            var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+            var jObj = JObject.Load(reader);
 
-            if(!dict.ContainsKey("type"))
-                throw new ConverterException("Chart object must contain a 'type' field.");
+            if (!jObj.ContainsKey("type"))
+                throw new ConverterException("Chart object must have a 'type' key.");
 
-            // Deserializes the object based on its type.
-            switch (dict["type"])
+            var type = (string)jObj["type"];
+            IChartObject result;
+
+            // Look at the type key to see what kind of chart object this is.
+            switch (type)
             {
                 case ChartObjectType.TapNote:
-                    return JsonConvert.DeserializeObject<TapNote>(json);
+                    result = new TapNote();
+                    break;
                 case ChartObjectType.HoldNote:
-                    return JsonConvert.DeserializeObject<HoldNote>(json);
+                    result = new HoldNote();
+                    break;
                 default:
-                    throw new ConverterException($"Unknown chart object type: '{dict["type"]}'");
+                    throw new ConverterException($"Unknown chart object type: '{type}'");
             }
+
+            serializer.Populate(jObj.CreateReader(), result);
+
+            return result;
         }
 
         public override void WriteJson(JsonWriter writer, IChartObject value, JsonSerializer serializer)

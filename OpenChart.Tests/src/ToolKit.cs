@@ -24,7 +24,7 @@ namespace OpenChart.Tests
                 var env = Environment.GetEnvironmentVariable("TESTDATA_DIR");
 
                 if (String.IsNullOrEmpty(env))
-                    return Path.Combine("..", "..", "..", "testdata");
+                    return Path.Combine("OpenChart.Tests", "testdata");
 
                 return env;
             }
