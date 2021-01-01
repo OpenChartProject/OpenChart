@@ -64,13 +64,9 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 
         public override void WriteJson(JsonWriter writer, IChartObject value, JsonSerializer serializer)
         {
-            // Serializes the object based on its type.
-            if (value is TapNote)
-                writer.WriteRaw(JsonConvert.SerializeObject((TapNote)value));
-            else if (value is HoldNote)
-                writer.WriteRaw(JsonConvert.SerializeObject((HoldNote)value));
-            else
-                throw new ConverterException("Cannot serialize chart object, type is unknown.");
+            // No custom writing logic is needed.
         }
+
+        public override bool CanWrite => false;
     }
 }

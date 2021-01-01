@@ -16,6 +16,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             Assert.IsNull(data);
         }
 
+        [TestCase("null")]
         [TestCase("false")]
         [TestCase("0")]
         [TestCase("[]")]
@@ -78,7 +79,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             var input = new HoldNote() { Length = 2 };
             var data = JsonConvert.SerializeObject(input, settings);
 
-            Assert.AreEqual("{\"length\":2,\"type\":\"hold\"}", data);
+            Assert.AreEqual("{\"length\":2.0,\"type\":\"hold\"}", data);
         }
     }
 }

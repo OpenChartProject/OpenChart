@@ -10,9 +10,8 @@ namespace OpenChart.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var culture = new CultureInfo("en-US");
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            Thread.CurrentThread.CurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
         }
     }
 }

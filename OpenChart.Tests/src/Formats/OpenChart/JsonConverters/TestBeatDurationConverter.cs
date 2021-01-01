@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
+using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using System;
 using Newtonsoft.Json;
@@ -16,12 +17,12 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         JsonSerializerSettings settings = new OpenChartSerializer().Settings;
 
 
-        [TestCase("\"123\"")]
+        [TestCase("null")]
         [TestCase("false")]
         public void Test_Read_BadType(string value)
         {
             var input = $"{{ \"duration\": {value} }}";
-            Assert.Throws<JsonException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
+            Assert.Throws<ConverterException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
         }
 
         [TestCase(-1)]
@@ -44,14 +45,14 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             Assert.AreEqual(value, data.Duration.Value);
         }
 
-        [TestCase(1)]
-        [TestCase(1.5)]
-        [TestCase(123.45)]
-        public void Test_Write(double value)
+        [TestCase(1, "1.0")]
+        [TestCase(1.5, "1.5")]
+        [TestCase(123.45, "123.45")]
+        public void Test_Write(double value, string expected)
         {
             var data = new DummyData() { Duration = value };
             var json = JsonConvert.SerializeObject(data, typeof(DummyData), settings);
-            Assert.AreEqual($"{{\"duration\":{value}}}", json);
+            Assert.AreEqual($"{{\"duration\":{expected}}}", json);
         }
     }
 }

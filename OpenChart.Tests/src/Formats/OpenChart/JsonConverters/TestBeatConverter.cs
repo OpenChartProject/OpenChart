@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
+using OpenChart.Formats;
 using OpenChart.Formats.OpenChart.Version0_1;
 using System;
 using Newtonsoft.Json;
@@ -16,12 +17,12 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 
         JsonSerializerSettings settings = new OpenChartSerializer().Settings;
 
-        [TestCase("\"123\"")]
+        [TestCase("null")]
         [TestCase("false")]
         public void Test_Read_BadType(string value)
         {
             var input = $"{{ \"beat\": {value} }}";
-            Assert.Throws<JsonException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
+            Assert.Throws<ConverterException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
         }
 
         [TestCase(-1)]
