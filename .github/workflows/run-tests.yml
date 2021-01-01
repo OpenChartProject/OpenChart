@@ -21,5 +21,8 @@ jobs:
       - name: Install SDL
         run: sudo apt install -y libsdl2-dev libsdl2-image-dev
 
+      - name: Restore dependencies
+        run: ./tasks.sh restore
+
       - name: Run tests
         run: ./tasks.sh test

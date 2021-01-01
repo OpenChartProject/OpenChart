@@ -254,6 +254,7 @@ function fnUsage() {
     echo "  help        Prints this help message"
     echo "  publish     Builds the project for release"
     echo "  run         Runs OpenChart from $OUTPUT_DIR/"
+    echo "  restore     Downloads nuget dependencies"
     echo "  test        Runs the test suite"
     echo "  version     Prints the current version"
     echo
@@ -370,6 +371,10 @@ publish)
 
 run)
     fnRun
+    ;;
+
+restore)
+    msbuild -t:Restore OpenChart.sln
     ;;
 
 test)
