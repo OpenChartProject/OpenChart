@@ -43,7 +43,7 @@ function fnBuild() {
     msbuild -restore -clp:Verbosity=minimal $PROJECT_FILE
 
     if [[ ! -e "$1" ]]; then
-	    mkdir $1
+        mkdir $1
     fi
 
     cp OpenChart/bin/Debug/net45/* $1
@@ -161,7 +161,7 @@ function fnTest() {
     echo "-> Running test suite"
 
     local path=$TEST_DIR/bin/Debug/net45
-    local nunit_path=`which nunit3-console.exe`
+    local nunit_path=$(which nunit3-console.exe)
 
     if [[ -z $nunit_path ]]; then
         echo "Error: nunit3-console.exe must be in the PATH"
@@ -179,9 +179,7 @@ function fnTest() {
 
     rm -rf $path/logs
 
-    echo $nunit_path
-
-    mono $nunit_path OpenChart.Tests/OpenChart.Tests.csproj --noresult $@
+    mono $nunit_path OpenChart.Tests/bin/Debug/net45/OpenChart.Tests.dll --noresult $@
 }
 
 function fnVersion() {
