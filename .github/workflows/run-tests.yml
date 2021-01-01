@@ -24,5 +24,8 @@ jobs:
       - name: Restore dependencies
         run: ./tasks.sh restore
 
+      - name: Update PATH
+        run: echo "/home/runner/.nuget/packages/nunit.consolerunner/3.12.0-beta1/tools" >> $GITHUB_PATH
+
       - name: Run tests
         run: ./tasks.sh test
