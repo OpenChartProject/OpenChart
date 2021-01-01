@@ -33,6 +33,9 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
     {
         public override IChartObject ReadJson(JsonReader reader, Type objectType, IChartObject existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
+            if (reader.TokenType == JsonToken.Null)
+                return null;
+
             if (reader.TokenType != JsonToken.StartObject)
                 throw new ConverterException("Chart object must be a JSON object.");
 

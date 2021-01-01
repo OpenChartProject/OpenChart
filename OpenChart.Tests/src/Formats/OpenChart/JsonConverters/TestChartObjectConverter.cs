@@ -16,7 +16,6 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             Assert.IsNull(data);
         }
 
-        [TestCase("null")]
         [TestCase("false")]
         [TestCase("0")]
         [TestCase("[]")]
