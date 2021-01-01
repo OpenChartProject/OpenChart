@@ -29,8 +29,8 @@ namespace OpenChart.Charting.Objects
         public override void ValidatePlacement(IBeatObject prev, IBeatObject next)
         {
             // Check if the previous object overlaps with this one.
-            if (prev is PlacementValidator validatable)
-                validatable.ValidatePlacement(null, this);
+            if (prev is BaseObject prevObj)
+                prevObj.ValidatePlacement(null, this);
 
             // Check if this overlaps with the next object.
             if (next != null && next.Beat.Value <= (Beat.Value + Length.Value))
