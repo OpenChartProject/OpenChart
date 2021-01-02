@@ -37,16 +37,16 @@ namespace OpenChart.UI.Components.NoteField
             switch (args.Key)
             {
                 case SDL_Keycode.SDLK_1:
-                    handlePlaceNote(e, 0);
+                    placeNote(e, 0);
                     break;
                 case SDL_Keycode.SDLK_2:
-                    handlePlaceNote(e, 1);
+                    placeNote(e, 1);
                     break;
                 case SDL_Keycode.SDLK_3:
-                    handlePlaceNote(e, 2);
+                    placeNote(e, 2);
                     break;
                 case SDL_Keycode.SDLK_4:
-                    handlePlaceNote(e, 3);
+                    placeNote(e, 3);
                     break;
                 case SDL_Keycode.SDLK_DOWN:
                     Settings.Scroll(1);
@@ -57,7 +57,7 @@ namespace OpenChart.UI.Components.NoteField
             }
         }
 
-        protected void handlePlaceNote(InputEvent e, KeyIndex keyIndex)
+        protected void placeNote(InputEvent e, KeyIndex keyIndex)
         {
             var removed = Settings.Chart.Objects[keyIndex.Value].RemoveAtBeat(Settings.ReceptorBeatTime.Beat);
 
