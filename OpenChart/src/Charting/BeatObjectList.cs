@@ -185,9 +185,9 @@ namespace OpenChart.Charting
             {
                 if (cur.Value.Beat.Value == beat.Value)
                 {
-                    var bpm = cur.Value;
+                    var obj = cur.Value;
                     objects.Remove(cur);
-                    onRemoved(bpm);
+                    onRemoved(obj);
                     return true;
                 }
 

@@ -71,6 +71,8 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public int ReceptorY = 150;
 
+        public BeatTime ReceptorBeatTime { get; private set; }
+
         /// <summary>
         /// The amount of pixels to scroll the notefield by for each click on a scroll wheel.
         /// </summary>
@@ -112,6 +114,7 @@ namespace OpenChart.UI.Components.NoteField
             PixelsPerSecond = pixelsPerSecond;
             Y = ScrollStop;
             Zoom = 1.0f;
+            ReceptorBeatTime = new BeatTime(0, 0);
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
@@ -134,17 +137,31 @@ namespace OpenChart.UI.Components.NoteField
             return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
         }
 
+        /// <summary>
+        /// Scrolls the notefield.
+        /// </summary>
+        /// <param name="delta">The amount to scroll by, in "scroll ticks".</param>
         public void Scroll(double delta)
         {
             ScrollTo(Y - (int)Math.Round(delta * ScrollSpeed));
         }
 
+        /// <summary>
+        /// Scrolls the notefield to a specific position.
+        /// </summary>
         public void ScrollTo(int y)
         {
             if (y > ScrollStop)
                 y = ScrollStop;
 
             Y = y;
+
+            var absY = ScrollStop - Y;
+            var time = (double)absY / ScaledPixelsPerSecond;
+            var beat = Chart.BPMList.Time.TimeToBeat(time);
+
+            ReceptorBeatTime.Beat = beat;
+            ReceptorBeatTime.Time = time;
         }
 
         private double getBaseLine()
