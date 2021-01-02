@@ -14,6 +14,13 @@ namespace OpenChart.UI
             public SDL_Keycode Key;
             public SDL_Keymod KeyMod;
             public bool Pressed;
+
+            /// <summary>
+            /// Holding down a key can fire multiple events. This is false the first time the event
+            /// is fired, and if the user continues to hold down the key, all future events will be
+            /// set to true.
+            /// </summary>
+            public bool Repeated;
         }
 
         /// <summary>
@@ -71,7 +78,8 @@ namespace OpenChart.UI
                         {
                             Key = e.key.keysym.sym,
                             KeyMod = e.key.keysym.mod,
-                            Pressed = e.key.state == SDL_PRESSED
+                            Pressed = e.key.state == SDL_PRESSED,
+                            Repeated = e.key.repeat > 0
                         };
 
                         var type = args.Pressed ? InputEventType.KeyDown : InputEventType.KeyUp;

@@ -20,7 +20,7 @@ namespace OpenChart.UI.Components.NoteField
                     handleScroll(e);
                     break;
 
-                case InputEventType.KeyUp:
+                case InputEventType.KeyDown:
                     handleKeyPress(e);
                     break;
             }
@@ -29,6 +29,10 @@ namespace OpenChart.UI.Components.NoteField
         protected void handleKeyPress(InputEvent e)
         {
             var args = e.Args as InputEventFactory.KeyEventArgs;
+
+            if (args.Repeated)
+                return;
+
             var keyIndex = -1;
 
             switch (args.Key)
