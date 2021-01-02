@@ -45,7 +45,9 @@ namespace OpenChart.UI.Components.NoteField
         {
             ctx.SetSourceColor(bgColor);
             ctx.Paint();
-            ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            // FIXME: ClipExtents() is not a method in Mono.Cairo. Use Container Rect instead.
+            // ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            ctx.Translate(0, NoteFieldSettings.Y);
             base.Draw(ctx);
         }
 
