@@ -1,4 +1,5 @@
 using OpenChart.Charting.Objects;
+using OpenChart.Charting.Exceptions;
 using OpenChart.Charting.Properties;
 using static SDL2.SDL;
 
@@ -31,9 +32,6 @@ namespace OpenChart.UI.Components.NoteField
         {
             var args = e.Args as InputEventFactory.KeyEventArgs;
 
-            if (args.Repeated)
-                return;
-
             switch (args.Key)
             {
                 case SDL_Keycode.SDLK_1:
@@ -61,10 +59,23 @@ namespace OpenChart.UI.Components.NoteField
 
         protected void placeNote(InputEvent e, KeyIndex keyIndex)
         {
+            // Don't try to place more notes if the user is holding the key down.
+            if ((e.Args as InputEventFactory.KeyEventArgs).Repeated)
+                return;
+
             var removed = Settings.Chart.Objects[keyIndex.Value].RemoveAtBeat(Settings.ReceptorBeatTime.Beat);
 
             if (!removed)
-                Settings.Chart.Objects[keyIndex.Value].Add(new TapNote(keyIndex, Settings.ReceptorBeatTime.Beat));
+            {
+                try
+                {
+                    Settings.Chart.Objects[keyIndex.Value].Add(new TapNote(keyIndex, Settings.ReceptorBeatTime.Beat));
+                }
+                catch (ObjectOverlapException)
+                {
+                    // TODO: Try to fix the overlap.
+                }
+            }
 
             e.Consume();
         }
