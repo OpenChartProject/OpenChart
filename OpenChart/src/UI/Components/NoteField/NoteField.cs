@@ -14,6 +14,7 @@ namespace OpenChart.UI.Components.NoteField
         Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
+        BeatSnapIndicator beatSnapIndicator;
         Key[] keys;
         Receptor[] receptors;
 
@@ -24,6 +25,7 @@ namespace OpenChart.UI.Components.NoteField
             var keyCount = NoteFieldSettings.Chart.KeyCount.Value;
 
             beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
+            beatSnapIndicator = new BeatSnapIndicator(NoteFieldSettings);
             keys = new Key[keyCount];
             receptors = new Receptor[keyCount];
 
@@ -38,6 +40,7 @@ namespace OpenChart.UI.Components.NoteField
                 Children.Add(keys[i]);
             }
 
+            Children.Add(beatSnapIndicator);
             Children.Add(new NoteFieldInputHandler(NoteFieldSettings));
         }
 

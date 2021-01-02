@@ -80,6 +80,14 @@ namespace OpenChart.UI.Components.NoteField
         public int ScrollSpeed { get; private set; }
 
         /// <summary>
+        /// The number of parts to split a beat into, used by beat snapping.
+        ///
+        /// A quarter note is a quarter of a beat, or 1/4th. So the beat division for a quarter
+        /// note is 4. Half notes are 2, whole notes are 1, eigth notes are 8, etc.
+        /// </summary>
+        public int BeatDivision { get; set; }
+
+        /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
         /// affected by <see cref="Zoom" />.
         /// </summary>
@@ -114,6 +122,7 @@ namespace OpenChart.UI.Components.NoteField
             Y = ScrollStop;
             Zoom = 1.0f;
             ReceptorBeatTime = new BeatTime(0, 0);
+            BeatDivision = 1;
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
