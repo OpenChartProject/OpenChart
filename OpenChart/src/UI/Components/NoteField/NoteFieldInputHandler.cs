@@ -50,9 +50,11 @@ namespace OpenChart.UI.Components.NoteField
                     break;
                 case SDL_Keycode.SDLK_DOWN:
                     Settings.Scroll(1);
+                    e.Consume();
                     break;
                 case SDL_Keycode.SDLK_UP:
                     Settings.Scroll(-1);
+                    e.Consume();
                     break;
             }
         }
