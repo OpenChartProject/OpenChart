@@ -161,10 +161,13 @@ function fnPublish() {
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
-    msbuild OpenChart -p:Configuration=Release
+    mkdir -p $out_dir
+
+    msbuild -clp:Verbosity=minimal -p:Configuration=Release OpenChart
     fnCopyAssets $out_dir
     fnCopyLibs $out_dir
     fnCopyMisc $out_dir
+    mv OpenChart/bin/Release/net45/* $out_dir
 }
 
 function fnRun() {
