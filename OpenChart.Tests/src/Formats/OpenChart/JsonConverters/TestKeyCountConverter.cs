@@ -1,8 +1,9 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
-using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
+using OpenChart.Formats;
+using OpenChart.Formats.OpenChart.Version0_1;
 using System;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 {
@@ -13,23 +14,16 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             public KeyCount KeyCount { get; set; }
         }
 
-        JsonSerializerOptions options;
+        JsonSerializerSettings settings = new OpenChartSerializer().Settings;
 
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            options = new JsonSerializerOptions();
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.Converters.Add(new KeyCountConverter());
-        }
 
-        [TestCase("\"123\"")]
+        [TestCase("null")]
         [TestCase("1.2")]
         [TestCase("false")]
         public void Test_Read_BadType(string value)
         {
             var input = $"{{ \"keyCount\": {value} }}";
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize(input, typeof(DummyData), options));
+            Assert.Throws<ConverterException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
         }
 
         [TestCase(-1)]
@@ -38,7 +32,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         {
             var input = $"{{ \"keyCount\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => JsonSerializer.Deserialize(input, typeof(DummyData), options)
+                () => JsonConvert.DeserializeObject<DummyData>(input, settings)
             );
         }
 
@@ -48,7 +42,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Read_ValidKeyCount(int value)
         {
             var input = $"{{ \"keyCount\": {value} }}";
-            var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
+            var data = (DummyData)JsonConvert.DeserializeObject<DummyData>(input, settings);
             Assert.AreEqual(value, data.KeyCount.Value);
         }
 
@@ -57,7 +51,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Write(int value)
         {
             var data = new DummyData() { KeyCount = value };
-            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
+            var json = JsonConvert.SerializeObject(data, typeof(DummyData), settings);
             Assert.AreEqual($"{{\"keyCount\":{value}}}", json);
         }
     }

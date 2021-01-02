@@ -1,7 +1,8 @@
 using OpenChart.Formats.OpenChart.Version0_1.Data;
 using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
 using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace OpenChart.Formats.OpenChart.Version0_1
 {
@@ -13,18 +14,18 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <summary>
         /// The options used by the serializer.
         /// </summary>
-        public static JsonSerializerOptions JsonOptions;
+        public readonly JsonSerializerSettings Settings;
 
-        static OpenChartSerializer()
+        public OpenChartSerializer()
         {
-            JsonOptions = new JsonSerializerOptions();
+            Settings = new JsonSerializerSettings();
 
-            JsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            JsonOptions.Converters.Add(new BeatConverter());
-            JsonOptions.Converters.Add(new BeatDurationConverter());
-            JsonOptions.Converters.Add(new KeyIndexConverter());
-            JsonOptions.Converters.Add(new KeyCountConverter());
-            JsonOptions.Converters.Add(new ChartObjectConverter());
+            Settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            Settings.Converters.Add(new BeatConverter());
+            Settings.Converters.Add(new BeatDurationConverter());
+            Settings.Converters.Add(new KeyIndexConverter());
+            Settings.Converters.Add(new KeyCountConverter());
+            Settings.Converters.Add(new ChartObjectConverter());
         }
 
         /// <summary>
@@ -33,16 +34,17 @@ namespace OpenChart.Formats.OpenChart.Version0_1
         /// <param name="data">JSON data.</param>
         public ProjectData Deserialize(byte[] data)
         {
-            return (ProjectData)JsonSerializer.Deserialize(data, typeof(ProjectData), JsonOptions);
+            var str = Encoding.UTF8.GetString(data);
+            return JsonConvert.DeserializeObject<ProjectData>(str, Settings);
         }
 
         /// <summary>
-        /// Serializes a FileData object into JSON.
+        /// Serializes a ProjectData object into JSON.
         /// </summary>
-        /// <param name="fd">The FileData object.</param>
+        /// <param name="pd">The ProjectData object.</param>
         public byte[] Serialize(ProjectData pd)
         {
-            return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(pd, JsonOptions));
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(pd, Settings));
         }
     }
 }

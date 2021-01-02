@@ -104,10 +104,10 @@ namespace OpenChart.NoteSkins
             {
                 NoteSkinKey key = new NoteSkinKey();
 
-                // key.Receptor = new ImageAsset(Path.Join(path, $"receptor_{i}.png"));
-                key.TapNote = Surface.LoadFromFile(Path.Join(path, $"tap_{i}.png"));
-                key.HoldNote = Surface.LoadFromFile(Path.Join(path, $"hold_{i}.png"));
-                key.HoldNoteBody = new SurfacePattern(Surface.LoadFromFile(Path.Join(path, $"hold_body_{i}.png")));
+                // key.Receptor = new ImageAsset(Path.Combine(path, $"receptor_{i}.png"));
+                key.TapNote = Surface.LoadFromFile(Path.Combine(path, $"tap_{i}.png"));
+                key.HoldNote = Surface.LoadFromFile(Path.Combine(path, $"hold_{i}.png"));
+                key.HoldNoteBody = new SurfacePattern(Surface.LoadFromFile(Path.Combine(path, $"hold_body_{i}.png")));
 
                 kms.Set(i - 1, key);
             }

@@ -16,15 +16,10 @@ jobs:
       - name: Checkout OpenChart
         uses: actions/checkout@v2
         with:
-          submodules: 'recursive'
+          submodules: "recursive"
 
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 3.1.101
-
-      - name: Install SDL
-        run: sudo apt install -y libsdl2-dev libsdl2-image-dev
+      - name: Build Docker image
+        run: ./tasks.sh docker build
 
       - name: Run tests
-        run: ./tasks.sh test
+        run: ./tasks.sh docker test

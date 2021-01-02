@@ -1,7 +1,7 @@
 using OpenChart.Charting.Properties;
 using System;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
 {
@@ -10,14 +10,25 @@ namespace OpenChart.Formats.OpenChart.Version0_1.JsonConverters
     /// </summary>
     public class BeatDurationConverter : JsonConverter<BeatDuration>
     {
-        public override BeatDuration Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override BeatDuration ReadJson(JsonReader reader, Type objectType, BeatDuration existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
-            return new BeatDuration(reader.GetDouble());
+            var val = new JValue(reader.Value);
+
+            switch (val.Type)
+            {
+                case JTokenType.Float:
+                case JTokenType.Integer:
+                    return new BeatDuration((double)val);
+                case JTokenType.Null:
+                    throw new ConverterException("Beat duration cannot be null.");
+                default:
+                    throw new ConverterException("Beat duration must be a number.");
+            }
         }
 
-        public override void Write(Utf8JsonWriter writer, BeatDuration value, JsonSerializerOptions options)
+        public override void WriteJson(JsonWriter writer, BeatDuration value, JsonSerializer serializer)
         {
-            writer.WriteNumberValue(value.Value);
+            writer.WriteValue(value.Value);
         }
     }
 }

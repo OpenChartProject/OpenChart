@@ -1,8 +1,9 @@
 using NUnit.Framework;
 using OpenChart.Charting.Properties;
-using OpenChart.Formats.OpenChart.Version0_1.JsonConverters;
+using OpenChart.Formats;
+using OpenChart.Formats.OpenChart.Version0_1;
 using System;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
 {
@@ -13,22 +14,15 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
             public BeatDuration Duration { get; set; }
         }
 
-        JsonSerializerOptions options;
+        JsonSerializerSettings settings = new OpenChartSerializer().Settings;
 
-        [OneTimeSetUp]
-        public void SetUp()
-        {
-            options = new JsonSerializerOptions();
-            options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-            options.Converters.Add(new BeatDurationConverter());
-        }
 
-        [TestCase("\"123\"")]
+        [TestCase("null")]
         [TestCase("false")]
         public void Test_Read_BadType(string value)
         {
             var input = $"{{ \"duration\": {value} }}";
-            Assert.Throws<JsonException>(() => JsonSerializer.Deserialize(input, typeof(DummyData), options));
+            Assert.Throws<ConverterException>(() => JsonConvert.DeserializeObject<DummyData>(input, settings));
         }
 
         [TestCase(-1)]
@@ -37,7 +31,7 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         {
             var input = $"{{ \"duration\": {value} }}";
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => JsonSerializer.Deserialize(input, typeof(DummyData), options)
+                () => JsonConvert.DeserializeObject<DummyData>(input, settings)
             );
         }
 
@@ -47,18 +41,18 @@ namespace OpenChart.Tests.Formats.OpenChart.JsonConverters
         public void Test_Read_ValidValue(double value)
         {
             var input = $"{{ \"duration\": {value} }}";
-            var data = (DummyData)JsonSerializer.Deserialize(input, typeof(DummyData), options);
+            var data = (DummyData)JsonConvert.DeserializeObject<DummyData>(input, settings);
             Assert.AreEqual(value, data.Duration.Value);
         }
 
-        [TestCase(1)]
-        [TestCase(1.5)]
-        [TestCase(123.45)]
-        public void Test_Write(double value)
+        [TestCase(1, "1.0")]
+        [TestCase(1.5, "1.5")]
+        [TestCase(123.45, "123.45")]
+        public void Test_Write(double value, string expected)
         {
             var data = new DummyData() { Duration = value };
-            var json = JsonSerializer.Serialize(data, typeof(DummyData), options);
-            Assert.AreEqual($"{{\"duration\":{value}}}", json);
+            var json = JsonConvert.SerializeObject(data, typeof(DummyData), settings);
+            Assert.AreEqual($"{{\"duration\":{expected}}}", json);
         }
     }
 }

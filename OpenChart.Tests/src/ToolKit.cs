@@ -24,7 +24,7 @@ namespace OpenChart.Tests
                 var env = Environment.GetEnvironmentVariable("TESTDATA_DIR");
 
                 if (String.IsNullOrEmpty(env))
-                    return Path.Join("..", "..", "..", "testdata");
+                    return Path.Combine("OpenChart.Tests", "testdata");
 
                 return env;
             }
@@ -82,7 +82,7 @@ namespace OpenChart.Tests
         /// <param name="path">The path relative to the testdata dir.</param>
         public byte[] ReadTestDataFile(string path)
         {
-            return File.ReadAllBytes(Path.Join(TestDataDir, path));
+            return File.ReadAllBytes(Path.Combine(TestDataDir, path));
         }
     }
 }

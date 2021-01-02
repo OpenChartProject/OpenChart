@@ -56,7 +56,7 @@ namespace OpenChart.UI.NoteField
 
         private void doDraw(DrawingContext ctx)
         {
-            var viewRect = ctx.Cairo.ClipExtents();
+            var viewRect = ctx.Cairo.FillExtents();
 
             ctx.Cairo.SetSourceColor(bgColor);
             ctx.Cairo.Paint();
@@ -78,7 +78,7 @@ namespace OpenChart.UI.NoteField
         private DrawingContext newDrawingContext(Cairo.Context ctx)
         {
             var yTop = -NoteFieldSettings.Y;
-            var viewRect = ctx.ClipExtents();
+            var viewRect = ctx.FillExtents();
             var pps = (double)NoteFieldSettings.ScaledPixelsPerSecond;
             var topTime = yTop / pps;
             var bottomTime = (yTop + viewRect.Height) / pps;

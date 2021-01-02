@@ -216,35 +216,38 @@ namespace OpenChart.Charting
         /// <param name="cur">The starting point for the cursor. Defaults to the start of the list.</param>
         private LinkedListNode<T> insertObject(T obj, LinkedListNode<T> cur = null)
         {
+            if (objects.Count == 0)
+                return objects.AddFirst(obj);
+
             if (cur == null)
                 cur = objects.First;
 
-            IPlacementValidator prevValidatable = null;
-            var validatable = obj as IPlacementValidator;
+            var insertObj = obj as BaseObject;
 
             while (cur != null)
             {
                 if (obj.Beat.Value == cur.Value.Beat.Value)
                     throw new ArgumentException("An object at the given beat already exists.");
-                else if (obj.Beat.Value < cur.Value.Beat.Value)
+
+                // Check if this object should be inserted before the cursor.
+                if (obj.Beat.Value < cur.Value.Beat.Value)
                 {
-                    if (cur.Previous == null || cur.Previous.Value.Beat.Value < obj.Beat.Value)
-                    {
-                        prevValidatable = cur.Previous?.Value as IPlacementValidator;
+                    // Check that inserting the object here does not cause any overlap with
+                    // the previous object.
+                    var prevObj = cur.Previous?.Value as BaseObject;
+                    prevObj?.ValidatePlacement(null, obj);
+                    insertObj?.ValidatePlacement(prevObj, cur.Value);
 
-                        prevValidatable?.ValidatePlacement(null, obj);
-                        validatable?.ValidatePlacement(cur.Previous?.Value, cur.Value);
-
-                        return objects.AddBefore(cur, obj);
-                    }
+                    return objects.AddBefore(cur, obj);
                 }
 
                 cur = cur.Next;
             }
 
-            prevValidatable = objects.Last?.Value as IPlacementValidator;
-            prevValidatable?.ValidatePlacement(null, obj);
-            validatable?.ValidatePlacement(objects.Last?.Value, null);
+            // If the object has not been inserted yet then it goes at the end of the list.
+            var lastObj = objects.Last.Value as BaseObject;
+            lastObj?.ValidatePlacement(null, obj);
+            insertObj?.ValidatePlacement(lastObj, null);
 
             return objects.AddLast(obj);
         }

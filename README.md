@@ -22,9 +22,7 @@ We plan to add support for the following games:
 
 # Building OpenChart 🔨
 
-OpenChart uses [.NET Core 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1) and [SDL 2.0](https://www.libsdl.org/).
-
-The .NET Core SDK is only necessary to build the project. When the app is published the .NET runtimes are bundled into the executable to make it more portable.
+OpenChart uses [Mono 6.12](https://www.mono-project.com/) and [SDL 2.0](https://www.libsdl.org/).
 
 ### Build Script
 

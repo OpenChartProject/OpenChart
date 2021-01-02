@@ -40,7 +40,13 @@ function fnBuild() {
     '
     echo "-> Building OpenChart to $1/"
 
-    dotnet build -o $1 $PROJECT_FILE
+    msbuild -restore -clp:Verbosity=minimal $PROJECT_FILE
+
+    if [[ ! -e "$1" ]]; then
+        mkdir $1
+    fi
+
+    cp OpenChart/bin/Debug/net45/* $1
     fnCopyAssets $1
     fnCopyLibs $1
     fnCopyMisc $1
@@ -120,6 +126,43 @@ function fnCopyMisc() {
     fi
 }
 
+function fnDocker() {
+    : '
+    Executes commands in a docker container.
+    '
+    case "$1" in
+    build)
+        docker build . -t openchart
+        ;;
+
+    publish)
+        docker run \
+            --rm \
+            -v $(pwd)/docker-dist/:/app/dist/ \
+            openchart ./tasks.sh publish
+
+        echo
+        echo "Published to $(pwd)/docker-dist/"
+        ;;
+
+    test)
+        docker run --rm openchart ./tasks.sh test
+        ;;
+
+    *)
+        echo "Usage: $0 docker [command]"
+        echo
+        echo "COMMANDS"
+        echo
+        echo "  build     Builds the 'openchart' Docker image"
+        echo "  publish   Builds the project for release to docker-dist/"
+        echo "  test      Runs the test suite in Docker"
+        echo
+        exit
+        ;;
+    esac
+}
+
 function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
@@ -129,10 +172,13 @@ function fnPublish() {
     echo "-> Publishing OpenChart to $out_dir/"
 
     rm -rf $out_dir
-    dotnet publish -o $out_dir -r $PLATFORM -c Release OpenChart
+    mkdir -p $out_dir
+
+    msbuild -clp:Verbosity=minimal -p:Configuration=Release OpenChart
     fnCopyAssets $out_dir
     fnCopyLibs $out_dir
     fnCopyMisc $out_dir
+    mv OpenChart/bin/Release/net45/* $out_dir
 }
 
 function fnRun() {
@@ -154,17 +200,26 @@ function fnTest() {
     '
     echo "-> Running test suite"
 
-    local path=$TEST_DIR/bin/Debug/netcoreapp3.1
+    local path=$TEST_DIR/bin/Debug/net45
+    local nunit_path=$(which nunit3-console.exe)
+
+    if [[ -z $nunit_path ]]; then
+        echo "Error: nunit3-console.exe must be in the PATH"
+        exit 1
+    fi
+
+    echo "-> Found nunit3-console.exe: $nunit_path"
 
     mkdir -p $path
 
+    msbuild -clp:Verbosity=minimal OpenChart.Tests
     fnCopyAssets $path
     fnCopyLibs $path
     fnCopyMisc $path
 
     rm -rf $path/logs
 
-    OPENCHART_DIR="$(pwd)/$path" TESTDATA_DIR="$TESTDATA_DIR" dotnet test
+    mono $nunit_path OpenChart.Tests/bin/Debug/net45/OpenChart.Tests.dll --noresult $@
 }
 
 function fnVersion() {
@@ -234,9 +289,11 @@ function fnUsage() {
     echo "  build       Builds the project to $OUTPUT_DIR/"
     echo "  bundle      Bundles a published project to $BUNDLE_DIR/"
     echo "  clean       Cleans all build-related files"
+    echo "  docker      Run commands in a Docker container"
     echo "  help        Prints this help message"
     echo "  publish     Builds the project for release"
     echo "  run         Runs OpenChart from $OUTPUT_DIR/"
+    echo "  restore     Downloads nuget dependencies"
     echo "  test        Runs the test suite"
     echo "  version     Prints the current version"
     echo
@@ -347,6 +404,11 @@ clean)
     fnClean
     ;;
 
+docker)
+    shift
+    fnDocker $@
+    ;;
+
 publish)
     fnPublish
     ;;
@@ -355,12 +417,18 @@ run)
     fnRun
     ;;
 
+restore)
+    msbuild -t:Restore OpenChart.sln
+    ;;
+
 test)
-    fnTest
+    shift
+    fnTest $@
     ;;
 
 version)
-    fnVersion $2
+    shift
+    fnVersion $@
     ;;
 
 help | "-h" | "--help")
