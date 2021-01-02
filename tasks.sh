@@ -126,6 +126,32 @@ function fnCopyMisc() {
     fi
 }
 
+function fnDocker() {
+    : '
+    Executes commands in a docker container.
+    '
+    case "$1" in
+    build)
+        docker build . -t openchart
+        ;;
+
+    test)
+        docker run --rm openchart ./tasks.sh test
+        ;;
+
+    *)
+        echo "Usage: $0 docker [command]"
+        echo
+        echo "COMMANDS"
+        echo
+        echo "  build   Builds the 'openchart' Docker image"
+        echo "  test    Runs the test suite in Docker"
+        echo
+        exit
+        ;;
+    esac
+}
+
 function fnPublish() {
     : '
     Builds OpenChart bundled as a single executable.
@@ -249,6 +275,7 @@ function fnUsage() {
     echo "  build       Builds the project to $OUTPUT_DIR/"
     echo "  bundle      Bundles a published project to $BUNDLE_DIR/"
     echo "  clean       Cleans all build-related files"
+    echo "  docker      Run commands in a Docker container"
     echo "  help        Prints this help message"
     echo "  publish     Builds the project for release"
     echo "  run         Runs OpenChart from $OUTPUT_DIR/"
@@ -363,6 +390,11 @@ clean)
     fnClean
     ;;
 
+docker)
+    shift
+    fnDocker $@
+    ;;
+
 publish)
     fnPublish
     ;;
@@ -381,7 +413,8 @@ test)
     ;;
 
 version)
-    fnVersion $2
+    shift
+    fnVersion $@
     ;;
 
 help | "-h" | "--help")
