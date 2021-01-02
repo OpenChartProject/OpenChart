@@ -86,6 +86,11 @@ namespace OpenChart.Charting.Properties
             return Value.GetHashCode();
         }
 
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
         protected virtual void onChanged()
         {
             var handler = Changed;
