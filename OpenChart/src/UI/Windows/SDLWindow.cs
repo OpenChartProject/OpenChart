@@ -7,6 +7,11 @@ namespace OpenChart.UI.Windows
     public class SDLWindow
     {
         /// <summary>
+        /// The component container for the window.
+        /// </summary>
+        public Container Container { get; private set; }
+
+        /// <summary>
         /// A pointer to the SDL window.
         /// </summary>
         public IntPtr Handle { get; private set; }
@@ -26,6 +31,7 @@ namespace OpenChart.UI.Windows
 
         public SDLWindow()
         {
+            Container = new Container();
             Handle = SDL_CreateWindow(
                 baseTitle,
                 SDL_WINDOWPOS_CENTERED,
@@ -45,11 +51,11 @@ namespace OpenChart.UI.Windows
             SDL_SetWindowMinimumSize(Handle, minWidth, minHeight);
         }
 
-        /// <summary>
-        /// Swaps the buffer for the surface, displaying whatever was drawn on the surface.
-        /// </summary>
-        public void SwapBuffer()
+        public void Draw(Cairo.Context ctx)
         {
+            ctx.SetSourceRGB(0, 0, 0);
+            ctx.Paint();
+            Container.Draw(ctx);
             SDL_UpdateWindowSurface(Handle);
         }
 

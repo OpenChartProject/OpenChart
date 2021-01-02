@@ -3,7 +3,7 @@ using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
 using System;
 
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     /// <summary>
     /// Note field settings for modifying how the note field looks.
@@ -53,6 +53,35 @@ namespace OpenChart.UI.NoteField
         public KeyModeSkin NoteSkin { get; private set; }
 
         /// <summary>
+        /// The beattime at the bottom of the notefield container. Note that this is not the beattime
+        /// for the end of the chart. As the user scrolls this value will change based on which
+        /// part of the chart is visible.
+        /// </summary>
+        public BeatTime Bottom { get; set; }
+
+        /// <summary>
+        /// The beattime at the top of the notefield container. Note that this is not the beattime
+        /// for the beginning of the chart. As the user scrolls this value will change based on which
+        /// part of the chart is visible.
+        /// </summary>
+        public BeatTime Top { get; set; }
+
+        /// <summary>
+        /// The y-pos of the receptors.
+        /// </summary>
+        public int ReceptorY = 150;
+
+        public BeatTime ReceptorBeatTime { get; private set; }
+
+        /// <summary>
+        /// The amount of pixels to scroll the notefield by for each click on a scroll wheel.
+        /// </summary>
+        public int ScrollSpeed = 50;
+
+        public int ScrollStop => ReceptorY;
+
+
+        /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
         /// affected by <see cref="Zoom" />.
         /// </summary>
@@ -83,7 +112,9 @@ namespace OpenChart.UI.NoteField
             NoteSkin = noteSkin;
             KeyWidth = keyWidth;
             PixelsPerSecond = pixelsPerSecond;
+            Y = ScrollStop;
             Zoom = 1.0f;
+            ReceptorBeatTime = new BeatTime(0, 0);
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
@@ -104,6 +135,33 @@ namespace OpenChart.UI.NoteField
         public int TimeToPosition(Time time)
         {
             return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
+        }
+
+        /// <summary>
+        /// Scrolls the notefield.
+        /// </summary>
+        /// <param name="delta">The amount to scroll by, in "scroll ticks".</param>
+        public void Scroll(double delta)
+        {
+            ScrollTo(Y - (int)Math.Round(delta * ScrollSpeed));
+        }
+
+        /// <summary>
+        /// Scrolls the notefield to a specific position.
+        /// </summary>
+        public void ScrollTo(int y)
+        {
+            if (y > ScrollStop)
+                y = ScrollStop;
+
+            Y = y;
+
+            var absY = ScrollStop - Y;
+            var time = (double)absY / ScaledPixelsPerSecond;
+            var beat = Chart.BPMList.Time.TimeToBeat(time);
+
+            ReceptorBeatTime.Beat = beat;
+            ReceptorBeatTime.Time = time;
         }
 
         private double getBaseLine()

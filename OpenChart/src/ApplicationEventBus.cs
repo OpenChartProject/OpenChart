@@ -30,14 +30,14 @@ namespace OpenChart
         public event EventHandler CurrentProjectRenamed;
 
         /// <summary>
-        /// An event bus for user input.
+        /// A factory for producing InputEvents.
         /// </summary>
-        public InputEventBus Input { get; private set; }
+        public InputEventFactory InputFactory { get; private set; }
 
         public ApplicationEventBus(ApplicationData appData)
         {
             this.ApplicationData = appData;
-            this.Input = new InputEventBus();
+            this.InputFactory = new InputEventFactory();
 
             appData.ProjectChanged += onCurrentProjectChanged;
         }

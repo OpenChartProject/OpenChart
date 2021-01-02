@@ -14,6 +14,12 @@ namespace OpenChart.UI
         bool freeOnDispose;
 
         /// <summary>
+        /// This is the hex value of SDL_PIXELFORMAT_ARGB8888. Cairo expects the pixel format
+        /// to be ARGB32 (which is equivalent to ARGB8888).
+        /// </summary>
+        public const uint PIXEL_FORMAT = 0x16362004;
+
+        /// <summary>
         /// A pointer to the underlying SDL_Surface* object.
         /// </summary>
         public IntPtr Data { get; private set; }
@@ -86,6 +92,8 @@ namespace OpenChart.UI
                 return null;
             }
 
+            data = SDL_ConvertSurfaceFormat(data, PIXEL_FORMAT, 0);
+
             return new Surface(data);
         }
 
@@ -103,7 +111,7 @@ namespace OpenChart.UI
             }
 
             // Create the new surface to be returned.
-            var dst = SDL_CreateRGBSurface(0, width, height, 32, 0, 0, 0, 0);
+            var dst = SDL_CreateRGBSurfaceWithFormat(0, width, height, 32, PIXEL_FORMAT);
 
             if (dst == IntPtr.Zero)
             {

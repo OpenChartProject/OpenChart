@@ -16,5 +16,10 @@ namespace OpenChart.Charting.Properties
             Beat = beat;
             Time = time;
         }
+
+        public override string ToString()
+        {
+            return string.Format("BeatTime(beat={0} time={1})", Beat.ToString(), Time.ToString());
+        }
     }
 }

@@ -1,5 +1,6 @@
 using OpenChart.Charting.Objects;
-using OpenChart.UI.NoteField;
+using OpenChart.UI;
+using OpenChart.UI.Components.NoteField;
 using OpenChart.UI.Windows;
 using static SDL2.SDL;
 using Serilog;
@@ -97,8 +98,6 @@ namespace OpenChart
                 NoteFieldObjectAlignment.Center
             );
 
-            noteFieldSettings.Y = 100;
-
             var beatLineSettings = new BeatLineSettings
             {
                 BeatLineColor = new Cairo.Color(0.5, 0.5, 0.5),
@@ -108,12 +107,17 @@ namespace OpenChart
             };
 
             var noteField = new NoteField(noteFieldSettings, beatLineSettings);
-            eventBus.Input.Scrolled += (o, e) => noteField.Scroll(-e.Y);
+
+            noteFieldSettings.Top = new Charting.Properties.BeatTime(0, 0);
+            noteFieldSettings.Bottom = new Charting.Properties.BeatTime(20, 20);
+
+            MainWindow.Container.Children.Add(noteField);
 
             // Main application loop.
             while (!quit)
             {
                 SDL_Event e;
+                InputEvent inputEvent = null;
 
                 // Handle pending events.
                 while (SDL_PollEvent(out e) == 1)
@@ -129,11 +133,13 @@ namespace OpenChart
                             if (e.window.windowEvent == SDL_WindowEventID.SDL_WINDOWEVENT_RESIZED)
                                 refresh = true;
                             break;
-                        case SDL_EventType.SDL_MOUSEWHEEL:
+                        case SDL_EventType.SDL_KEYDOWN:
+                        case SDL_EventType.SDL_KEYUP:
                         case SDL_EventType.SDL_MOUSEBUTTONDOWN:
                         case SDL_EventType.SDL_MOUSEBUTTONUP:
                         case SDL_EventType.SDL_MOUSEMOTION:
-                            eventBus.Input.Dispatch(e);
+                        case SDL_EventType.SDL_MOUSEWHEEL:
+                            inputEvent = eventBus.InputFactory.CreateEvent(e);
                             break;
                     }
                 }
@@ -147,16 +153,10 @@ namespace OpenChart
                     refresh = false;
                 }
 
-                CairoCtx.Save();
+                if (inputEvent != null)
+                    MainWindow.Container.ReceiveEvent(inputEvent);
 
-                // Clear the window.
-                CairoCtx.SetSourceRGB(0, 0, 0);
-                CairoCtx.Paint();
-
-                noteField.Draw(CairoCtx);
-
-                CairoCtx.Restore();
-                MainWindow.SwapBuffer();
+                MainWindow.Draw(CairoCtx);
             }
         }
 

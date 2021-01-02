@@ -65,5 +65,10 @@ namespace OpenChart.Charting.Properties
 
             return Value.CompareTo(time.Value);
         }
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }

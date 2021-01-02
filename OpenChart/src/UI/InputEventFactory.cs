@@ -5,10 +5,24 @@ using System;
 namespace OpenChart.UI
 {
     /// <summary>
-    /// An event bus for handling user input.
+    /// Factory for generating InputEvent objects based on raw SDL events.
     /// </summary>
-    public class InputEventBus
+    public class InputEventFactory
     {
+        public class KeyEventArgs
+        {
+            public SDL_Keycode Key;
+            public SDL_Keymod KeyMod;
+            public bool Pressed;
+
+            /// <summary>
+            /// Holding down a key can fire multiple events. This is false the first time the event
+            /// is fired, and if the user continues to hold down the key, all future events will be
+            /// set to true.
+            /// </summary>
+            public bool Repeated;
+        }
+
         /// <summary>
         /// An enum of different mouse buttons.
         /// </summary>
@@ -33,11 +47,6 @@ namespace OpenChart.UI
         }
 
         /// <summary>
-        /// An event fired when a mouse button is pressed or released.
-        /// </summary>
-        public event EventHandler<MouseButtonEventArgs> MouseButton;
-
-        /// <summary>
         /// Event args for the MouseMoved event.
         /// </summary>
         public class MouseMovedEventArgs
@@ -45,11 +54,6 @@ namespace OpenChart.UI
             public int X, Y;
             public int DeltaX, DeltaY;
         }
-
-        /// <summary>
-        /// /// An event fired when the user moves the mouse.
-        /// </summary>
-        public event EventHandler<MouseMovedEventArgs> MouseMoved;
 
         /// <summary>
         /// Event args for the Scrolled event.
@@ -60,17 +64,28 @@ namespace OpenChart.UI
         }
 
         /// <summary>
-        /// An event fired when the user scrolls.
+        /// Converts a native SDL_Event to an InputEvent. Returns null if the SDL_Event isn't supported
+        /// by the factory.
         /// </summary>
-        public event EventHandler<ScrolledEventArgs> Scrolled;
-
-        /// <summary>
-        /// Converts a native SDL event to an application specific event and notifies any subscribers.
-        /// </summary>
-        public void Dispatch(SDL_Event e)
+        public InputEvent CreateEvent(SDL_Event e)
         {
             switch (e.type)
             {
+                case SDL_EventType.SDL_KEYDOWN:
+                case SDL_EventType.SDL_KEYUP:
+                    {
+                        var args = new KeyEventArgs
+                        {
+                            Key = e.key.keysym.sym,
+                            KeyMod = e.key.keysym.mod,
+                            Pressed = e.key.state == SDL_PRESSED,
+                            Repeated = e.key.repeat > 0
+                        };
+
+                        var type = args.Pressed ? InputEventType.KeyDown : InputEventType.KeyUp;
+
+                        return new InputEvent(type, args);
+                    }
                 case SDL_EventType.SDL_MOUSEWHEEL:
                     {
                         var args = new ScrolledEventArgs
@@ -78,8 +93,8 @@ namespace OpenChart.UI
                             X = e.wheel.x,
                             Y = e.wheel.y
                         };
-                        Scrolled?.Invoke(this, args);
-                        break;
+
+                        return new InputEvent(InputEventType.Scroll, args);
                     }
 
                 case SDL_EventType.SDL_MOUSEBUTTONDOWN:
@@ -93,8 +108,10 @@ namespace OpenChart.UI
                             X = e.button.x,
                             Y = e.button.y,
                         };
-                        MouseButton?.Invoke(this, args);
-                        break;
+
+                        var type = args.Pressed ? InputEventType.MouseDown : InputEventType.MouseUp;
+
+                        return new InputEvent(type, args);
                     }
 
                 case SDL_EventType.SDL_MOUSEMOTION:
@@ -106,9 +123,11 @@ namespace OpenChart.UI
                             DeltaX = e.motion.xrel,
                             DeltaY = e.motion.yrel,
                         };
-                        MouseMoved?.Invoke(this, args);
-                        break;
+
+                        return new InputEvent(InputEventType.MouseMove, args);
                     }
+                default:
+                    return null;
             }
         }
 

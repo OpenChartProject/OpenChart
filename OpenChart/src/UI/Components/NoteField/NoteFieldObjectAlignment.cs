@@ -1,4 +1,4 @@
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     /// <summary>
     /// The alignment for note field objects with respect to beat lines. This doesn't affect the

@@ -1,4 +1,4 @@
-namespace OpenChart.UI.NoteField
+namespace OpenChart.UI.Components.NoteField
 {
     /// <summary>
     /// The display settings for the BeatLines widget.
