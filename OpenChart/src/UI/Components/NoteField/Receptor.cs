@@ -18,7 +18,7 @@ namespace OpenChart.UI.Components.NoteField
         {
             ctx.Translate(
                 Index.Value * NoteFieldSettings.KeyWidth,
-                NoteFieldSettings.ReceptorY - NoteFieldSettings.Y
+                NoteFieldSettings.ReceptorY
             );
 
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].Receptor;

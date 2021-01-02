@@ -69,28 +69,25 @@ namespace OpenChart.UI.Components.NoteField
         /// <summary>
         /// The y-pos of the receptors.
         /// </summary>
-        public int ReceptorY = 150;
+        public int ReceptorY { get; private set; }
+        public int ScrollStop => ReceptorY;
 
         public BeatTime ReceptorBeatTime { get; private set; }
 
         /// <summary>
         /// The amount of pixels to scroll the notefield by for each click on a scroll wheel.
         /// </summary>
-        public int ScrollSpeed = 50;
-
-        public int ScrollStop => ReceptorY;
-
+        public int ScrollSpeed { get; private set; }
 
         /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
         /// affected by <see cref="Zoom" />.
         /// </summary>
-        public int PixelsPerSecond { get; set; }
+        public int PixelsPerSecond { get; private set; }
         public int ScaledPixelsPerSecond => (int)Math.Round(PixelsPerSecond * Zoom);
 
-        public int X { get; set; }
-        public int Y { get; set; }
-        public float Zoom { get; set; }
+        public int Y { get; private set; }
+        public float Zoom { get; private set; }
 
         /// <summary>
         /// Creates a new NoteFieldSettings instance.
@@ -112,6 +109,8 @@ namespace OpenChart.UI.Components.NoteField
             NoteSkin = noteSkin;
             KeyWidth = keyWidth;
             PixelsPerSecond = pixelsPerSecond;
+            ScrollSpeed = 50;
+            ReceptorY = 150;
             Y = ScrollStop;
             Zoom = 1.0f;
             ReceptorBeatTime = new BeatTime(0, 0);
@@ -134,7 +133,7 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public int TimeToPosition(Time time)
         {
-            return (int)Math.Round(time.Value * ScaledPixelsPerSecond);
+            return (int)Math.Round(time.Value * ScaledPixelsPerSecond) + Y;
         }
 
         /// <summary>
