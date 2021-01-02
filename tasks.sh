@@ -135,6 +135,16 @@ function fnDocker() {
         docker build . -t openchart
         ;;
 
+    publish)
+        docker run \
+            --rm \
+            -v $(pwd)/docker-dist/:/app/dist/ \
+            openchart ./tasks.sh publish
+
+        echo
+        echo "Published to $(pwd)/docker-dist/"
+        ;;
+
     test)
         docker run --rm openchart ./tasks.sh test
         ;;
@@ -144,8 +154,9 @@ function fnDocker() {
         echo
         echo "COMMANDS"
         echo
-        echo "  build   Builds the 'openchart' Docker image"
-        echo "  test    Runs the test suite in Docker"
+        echo "  build     Builds the 'openchart' Docker image"
+        echo "  publish   Builds the project for release to docker-dist/"
+        echo "  test      Runs the test suite in Docker"
         echo
         exit
         ;;
