@@ -1,4 +1,5 @@
 using OpenChart.Charting.Objects;
+using OpenChart.Charting.Properties;
 using static SDL2.SDL;
 
 namespace OpenChart.UI.Components.NoteField
@@ -33,33 +34,37 @@ namespace OpenChart.UI.Components.NoteField
             if (args.Repeated)
                 return;
 
-            var keyIndex = -1;
-
             switch (args.Key)
             {
                 case SDL_Keycode.SDLK_1:
-                    keyIndex = 0;
+                    handlePlaceNote(e, 0);
                     break;
                 case SDL_Keycode.SDLK_2:
-                    keyIndex = 1;
+                    handlePlaceNote(e, 1);
                     break;
                 case SDL_Keycode.SDLK_3:
-                    keyIndex = 2;
+                    handlePlaceNote(e, 2);
                     break;
                 case SDL_Keycode.SDLK_4:
-                    keyIndex = 3;
+                    handlePlaceNote(e, 3);
+                    break;
+                case SDL_Keycode.SDLK_DOWN:
+                    Settings.Scroll(1);
+                    break;
+                case SDL_Keycode.SDLK_UP:
+                    Settings.Scroll(-1);
                     break;
             }
+        }
 
-            if (keyIndex != -1)
-            {
-                var removed = Settings.Chart.Objects[keyIndex].RemoveAtBeat(Settings.ReceptorBeatTime.Beat);
+        protected void handlePlaceNote(InputEvent e, KeyIndex keyIndex)
+        {
+            var removed = Settings.Chart.Objects[keyIndex.Value].RemoveAtBeat(Settings.ReceptorBeatTime.Beat);
 
-                if (!removed)
-                    Settings.Chart.Objects[keyIndex].Add(new TapNote(keyIndex, Settings.ReceptorBeatTime.Beat));
+            if (!removed)
+                Settings.Chart.Objects[keyIndex.Value].Add(new TapNote(keyIndex, Settings.ReceptorBeatTime.Beat));
 
-                e.Consume();
-            }
+            e.Consume();
         }
 
         protected void handleScroll(InputEvent e)
