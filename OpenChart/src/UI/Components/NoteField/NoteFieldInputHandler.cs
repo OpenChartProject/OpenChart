@@ -9,6 +9,10 @@ namespace OpenChart.UI.Components.NoteField
     {
         public readonly NoteFieldSettings Settings;
 
+        public static int[] CommonSnaps = new int[] {
+            1, 2, 3, 4, 8, 12, 16, 24, 32, 48, 64, 96, 192
+        };
+
         public NoteFieldInputHandler(NoteFieldSettings settings)
         {
             Settings = settings;
@@ -55,14 +59,50 @@ namespace OpenChart.UI.Components.NoteField
                     e.Consume();
                     break;
                 case SDL_Keycode.SDLK_LEFT:
-                    Settings.BeatSnap.Value--;
+                    adjustSnap(false);
                     e.Consume();
                     break;
                 case SDL_Keycode.SDLK_RIGHT:
-                    Settings.BeatSnap.Value++;
+                    adjustSnap(true);
                     e.Consume();
                     break;
             }
+        }
+
+        protected void adjustSnap(bool increase)
+        {
+            var cur = Settings.BeatSnap.Value;
+
+            if (increase)
+            {
+                if (cur == BeatDivision.BEAT_DIVISION_MAX)
+                    return;
+
+                for (var i = 0; i < CommonSnaps.Length; i++)
+                {
+                    if (CommonSnaps[i] > cur)
+                    {
+                        cur = CommonSnaps[i];
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                if (cur == 1)
+                    return;
+
+                for (var i = CommonSnaps.Length - 1; i >= 0; i--)
+                {
+                    if (CommonSnaps[i] < cur)
+                    {
+                        cur = CommonSnaps[i];
+                        break;
+                    }
+                }
+            }
+
+            Settings.BeatSnap.Value = cur;
         }
 
         protected void placeNote(InputEvent e, KeyIndex keyIndex)
