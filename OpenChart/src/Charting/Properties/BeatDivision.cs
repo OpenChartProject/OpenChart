@@ -68,7 +68,19 @@ namespace OpenChart.Charting.Properties
         /// </summary>
         public Beat NextDivisionFromBeat(Beat beat)
         {
-            return Math.Ceiling(beat.Value / DivisionLength) * DivisionLength;
+            // Get the number of divisions that fit.
+            // e.g. 0.67 / 0.25 = 2.68
+            var divCount = beat.Value / DivisionLength;
+
+            var nextDiv = Math.Ceiling(divCount);
+
+            var diff = nextDiv - divCount;
+
+            // If we're nearly aligned with a division already we need to explicitly jump to the next one.
+            if (diff < ROUNDING_ERROR)
+                nextDiv++;
+
+            return nextDiv * DivisionLength;
         }
 
         /// <summary>
@@ -77,7 +89,22 @@ namespace OpenChart.Charting.Properties
         /// </summary>
         public Beat PrevDivisionFromBeat(Beat beat)
         {
-            return Math.Floor(beat.Value / DivisionLength) * DivisionLength;
+            // Get the number of divisions that fit.
+            // e.g. 0.67 / 0.25 = 2.68
+            var divCount = beat.Value / DivisionLength;
+
+            var prevDiv = Math.Floor(divCount);
+
+            if (prevDiv == 0)
+                return 0;
+
+            var diff = divCount - prevDiv;
+
+            // If we're nearly aligned with a division already we need to explicitly jump to the previous one.
+            if (diff < ROUNDING_ERROR)
+                prevDiv--;
+
+            return prevDiv * DivisionLength;
         }
 
         public override string ToString()
