@@ -20,7 +20,7 @@ namespace OpenChart.UI.Components.NoteField
 
             ctx.SetFontSize(20);
             ctx.SetSourceRGB(1, 1, 1);
-            ctx.ShowText(string.Format("1/{0}", Settings.BeatDivision));
+            ctx.ShowText(string.Format("1/{0}", Settings.BeatSnap.Value));
         }
     }
 }

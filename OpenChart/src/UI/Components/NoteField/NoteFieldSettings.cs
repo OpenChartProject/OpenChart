@@ -1,6 +1,7 @@
 using OpenChart.Charting;
 using OpenChart.Charting.Properties;
 using OpenChart.NoteSkins;
+using Serilog;
 using System;
 
 namespace OpenChart.UI.Components.NoteField
@@ -74,18 +75,7 @@ namespace OpenChart.UI.Components.NoteField
 
         public BeatTime ReceptorBeatTime { get; private set; }
 
-        /// <summary>
-        /// The amount of pixels to scroll the notefield by for each click on a scroll wheel.
-        /// </summary>
-        public int ScrollSpeed { get; private set; }
-
-        /// <summary>
-        /// The number of parts to split a beat into, used by beat snapping.
-        ///
-        /// A quarter note is a quarter of a beat, or 1/4th. So the beat division for a quarter
-        /// note is 4. Half notes are 2, whole notes are 1, eigth notes are 8, etc.
-        /// </summary>
-        public int BeatDivision { get; set; }
+        public BeatDivision BeatSnap { get; private set; }
 
         /// <summary>
         /// The number of pixels that represents one second of time in the chart. This value is
@@ -117,12 +107,11 @@ namespace OpenChart.UI.Components.NoteField
             NoteSkin = noteSkin;
             KeyWidth = keyWidth;
             PixelsPerSecond = pixelsPerSecond;
-            ScrollSpeed = 50;
+            BeatSnap = 4;
             ReceptorY = 150;
             Y = ScrollStop;
             Zoom = 1.0f;
             ReceptorBeatTime = new BeatTime(0, 0);
-            BeatDivision = 1;
 
             NoteSkin.ScaleToNoteFieldKeyWidth(KeyWidth);
 
@@ -142,16 +131,25 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public int TimeToPosition(Time time)
         {
-            return (int)Math.Round(time.Value * ScaledPixelsPerSecond) + Y;
+            return (int)Math.Round(time.Value * ScaledPixelsPerSecond) - Y;
         }
 
         /// <summary>
         /// Scrolls the notefield.
         /// </summary>
-        /// <param name="delta">The amount to scroll by, in "scroll ticks".</param>
         public void Scroll(double delta)
         {
-            ScrollTo(Y - (int)Math.Round(delta * ScrollSpeed));
+            Beat beat;
+
+            if (delta < 0)
+                beat = BeatSnap.NextDivisionFromBeat(ReceptorBeatTime.Beat);
+            else
+                beat = BeatSnap.PrevDivisionFromBeat(ReceptorBeatTime.Beat);
+
+            var pos = BeatToPosition(beat);
+            Log.Debug("Scroll to beat={0} pos={1} cur={2}", beat.Value, pos, ReceptorBeatTime.Beat.Value);
+
+            ScrollTo(pos);
         }
 
         /// <summary>

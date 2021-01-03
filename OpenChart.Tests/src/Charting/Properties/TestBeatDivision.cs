@@ -28,6 +28,7 @@ namespace OpenChart.Tests.Charting.Properties
         }
 
         [TestCase(0, 1, 1)]
+        [TestCase(0, 0.25, 4)]
         [TestCase(0.5, 1, 1)]
         [TestCase(0.99999, 2, 1)]
         [TestCase(1, 2, 1)]
@@ -45,6 +46,7 @@ namespace OpenChart.Tests.Charting.Properties
         [TestCase(0.99999, 0, 1)]
         [TestCase(1, 0, 1)]
         [TestCase(1.00001, 0, 1)]
+        [TestCase(0.25, 0, 4)]
         [TestCase(0.5, 1.0 / 3, 3)]
         [TestCase(2, 1.875, 8)]
         public void Test_PrevDivisionFromBeat(double curBeat, double prevBeat, int div)
