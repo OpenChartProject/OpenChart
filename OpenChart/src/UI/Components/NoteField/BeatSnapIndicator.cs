@@ -13,10 +13,7 @@ namespace OpenChart.UI.Components.NoteField
 
         public override void Draw(Context ctx)
         {
-            ctx.Translate(
-                Settings.NoteFieldWidth + 30,
-                Settings.ReceptorY
-            );
+            ctx.Translate(Settings.NoteFieldWidth + 30, 0);
 
             ctx.SetFontSize(20);
             ctx.SetSourceRGB(1, 1, 1);

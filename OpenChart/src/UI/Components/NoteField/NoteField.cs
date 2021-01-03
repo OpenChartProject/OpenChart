@@ -11,6 +11,8 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
+        public const int Margin = 150;
+
         Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
@@ -50,6 +52,7 @@ namespace OpenChart.UI.Components.NoteField
             ctx.Paint();
             // FIXME: ClipExtents() is not a method in Mono.Cairo. Use Container Rect instead.
             // ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
+            ctx.Translate(0, Margin);
             base.Draw(ctx);
         }
 

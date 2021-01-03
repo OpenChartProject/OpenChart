@@ -70,8 +70,7 @@ namespace OpenChart.UI.Components.NoteField
         /// <summary>
         /// The y-pos of the receptors.
         /// </summary>
-        public int ReceptorY { get; private set; }
-        public int ScrollStop => ReceptorY;
+        public int ReceptorY => Y;
 
         public BeatTime ReceptorBeatTime { get; private set; }
 
@@ -107,9 +106,8 @@ namespace OpenChart.UI.Components.NoteField
             NoteSkin = noteSkin;
             KeyWidth = keyWidth;
             PixelsPerSecond = pixelsPerSecond;
-            BeatSnap = 4;
-            ReceptorY = 150;
-            Y = ScrollStop;
+            BeatSnap = 1;
+            Y = 0;
             Zoom = 1.0f;
             ReceptorBeatTime = new BeatTime(0, 0);
 
@@ -141,15 +139,12 @@ namespace OpenChart.UI.Components.NoteField
         {
             Beat beat;
 
-            if (delta < 0)
+            if (delta > 0)
                 beat = BeatSnap.NextDivisionFromBeat(ReceptorBeatTime.Beat);
             else
                 beat = BeatSnap.PrevDivisionFromBeat(ReceptorBeatTime.Beat);
 
-            var pos = BeatToPosition(beat);
-            Log.Debug("Scroll to beat={0} pos={1} cur={2}", beat.Value, pos, ReceptorBeatTime.Beat.Value);
-
-            ScrollTo(pos);
+            ScrollTo(BeatToPosition(beat) + Y);
         }
 
         /// <summary>
@@ -157,13 +152,9 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public void ScrollTo(int y)
         {
-            if (y > ScrollStop)
-                y = ScrollStop;
+            Y = Math.Max(y, 0);
 
-            Y = y;
-
-            var absY = ScrollStop - Y;
-            var time = (double)absY / ScaledPixelsPerSecond;
+            var time = (double)Y / ScaledPixelsPerSecond;
             var beat = Chart.BPMList.Time.TimeToBeat(time);
 
             ReceptorBeatTime.Beat = beat;
