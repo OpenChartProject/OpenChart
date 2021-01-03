@@ -54,6 +54,14 @@ namespace OpenChart.UI.Components.NoteField
                     Settings.Scroll(-1);
                     e.Consume();
                     break;
+                case SDL_Keycode.SDLK_LEFT:
+                    Settings.BeatSnap.Value--;
+                    e.Consume();
+                    break;
+                case SDL_Keycode.SDLK_RIGHT:
+                    Settings.BeatSnap.Value++;
+                    e.Consume();
+                    break;
             }
         }
 
