@@ -8,7 +8,7 @@ namespace OpenChart.Charting.Properties
     public class BeatDivision
     {
         public const int BEAT_DIVISION_MAX = 192;
-        public const double ROUNDING_ERROR = 0.00001;
+        public const double ROUNDING_ERROR = 0.001;
 
         int _value;
 
