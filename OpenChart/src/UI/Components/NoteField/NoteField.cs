@@ -11,9 +11,12 @@ namespace OpenChart.UI.Components.NoteField
         /// </summary>
         public NoteFieldSettings NoteFieldSettings { get; private set; }
 
+        public const int Margin = 150;
+
         Cairo.Color bgColor = new Cairo.Color(0.07, 0.07, 0.07);
 
         BeatLines beatLines;
+        BeatSnapIndicator beatSnapIndicator;
         Key[] keys;
         Receptor[] receptors;
 
@@ -24,6 +27,7 @@ namespace OpenChart.UI.Components.NoteField
             var keyCount = NoteFieldSettings.Chart.KeyCount.Value;
 
             beatLines = new BeatLines(NoteFieldSettings, beatLineSettings);
+            beatSnapIndicator = new BeatSnapIndicator(NoteFieldSettings);
             keys = new Key[keyCount];
             receptors = new Receptor[keyCount];
 
@@ -38,6 +42,7 @@ namespace OpenChart.UI.Components.NoteField
                 Children.Add(keys[i]);
             }
 
+            Children.Add(beatSnapIndicator);
             Children.Add(new NoteFieldInputHandler(NoteFieldSettings));
         }
 
@@ -47,7 +52,7 @@ namespace OpenChart.UI.Components.NoteField
             ctx.Paint();
             // FIXME: ClipExtents() is not a method in Mono.Cairo. Use Container Rect instead.
             // ctx.Translate((ctx.ClipExtents().Width - NoteFieldSettings.NoteFieldWidth) / 2, NoteFieldSettings.Y);
-            ctx.Translate(0, NoteFieldSettings.Y);
+            ctx.Translate(0, Margin);
             base.Draw(ctx);
         }
 

@@ -16,10 +16,7 @@ namespace OpenChart.UI.Components.NoteField
 
         public override void Draw(Cairo.Context ctx)
         {
-            ctx.Translate(
-                Index.Value * NoteFieldSettings.KeyWidth,
-                NoteFieldSettings.ReceptorY - NoteFieldSettings.Y
-            );
+            ctx.Translate(Index.Value * NoteFieldSettings.KeyWidth, 0);
 
             var img = NoteFieldSettings.NoteSkin.ScaledKeys[Index.Value].Receptor;
 
