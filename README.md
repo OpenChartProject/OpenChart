@@ -2,7 +2,23 @@
 
 [![](https://imgur.com/bhQKKSZ.png)](https://discord.gg/wSGmN52)
 
---------------
+# ⚠️ ATTENTION
+
+[Please visit the new repo here](https://github.com/OpenChartProject/OpenChart-web)
+
+Long story short, I've decided to make OpenChart a web-based editor. Some of the benefits of this are:
+
+- I can develop for web much faster
+- I no longer need to worry about cross-platform compatibility
+- updates are deployed instantly, no need to redistribute the application
+- less tooling, easier to work on
+- ...and probably a dozen other things I can't think of right now
+
+I'm going to keep this repo around since it has a ton of information, but just know that all future development will be in the new repo I linked above.
+
+Thanks ✌️
+
+---
 
 [![](branding/banner_small.png)](https://github.com/OpenChartProject/OpenChart)
 
@@ -15,6 +31,7 @@ We plan to add support for the following games:
 - [Osu! (mania)](https://osu.ppy.sh/)
 
 # FAQ
+
 - **Having issues running the app?** Read the [troubleshooting guide](docs/Troubleshooting.md).
 - **Looking for the latest build?** Check out the automated [publish workflow](https://github.com/OpenChartProject/OpenChart/actions?query=workflow%3Apublish). NOTE: You must be logged in to GitHub to download automated builds.
 
@@ -31,9 +48,11 @@ There is an included `tasks.sh` script for automating a lot of the development t
 Run `./tasks.sh --help` for usage info.
 
 ## Windows
+
 In order to use the provided `tasks.sh` script you need to use a bash terminal such as [cygwin](https://www.cygwin.com/), [MinGW](http://mingw.org/), or [WSL](https://docs.microsoft.com/en-us/windows/wsl/about).
 
 ## Linux
+
 Linux users will need to install SDL before the app can be run.
 
 **Ubuntu/Debian**
